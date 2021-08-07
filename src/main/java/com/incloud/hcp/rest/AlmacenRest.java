@@ -1,5 +1,6 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.maestro.dto.AlmacenDto;
 import com.incloud.hcp.jco.maestro.dto.AlmacenExtDto;
 import com.incloud.hcp.jco.maestro.dto.PlantaDto;
 import com.incloud.hcp.jco.maestro.service.JCOAlmacenService;
@@ -25,14 +26,12 @@ public class AlmacenRest {
     private JCOAlmacenService jcoAlmacenService;
 
     //@GetMapping(value = "/BuscarPlantas", produces = APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/BuscarPlantas", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PlantaDto>> BuscarPlantas(@RequestBody PlantaDto plantaDto
-                                                         ) {
+    @GetMapping(value = "/BuscarPlantas/{condicion}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlantaDto>> BuscarPlantas(@PathVariable String condicion ) {
         //Parametro dto = new Parametro();
-        PlantaDto p=new PlantaDto();
-        p.setCentro("ESREG = 'S'");
+
         try {
-            return Optional.ofNullable(this.jcoAlmacenService.BuscarPlantas(plantaDto))
+            return Optional.ofNullable(this.jcoAlmacenService.BuscarPlantas(condicion))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -41,8 +40,8 @@ public class AlmacenRest {
     }
 
     @PostMapping(value = "/BuscarAlmacenExt", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AlmacenExtDto>> BuscarPlantas(@RequestBody AlmacenExtDto almacenExtDto
-    ) {
+    public ResponseEntity<List<AlmacenExtDto>> BuscarAlmacenExt(AlmacenExtDto  almacenExtDto
+                                                                ) {
         //Parametro dto = new Parametro();
 
         try {
@@ -54,4 +53,17 @@ public class AlmacenRest {
         }
     }
 
+    @PostMapping(value = "/BuscarAlmacen", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AlmacenDto>> BuscarAlmacen(AlmacenDto  almacenDto
+    ) {
+        //Parametro dto = new Parametro();
+
+        try {
+            return Optional.ofNullable(this.jcoAlmacenService.BuscarAlmacen(almacenDto))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

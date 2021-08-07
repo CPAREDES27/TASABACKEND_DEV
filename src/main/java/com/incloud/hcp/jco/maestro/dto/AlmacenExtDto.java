@@ -1,32 +1,32 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class AlmacenExtDto {
-    public String Centro;               //WERKS
-    public String NombreAlmacen;        //LGORT
-    public String DenominacionAlmacen;  //LGOBE
+    public String WERKS;               //WERKS
+    public String LGORT;        //LGORT
+    public String LGOBE;  //LGOBE
 
-    public String getCentro() {
-        return Centro;
+    public String getWERKS() {
+        return WERKS;
     }
 
-    public void setCentro(String centro) {
-        Centro = centro;
+    public void setWERKS(String WERKS) {
+        this.WERKS = WERKS;
     }
 
-    public String getNombreAlmacen() {
-        return NombreAlmacen;
+    public String getLGORT() {
+        return LGORT;
     }
 
-    public void setNombreAlmacen(String nombreAlmacen) {
-        NombreAlmacen = nombreAlmacen;
+    public void setLGORT(String LGORT) {
+        this.LGORT = LGORT;
     }
 
-    public String getDenominacionAlmacen() {
-        return DenominacionAlmacen;
+    public String getLGOBE() {
+        return LGOBE;
     }
 
-    public void setDenominacionAlmacen(String denominacionAlmacen) {
-        DenominacionAlmacen = denominacionAlmacen;
+    public void setLGOBE(String LGOBE) {
+        this.LGOBE = LGOBE;
     }
 
 

@@ -1,43 +1,49 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class AlmacenDto {
-    public String CodPlanta;        //CDALM
-    public String CodAlmacen;       //CDPTA
-    public String Descripcion;      //DSALM
-    public String Centro;           //WERKS
-    public String CuentaAsoc;       //NEWKO
-    public String AlmacenExt;       //CDALE
-    public String EstadoReg;        //ESREG
+    public String CDALM;        //CDALM
+    public String CDPTA;       //CDPTA
+    public String DSALM;      //DSALM
+    public String WERKS;           //WERKS
+    public String NEWKO;       //NEWKO
+    public String CDALE;       //CDALE
+    public String ESREG;        //ESREG
 
-    public String getCodPlanta() { return CodPlanta;  }
+    public String getCDALM() { return CDALM;  }
 
-    public void setCodPlanta(String codPlanta) {CodPlanta = codPlanta;}
+    public void setCDALM(String CDALM) {
+        this.CDALM = CDALM;}
 
-    public String getCodAlmacen() {return CodAlmacen;  }
+    public String getCDPTA() {return CDPTA;  }
 
-    public void setCodAlmacen(String codAlmacen) {CodAlmacen = codAlmacen;}
+    public void setCDPTA(String CDPTA) {
+        this.CDPTA = CDPTA;}
 
-    public String getDescripcion() {return Descripcion;}
+    public String getDSALM() {return DSALM;}
 
-    public void setDescripcion(String descripcion) {Descripcion = descripcion;}
+    public void setDSALM(String DSALM) {
+        this.DSALM = DSALM;}
 
-    public String getCentro() {return Centro;}
+    public String getWERKS() {return WERKS;}
 
-    public void setCentro(String centro) {Centro = centro; }
+    public void setWERKS(String WERKS) {
+        this.WERKS = WERKS; }
 
-    public String getAlmacenExt() {return AlmacenExt;}
+    public String getCDALE() {return CDALE;}
 
-    public void setAlmacenExt(String almacenExt) {AlmacenExt = almacenExt;}
+    public void setCDALE(String CDALE) {
+        this.CDALE = CDALE;}
 
-    public String getEstadoReg() {return EstadoReg;}
+    public String getESREG() {return ESREG;}
 
-    public void setEstadoReg(String estadoReg) {EstadoReg = estadoReg;}
+    public void setESREG(String ESREG) {
+        this.ESREG = ESREG;}
 
-    public String getCuentaAsoc() {
-        return CuentaAsoc;
+    public String getNEWKO() {
+        return NEWKO;
     }
 
-    public void setCuentaAsoc(String cuentaAsoc) {
-        CuentaAsoc = cuentaAsoc;
+    public void setNEWKO(String NEWKO) {
+        this.NEWKO = NEWKO;
     }
 }
