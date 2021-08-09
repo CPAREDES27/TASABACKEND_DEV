@@ -3,7 +3,7 @@ package com.incloud.hcp.jco.maestro.dto;
 public class TipoEmbarcacionDto {
     private String CDTEM;
     private String DESCR;
-
+    //Cesar PAredes
     public String getCDTEM() {
         return CDTEM;
     }
