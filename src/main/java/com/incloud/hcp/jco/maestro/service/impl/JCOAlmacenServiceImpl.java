@@ -8,6 +8,7 @@ import com.incloud.hcp.jco.maestro.service.JCOAlmacenService;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class JCOAlmacenServiceImpl implements JCOAlmacenService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
     public ZFL_RFC_READ_TABLEImplement zfl_rfc_read_tableImplement;
 
     @Override

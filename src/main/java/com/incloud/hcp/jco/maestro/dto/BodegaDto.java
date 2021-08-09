@@ -1,9 +1,9 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class BodegaDto {
-    public String CDBOD;   //Codigo de Bodega
-    public String DSBOD;    //Descripcion bodega
-    public String ESREG;    //estado registro
+    private String CDBOD;   //Codigo de Bodega
+    private String DSBOD;    //Descripcion bodega
+    private String ESREG;    //estado registro
 
     public String getCDBOD() {
         return CDBOD;

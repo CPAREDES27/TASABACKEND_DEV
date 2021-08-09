@@ -2,15 +2,15 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class BalanzaDto {
 
-    public String CDBAL;                //Codigo de Balanza
-    public String CDPTA;                //Codigo de planta
-    public String DESCR;                //DESCR  DescripcionPlanta
-    public String DSBAL;                //Descripcion de balanza
-    public String NMSER;                //Numero de Serie
-    public String CDTBA;                //Codigo tipo de balanza
-    public String TABAL;                //INPRP  IndPropiedad
-    public String CDUMD;                //Codigo unidad de balanza
-    public String UBADS;                //Carpeta destino
+    private String CDBAL;                //Codigo de Balanza
+    private String CDPTA;                //Codigo de planta
+    private String DESCR;                //DESCR  DescripcionPlanta
+    private String DSBAL;                //Descripcion de balanza
+    private String NMSER;                //Numero de Serie
+    private String CDTBA;                //Codigo tipo de balanza
+    private String TABAL;                //INPRP  IndPropiedad
+    private String CDUMD;                //Codigo unidad de balanza
+    private String UBADS;                //Carpeta destino
 
 
     public String getCDBAL() {

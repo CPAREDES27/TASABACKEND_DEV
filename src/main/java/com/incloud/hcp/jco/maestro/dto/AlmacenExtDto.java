@@ -1,9 +1,9 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class AlmacenExtDto {
-    public String WERKS;               //WERKS
-    public String LGORT;        //LGORT
-    public String LGOBE;  //LGOBE
+    private String WERKS;               //WERKS
+    private String LGORT;        //LGORT
+    private String LGOBE;  //LGOBE
 
     public String getWERKS() {
         return WERKS;

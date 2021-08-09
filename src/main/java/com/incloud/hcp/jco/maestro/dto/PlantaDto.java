@@ -2,18 +2,18 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class PlantaDto {
 
-    public String CodPlanta;                //CDPTA
-    public String Centro;                   //WERKS
-    public String DescripcionPlanta;        //DESCR
-    public String RucEmp;                   //STCD1
-    public String DescripcionEmp;           //NAME1
-    public String IndPropiedad;             //INPRP
-    public String CodigoPuerto;             //CDPTO
-    public String DescripcionPuerto;        //DSPTO
-    public String CodigoEmpresa;            //CDEMP
-    public String CodigoZonaLiteral;        //CDZLT
-    public String DescripcionZonaLit;       //DSZLT
-    public String EstadoReg;                //ESREG
+    private String CodPlanta;                //CDPTA
+    private String Centro;                   //WERKS
+    private String DescripcionPlanta;        //DESCR
+    private String RucEmp;                   //STCD1
+    private String DescripcionEmp;           //NAME1
+    private String IndPropiedad;             //INPRP
+    private String CodigoPuerto;             //CDPTO
+    private String DescripcionPuerto;        //DSPTO
+    private String CodigoEmpresa;            //CDEMP
+    private String CodigoZonaLiteral;        //CDZLT
+    private String DescripcionZonaLit;       //DSZLT
+    private String EstadoReg;                //ESREG
 
     public String getCodPlanta() {
         return CodPlanta;

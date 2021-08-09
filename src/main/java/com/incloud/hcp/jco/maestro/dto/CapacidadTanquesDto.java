@@ -2,13 +2,13 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class CapacidadTanquesDto {
 
-    public String CDEMB;
-    public String NMEMB;
-    public String WERKS;
-    public String MREMB;
-    public String CDTEM;
-    public String DESCR;
-    public String CDTAN;
+    private String CDEMB;
+    private String NMEMB;
+    private String WERKS;
+    private String MREMB;
+    private String CDTEM;
+    private String DESCR;
+    private String CDTAN;
 
     public String getCDEMB() {
         return CDEMB;
