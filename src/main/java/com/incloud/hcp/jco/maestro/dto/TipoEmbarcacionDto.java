@@ -1,22 +1,22 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class TipoEmbarcacionDto {
-    private String codigoTipo;
-    private String descripcionTipo;
+    private String CDTEM;
+    private String DESCR;
 
-    public String getCodigoTipo() {
-        return codigoTipo;
+    public String getCDTEM() {
+        return CDTEM;
     }
 
-    public void setCodigoTipo(String codigoTipo) {
-        this.codigoTipo = codigoTipo;
+    public void setCDTEM(String CDTEM) {
+        this.CDTEM = CDTEM;
     }
 
-    public String getDescripcionTipo() {
-        return descripcionTipo;
+    public String getDESCR() {
+        return DESCR;
     }
 
-    public void setDescripcionTipo(String descripcionTipo) {
-        this.descripcionTipo = descripcionTipo;
+    public void setDESCR(String DESCR) {
+        this.DESCR = DESCR;
     }
 }

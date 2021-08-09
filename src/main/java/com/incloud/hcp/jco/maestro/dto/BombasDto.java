@@ -2,8 +2,9 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class BombasDto {
 
-    public String CDBOM;     //Codigo bomba
-    public String DSBOM;     //Descripcion de bomba
+    private String CDBOM;     //Codigo bomba
+    private String DSBOM;     //Descripcion de bomba
+    private String ESREG;     //estado de registro
 
     public String getCDBOM() {
         return CDBOM;
@@ -29,5 +30,5 @@ public class BombasDto {
         this.ESREG = ESREG;
     }
 
-    public String ESREG;     //estado de registro
+
 }
