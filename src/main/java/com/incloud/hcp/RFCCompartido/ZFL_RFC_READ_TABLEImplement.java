@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ZFL_RFC_READ_TABLEImplement {
+    public class ZFL_RFC_READ_TABLEImplement {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

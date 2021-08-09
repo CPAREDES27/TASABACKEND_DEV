@@ -39,9 +39,8 @@ public class AlmacenRest {
         }
     }
 
-    @PostMapping(value = "/BuscarAlmacenExt", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AlmacenExtDto>> BuscarAlmacenExt(AlmacenExtDto  almacenExtDto
-                                                                ) {
+    @PostMapping(value = "/BuscarAlmacenExterno", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AlmacenExtDto>> BuscarAlmacenExt(AlmacenExtDto  almacenExtDto) {
         //Parametro dto = new Parametro();
 
         try {
@@ -54,8 +53,7 @@ public class AlmacenRest {
     }
 
     @PostMapping(value = "/BuscarAlmacen", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AlmacenDto>> BuscarAlmacen(AlmacenDto  almacenDto
-    ) {
+    public ResponseEntity<List<AlmacenDto>> BuscarAlmacen(AlmacenDto  almacenDto) {
         //Parametro dto = new Parametro();
 
         try {
@@ -66,4 +64,6 @@ public class AlmacenRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+
 }

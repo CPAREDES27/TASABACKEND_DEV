@@ -1,21 +1,21 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class UnidadMedidaDto {
-    public String Codigo;
-    public String Descripcion;
-    public String getCodigo() {
-        return Codigo;
+    public String CDUMD;       //Codigo
+    public String DSUMD;  //Descripcion
+    public String getCDUMD() {
+        return CDUMD;
     }
 
-    public void setCodigo(String codigo) {
-        Codigo = codigo;
+    public void setCDUMD(String CDUMD) {
+        this.CDUMD = CDUMD;
     }
 
-    public String getDescripcion() {
-        return Descripcion;
+    public String getDSUMD() {
+        return DSUMD;
     }
 
-    public void setDescripcion(String descripcion) {
-        Descripcion = descripcion;
+    public void setDSUMD(String DSUMD) {
+        this.DSUMD = DSUMD;
     }
 }

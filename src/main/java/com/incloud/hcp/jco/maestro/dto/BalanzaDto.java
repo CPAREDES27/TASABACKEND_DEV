@@ -2,112 +2,91 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class BalanzaDto {
 
-    public String CodPlanta;                //CDPTA
-    public String Centro;                   //WERKS
-    public String DescripcionPlanta;        //DESCR
-    public String RucEmp;                   //STCD1
-    public String DescripcionEmp;           //NAME1
-    public String IndPropiedad;             //INPRP
-    public String CodigoPuerto;             //CDPTO
-    public String DescripcionPuerto;        //DSPTO
-    public String CodigoEmpresa;            //CDEMP
-    public String CodigoZonaLiteral;        //CDZLT
-    public String DescripcionZonaLit;       //DSZLT
-    public String EstadoReg;                //ESREG
+    public String CDBAL;                //Codigo de Balanza
+    public String CDPTA;                //Codigo de planta
+    public String DESCR;                //DESCR  DescripcionPlanta
+    public String DSBAL;                //Descripcion de balanza
+    public String NMSER;                //Numero de Serie
+    public String CDTBA;                //Codigo tipo de balanza
+    public String TABAL;                //INPRP  IndPropiedad
+    public String CDUMD;                //Codigo unidad de balanza
+    public String UBADS;                //Carpeta destino
 
-    public String getCodPlanta() {
-        return CodPlanta;
+
+    public String getCDBAL() {
+        return CDBAL;
     }
 
-    public void setCodPlanta(String codPlanta) {
-        CodPlanta = codPlanta;
+    public void setCDBAL(String CDBAL) {
+        this.CDBAL = CDBAL;
     }
 
-    public String getCentro() {
-        return Centro;
+    public String getCDPTA() {
+        return CDPTA;
     }
 
-    public void setCentro(String centro) {
-        Centro = centro;
+    public void setCDPTA(String CDPTA) {
+        this.CDPTA = CDPTA;
     }
 
-    public String getDescripcionPlanta() {
-        return DescripcionPlanta;
+    public String getDESCR() {
+        return DESCR;
     }
 
-    public void setDescripcionPlanta(String descripcionPlanta) {
-        DescripcionPlanta = descripcionPlanta;
+    public void setDESCR(String DESCR) {
+        this.DESCR = DESCR;
     }
 
-    public String getRucEmp() {
-        return RucEmp;
+    public String getDSBAL() {
+        return DSBAL;
     }
 
-    public void setRucEmp(String rucEmp) {
-        RucEmp = rucEmp;
+    public void setDSBAL(String DSBAL) {
+        this.DSBAL = DSBAL;
     }
 
-    public String getDescripcionEmp() {
-        return DescripcionEmp;
+    public String getNMSER() {
+        return NMSER;
     }
 
-    public void setDescripcionEmp(String descripcionEmp) {
-        DescripcionEmp = descripcionEmp;
+    public void setNMSER(String NMSER) {
+        this.NMSER = NMSER;
     }
 
-    public String getIndPropiedad() {
-        return IndPropiedad;
+    public String getCDTBA() {
+        return CDTBA;
     }
 
-    public void setIndPropiedad(String indPropiedad) {
-        IndPropiedad = indPropiedad;
+    public void setCDTBA(String CDTBA) {
+        this.CDTBA = CDTBA;
     }
 
-    public String getCodigoPuerto() {
-        return CodigoPuerto;
+    public String getTABAL() {
+        return TABAL;
     }
 
-    public void setCodigoPuerto(String codigoPuerto) {
-        CodigoPuerto = codigoPuerto;
+    public void setTABAL(String TABAL) {
+        this.TABAL = TABAL;
     }
 
-    public String getDescripcionPuerto() {
-        return DescripcionPuerto;
+    public String getCDUMD() {
+        return CDUMD;
     }
 
-    public void setDescripcionPuerto(String descripcionPuerto) {
-        DescripcionPuerto = descripcionPuerto;
+    public void setCDUMD(String CDUMD) {
+        this.CDUMD = CDUMD;
     }
 
-    public String getCodigoEmpresa() {
-        return CodigoEmpresa;
+    public String getUBADS() {
+        return UBADS;
     }
 
-    public void setCodigoEmpresa(String codigoEmpresa) {
-        CodigoEmpresa = codigoEmpresa;
+    public void setUBADS(String UBADS) {
+        this.UBADS = UBADS;
     }
 
-    public String getCodigoZonaLiteral() {
-        return CodigoZonaLiteral;
-    }
 
-    public void setCodigoZonaLiteral(String codigoZonaLiteral) {
-        CodigoZonaLiteral = codigoZonaLiteral;
-    }
 
-    public String getDescripcionZonaLit() {
-        return DescripcionZonaLit;
-    }
 
-    public void setDescripcionZonaLit(String descripcionZonaLit) {
-        DescripcionZonaLit = descripcionZonaLit;
-    }
 
-    public String getEstadoReg() {
-        return EstadoReg;
-    }
-
-    public void setEstadoReg(String estadoReg) {
-        EstadoReg = estadoReg;
-    }
 }

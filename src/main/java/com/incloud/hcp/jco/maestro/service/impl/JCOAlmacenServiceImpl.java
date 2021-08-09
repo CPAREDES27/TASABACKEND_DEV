@@ -201,7 +201,7 @@ public class JCOAlmacenServiceImpl implements JCOAlmacenService {
             }
             if (almacenDto.getESREG() != null) {
                 tableImport.appendRow();
-                ESREG = "ESREG LIKE '" + almacenDto.getESREG() + "'";
+                ESREG = "ESREG LIKE '" + almacenDto.getESREG().toUpperCase() + "'";
                 tableImport.setValue("WA", ESREG);
             }
 
