@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ZFL_RFC_READ_TEABLEImplement {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public JCoTable Buscar() throws Exception{
+    public JCoTable Buscar(String condicion) throws Exception{
 
         logger.error("TIPO_1111");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
@@ -28,7 +28,7 @@ public class ZFL_RFC_READ_TEABLEImplement {
         JCoTable tableImport = tables.getTable("OPTIONS");
         tableImport.appendRow();
         logger.error("TIPO_5");;
-        tableImport.setValue("WA", "ESREG = 'S'");
+        tableImport.setValue("WA", "ESREG = '"+condicion+"'");
         //Ejecutar Funcion
         stfcConnection.execute(destination);
         logger.error("TIPO_6");

@@ -3,8 +3,8 @@ package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
-import com.incloud.hcp.jco.maestro.dto.TipoEmbarcacionDto;
-import com.incloud.hcp.jco.maestro.service.JCOTipoEmbarcacionService;
+import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
+import com.incloud.hcp.jco.gestionpesca.service.impl.JCOTipoEmbarcacionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

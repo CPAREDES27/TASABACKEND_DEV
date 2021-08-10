@@ -1,4 +1,4 @@
-package com.incloud.hcp.jco.maestro.dto;
+package com.incloud.hcp.jco.gestionpesca.dto;
 
 public class TipoEmbarcacionDto {
     private String CDTEM;
