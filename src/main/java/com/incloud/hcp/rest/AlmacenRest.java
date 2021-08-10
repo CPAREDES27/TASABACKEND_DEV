@@ -26,12 +26,12 @@ public class AlmacenRest {
     private JCOAlmacenService jcoAlmacenService;
 
     //@GetMapping(value = "/BuscarPlantas", produces = APPLICATION_JSON_VALUE)
-    @GetMapping(value = "/BuscarPlantas/{condicion}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PlantaDto>> BuscarPlantas(@PathVariable String condicion ) {
+    @PostMapping(value = "/BuscarPlantas", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PlantaDto>> BuscarPlantas(PlantaDto plantaDto ) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoAlmacenService.BuscarPlantas(condicion))
+            return Optional.ofNullable(this.jcoAlmacenService.BuscarPlantas(plantaDto))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

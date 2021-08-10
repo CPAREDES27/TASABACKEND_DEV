@@ -15,7 +15,7 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public List<CapacidadTanquesDto> BuscarCapacidadTanques(String tipoEmbarcacion, String nombreEmbarcacion)throws Exception{
+    public List<CapacidadTanquesDto> BuscarCapacidadTanques(String cdtem, String nmemb)throws Exception{
 
         String CDTEM, NMEMB;
         List<CapacidadTanquesDto> ListaCapTan= new ArrayList<CapacidadTanquesDto>();
@@ -29,29 +29,29 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("QUERY_TABLE", "ZFLTEM");
+        importx.setValue("QUERY_TABLE", "ZV_FLTE");
         importx.setValue("DELIMITER", "|");
         importx.setValue("P_USER", "FGARCIA");
 
 
         logger.error("listaCapacidadTanques_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
-        JCoTable tableImport = tables.getTable("ZV_FLTE");
+        JCoTable tableImport = tables.getTable("OPTIONS");
 
         logger.error("listaCapacidadTanques_5");;
 
-        CDTEM="CDTEM " + tipoEmbarcacion;
-        NMEMB ="DSBOD " + nombreEmbarcacion;
+        CDTEM="CDTEM " + cdtem;
+        NMEMB ="NMEMB " + nmemb;
 
 
         logger.error(CDTEM);;
         logger.error(NMEMB);;
 
-        if(tipoEmbarcacion!=null) {
+        if(cdtem!=null) {
             tableImport.appendRow();
             tableImport.setValue("WA", CDTEM);
         }
-        if(nombreEmbarcacion!=null) {
+        if(nmemb!=null) {
             tableImport.appendRow();
             tableImport.setValue("WA", NMEMB);
         }
@@ -82,14 +82,14 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
             ArrayResponse= response.split("\\|");
 
             CapacidadTanquesDto captan = new CapacidadTanquesDto();
-            captan.setCDEMB(tableExport.getString());
-           /* captan.setCDEMB(ArrayResponse[1].trim());
-            captan.setNMEMB(ArrayResponse[2].trim());
-            captan.setWERKS(ArrayResponse[4].trim());
-            captan.setMREMB(ArrayResponse[5].trim());
-            captan.setCDTEM(ArrayResponse[6].trim());
-            captan.setDESCR(ArrayResponse[7].trim());
-            captan.setCDTAN(ArrayResponse[8].trim());*/
+
+            captan.setCDEMB(ArrayResponse[1].trim());
+            captan.setNMEMB(ArrayResponse[4].trim());
+            captan.setWERKS(ArrayResponse[3].trim());
+            captan.setMREMB(ArrayResponse[2].trim());
+            captan.setCDTEM(ArrayResponse[5].trim());
+            captan.setDESCR(ArrayResponse[6].trim());
+            captan.setCDTAN(ArrayResponse[13].trim());
 
             ListaCapTan.add(captan);
         }

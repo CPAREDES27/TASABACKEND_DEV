@@ -27,7 +27,7 @@ public class BodegaRest {
     private JCOBodegaService jcoBodegaService;
 
     @PostMapping(value = "/BuscarBodega", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BodegaDto>> BuscarBodegas(@RequestBody BodegaDto bodegaDto) {
+    public ResponseEntity<List<BodegaDto>> BuscarBodegas(BodegaDto bodegaDto) {
         //Parametro dto = new Parametro();
 
         try {

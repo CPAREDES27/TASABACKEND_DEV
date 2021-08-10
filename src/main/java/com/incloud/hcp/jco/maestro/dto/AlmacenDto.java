@@ -1,13 +1,13 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class AlmacenDto {
-    public String CDALM;        //CDALM
-    public String CDPTA;       //CDPTA
-    public String DSALM;      //DSALM
-    public String WERKS;           //WERKS
-    public String NEWKO;       //NEWKO
-    public String CDALE;       //CDALE
-    public String ESREG;        //ESREG
+    private String CDALM;        //CDALM
+    private String CDPTA;       //CDPTA
+    private String DSALM;      //DSALM
+    private String WERKS;           //WERKS
+    private String NEWKO;       //NEWKO
+    private String CDALE;       //CDALE
+    private String ESREG;        //ESREG
 
     public String getCDALM() { return CDALM;  }
 

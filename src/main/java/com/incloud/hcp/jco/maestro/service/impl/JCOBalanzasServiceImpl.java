@@ -15,9 +15,9 @@ public class JCOBalanzasServiceImpl implements JCOBalanzasService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public List<UnidadMedidaDto> ListarUnidadMedida(String condicion) throws Exception {
+    public List<UnidadMedidaDto> ListarUnidadMedida(String esreg) throws Exception {
 
-        String CDALM, CDPTA, DSALM, ESREG;
+        String ESREG;
 
         List<UnidadMedidaDto> ListaUmd=new ArrayList<UnidadMedidaDto>();
 
@@ -38,9 +38,11 @@ public class JCOBalanzasServiceImpl implements JCOBalanzasService {
         logger.error("listaUnidadMedida_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         JCoTable tableImport = tables.getTable("OPTIONS");
-        tableImport.appendRow();
+
         logger.error("listaUnidadMedida_5");;
-        ESREG="ESREG LIKE '"+condicion+"'";
+
+        ESREG="ESREG "+esreg;
+        tableImport.appendRow();
         tableImport.setValue("WA", ESREG);
 
         //Ejecutar Funcion
@@ -64,12 +66,15 @@ public class JCOBalanzasServiceImpl implements JCOBalanzasService {
             logger.error("listaUnidadMedida_8");
 
 
-            response=tableExport.getString();
-            ArrayResponse= response.split("\\|");
+            response = tableExport.getString();
+            ArrayResponse = response.split("\\|");
 
             UnidadMedidaDto umd = new UnidadMedidaDto();
+
             umd.setCDUMD(ArrayResponse[1].trim());
             umd.setDSUMD(ArrayResponse[2].trim());
+            //umd.setDSUMD(ArrayResponse[2].trim());
+
 
 
 
