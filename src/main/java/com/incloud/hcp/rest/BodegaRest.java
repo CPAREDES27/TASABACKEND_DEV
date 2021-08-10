@@ -1,5 +1,6 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.gestionpesca.dto.Options;
 import com.incloud.hcp.jco.maestro.dto.BodegaDto;
 import com.incloud.hcp.jco.maestro.service.JCOBodegaService;
 import org.slf4j.Logger;
@@ -27,11 +28,11 @@ public class BodegaRest {
     private JCOBodegaService jcoBodegaService;
 
     @PostMapping(value = "/BuscarBodega", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BodegaDto>> BuscarBodegas(BodegaDto bodegaDto) {
+    public ResponseEntity<List<BodegaDto>> BuscarBodegas(@RequestBody List<Options> options) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoBodegaService.BuscarBodegas(bodegaDto))
+            return Optional.ofNullable(this.jcoBodegaService.BuscarBodegas(options))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
