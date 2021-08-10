@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface JCOBalanzasService {
 
-    List<UnidadMedidaDto> ListarUnidadMedida(String condicion)throws Exception;
+    List<UnidadMedidaDto> ListarUnidadMedida(String esreg)throws Exception;
     List<BalanzaDto> ListarBalanzas()throws Exception;
 
 }

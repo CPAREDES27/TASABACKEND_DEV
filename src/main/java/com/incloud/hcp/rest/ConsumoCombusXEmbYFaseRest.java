@@ -18,19 +18,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/ConsumoCombustibleXEmbarcacionYFase")
-public class ConsumoCombusXEmbYFase {
+public class ConsumoCombusXEmbYFaseRest {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private JCOConsumoCombustibleXEmbarcionesYFasesServices jcoConsumoCombustibleXEmbarcionesYFasesServices;
 
-    @GetMapping(value = "/ListarZonarArea", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ZonaAreaDto>> ListarZonarArea() {
+    @GetMapping(value = "/ListarZonaArea", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ZonaAreaDto>> ListarZonaArea() {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoConsumoCombustibleXEmbarcionesYFasesServices.ListarZonarArea())
+            return Optional.ofNullable(this.jcoConsumoCombustibleXEmbarcionesYFasesServices.ListarZonaArea())
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

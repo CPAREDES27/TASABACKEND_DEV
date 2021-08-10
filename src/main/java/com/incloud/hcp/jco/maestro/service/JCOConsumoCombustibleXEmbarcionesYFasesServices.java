@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface JCOConsumoCombustibleXEmbarcionesYFasesServices {
 
-    List<ZonaAreaDto> ListarZonarArea()throws Exception;
+    List<ZonaAreaDto> ListarZonaArea()throws Exception;
 }

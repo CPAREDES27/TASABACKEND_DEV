@@ -2,112 +2,112 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class PlantaDto {
 
-    private String CodPlanta;                //CDPTA
-    private String Centro;                   //WERKS
-    private String DescripcionPlanta;        //DESCR
-    private String RucEmp;                   //STCD1
-    private String DescripcionEmp;           //NAME1
-    private String IndPropiedad;             //INPRP
-    private String CodigoPuerto;             //CDPTO
-    private String DescripcionPuerto;        //DSPTO
-    private String CodigoEmpresa;            //CDEMP
-    private String CodigoZonaLiteral;        //CDZLT
-    private String DescripcionZonaLit;       //DSZLT
-    private String EstadoReg;                //ESREG
+    private String CDPTA;                // CodPlanta
+    private String WERKS;                //Centro
+    private String DESCR;                //DESCR DescripcionPlanta
+    private String STCD1;                //STCD1 RucEmp
+    private String NAME1;                // DescripcionEmp
+    private String INPRP;                // IndPropiedad
+    private String CDPTO;                // CodigoPuerto
+    private String DSPTO;                // DescripcionPuerto
+    private String CDEMP;                //CDEMP CodigoEmpresa
+    private String CDZLT;                // CodigoZonaLiteral
+    private String DSZLT;                //DSZLT DescripcionZonaLit
+    private String ESREG;                //ESREG EstadoReg
 
-    public String getCodPlanta() {
-        return CodPlanta;
+    public String getCDPTA() {
+        return CDPTA;
     }
 
-    public void setCodPlanta(String codPlanta) {
-        CodPlanta = codPlanta;
+    public void setCDPTA(String CDPTA) {
+        this.CDPTA = CDPTA;
     }
 
-    public String getCentro() {
-        return Centro;
+    public String getWERKS() {
+        return WERKS;
     }
 
-    public void setCentro(String centro) {
-        Centro = centro;
+    public void setWERKS(String WERKS) {
+        this.WERKS = WERKS;
     }
 
-    public String getDescripcionPlanta() {
-        return DescripcionPlanta;
+    public String getDESCR() {
+        return DESCR;
     }
 
-    public void setDescripcionPlanta(String descripcionPlanta) {
-        DescripcionPlanta = descripcionPlanta;
+    public void setDESCR(String DESCR) {
+        this.DESCR = DESCR;
     }
 
-    public String getRucEmp() {
-        return RucEmp;
+    public String getSTCD1() {
+        return STCD1;
     }
 
-    public void setRucEmp(String rucEmp) {
-        RucEmp = rucEmp;
+    public void setSTCD1(String STCD1) {
+        this.STCD1 = STCD1;
     }
 
-    public String getDescripcionEmp() {
-        return DescripcionEmp;
+    public String getNAME1() {
+        return NAME1;
     }
 
-    public void setDescripcionEmp(String descripcionEmp) {
-        DescripcionEmp = descripcionEmp;
+    public void setNAME1(String NAME1) {
+        this.NAME1 = NAME1;
     }
 
-    public String getIndPropiedad() {
-        return IndPropiedad;
+    public String getINPRP() {
+        return INPRP;
     }
 
-    public void setIndPropiedad(String indPropiedad) {
-        IndPropiedad = indPropiedad;
+    public void setINPRP(String INPRP) {
+        this.INPRP = INPRP;
     }
 
-    public String getCodigoPuerto() {
-        return CodigoPuerto;
+    public String getCDPTO() {
+        return CDPTO;
     }
 
-    public void setCodigoPuerto(String codigoPuerto) {
-        CodigoPuerto = codigoPuerto;
+    public void setCDPTO(String CDPTO) {
+        this.CDPTO = CDPTO;
     }
 
-    public String getDescripcionPuerto() {
-        return DescripcionPuerto;
+    public String getDSPTO() {
+        return DSPTO;
     }
 
-    public void setDescripcionPuerto(String descripcionPuerto) {
-        DescripcionPuerto = descripcionPuerto;
+    public void setDSPTO(String DSPTO) {
+        this.DSPTO = DSPTO;
     }
 
-    public String getCodigoEmpresa() {
-        return CodigoEmpresa;
+    public String getCDEMP() {
+        return CDEMP;
     }
 
-    public void setCodigoEmpresa(String codigoEmpresa) {
-        CodigoEmpresa = codigoEmpresa;
+    public void setCDEMP(String CDEMP) {
+        this.CDEMP = CDEMP;
     }
 
-    public String getCodigoZonaLiteral() {
-        return CodigoZonaLiteral;
+    public String getCDZLT() {
+        return CDZLT;
     }
 
-    public void setCodigoZonaLiteral(String codigoZonaLiteral) {
-        CodigoZonaLiteral = codigoZonaLiteral;
+    public void setCDZLT(String CDZLT) {
+        this.CDZLT = CDZLT;
     }
 
-    public String getDescripcionZonaLit() {
-        return DescripcionZonaLit;
+    public String getDSZLT() {
+        return DSZLT;
     }
 
-    public void setDescripcionZonaLit(String descripcionZonaLit) {
-        DescripcionZonaLit = descripcionZonaLit;
+    public void setDSZLT(String DSZLT) {
+        this.DSZLT = DSZLT;
     }
 
-    public String getEstadoReg() {
-        return EstadoReg;
+    public String getESREG() {
+        return ESREG;
     }
 
-    public void setEstadoReg(String estadoReg) {
-        EstadoReg = estadoReg;
+    public void setESREG(String ESREG) {
+        this.ESREG = ESREG;
     }
 }

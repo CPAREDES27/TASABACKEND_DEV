@@ -1,7 +1,7 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.ConstantesDto;
-import com.incloud.hcp.jco.maestro.service.JCOConstantesSevice;
+import com.incloud.hcp.jco.maestro.dto.ConsumoCombustibleXFaseDto;
+import com.incloud.hcp.jco.maestro.service.JCOConsumoCombustibleXFaseService;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,45 +11,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class JCOConstantesImpl implements JCOConstantesSevice {
+public class JCOConsumoCombustibleXFaseImpl implements JCOConsumoCombustibleXFaseService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public List<ConstantesDto> ListarConstantes()throws Exception{
 
-        List<ConstantesDto> ListaConstantes= new ArrayList<ConstantesDto>();
+    @Override
+    public List<ConsumoCombustibleXFaseDto> ListarConsumoxFase() throws Exception {
 
-        logger.error("listaConstantes_1");;
+        List<ConsumoCombustibleXFaseDto> ListaConsumoxFase= new ArrayList<ConsumoCombustibleXFaseDto>();
+
+        logger.error("listaConsumoxFase_1");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         //JCo
-        logger.error("listaConstantes_2");;
+        logger.error("listaConsumoxFase_2");;
         JCoRepository repo = destination.getRepository();
-        logger.error("listaConstantes_3");;
+        logger.error("listaConsumoxFase_3");;
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("QUERY_TABLE", "ZFLCNS");
+        importx.setValue("QUERY_TABLE", "ZFLCCF");
         importx.setValue("DELIMITER", "|");
         importx.setValue("P_USER", "FGARCIA");
 
 
-        logger.error("listaConstantes_4");;
+        logger.error("listaConsumoxFase_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         //JCoTable tableImport = tables.getTable("OPTIONS");
 
-        logger.error("listaConstantes_5");;
+        logger.error("listaConsumoxFase_5");;
 
 
         //Ejecutar Funcion
         stfcConnection.execute(destination);
-        logger.error("listaConstantes_6");
+        logger.error("listaConsumoxFase_6");
         //DestinationAcce
 
         //Recuperar Datos de SAP
 
         JCoTable tableExport = tables.getTable("DATA");
 
-        logger.error("listaConstantes_7");
+        logger.error("listaConsumoxFase_7");
 
         String response;
         String[] ArrayResponse;
@@ -58,30 +60,26 @@ public class JCOConstantesImpl implements JCOConstantesSevice {
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
 
-            logger.error("listaConstantes_8");
+            logger.error("listaConsumoxFase_8");
 
 
             response=tableExport.getString();
             ArrayResponse= response.split("\\|");
 
-            ConstantesDto constantes = new ConstantesDto();
+            ConsumoCombustibleXFaseDto ccxf = new ConsumoCombustibleXFaseDto();
+            ccxf.setCDFAS(ArrayResponse[1].trim());
+            ccxf.setCSTEO(ArrayResponse[2].trim());
+            ccxf.setCSMAX(ArrayResponse[3].trim());
 
-            constantes.setCDCNS(ArrayResponse[1].trim());
-            constantes.setDESCR(ArrayResponse[2].replaceAll(" ",""));
-            constantes.setVAL01(ArrayResponse[3].trim());
-            constantes.setVAL02(ArrayResponse[4].trim());
-            constantes.setVAL03(ArrayResponse[5].trim());
-            constantes.setVAL04(ArrayResponse[6].trim());
-
-
-            ListaConstantes.add(constantes);
+            ListaConsumoxFase.add(ccxf);
         }
 
 
-        logger.error("listaConstantes_9");
+        logger.error("listaConsumoxFase_9");
 
-        return ListaConstantes;
+
+        return ListaConsumoxFase;
+
 
     }
-
 }

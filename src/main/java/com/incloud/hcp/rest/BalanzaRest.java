@@ -23,12 +23,12 @@ public class BalanzaRest {
     @Autowired
     private JCOBalanzasService jcoBalanzasService;
 
-    @GetMapping(value = "/ListarUnidadMedida/{condicion}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UnidadMedidaDto>> ListarUnidadMedida(@PathVariable String condicion ) {
+    @PostMapping(value = "/ListarUnidadMedida/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UnidadMedidaDto>> ListarUnidadMedida(String esreg ) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoBalanzasService.ListarUnidadMedida(condicion))
+            return Optional.ofNullable(this.jcoBalanzasService.ListarUnidadMedida(esreg))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

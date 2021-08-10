@@ -15,7 +15,7 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public List<CapacidadTanquesDto> BuscarCapacidadTanques(String tipoEmbarcacion, String nombreEmbarcacion)throws Exception{
+    public List<CapacidadTanquesDto> BuscarCapacidadTanques(String cdtem, String nmemb)throws Exception{
 
         String CDTEM, NMEMB;
         List<CapacidadTanquesDto> ListaCapTan= new ArrayList<CapacidadTanquesDto>();
@@ -40,18 +40,18 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
         logger.error("listaCapacidadTanques_5");;
 
-        CDTEM="CDTEM " + tipoEmbarcacion;
-        NMEMB ="DSBOD " + nombreEmbarcacion;
+        CDTEM="CDTEM " + cdtem;
+        NMEMB ="NMEMB " + nmemb;
 
 
         logger.error(CDTEM);;
         logger.error(NMEMB);;
 
-        if(tipoEmbarcacion!=null) {
+        if(cdtem!=null) {
             tableImport.appendRow();
             tableImport.setValue("WA", CDTEM);
         }
-        if(nombreEmbarcacion!=null) {
+        if(nmemb!=null) {
             tableImport.appendRow();
             tableImport.setValue("WA", NMEMB);
         }

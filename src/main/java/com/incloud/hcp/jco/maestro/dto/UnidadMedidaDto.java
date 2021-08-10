@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.maestro.dto;
 public class UnidadMedidaDto {
     private String CDUMD;       //Codigo
     private String DSUMD;  //Descripcion
+
     private String getCDUMD() {
         return CDUMD;
     }

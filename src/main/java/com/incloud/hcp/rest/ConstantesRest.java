@@ -25,7 +25,7 @@ public class ConstantesRest {
     @Autowired
     private JCOConstantesSevice jcoConstantesSevice;
 
-    @GetMapping(value = "/ListarBombas", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/ListarConstantes", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ConstantesDto>> ListarConstantes() {
         //Parametro dto = new Parametro();
 

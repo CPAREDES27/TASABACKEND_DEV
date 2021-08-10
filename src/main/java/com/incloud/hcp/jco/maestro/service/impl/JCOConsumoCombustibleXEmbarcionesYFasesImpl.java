@@ -16,7 +16,7 @@ public class JCOConsumoCombustibleXEmbarcionesYFasesImpl implements JCOConsumoCo
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public List<ZonaAreaDto> ListarZonarArea()throws Exception{
+    public List<ZonaAreaDto> ListarZonaArea()throws Exception{
 
        List<ZonaAreaDto> ListaZonaArea=new ArrayList<ZonaAreaDto>();
 
