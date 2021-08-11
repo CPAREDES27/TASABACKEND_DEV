@@ -36,7 +36,9 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
         logger.error("listaCapacidadTanques_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
+
         JCoTable tableImport = tables.getTable("OPTIONS");
+
 
         logger.error("listaCapacidadTanques_5");;
 

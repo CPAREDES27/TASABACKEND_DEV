@@ -101,6 +101,7 @@ public class JCOBalanzasServiceImpl implements JCOBalanzasService {
         JCoRepository repo = destination.getRepository();
         logger.error("listaBalanza_3");;
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
+
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
         importx.setValue("QUERY_TABLE", "ZV_FLBA");
