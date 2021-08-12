@@ -10,5 +10,5 @@ public interface JCOMaestrosService {
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
     List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
     List<PuntosDescargaDto> obtenerPuntosDescarga(String usuario)throws Exception;
-
+    EmpresaDto obtenerEmpresa(EmpresaImports imports)throws Exception;
 }

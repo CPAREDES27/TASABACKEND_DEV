@@ -7,6 +7,8 @@ import com.incloud.hcp.jco.gestionpesca.dto.Options;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
+import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
+import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,8 @@ public class EmbarcacionRest {
     @Autowired
     private JCOTipoEmbarcacionService jcoTipoEmbarcacionService;
 
-
+    @Autowired
+    private com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService EmbarcacionService;
 
 
 
@@ -73,6 +76,18 @@ public class EmbarcacionRest {
         });
 
         return lista;
+    }
+    @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<com.incloud.hcp.jco.maestro.dto.EmbarcacionDto>> ConsultarEmbarcaciones(@RequestBody EmbarcacionImports imports){
+
+        try {
+            return Optional.ofNullable(this.EmbarcacionService.obtenerEmbarcaciones(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
     }
 
 }

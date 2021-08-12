@@ -2,12 +2,16 @@ package com.incloud.hcp.jco.gestionpesca.service.impl;
 
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
+import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.util.EjecutarRFC;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -55,4 +59,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return listaEmbarcacion;
     }
+
+
 }

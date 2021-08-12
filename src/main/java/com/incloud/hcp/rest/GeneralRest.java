@@ -15,13 +15,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RestController
-@RequestMapping(value = "/api/Maestros")
-public class MaestrosRest {
+@RequestMapping(value = "/api/General")
+public class GeneralRest {
 
     @Autowired
     private JCOMaestrosService MaestroService;
 
-    @PostMapping(value = "/ConsultarMaestro/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Read_Table/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ConsultarMaestro(@RequestBody MaestroImports imports){
 
         try {
@@ -33,6 +33,21 @@ public class MaestrosRest {
         }
 
     }
+
+    @PostMapping(value = "/Update_Table/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.editarMaestro(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+/*
     @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EmbarcacionDto>> ConsultarEmbarcaciones(@RequestBody EmbarcacionImports imports){
 
@@ -57,19 +72,19 @@ public class MaestrosRest {
         }
 
     }
-    @PostMapping(value = "/EditarMaestro/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
+
+    @PostMapping(value = "/ConsultarEmpresa/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmpresaDto> ObtenerEmpresa(@RequestBody EmpresaImports imports){
 
         try {
-            return Optional.ofNullable(this.MaestroService.editarMaestro(imports))
+            return Optional.ofNullable(this.MaestroService.obtenerEmpresa(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
 
-    }
-
+    }*/
 
 
 }

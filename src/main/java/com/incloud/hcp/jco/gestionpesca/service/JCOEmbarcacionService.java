@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface JCOEmbarcacionService {
     List<EmbarcacionDto> listaEmbarcacion(String condicion) throws Exception;
+
 }
