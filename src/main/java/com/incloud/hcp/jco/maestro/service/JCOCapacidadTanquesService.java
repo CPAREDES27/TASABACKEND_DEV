@@ -1,9 +1,10 @@
 package com.incloud.hcp.jco.maestro.service;
 
-import com.incloud.hcp.jco.maestro.dto.CapacidadTanquesDto;
-
-import java.util.List;
+import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
+import com.incloud.hcp.util.Mensaje;
+import com.incloud.hcp.util.Tablas;
 
 public interface JCOCapacidadTanquesService {
-    List<CapacidadTanquesDto> BuscarCapacidadTanques(String cdtem, String nmemb)throws Exception;
+
+    Mensaje EditarCaptanques(STR_SETDto ctdto, String tabla)throws Exception;
 }

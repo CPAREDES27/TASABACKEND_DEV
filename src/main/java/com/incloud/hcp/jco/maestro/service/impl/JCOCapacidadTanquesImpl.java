@@ -1,105 +1,68 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.CapacidadTanquesDto;
+import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
 import com.incloud.hcp.jco.maestro.service.JCOCapacidadTanquesService;
+import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.EjecutarRFC;
+import com.incloud.hcp.util.Mensaje;
+import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public List<CapacidadTanquesDto> BuscarCapacidadTanques(String cdtem, String nmemb)throws Exception{
 
-        String CDTEM, NMEMB;
-        List<CapacidadTanquesDto> ListaCapTan= new ArrayList<CapacidadTanquesDto>();
+    public Mensaje EditarCaptanques(STR_SETDto str_setDto, String tabla)throws Exception{
 
-        logger.error("listaCapacidadTanques_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        EjecutarRFC exec= new EjecutarRFC();
+        Mensaje msj= exec.Exec_ZFL_RFC_ACT_CAMP_TAB(str_setDto, tabla);
+/*
+        logger.error("EditarCaptanques_1");;
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
-        logger.error("listaCapacidadTanques_2");;
+        logger.error("EditarCaptanques_2");;
         JCoRepository repo = destination.getRepository();
-        logger.error("listaCapacidadTanques_3");;
-        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
+        logger.error("EditarCaptanques_3");;
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ACT_CAMP_TAB);
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("QUERY_TABLE", "ZV_FLTE");
-        importx.setValue("DELIMITER", "|");
-        importx.setValue("P_USER", "FGARCIA");
-
-
-        logger.error("listaCapacidadTanques_4");;
+        importx.setValue("P_USER", str_setDto.getP_USER());
+        logger.error("EditarCaptanques_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
-
-        JCoTable tableImport = tables.getTable("OPTIONS");
-
-
-        logger.error("listaCapacidadTanques_5");;
-
-        CDTEM="CDTEM " + cdtem;
-        NMEMB ="NMEMB " + nmemb;
-
-
-        logger.error(CDTEM);;
-        logger.error(NMEMB);;
-
-        if(cdtem!=null) {
-            tableImport.appendRow();
-            tableImport.setValue("WA", CDTEM);
-        }
-        if(nmemb!=null) {
-            tableImport.appendRow();
-            tableImport.setValue("WA", NMEMB);
-        }
-
-
+        JCoTable tableImport = tables.getTable(Tablas.STR_SET);
+        tableImport.appendRow();
+        logger.error("EditarCaptanques_5");;
+        tableImport.setValue("NMTAB", str_setDto.getNMTAB());
+        tableImport.setValue("CMSET", str_setDto.getCMSET());
+        tableImport.setValue("CMOPT", str_setDto.getCMOPT());
         //Ejecutar Funcion
+        logger.error("NMTAB " +  str_setDto.getNMTAB());
+        logger.error("CMSET " + str_setDto.getCMOPT());
+        logger.error("CMOPT " + str_setDto.getCMSET());
         stfcConnection.execute(destination);
-        logger.error("listaCapacidadTanques_6");
-        //DestinationAcce
+        logger.error("EditarCaptanques_6");
+
+        Mensaje msj= new Mensaje();
+        msj.setMensaje("Ok");
 
         //Recuperar Datos de SAP
+        /*
+        JCoTable tableExport = tables.getTable(Tablas.T_MENSAJE);
+        tableExport.setRow(0);
+        mensaje=tableExport.getString("DSMIN");
 
-        JCoTable tableExport = tables.getTable("DATA");
-
-        logger.error("listaCapacidadTanques_7");
-
-        String response;
-        String[] ArrayResponse;
-
-
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-
-            logger.error("listaCapacidadTanques_8");
+        if(mensaje==""){
+            mensaje="Ok";
+        }*/
 
 
-            response=tableExport.getString();
-            ArrayResponse= response.split("\\|");
-
-            CapacidadTanquesDto captan = new CapacidadTanquesDto();
-
-            captan.setCDEMB(ArrayResponse[1].trim());
-            captan.setNMEMB(ArrayResponse[4].trim());
-            captan.setWERKS(ArrayResponse[3].trim());
-            captan.setMREMB(ArrayResponse[2].trim());
-            captan.setCDTEM(ArrayResponse[5].trim());
-            captan.setDESCR(ArrayResponse[6].trim());
-            captan.setCDTAN(ArrayResponse[13].trim());
-
-            ListaCapTan.add(captan);
-        }
-
-
-        logger.error("listaCapacidadTanques_9");
-
-        return ListaCapTan;
+        return msj;
     }
+
 
 }

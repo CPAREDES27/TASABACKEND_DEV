@@ -1,10 +1,13 @@
 package com.incloud.hcp.jco.maestro.service;
 
-import com.incloud.hcp.jco.maestro.dto.MaestroExport;
-import com.incloud.hcp.jco.maestro.dto.MaestroImports;
+import com.incloud.hcp.jco.maestro.dto.*;
+
+import java.util.List;
 
 public interface JCOMaestrosService {
 
     MaestroExport obtenerMaestro (MaestroImports imports) throws Exception;
+    List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
+    List<PuntosDescargaDto> obtenerPuntosDescarga(String usuario)throws Exception;
 
 }
