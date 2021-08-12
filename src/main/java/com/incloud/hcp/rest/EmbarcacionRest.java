@@ -7,6 +7,8 @@ import com.incloud.hcp.jco.gestionpesca.dto.Options;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
+import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionDto;
+import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import org.json.JSONObject;
@@ -82,6 +84,18 @@ public class EmbarcacionRest {
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.obtenerEmbarcaciones(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/BusquedasEmbarcacion/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BusquedaEmbarcacionDto>> BusquedaEmbarcaciones(@RequestBody BusquedaEmbarcacionImports imports){
+
+        try {
+            return Optional.ofNullable(this.EmbarcacionService.busquedaEmbarcaciones(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

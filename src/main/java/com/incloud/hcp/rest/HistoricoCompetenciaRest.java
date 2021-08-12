@@ -23,7 +23,7 @@ public class HistoricoCompetenciaRest {
     @Autowired
     private JCOHistoricoCompetenciaService jcoHistoricoCompetenciaService;
 
-    @PostMapping(value = "/EditarHistoricoCompetencia", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Editar_nuevo", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody STR_SETDto str_setDto) {
         //Parametro dto = new Parametro();
 

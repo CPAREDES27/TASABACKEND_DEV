@@ -47,44 +47,6 @@ public class GeneralRest {
 
     }
 
-/*
-    @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmbarcacionDto>> ConsultarEmbarcaciones(@RequestBody EmbarcacionImports imports){
-
-        try {
-            return Optional.ofNullable(this.MaestroService.obtenerEmbarcaciones(imports))
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
-            throw new RuntimeException(e.toString());
-        }
-
-    }
-    @PostMapping(value = "/ConsultarPuntosDescarga/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PuntosDescargaDto>> ConsultarPuntosDescarga(@RequestBody String usuario){
-
-        try {
-            return Optional.ofNullable(this.MaestroService.obtenerPuntosDescarga(usuario))
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
-            throw new RuntimeException(e.toString());
-        }
-
-    }
-
-    @PostMapping(value = "/ConsultarEmpresa/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmpresaDto> ObtenerEmpresa(@RequestBody EmpresaImports imports){
-
-        try {
-            return Optional.ofNullable(this.MaestroService.obtenerEmpresa(imports))
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
-            throw new RuntimeException(e.toString());
-        }
-
-    }*/
 
 
 }

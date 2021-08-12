@@ -31,7 +31,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         imports.put("ROWCOUNT", importsParam.getRowcount());
         imports.put("P_USER", importsParam.getP_user());
         imports.put("P_ORDER", importsParam.getOrder());
-
+        logger.error("obtenerMaestro_1");
         //setear mapeo de tabla options
         List<MaestroOptions> options = importsParam.getOptions();
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
@@ -41,6 +41,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             record.put("WA", mo.getWa());
             tmpOptions.add(record);
         }
+        logger.error("obtenerMaestro_2");
 
         //ejecutar RFC ZFL_RFC_READ_TABLE
         EjecutarRFC exec = new EjecutarRFC();
@@ -66,151 +67,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     }
 
-
-    public List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception{
-
-        //setear mapeo de parametros import
-        HashMap<String, Object> imports = new HashMap<String, Object>();
-        imports.put("P_USER", importsParam.getP_user());
-        logger.error("ObtenerEmbarcaciones_1");
-        //setear mapeo de tabla options
-        List<MaestroOptions> options = importsParam.getOptions();
-        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        for(int i = 0; i < options.size(); i++){
-            MaestroOptions mo = options.get(i);
-            HashMap<String, Object> record = new HashMap<String, Object>();
-            record.put("WA", mo.getWa());
-            tmpOptions.add(record);
-        }
-        logger.error("ObtenerEmbarcaciones_2");
-        List<MaestroOptions> options2 = importsParam.getOptions2();
-        List<HashMap<String, Object>> tmpOptions2 = new ArrayList<HashMap<String, Object>>();
-        for(int i = 0; i < options2.size(); i++){
-            MaestroOptions mo = options2.get(i);
-            HashMap<String, Object> record2 = new HashMap<String, Object>();
-            record2.put("WA", mo.getWa());
-            tmpOptions2.add(record2);
-        }
-        logger.error("ObtenerEmbarcaciones_3");
-        //ejecutar RFC ZFL_RFC_READ_TABLE
-        EjecutarRFC exec = new EjecutarRFC();
-        logger.error("ObtenerEmbarcaciones_4");
-        List<EmbarcacionDto> ListaEmb =  exec.Execute_ZFL_RFC_CONS_EMBARCA(imports, tmpOptions, tmpOptions2);
-
-        logger.error("ObtenerEmbarcaciones_5");
-        return ListaEmb;
-    }
-
-    public List<PuntosDescargaDto> obtenerPuntosDescarga(String usuario)throws Exception{
-
-        List<PuntosDescargaDto> ListPuntosD = new ArrayList<PuntosDescargaDto>();
-
-        logger.error("listaEmbarcacion_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        //JCo
-        logger.error("listaEmbarcacion_2");;
-        JCoRepository repo = destination.getRepository();
-        logger.error("listaEmbarcacion_3");;
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_MAES_PUNT_DESCA);
-        JCoParameterList importx = stfcConnection.getImportParameterList();
-        //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("P_USER", usuario);
-        logger.error("listaEmbarcacion_4");;
-        JCoParameterList tables = stfcConnection.getTableParameterList();
-
-        logger.error("listaEmbarcacion_5");;
-        //tableImport.setValue("WA", condicion);
-        //Ejecutar Funcion
-        stfcConnection.execute(destination);
-        logger.error("listaEmbarcacion_6");
-        //DestinationAcce
-
-        //Recuperar Datos de SAP
-
-        JCoTable tableExport = tables.getTable(Tablas.ST_PDG);
-
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-            PuntosDescargaDto dto = new PuntosDescargaDto();
-
-            dto.setCDPDG(tableExport.getString("CDPDG"));
-            dto.setCDTPD(tableExport.getString("CDTPD"));
-            dto.setDSPDG(tableExport.getString("DSPDG"));
-            dto.setESREG(tableExport.getString("ESREG"));
-            dto.setCDPTA(tableExport.getString("CDPTA"));
-            dto.setCDEMB(tableExport.getString("CDEMB"));
-            dto.setNMEMB(tableExport.getString("NMEMB"));
-            dto.setDESCR(tableExport.getString("DESCR"));
-            ListPuntosD.add(dto);
-            //lista.add(param);
-        }
-
-        return ListPuntosD;
-    }
-
-    public EmpresaDto obtenerEmpresa(EmpresaImports imports)throws Exception{
-
-        logger.error("obtenerEmpresa_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        //JCo
-        logger.error("obtenerEmpresa_2");;
-        JCoRepository repo = destination.getRepository();
-        logger.error("obtenerEmpresa_3");;
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMPRESAS);
-        JCoParameterList importx = stfcConnection.getImportParameterList();
-        importx.setValue("P_CDUSR", imports.getP_cdusr());
-        importx.setValue("P_RUC", imports.getP_ruc());
-        logger.error("obtenerEmpresa_4");;
-
-        JCoParameterList tables = stfcConnection.getTableParameterList();
-
-        List<MaestroOptions> options = imports.getOptions();
-        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        for(int i = 0; i < options.size(); i++){
-            MaestroOptions mo = options.get(i);
-            HashMap<String, Object> record = new HashMap<String, Object>();
-            record.put("WA", mo.getWa());
-            tmpOptions.add(record);
-        }
-
-        EjecutarRFC exe= new EjecutarRFC();
-        exe.setTable(tables, "P_OPTIONS", tmpOptions);
-
-
-        logger.error("obtenerEmpresa_5");;
-        //tableImport.setValue("WA", condicion);
-        //Ejecutar Funcion
-        stfcConnection.execute(destination);
-        logger.error("obtenerEmpresa_6");
-        //DestinationAcce
-
-
-        //Recuperar Datos de SAP
-
-        JCoTable tableExport = tables.getTable("STR_EMP");
-        EmpresaDto dto = new EmpresaDto();
-        logger.error("obtenerEmpresa_7");
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-
-
-            dto.setCDGRE(tableExport.getString("CDGRE"));
-            dto.setCDEMP(tableExport.getString("CDEMP"));
-            dto.setDSEMP(tableExport.getString("DSEMP"));
-            dto.setINPRP(tableExport.getString("INPRP"));
-            dto.setESREG(tableExport.getString("ESREG"));
-            dto.setLIFNR(tableExport.getString("LIFNR"));
-            dto.setRUCPRO(tableExport.getString("RUCPRO"));
-            dto.setKUNNR(tableExport.getString("KUNNR"));
-            dto.setRUCLIE(tableExport.getString("RUCLIE"));
-
-        }
-        logger.error("obtenerEmpresa_7");
-
-
-
-        return dto;
-    }
 
 
 

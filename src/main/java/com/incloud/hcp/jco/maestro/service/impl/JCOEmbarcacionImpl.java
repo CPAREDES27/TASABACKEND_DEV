@@ -1,8 +1,6 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
 import com.incloud.hcp.util.EjecutarRFC;
 import org.slf4j.Logger;
@@ -51,4 +49,40 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         logger.error("ObtenerEmbarcaciones_5");
         return ListaEmb;
     }
+
+    @Override
+      public List<BusquedaEmbarcacionDto> busquedaEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception{
+
+        //setear mapeo de parametros import
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("P_USER", importsParam.getP_user());
+        imports.put("ROWCOUNT", importsParam.getRowcount());
+
+        logger.error("ObtenerEmbarcaciones_1");
+        //setear mapeo de tabla options
+        List<MaestroOptions> options = importsParam.getOptions();
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        for(int i = 0; i < options.size(); i++){
+            MaestroOptions mo = options.get(i);
+            HashMap<String, Object> record = new HashMap<String, Object>();
+            record.put("WA", mo.getWa());
+            tmpOptions.add(record);
+        }
+
+
+        logger.error("ObtenerEmbarcaciones_3");
+        //ejecutar RFC ZFL_RFC_READ_TABLE
+        EjecutarRFC exec = new EjecutarRFC();
+        logger.error("ObtenerEmbarcaciones_4");
+        List<BusquedaEmbarcacionDto> ListaEmb =  exec.Excute_ZFL_RFC_LECT_MAES_EMBAR(imports, tmpOptions);
+
+
+
+
+
+        logger.error("ObtenerEmbarcaciones_5");
+        return ListaEmb;
+
+    }
+
 }

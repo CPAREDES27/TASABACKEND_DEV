@@ -1,9 +1,6 @@
 package com.incloud.hcp.util;
 
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.MaestroExport;
-import com.incloud.hcp.jco.maestro.dto.MensajeDto;
-import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +19,19 @@ public class EjecutarRFC {
     public MaestroExport Execute_ZFL_RFC_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam) throws Exception{
         JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
         setImports(function, imports);
+        logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();
         setTable(jcoTables, "OPTIONS", optionsParam);
         function.execute(destination);
+        logger.error("Execute_ZFL_RFC_READ_TABLE_2");;
+
         JCoTable DATA = jcoTables.getTable("DATA");
         JCoTable FIELDS = jcoTables.getTable("FIELDS");
         //JCoTable T_MENSAJE = jcoTables.getTable("FIELDS");
         //T_MENSAJE.setRow(0);
         String mensaje = "Ok";
+        logger.error("Execute_ZFL_RFC_READ_TABLE_3");;
+
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         for (int i = 0; i < DATA.getNumRows(); i++) {
             DATA.setRow(i);
@@ -43,6 +45,8 @@ public class EjecutarRFC {
             };
             data.add(newRecord);
         }
+        logger.error("Execute_ZFL_RFC_READ_TABLE_4");;
+
         MaestroExport me = new MaestroExport();
         me.setData(data);
         me.setMensaje(mensaje);
@@ -65,6 +69,7 @@ public class EjecutarRFC {
 
     public void setTable(JCoParameterList listTables, String tableName, List<HashMap<String, Object>> data){
         JCoTable tableImport = listTables.getTable(tableName);
+        logger.error("setTable_1");
         for (int i = 0; i < data.size(); i++){
             tableImport.appendRow();
             HashMap<String, Object> record = data.get(i);
@@ -76,11 +81,14 @@ public class EjecutarRFC {
                 tableImport.setValue(key, value);
             }
         }
+        logger.error("setTable_2");
+
     }
 
     public JCoFunction getFunction (String FunctionName) throws Exception{
         destination = getDestination();
         JCoRepository repo = destination.getRepository();
+        logger.error("getFunction_1");
         return repo.getFunction(FunctionName);
     }
 
@@ -163,8 +171,8 @@ public class EjecutarRFC {
         tableImport.setValue("CMOPT", str_setDto.getCMOPT());
         //Ejecutar Funcion
         logger.error("NMTAB " +  Tabla);
-        logger.error("CMSET " + str_setDto.getCMOPT());
-        logger.error("CMOPT " + str_setDto.getCMSET());
+        logger.error("CMSET", str_setDto.getCMSET());
+        logger.error("CMOPT", str_setDto.getCMOPT());
         stfcConnection.execute(destination);
         logger.error("EditarCaptanques_6");
 
@@ -216,4 +224,96 @@ public class EjecutarRFC {
         return dto;
     }
 
+    public List<BusquedaEmbarcacionDto> Excute_ZFL_RFC_LECT_MAES_EMBAR(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam)throws Exception{
+
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_LECT_MAES_EMBAR);
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_1");
+        setImports(function, imports);
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_2");
+
+        JCoParameterList jcoTables = function.getTableParameterList();
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_3");
+        setTable(jcoTables, "OPTIONS", optionsParam);
+
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_4");
+        function.execute(destination);
+        JCoTable DATA = jcoTables.getTable(Tablas.S_DATA);
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_5");
+
+        String mensaje = "Ok";
+
+
+        List<BusquedaEmbarcacionDto> ListaEmb= new ArrayList<BusquedaEmbarcacionDto>();
+        for (int i = 0; i < DATA.getNumRows(); i++) {
+            DATA.setRow(i);
+            BusquedaEmbarcacionDto dto = new BusquedaEmbarcacionDto();
+
+            dto.setCDEMB(DATA.getString("CDEMB"));
+            dto.setNMEMB(DATA.getString("NMEMB"));
+            dto.setMREMB(DATA.getString("MREMB"));
+            dto.setNRPER(DATA.getString("NRPER"));
+            dto.setCDEMP(DATA.getString("CDEMP"));
+            dto.setNAME1(DATA.getString("NAME1"));
+            dto.setCDSPE(DATA.getString("CDSPE"));
+            dto.setDSSPE(DATA.getString("DSSPE"));
+            dto.setREGIM(DATA.getString("REGIM"));
+            dto.setCDTPR(DATA.getString("CDTPR"));
+            dto.setCDTCS(DATA.getString("CDTCS"));
+            dto.setCVADM(DATA.getString("CVADM"));
+            dto.setCPSDM(DATA.getString("CPSDM"));
+            dto.setCVPMS(DATA.getString("CVPMS"));
+            dto.setCPPMS(DATA.getString("CPPMS"));
+            dto.setCDGCP(DATA.getString("CDGCP"));
+            dto.setDSGCP(DATA.getString("DSGCP"));
+            dto.setCDGFL(DATA.getString("CDGFL"));
+            dto.setDSGFL(DATA.getString("DSGFL"));
+            dto.setCDGAC(DATA.getString("CDGAC"));
+            dto.setWERKS(DATA.getString("WERKS"));
+            dto.setNAME(DATA.getString("NAME"));
+            dto.setLGORT(DATA.getString("LGORT"));
+            dto.setLGOBE(DATA.getString("LGOBE"));
+            dto.setCDALS(DATA.getString("CDALS"));
+            dto.setKOSTL(DATA.getString("KOSTL"));
+            dto.setNRUBC(DATA.getString("NRUBC"));
+            dto.setCOCSC(DATA.getString("COCSC"));
+            dto.setESLOR(DATA.getString("ESLOR"));
+            dto.setMANGA(DATA.getString("MANGA"));
+            dto.setPNTAL(DATA.getString("PNTAL"));
+            dto.setTRBRT(DATA.getString("TRBRT"));
+            dto.setTRNET(DATA.getString("TRNET"));
+            dto.setESEMB(DATA.getString("ESEMB"));
+            dto.setIMAGN(DATA.getString("IMAGN"));
+            dto.setINPRP(DATA.getString("INPRP"));
+            dto.setFCEMB(DATA.getString("FCEMB"));
+            dto.setUCEMB(DATA.getString("UCEMB"));
+            dto.setFMEMB(DATA.getString("FMEMB"));
+            dto.setUMEMB(DATA.getString("UMEMB"));
+            dto.setNRTRI(DATA.getString("NRTRI"));
+            dto.setCDTEM(DATA.getString("CDTEM"));
+            dto.setTCBPS(DATA.getString("TCBPS"));
+            dto.setCNVPS(DATA.getString("CNVPS"));
+            dto.setFCVPS(DATA.getString("FCVPS"));
+            dto.setINOOC(DATA.getString("INOOC"));
+            dto.setCPNCN(DATA.getString("CPNCN"));
+            dto.setCPNSR(DATA.getString("CPNSR"));
+            dto.setCLGFL(DATA.getString("CLGFL"));
+            dto.setEMPTO(DATA.getString("EMPTO"));
+            dto.setTONAB(DATA.getString("TONAB"));
+            dto.setAQBRT(DATA.getString("AQBRT"));
+            dto.setAQNET(DATA.getString("AQNET"));
+            dto.setCDTAN(DATA.getString("CDTAN"));
+            dto.setNRORD(DATA.getString("NRORD"));
+            dto.setCOCAS(DATA.getString("COCAS"));
+            dto.setCOSUP(DATA.getString("COSUP"));
+            dto.setCDSVE(DATA.getString("CDSVE"));
+            dto.setDSSVE(DATA.getString("DSSVE"));
+
+
+            ListaEmb.add(dto);
+            //lista.add(param);
+        }
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_6");
+
+        return ListaEmb;
+    }
 }

@@ -28,7 +28,7 @@ public class CapacidadTanqueRest {
     @Autowired
     private JCOCapacidadTanquesService jcoCapacidadTanquesService;
 
-    @PostMapping(value = "/EditarCapacidadTanque", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Editar_Nuevo", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody STR_SETDto str_setDto) {
         //Parametro dto = new Parametro();
 
