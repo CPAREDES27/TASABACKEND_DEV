@@ -2,6 +2,7 @@ package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
@@ -49,14 +50,17 @@ public class EjecutarRFC {
     }
 
     public void setImports(JCoFunction function, HashMap<String, Object> imports){
+
         JCoParameterList jcoImport = function.getImportParameterList();
         Iterator iterator = imports.entrySet().iterator();
+        logger.error("setImports_1");
         while (iterator.hasNext()) {
             Map.Entry tmpImport = (Map.Entry) iterator.next();
             String key = tmpImport.getKey().toString();
             Object value = tmpImport.getValue();
             jcoImport.setValue(key, value);
         }
+        logger.error("setImports_2");
     }
 
     public void setTable(JCoParameterList listTables, String tableName, List<HashMap<String, Object>> data){
@@ -139,7 +143,6 @@ public class EjecutarRFC {
 
     public Mensaje Exec_ZFL_RFC_ACT_CAMP_TAB(STR_SETDto str_setDto, String Tabla)throws Exception{
 
-
         logger.error("EditarCaptanques_1");;
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
@@ -181,4 +184,36 @@ public class EjecutarRFC {
 
         return msj;
     }
+
+    public MensajeDto Execute_ZFL_RFC_UPDATE_TABLE(HashMap<String, Object> imports, String data) throws Exception{
+
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_UPDATE_TABLE);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_1");
+        setImports(function, imports);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_2");
+        JCoParameterList jcoTables = function.getTableParameterList();
+        JCoTable tableImport = jcoTables.getTable("T_DATA");
+        tableImport.appendRow();
+        tableImport.setValue("DATA", data);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
+        function.execute(destination);
+        JCoTable tableExport = jcoTables.getTable("T_MENSAJE");
+
+        MensajeDto dto = new MensajeDto();
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+
+
+            dto.setMANDT(tableExport.getString("MANDT"));
+            dto.setCMIN(tableExport.getString("CMIN"));
+            dto.setCDMIN(tableExport.getString("CDMIN"));
+            dto.setDSMIN(tableExport.getString("DSMIN"));
+
+        }
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_4");
+
+
+        return dto;
+    }
+
 }

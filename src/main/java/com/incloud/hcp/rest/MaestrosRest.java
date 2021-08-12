@@ -57,6 +57,18 @@ public class MaestrosRest {
         }
 
     }
+    @PostMapping(value = "/EditarMaestro/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.editarMaestro(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
 
 

@@ -48,6 +48,25 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
 
+    public MensajeDto editarMaestro (MaestroEditImports importsParam) throws Exception{
+        //setear mapeo de parametros import
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("I_TABLE", importsParam.getTabla());
+        imports.put("P_FLAG", importsParam.getFlag());
+        imports.put("P_CASE", importsParam.getP_case());
+        imports.put("P_USER", importsParam.getP_user());
+
+        logger.error("EditarMaestro_1");
+        //ejecutar RFC ZFL_RFC_READ_TABLE
+        EjecutarRFC exec = new EjecutarRFC();
+        logger.error("EditarMaestro_2");
+        MensajeDto msj =  exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
+        logger.error("EditarMaestro_3");
+        return msj;
+
+    }
+
+
     public List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception{
 
         //setear mapeo de parametros import

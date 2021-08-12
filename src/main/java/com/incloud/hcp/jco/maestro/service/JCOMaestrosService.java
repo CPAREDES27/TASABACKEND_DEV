@@ -7,6 +7,7 @@ import java.util.List;
 public interface JCOMaestrosService {
 
     MaestroExport obtenerMaestro (MaestroImports imports) throws Exception;
+    MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
     List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
     List<PuntosDescargaDto> obtenerPuntosDescarga(String usuario)throws Exception;
 
