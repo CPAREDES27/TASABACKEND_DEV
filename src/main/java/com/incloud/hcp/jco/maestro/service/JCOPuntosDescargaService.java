@@ -1,10 +1,8 @@
 package com.incloud.hcp.jco.maestro.service;
 
-import com.incloud.hcp.jco.maestro.dto.PuntosDescargaDto;
-
-import java.util.List;
+import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.util.UsuarioDto;
 
 public interface JCOPuntosDescargaService {
-    List<PuntosDescargaDto> obtenerPuntosDescarga(String usuario)throws Exception;
-
+    MaestroExport ListarPuntosDes(UsuarioDto imports)throws Exception;
 }

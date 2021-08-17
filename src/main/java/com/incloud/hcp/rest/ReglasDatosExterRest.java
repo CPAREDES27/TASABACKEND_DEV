@@ -1,10 +1,10 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.maestro.dto.EventosPescaEditImports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaImports;
-import com.incloud.hcp.jco.maestro.service.JCOEventosPescaService;
-import com.incloud.hcp.util.Mensaje;
+
+import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+import com.incloud.hcp.jco.maestro.dto.ReglasDatosExterEditImports;
+import com.incloud.hcp.jco.maestro.dto.ReglasDatosExterNuevImports;
+import com.incloud.hcp.jco.maestro.service.JCOReglasDatosExterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +16,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
-@RequestMapping(value = "/api/eventospesca")
-public class EventosPescaRest {
+@RequestMapping(value = "/api/reglasdatosexternos")
+public class ReglasDatosExterRest {
 
     @Autowired
-    private JCOEventosPescaService jcoEventosPescaService;
+    JCOReglasDatosExterService jcoReglasDatosExterService;
 
-
-
-    @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<EventosPescaExports> ListarEventoPesca(@RequestBody EventosPescaImports imports){
+    @PostMapping(value = "/Nuevo/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> Nuevo(@RequestBody ReglasDatosExterNuevImports imports){
 
         try {
-            return Optional.ofNullable(this.jcoEventosPescaService.ListarEventoPesca(imports))
+            return Optional.ofNullable(this.jcoReglasDatosExterService.Nuevo(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -36,11 +34,12 @@ public class EventosPescaRest {
         }
 
     }
+
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarEventosPesca(@RequestBody EventosPescaEditImports imports){
+    public ResponseEntity<MensajeDto> Editar(@RequestBody ReglasDatosExterEditImports imports){
 
         try {
-            return Optional.ofNullable(this.jcoEventosPescaService.EditarEventosPesca(imports))
+            return Optional.ofNullable(this.jcoReglasDatosExterService.Editar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -48,4 +47,6 @@ public class EventosPescaRest {
         }
 
     }
+
+
 }

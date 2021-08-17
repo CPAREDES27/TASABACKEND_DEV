@@ -1,7 +1,6 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.EstructuraInformacionDto;
+import com.incloud.hcp.jco.maestro.dto.EstructuraInformacionImports;
 import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.jco.maestro.service.JCOEstructuraInformacionService;
 import com.incloud.hcp.util.Constantes;
@@ -18,7 +17,7 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public MensajeDto EditarEstructuraInf(EstructuraInformacionDto estructuraInformacionDto)throws Exception{
+    public MensajeDto EditarEstructuraInf(EstructuraInformacionImports estructuraInformacionImports)throws Exception{
 
         logger.error("EditarEstructuraInf_1");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
@@ -29,10 +28,10 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
         JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ESTR_INFOR);
 
         JCoParameterList importx = stfcConnection.getImportParameterList();
-        importx.setValue("P_CDEIN", estructuraInformacionDto.getP_cdein());
-        importx.setValue("P_DSEIN", estructuraInformacionDto.getP_dsein());
-        importx.setValue("P_CASE", estructuraInformacionDto.getP_case());
-        importx.setValue("P_USER", estructuraInformacionDto.getP_user());
+        importx.setValue("P_CDEIN", estructuraInformacionImports.getP_cdein());
+        importx.setValue("P_DSEIN", estructuraInformacionImports.getP_dsein());
+        importx.setValue("P_CASE", estructuraInformacionImports.getP_case());
+        importx.setValue("P_USER", estructuraInformacionImports.getP_user());
 
         logger.error("EditarEstructuraInf_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
@@ -59,5 +58,6 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
 
         return msj;
     }
+
 
 }

@@ -1,13 +1,13 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
-import com.incloud.hcp.jco.maestro.service.JCOHistoricoCompetenciaService;
+import com.incloud.hcp.jco.maestro.service.JCOHistCompeService;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Mensaje;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JCOHistoricoCompetenciaImpl implements JCOHistoricoCompetenciaService {
+public class JCOHistCompeImpl implements JCOHistCompeService {
 
 
 

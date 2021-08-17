@@ -1,7 +1,7 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.maestro.dto.EstructuraInformacionDto;
+import com.incloud.hcp.jco.maestro.dto.EstructuraInformacionImports;
 import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.jco.maestro.service.JCOEstructuraInformacionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class EstructuraInformacionRest {
     private JCOEstructuraInformacionService jcoEstructuraInformacionService;
 
     @PostMapping(value = "/Editar_Nuevo/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> EditarEstructuraInf(@RequestBody EstructuraInformacionDto imports){
+    public ResponseEntity<MensajeDto> EditarEstructuraInf(@RequestBody EstructuraInformacionImports imports){
 
         try {
             return Optional.ofNullable(this.jcoEstructuraInformacionService.EditarEstructuraInf(imports))

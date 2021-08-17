@@ -2,7 +2,11 @@ package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
+import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
+import com.incloud.hcp.util.Metodos;
+import com.incloud.hcp.util.Tablas;
+import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,10 +19,10 @@ import java.util.List;
 public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Override
-    public List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception{
 
-        //setear mapeo de parametros import
+    @Override
+    public MaestroExport ListarEmbarcaciones(EmbarcacionImports importsParam) throws Exception {
+
         HashMap<String, Object> imports = new HashMap<String, Object>();
         imports.put("P_USER", importsParam.getP_user());
         logger.error("ObtenerEmbarcaciones_1");
@@ -44,16 +48,36 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         //ejecutar RFC ZFL_RFC_READ_TABLE
         EjecutarRFC exec = new EjecutarRFC();
         logger.error("ObtenerEmbarcaciones_4");
-        List<EmbarcacionDto> ListaEmb =  exec.Execute_ZFL_RFC_CONS_EMBARCA(imports, tmpOptions, tmpOptions2);
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
-        logger.error("ObtenerEmbarcaciones_5");
-        return ListaEmb;
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+
+
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_1");
+        exec.setImports(function, imports);
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_2");
+
+        JCoParameterList jcoTables = function.getTableParameterList();
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_3");
+        exec.setTable(jcoTables, "P_OPTIONS", tmpOptions);
+        exec.setTable(jcoTables, "P_OPTIONS2", tmpOptions2);
+        logger.error("Execute_ZFL_RFC_CONS_EMBARCA_4");
+        function.execute(destination);
+        JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
+
+        Metodos me= new Metodos();
+        List<HashMap<String, Object>> data =  me.ListarObjetos(tableExport);
+
+        MaestroExport dto= new MaestroExport();
+
+        dto.setData(data);
+        dto.setMensaje("Ok");
+
+        return dto;
     }
+    public MaestroExport BuscarEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception{
 
-    @Override
-      public List<BusquedaEmbarcacionDto> busquedaEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception{
-
-        //setear mapeo de parametros import
         HashMap<String, Object> imports = new HashMap<String, Object>();
         imports.put("P_USER", importsParam.getP_user());
         imports.put("ROWCOUNT", importsParam.getRowcount());
@@ -69,20 +93,164 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             tmpOptions.add(record);
         }
 
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
-        logger.error("ObtenerEmbarcaciones_3");
-        //ejecutar RFC ZFL_RFC_READ_TABLE
-        EjecutarRFC exec = new EjecutarRFC();
-        logger.error("ObtenerEmbarcaciones_4");
-        List<BusquedaEmbarcacionDto> ListaEmb =  exec.Excute_ZFL_RFC_LECT_MAES_EMBAR(imports, tmpOptions);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_LECT_MAES_EMBAR);
+        JCoParameterList jcoTables = function.getTableParameterList();
+        EjecutarRFC exec=new EjecutarRFC();
+        exec.setImports(function, imports);
+        exec.setTable(jcoTables, "OPTIONS", tmpOptions);
+        function.execute(destination);
+        JCoTable DATA = jcoTables.getTable(Tablas.S_DATA);
 
 
+        Metodos m=new Metodos();
+        List<HashMap<String, Object>> data=m.ListarObjetos(DATA);
 
 
+        MaestroExport me = new MaestroExport();
+        me.setData(data);
+        me.setMensaje("Ok");
 
-        logger.error("ObtenerEmbarcaciones_5");
-        return ListaEmb;
-
+        return me;
     }
+
+    public BusqAdicEmbarExports BusquedaAdicionalEmbarca(BusqAdicEmbarImports importsParam) throws Exception{
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("P_USER", importsParam.getP_user());
+        imports.put("P_CODE", importsParam.getP_code());
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_ADIC_MAES_EMBAR);
+        JCoParameterList jcoTables = function.getTableParameterList();
+        EjecutarRFC exec=new EjecutarRFC();
+        exec.setImports(function, imports);
+
+        function.execute(destination);
+        JCoTable s_pe = jcoTables.getTable(Tablas.S_PE);
+        JCoTable s_ps = jcoTables.getTable(Tablas.S_PS);
+        JCoTable s_ee = jcoTables.getTable(Tablas.S_EE);
+        JCoTable s_be = jcoTables.getTable(Tablas.S_BE);
+
+
+
+        Metodos m=new Metodos();
+        List<HashMap<String, Object>> S_PE=m.ListarObjetos(s_pe);
+        List<HashMap<String, Object>> S_PS=m.ListarObjetos(s_ps);
+        List<HashMap<String, Object>> S_EE=m.ListarObjetos(s_ee);
+        List<HashMap<String, Object>> S_BE=m.ListarObjetos(s_be);
+
+
+
+
+        BusqAdicEmbarExports dto= new BusqAdicEmbarExports();
+        dto.setS_pe(S_PE);
+        dto.setS_ps(S_PS);
+        dto.setS_ee(S_EE);
+        dto.setS_be(S_BE);
+
+        return dto;
+    }
+
+    public MensajeDto Nuevo(EmbarcacionNuevImports importsParam)throws Exception{
+
+        EmbarcaImports embarcaImports= importsParam.getParams();
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("P_CASE", embarcaImports.getP_case());
+        imports.put("P_CODE", embarcaImports.getP_code());
+        imports.put("P_USER", embarcaImports.getP_user());
+
+        List<HashMap<String, Object>> s_emb=importsParam.getS_emb();
+        List<HashMap<String, Object>> s_ppe=importsParam.getS_ppe();
+        List<HashMap<String, Object>> s_pec=importsParam.getS_pec();
+        List<HashMap<String, Object>> s_epe=importsParam.getS_epe();
+        List<HashMap<String, Object>> s_bpe=importsParam.getS_bpe();
+        List<HashMap<String, Object>> str_hor=importsParam.getStr_hor();
+
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_MANT_MAESTRO_EMB);
+        JCoParameterList jcoTables = function.getTableParameterList();
+
+        EjecutarRFC exec=new EjecutarRFC();
+        exec.setImports(function, imports);
+        exec.setTable(jcoTables, Tablas.S_EMB,s_emb);
+        exec.setTable(jcoTables,Tablas.S_PPE,s_ppe);
+        exec.setTable(jcoTables,Tablas.S_PEC,s_pec);
+        exec.setTable(jcoTables,Tablas.S_EPE,s_epe);
+        exec.setTable(jcoTables,Tablas.S_BPE,s_bpe);
+        exec.setTable(jcoTables,Tablas.STR_HOR,str_hor);
+        function.execute(destination);
+
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+
+        MensajeDto msj= new MensajeDto();
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+
+            msj.setMANDT(tableExport.getString("MANDT"));
+            msj.setCMIN(tableExport.getString("CMIN"));
+            msj.setCDMIN(tableExport.getString("CDMIN"));
+            msj.setDSMIN(tableExport.getString("DSMIN"));
+            //lista.add(param);
+        }
+
+
+        return msj;
+    }
+
+    public MensajeDto Editar(EmbarcacionEditImports importsParam)throws Exception{
+
+        EmbarcaImports embarcaImports= importsParam.getParams();
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("P_CASE", embarcaImports.getP_case());
+        imports.put("P_CODE", embarcaImports.getP_code());
+        imports.put("P_USER", embarcaImports.getP_user());
+
+        List<HashMap<String, Object>> s_emb=importsParam.getS_emb();
+        List<HashMap<String, Object>> s_ppe=importsParam.getS_ppe();
+        List<HashMap<String, Object>> s_pec=importsParam.getS_pec();
+        List<HashMap<String, Object>> str_hor=importsParam.getStr_hor();
+
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_MANT_MAESTRO_EMB);
+        JCoParameterList jcoTables = function.getTableParameterList();
+
+        EjecutarRFC exec=new EjecutarRFC();
+        exec.setImports(function, imports);
+        exec.setTable(jcoTables, Tablas.S_EMB,s_emb);
+        exec.setTable(jcoTables,Tablas.S_PPE,s_ppe);
+        exec.setTable(jcoTables,Tablas.S_PEC,s_pec);
+        exec.setTable(jcoTables,Tablas.STR_HOR,str_hor);
+        function.execute(destination);
+
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+
+        MensajeDto msj= new MensajeDto();
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+
+            msj.setMANDT(tableExport.getString("MANDT"));
+            msj.setCMIN(tableExport.getString("CMIN"));
+            msj.setCDMIN(tableExport.getString("CDMIN"));
+            msj.setDSMIN(tableExport.getString("DSMIN"));
+            //lista.add(param);
+        }
+
+
+        return msj;
+    }
+
 
 }

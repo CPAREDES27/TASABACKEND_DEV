@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.maestro.dto;
 
-public class EstructuraInformacionDto {
+public class EstructuraInformacionImports {
     private String p_cdein;
     private String p_dsein;
     private String p_case;

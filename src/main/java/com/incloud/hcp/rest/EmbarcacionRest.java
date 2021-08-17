@@ -1,17 +1,12 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.gestionpesca.dto.Atributos;
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.dto.Options;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
-import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionImports;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
-import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
-import org.json.JSONObject;
+import com.incloud.hcp.jco.maestro.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,11 +74,13 @@ public class EmbarcacionRest {
 
         return lista;
     }
+
+
     @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<com.incloud.hcp.jco.maestro.dto.EmbarcacionDto>> ConsultarEmbarcaciones(@RequestBody EmbarcacionImports imports){
+    public ResponseEntity<MaestroExport> ConsultarEmbarcacionesNew(@RequestBody EmbarcacionImports imports){
 
         try {
-            return Optional.ofNullable(this.EmbarcacionService.obtenerEmbarcaciones(imports))
+            return Optional.ofNullable(this.EmbarcacionService.ListarEmbarcaciones(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -92,11 +88,49 @@ public class EmbarcacionRest {
         }
 
     }
+
+
     @PostMapping(value = "/BusquedasEmbarcacion/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BusquedaEmbarcacionDto>> BusquedaEmbarcaciones(@RequestBody BusquedaEmbarcacionImports imports){
+    public ResponseEntity<MaestroExport> BuscarEmbarcaciones(@RequestBody BusquedaEmbarcacionImports imports){
 
         try {
-            return Optional.ofNullable(this.EmbarcacionService.busquedaEmbarcaciones(imports))
+            return Optional.ofNullable(this.EmbarcacionService.BuscarEmbarcaciones(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/BusqAdicEmbarca/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BusqAdicEmbarExports> BusqAdicEmbarca(@RequestBody BusqAdicEmbarImports imports){
+
+        try {
+            return Optional.ofNullable(this.EmbarcacionService.BusquedaAdicionalEmbarca(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/Nuevo/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionNuevImports imports){
+
+        try {
+            return Optional.ofNullable(this.EmbarcacionService.Nuevo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionEditImports imports){
+
+        try {
+            return Optional.ofNullable(this.EmbarcacionService.Editar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

@@ -12,6 +12,11 @@ public class Constantes {
     public static String ZFL_RFC_LECT_MAES_EMBAR="ZFL_RFC_LECT_MAES_EMBAR";
     public static String ZFL_RFC_ESTR_INFOR="ZFL_RFC_ESTR_INFOR";
     public static String ZFL_RFC_MAES_EVEN_PES="ZFL_RFC_MAES_EVEN_PES";
+    public static String ZFL_RFC_TRIPU_EMBAR="ZFL_RFC_TRIPU_EMBAR";
+    public static String ZFL_RFC_ADIC_MAES_EMBAR="ZFL_RFC_ADIC_MAES_EMBAR";
+    public static String ZFL_RFC_MANT_MAESTRO_EMB="ZFL_RFC_MANT_MAESTRO_EMB";
+    public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
+
 
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";

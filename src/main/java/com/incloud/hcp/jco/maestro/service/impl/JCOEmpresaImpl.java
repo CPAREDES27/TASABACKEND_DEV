@@ -1,11 +1,10 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.EmpresaDto;
-import com.incloud.hcp.jco.maestro.dto.EmpresaImports;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmpresaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
+import com.incloud.hcp.util.Metodos;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,10 @@ import java.util.List;
 public class JCOEmpresaImpl implements JCOEmpresaService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public EmpresaDto obtenerEmpresa(EmpresaImports imports)throws Exception{
+
+
+    public MaestroExport ListarEmpresas(EmpresaImports imports)throws Exception{
+
 
         logger.error("obtenerEmpresa_1");;
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -59,27 +61,17 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
         //Recuperar Datos de SAP
 
         JCoTable tableExport = tables.getTable("STR_EMP");
-        EmpresaDto dto = new EmpresaDto();
-        logger.error("obtenerEmpresa_7");
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
 
-
-            dto.setCDGRE(tableExport.getString("CDGRE"));
-            dto.setCDEMP(tableExport.getString("CDEMP"));
-            dto.setDSEMP(tableExport.getString("DSEMP"));
-            dto.setINPRP(tableExport.getString("INPRP"));
-            dto.setESREG(tableExport.getString("ESREG"));
-            dto.setLIFNR(tableExport.getString("LIFNR"));
-            dto.setRUCPRO(tableExport.getString("RUCPRO"));
-            dto.setKUNNR(tableExport.getString("KUNNR"));
-            dto.setRUCLIE(tableExport.getString("RUCLIE"));
-
-        }
         logger.error("obtenerEmpresa_7");
 
 
+        Metodos metodo = new Metodos();
+        List<HashMap<String, Object>> data= metodo.ListarObjetos(tableExport);
+        MaestroExport me=new MaestroExport();
+        me.setData(data);
+        me.setMensaje("Ok");
 
-        return dto;
+        return me;
     }
+
 }

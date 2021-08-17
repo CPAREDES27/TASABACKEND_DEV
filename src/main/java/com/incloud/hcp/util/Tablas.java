@@ -10,6 +10,25 @@ public class Tablas {
     public static String S_DATA="S_DATA";
     public static String ST_CCP="ST_CCP";
     public static String ST_CEP="ST_CEP";
+    public static String ESTCEP="ESTCEP";
+    public static String ESTCCE="ESTCCE";
+    public static String S_PE="S_PE";
+    public static String S_PS="S_PS";
+    public static String S_EE="S_EE";
+    public static String S_BE="S_BE";
+    public static String S_INSERT="S_INSERT";
+    public static String S_EOD="S_EOD";
+    public static String T_RRZ="T_RRZ";
+    public static String T_REF="T_REF";
+    public static String T_EOD="T_EOD";
+    public static String S_EMB="S_EMB";
+    public static String S_PPE="S_PPE";
+    public static String S_PEC="S_PEC";
+    public static String S_EPE="S_EPE";
+    public static String S_BPE="S_BPE";
+    public static String STR_HOR="STR_HOR";
+
+
     public static String T_MENSAJE="T_MENSAJE";
 
 }

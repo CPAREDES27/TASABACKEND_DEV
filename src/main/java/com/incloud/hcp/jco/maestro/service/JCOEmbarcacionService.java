@@ -1,15 +1,15 @@
 package com.incloud.hcp.jco.maestro.service;
 
-import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.BusquedaEmbarcacionImports;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
+import com.incloud.hcp.jco.maestro.dto.*;
 
 import java.util.List;
 
 public interface JCOEmbarcacionService {
-    List<EmbarcacionDto> obtenerEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
-    List<BusquedaEmbarcacionDto> busquedaEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception;
 
+     MaestroExport ListarEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
+     MaestroExport BuscarEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception;
+     BusqAdicEmbarExports BusquedaAdicionalEmbarca(BusqAdicEmbarImports importsParam) throws Exception;
+     MensajeDto Nuevo(EmbarcacionNuevImports importsParam)throws Exception;
+     MensajeDto Editar(EmbarcacionEditImports importsParam)throws Exception;
 
 }
