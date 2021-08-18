@@ -50,10 +50,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        dto.setSt_cep(ListarST_CEP);
        dto.setSt_ccp(ListarST_CCP);
        dto.setMensaje("Ok");
-
-
        return dto;
-
    }
 
    public Mensaje EditarEventosPesca(EventosPescaEditImports impor)throws Exception{
