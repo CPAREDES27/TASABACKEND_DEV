@@ -2,6 +2,8 @@ package com.incloud.hcp.jco.gestionpesca.service.impl;
 
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.dto.FlotaDto;
+import com.incloud.hcp.jco.gestionpesca.dto.MareaDto;
+import com.incloud.hcp.jco.gestionpesca.dto.MareaOptions;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
@@ -112,5 +114,44 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return dto;
     }
+    public MareaDto consultaMarea(MareaOptions marea) throws Exception{
+
+        logger.error("ListarEventosPesca_1");;
+        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        logger.error("ListarEventosPesca_2");;
+        JCoRepository repo = destination.getRepository();
+        logger.error("ListarEventosPesca_3");;
+        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_CONS_MARE_EVENT");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+
+        importx.setValue("P_USER", marea.getUser());
+        importx.setValue("P_MAREA", marea.getP_marea());
+        logger.error("ListarEventosPesca_4");;
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        stfcConnection.execute(destination);
+        logger.error("ListarEventosPesca_5");
+
+        JCoTable S_MAREA = tables.getTable("S_MAREA");
+        logger.error("ListarEventosPesca_6");
+        JCoTable S_EVENTO = tables.getTable("S_EVENTO");
+
+
+        logger.error("ListarEventosPesca_7");
+
+        Metodos metodo = new Metodos();
+        List<HashMap<String, Object>> ListarS_MAREA= metodo.ListarObjetos(S_MAREA);
+        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ListarObjetos(S_EVENTO);
+
+
+        MareaDto dto= new MareaDto();
+        dto.setS_marea(ListarS_MAREA);
+        dto.setS_evento(ListarS_EVENTO);
+
+        dto.setMensaje("Ok");
+
+        return dto;
+    }
+
+
 
 }

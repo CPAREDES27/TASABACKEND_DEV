@@ -1,11 +1,8 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.gestionpesca.dto.FlotaDto;
-import com.incloud.hcp.jco.gestionpesca.dto.Options;
+import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
-import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
 import org.slf4j.Logger;
@@ -101,6 +98,19 @@ public class EmbarcacionRest {
         }
 
     }
+    @PostMapping(value = "/consultaMarea/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MareaDto> consultaMarea(@RequestBody MareaOptions marea){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.consultaMarea(marea))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
 
 
 
