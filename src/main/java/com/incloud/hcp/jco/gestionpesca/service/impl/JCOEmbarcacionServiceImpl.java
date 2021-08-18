@@ -1,13 +1,10 @@
 package com.incloud.hcp.jco.gestionpesca.service.impl;
 
-import com.incloud.hcp.jco.gestionpesca.dto.DistribucionDto;
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoRepository repo = destination.getRepository();
         logger.error("listaEmbarcacion_3");;
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_CONS_EMBARCA");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
+        importx.setValue("P_USER", "XTS");
         logger.error("listaEmbarcacion_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         JCoTable tableImport = tables.getTable("P_OPTIONS");
@@ -46,9 +46,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         //Recuperar Datos de SAP
 
         JCoTable tableExport = tables.getTable("STR_EMB");
-        JCoParameterList importx = stfcConnection.getImportParameterList();
-        //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("P_USER", "XTS");
 
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
@@ -63,8 +60,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return listaEmbarcacion;
     }
 
-    public DistribucionDto obtenerDistribucionFlota(String user) throws Exception{
 
+<<<<<<< .mine
         List<DistribucionDto> listarPlantas = new ArrayList<DistribucionDto>();
         logger.error("TIPO_1111");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
@@ -98,4 +95,39 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         dto.setMensaje("Ok");
         return dto;
     }
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 }

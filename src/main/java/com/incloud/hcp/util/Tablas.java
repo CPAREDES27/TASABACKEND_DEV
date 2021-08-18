@@ -17,6 +17,7 @@ public class Tablas {
     public static String S_EE="S_EE";
     public static String S_BE="S_BE";
     public static String S_INSERT="S_INSERT";
+    public static String S_UPDATE="S_UPDATE";
     public static String S_EOD="S_EOD";
     public static String T_RRZ="T_RRZ";
     public static String T_REF="T_REF";

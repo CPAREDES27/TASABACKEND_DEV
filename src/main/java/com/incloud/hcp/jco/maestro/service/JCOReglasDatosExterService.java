@@ -6,7 +6,7 @@ import com.incloud.hcp.jco.maestro.dto.ReglasDatosExterNuevImports;
 
 public interface JCOReglasDatosExterService {
 
-    MensajeDto Nuevo(ReglasDatosExterNuevImports importsParam)throws Exception;
+    MensajeDto Crear(ReglasDatosExterNuevImports importsParam)throws Exception;
     MensajeDto Editar(ReglasDatosExterEditImports importsParam)throws Exception;
 
 

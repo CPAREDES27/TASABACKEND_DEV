@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
 
-    public MensajeDto Nuevo(ReglasDatosExterNuevImports importsParam)throws Exception{
+    public MensajeDto Crear(ReglasDatosExterNuevImports importsParam)throws Exception{
 
         ReglasDatosExterDto rde= importsParam.getParams();
 
@@ -79,9 +79,8 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
         imports.put("P_CASE", rde.getP_case());
         imports.put("P_USER", rde.getP_user());
 
-        List<HashMap<String, Object>> t_rrz=importsParam.getT_rrz();
-        List<HashMap<String, Object>> t_ref=importsParam.getT_ref();
-        List<HashMap<String, Object>> t_eod=importsParam.getT_eod();
+        List<HashMap<String, Object>> s_update=importsParam.getS_update();
+        List<HashMap<String, Object>> s_eod=importsParam.getS_eod();
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
@@ -91,9 +90,8 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
 
         EjecutarRFC exec=new EjecutarRFC();
         exec.setImports(function, imports);
-        exec.setTable(jcoTables, Tablas.T_RRZ,t_rrz);
-        exec.setTable(jcoTables,Tablas.T_REF,t_ref);
-        exec.setTable(jcoTables,Tablas.T_EOD,t_eod);
+        exec.setTable(jcoTables, Tablas.S_UPDATE,s_update);
+        exec.setTable(jcoTables,Tablas.S_EOD,s_eod);
 
         function.execute(destination);
 

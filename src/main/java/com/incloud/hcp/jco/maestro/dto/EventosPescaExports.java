@@ -6,7 +6,6 @@ import java.util.List;
 public class EventosPescaExports {
     private List<HashMap<String, Object>> st_ccp;
     private List<HashMap<String, Object>> st_cep;
-    private String mensaje;
 
     public List<HashMap<String, Object>> getSt_ccp() {
         return st_ccp;
@@ -32,5 +31,5 @@ public class EventosPescaExports {
         this.mensaje = mensaje;
     }
 
-
+    private String mensaje;
 }

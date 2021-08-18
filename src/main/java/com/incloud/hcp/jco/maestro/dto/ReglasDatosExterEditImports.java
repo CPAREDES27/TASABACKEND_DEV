@@ -6,9 +6,8 @@ import java.util.List;
 public class ReglasDatosExterEditImports {
 
     private ReglasDatosExterDto params;
-    private List<HashMap<String, Object>> t_rrz;
-    private List<HashMap<String, Object>> t_ref;
-    private List<HashMap<String, Object>> t_eod;
+    private List<HashMap<String, Object>> s_update;
+    private List<HashMap<String, Object>> s_eod;
 
     public ReglasDatosExterDto getParams() {
         return params;
@@ -18,27 +17,21 @@ public class ReglasDatosExterEditImports {
         this.params = params;
     }
 
-    public List<HashMap<String, Object>> getT_rrz() {
-        return t_rrz;
+    public List<HashMap<String, Object>> getS_update() {
+        return s_update;
     }
 
-    public void setT_rrz(List<HashMap<String, Object>> t_rrz) {
-        this.t_rrz = t_rrz;
+    public void setS_update(List<HashMap<String, Object>> s_update) {
+        this.s_update = s_update;
     }
 
-    public List<HashMap<String, Object>> getT_ref() {
-        return t_ref;
+
+
+    public List<HashMap<String, Object>> getS_eod() {
+        return s_eod;
     }
 
-    public void setT_ref(List<HashMap<String, Object>> t_ref) {
-        this.t_ref = t_ref;
-    }
-
-    public List<HashMap<String, Object>> getT_eod() {
-        return t_eod;
-    }
-
-    public void setT_eod(List<HashMap<String, Object>> t_eod) {
-        this.t_eod = t_eod;
+    public void setS_eod(List<HashMap<String, Object>> s_eod) {
+        this.s_eod = s_eod;
     }
 }

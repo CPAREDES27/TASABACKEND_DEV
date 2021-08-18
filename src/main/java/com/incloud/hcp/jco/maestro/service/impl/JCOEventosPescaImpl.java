@@ -19,50 +19,6 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
 
 
 
-   public ST_CEPDto llenarSTCEP(JCoTable table){
-
-       ST_CEPDto st_cepDto= new ST_CEPDto();
-       st_cepDto.setCLSIS(table.getString("CLSIS"));
-       st_cepDto.setINEIF(table.getString("INEIF"));
-       st_cepDto.setBWART1(table.getString("BWART1"));
-       st_cepDto.setMATNR(table.getString("MATNR"));
-       st_cepDto.setCDTEZ(table.getString("CDTEZ"));
-       st_cepDto.setCDTAP(table.getString("CDTAP"));
-       st_cepDto.setCDTED(table.getString("CDTED"));
-       st_cepDto.setBAUGR(table.getString("BAUGR"));
-       st_cepDto.setHERKUNFT(table.getString("HERKUNFT"));
-       st_cepDto.setBSART(table.getString("BSART"));
-       st_cepDto.setEKORG(table.getString("EKORG"));
-       st_cepDto.setEKGRP(table.getString("EKGRP"));
-       st_cepDto.setAUART(table.getString("AUART"));
-       st_cepDto.setVKORG(table.getString("VKORG"));
-       st_cepDto.setVTWEG(table.getString("VTWEG"));
-       st_cepDto.setBWART2(table.getString("BWART2"));
-       st_cepDto.setMXESP(table.getString("MXESP"));
-       st_cepDto.setMNESP(table.getString("MNESP"));
-       st_cepDto.setNTESP(table.getString("NTESP"));
-       st_cepDto.setQMART(table.getString("QMART"));
-       st_cepDto.setMAKTX(table.getString("MAKTX"));
-       st_cepDto.setBEZEI(table.getString("BEZEI"));
-       st_cepDto.setEKNAM(table.getString("EKNAM"));
-       st_cepDto.setLTEXT(table.getString("LTEXT"));
-       st_cepDto.setUMPDS(table.getString("UMPDS"));
-       st_cepDto.setUMPDC(table.getString("UMPDC"));
-       st_cepDto.setPRCHI(table.getString("PRCHI"));
-       st_cepDto.setDSSPC(table.getString("DSSPC"));
-       st_cepDto.setTMXCA(table.getString("TMXCA"));
-       st_cepDto.setUMTMX(table.getString("UMTMX"));
-       st_cepDto.setTMICA(table.getString("TMICA"));
-       st_cepDto.setUMTMI(table.getString("UMTMI"));
-       st_cepDto.setHRCOR(table.getString("HRCOR"));
-
-
-
-
-
-
-       return st_cepDto;
-   }
 
    public EventosPescaExports ListarEventoPesca(EventosPescaImports imports)throws Exception{
 
@@ -84,8 +40,6 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        logger.error("ListarEventosPesca_6");
        JCoTable tableST_CEP = tables.getTable(Tablas.ST_CEP);
 
-       ST_CEPDto st_cepDto= llenarSTCEP(tableST_CEP);
-
        logger.error("ListarEventosPesca_7");
 
        Metodos metodo = new Metodos();
@@ -96,6 +50,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        dto.setSt_cep(ListarST_CEP);
        dto.setSt_ccp(ListarST_CCP);
        dto.setMensaje("Ok");
+
 
        return dto;
 
