@@ -81,23 +81,21 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("TIPO_6");
 
         JCoTable tableSTR_ZLT = tables.getTable("STR_ZLT");
-        //JCoTable tableSTR_DI = tables.getTable("ZTR_DI");
-        //JCoTable tableSTR_PTA = tables.getTable("STR_PTA");
-        //JCoTable tableSTR_DP = tables.getTable("STR_DP");
+        JCoTable tableSTR_DI = tables.getTable("STR_DI");
+        JCoTable tableSTR_PTA = tables.getTable("STR_PTA");
+        JCoTable tableSTR_DP = tables.getTable("STR_DP");
         Metodos metodo = new Metodos();
         List<HashMap<String, Object>> ListarSTR_ZLT= metodo.ListarObjetos(tableSTR_ZLT);
-        //List<HashMap<String, Object>> ListarSTR_DI= metodo.ListarObjetos(tableSTR_DI);
-        //List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetos(tableSTR_PTA);
-        //List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetos(tableSTR_DP);
+        List<HashMap<String, Object>> ListarSTR_DI= metodo.ListarObjetos(tableSTR_DI);
+        List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetos(tableSTR_PTA);
+        List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetos(tableSTR_DP);
 
         DistribucionDto dto = new DistribucionDto();
         dto.setStr_zlt(ListarSTR_ZLT);
-        //dto.setStr_di(ListarSTR_DI);
-        //dto.setStr_pta(ListarSTR_PTA);
-        //dto.setStr_dp(ListarSTR_DP);
+        dto.setStr_di(ListarSTR_DI);
+        dto.setStr_pta(ListarSTR_PTA);
+        dto.setStr_dp(ListarSTR_DP);
         dto.setMensaje("Ok");
         return dto;
     }
-
-
 }
