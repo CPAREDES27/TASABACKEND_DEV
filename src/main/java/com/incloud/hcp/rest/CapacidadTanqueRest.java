@@ -1,10 +1,8 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
+import com.incloud.hcp.jco.maestro.dto.CapacidadTanquesImports;
 import com.incloud.hcp.jco.maestro.service.JCOCapacidadTanquesService;
-import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.Tablas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +24,13 @@ public class CapacidadTanqueRest {
     @Autowired
     private JCOCapacidadTanquesService jcoCapacidadTanquesService;
 
-    @PostMapping(value = "/Editar_Nuevo", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody STR_SETDto str_setDto) {
+
+    @PostMapping(value = "/Editar", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> Editar(@RequestBody CapacidadTanquesImports imports) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoCapacidadTanquesService.EditarCaptanques(str_setDto, Tablas.ZFLEMB))
+            return Optional.ofNullable(this.jcoCapacidadTanquesService.Editar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

@@ -22,11 +22,11 @@ public class ReglasDatosExterRest {
     @Autowired
     JCOReglasDatosExterService jcoReglasDatosExterService;
 
-    @PostMapping(value = "/Nuevo/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Nuevo(@RequestBody ReglasDatosExterNuevImports imports){
+    @PostMapping(value = "/Crear/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> Crear(@RequestBody ReglasDatosExterNuevImports imports){
 
         try {
-            return Optional.ofNullable(this.jcoReglasDatosExterService.Nuevo(imports))
+            return Optional.ofNullable(this.jcoReglasDatosExterService.Crear(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

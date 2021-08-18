@@ -1,6 +1,6 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.maestro.dto.STR_SETDto;
+import com.incloud.hcp.jco.maestro.dto.CapacidadTanquesImports;
 import com.incloud.hcp.jco.maestro.service.JCOHistCompeService;
 import com.incloud.hcp.util.Mensaje;
 import com.incloud.hcp.util.Tablas;
@@ -21,12 +21,12 @@ public class HistoricoCompetenciaRest {
     @Autowired
     private JCOHistCompeService jcoHistCompeService;
 
-    @PostMapping(value = "/Editar_nuevo", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody STR_SETDto str_setDto) {
+    @PostMapping(value = "/Editar", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody CapacidadTanquesImports imports) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.jcoHistCompeService.EditarHistoricoCompetencia(str_setDto, Tablas.ZTFL_HISCOM))
+            return Optional.ofNullable(this.jcoHistCompeService.Editar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
