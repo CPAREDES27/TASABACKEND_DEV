@@ -1,6 +1,7 @@
 package com.incloud.hcp.rest;
 
 
+import com.incloud.hcp.jco.gestionpesca.dto.DistribucionDto;
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.dto.Options;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
@@ -64,15 +65,17 @@ public class EmbarcacionRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/metodo")
-    public List<Options> modelParam(@RequestBody List<Options> person) {
+    @PostMapping(value = "/BuscarFlota/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DistribucionDto> obtenerDistribucionFlota(@RequestBody String user){
 
-        List<Options> lista = new ArrayList<Options>();
-        person.stream().forEach(persona ->{
-            lista.add(persona);
-        });
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.obtenerDistribucionFlota(user))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
 
-        return lista;
     }
 
 
@@ -138,5 +141,6 @@ public class EmbarcacionRest {
         }
 
     }
+
 
 }

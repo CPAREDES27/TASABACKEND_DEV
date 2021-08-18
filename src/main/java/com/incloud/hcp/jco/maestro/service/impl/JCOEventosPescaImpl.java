@@ -83,6 +83,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        JCoTable tableST_CCP = tables.getTable(Tablas.ST_CCP);
        logger.error("ListarEventosPesca_6");
        JCoTable tableST_CEP = tables.getTable(Tablas.ST_CEP);
+
        ST_CEPDto st_cepDto= llenarSTCEP(tableST_CEP);
 
        logger.error("ListarEventosPesca_7");
@@ -95,7 +96,6 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        dto.setSt_cep(ListarST_CEP);
        dto.setSt_ccp(ListarST_CCP);
        dto.setMensaje("Ok");
-
 
        return dto;
 

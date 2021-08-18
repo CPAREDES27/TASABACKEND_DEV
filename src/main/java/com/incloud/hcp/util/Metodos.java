@@ -26,12 +26,10 @@ public class Metodos {
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             while(iter.hasNextField())
             {
-
                 JCoField field = iter.nextField();
                 String key=(String) field.getName();
                 Object value=tableExport.getValue(field.getName());
                 newRecord.put(key, value);
-
             }
             data.add(newRecord);
         }
