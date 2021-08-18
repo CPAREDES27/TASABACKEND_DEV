@@ -21,7 +21,7 @@ public class EstructuraInformacionRest {
     @Autowired
     private JCOEstructuraInformacionService jcoEstructuraInformacionService;
 
-    @PostMapping(value = "/Editar_Nuevo/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Editar_Crear/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> EditarEstructuraInf(@RequestBody EstructuraInformacionImports imports){
 
         try {

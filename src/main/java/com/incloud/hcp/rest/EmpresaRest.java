@@ -22,7 +22,7 @@ public class EmpresaRest {
     private JCOEmpresaService jcoEmpresaService;
 
 
-    @PostMapping(value = "/ConsultarEmpresa/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ListarEmpresas(@RequestBody EmpresaImports imports){
 
         try {

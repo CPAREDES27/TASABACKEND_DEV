@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -23,7 +24,7 @@ public class ReglasDatosExterRest {
     JCOReglasDatosExterService jcoReglasDatosExterService;
 
     @PostMapping(value = "/Crear/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Crear(@RequestBody ReglasDatosExterNuevImports imports){
+    public ResponseEntity<List<MensajeDto>> Crear(@RequestBody ReglasDatosExterNuevImports imports){
 
         try {
             return Optional.ofNullable(this.jcoReglasDatosExterService.Crear(imports))
@@ -36,7 +37,7 @@ public class ReglasDatosExterRest {
     }
 
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Editar(@RequestBody ReglasDatosExterEditImports imports){
+    public ResponseEntity<List<MensajeDto>> Editar(@RequestBody ReglasDatosExterEditImports imports){
 
         try {
             return Optional.ofNullable(this.jcoReglasDatosExterService.Editar(imports))

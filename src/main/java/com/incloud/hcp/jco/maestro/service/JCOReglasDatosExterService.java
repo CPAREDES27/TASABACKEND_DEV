@@ -4,10 +4,12 @@ import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.jco.maestro.dto.ReglasDatosExterEditImports;
 import com.incloud.hcp.jco.maestro.dto.ReglasDatosExterNuevImports;
 
+import java.util.List;
+
 public interface JCOReglasDatosExterService {
 
-    MensajeDto Crear(ReglasDatosExterNuevImports importsParam)throws Exception;
-    MensajeDto Editar(ReglasDatosExterEditImports importsParam)throws Exception;
+    List<MensajeDto>Crear(ReglasDatosExterNuevImports importsParam)throws Exception;
+   List<MensajeDto> Editar(ReglasDatosExterEditImports importsParam)throws Exception;
 
 
 }

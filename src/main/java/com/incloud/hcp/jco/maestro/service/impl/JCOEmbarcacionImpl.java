@@ -2,11 +2,9 @@ package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
+import com.sun.xml.internal.ws.api.model.MEP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -206,7 +204,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         return msj;
     }
 
-    public MensajeDto Editar(EmbarcacionEditImports importsParam)throws Exception{
+    public Mensaje Editar(EmbarcacionEditImports importsParam)throws Exception{
 
         EmbarcaImports embarcaImports= importsParam.getParams();
 
@@ -235,18 +233,8 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         exec.setTable(jcoTables,Tablas.STR_HOR,str_hor);
         function.execute(destination);
 
-        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
-
-        MensajeDto msj= new MensajeDto();
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-
-            msj.setMANDT(tableExport.getString("MANDT"));
-            msj.setCMIN(tableExport.getString("CMIN"));
-            msj.setCDMIN(tableExport.getString("CDMIN"));
-            msj.setDSMIN(tableExport.getString("DSMIN"));
-            //lista.add(param);
-        }
+        Mensaje msj= new Mensaje();
+        msj.setMensaje("Ok");
 
 
         return msj;
