@@ -23,7 +23,7 @@ public class PuntoDescargaRest {
 
 
 
-    @PostMapping(value = "/ConsultarPuntosDescarga/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ListarPuntosDescarga(@RequestBody UsuarioDto imports){
 
         try {

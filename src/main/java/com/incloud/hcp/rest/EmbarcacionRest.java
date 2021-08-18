@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.util.Mensaje;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +152,7 @@ public class EmbarcacionRest {
 
     }
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionEditImports imports){
+    public ResponseEntity<Mensaje> Nuevo(@RequestBody EmbarcacionEditImports imports){
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.Editar(imports))

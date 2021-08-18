@@ -11,13 +11,14 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
 
-    public MensajeDto Crear(ReglasDatosExterNuevImports importsParam)throws Exception{
+    public List<MensajeDto> Crear(ReglasDatosExterNuevImports importsParam)throws Exception{
 
         ReglasDatosExterDto rde= importsParam.getParams();
 
@@ -50,6 +51,7 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
 
         JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
 
+        List<MensajeDto> ListMensajes= new ArrayList<MensajeDto>();
         MensajeDto msj= new MensajeDto();
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
@@ -58,13 +60,13 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
             msj.setCMIN(tableExport.getString("CMIN"));
             msj.setCDMIN(tableExport.getString("CDMIN"));
             msj.setDSMIN(tableExport.getString("DSMIN"));
-            //lista.add(param);
+            ListMensajes.add(msj);
         }
 
-        return msj;
+        return ListMensajes;
     }
 
-    public MensajeDto Editar(ReglasDatosExterEditImports importsParam)throws Exception{
+    public List<MensajeDto> Editar(ReglasDatosExterEditImports importsParam)throws Exception{
 
         ReglasDatosExterDto rde= importsParam.getParams();
 
@@ -97,6 +99,7 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
 
         JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
 
+        List<MensajeDto> ListMensajes= new ArrayList<MensajeDto>();
         MensajeDto msj= new MensajeDto();
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
@@ -105,10 +108,10 @@ public class JCOReglasDatosExterImpl implements JCOReglasDatosExterService {
             msj.setCMIN(tableExport.getString("CMIN"));
             msj.setCDMIN(tableExport.getString("CDMIN"));
             msj.setDSMIN(tableExport.getString("DSMIN"));
-            //lista.add(param);
+            ListMensajes.add(msj);
         }
 
-        return msj;
+        return ListMensajes;
     }
 
 }
