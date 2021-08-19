@@ -41,26 +41,8 @@ public class JCOTripuEmbarcaImpl implements JCOTripEmbarcService {
 
         function.execute(destination);
 
-        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
-
-        MensajeDto msj= new MensajeDto();
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-
-            msj.setMANDT(tableExport.getString("MANDT"));
-            msj.setCMIN(tableExport.getString("CMIN"));
-            msj.setCDMIN(tableExport.getString("CDMIN"));
-            msj.setDSMIN(tableExport.getString("DSMIN"));
-            //lista.add(param);
-        }
-
         Mensaje msje= new Mensaje();
-        if(msj.getDSMIN()=="") {
-            msje.setMensaje("Ok");
-        }else{
-            msje.setMensaje(msj.getDSMIN());
-        }
-
+        msje.setMensaje("Ok");
 
         return msje;
     }
