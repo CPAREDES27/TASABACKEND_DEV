@@ -1,9 +1,6 @@
 package com.incloud.hcp.jco.gestionpesca.service.impl;
 
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.gestionpesca.dto.FlotaDto;
-import com.incloud.hcp.jco.gestionpesca.dto.MareaDto;
-import com.incloud.hcp.jco.gestionpesca.dto.MareaOptions;
+import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
@@ -152,6 +149,34 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return dto;
     }
 
+    @Override
+    public HorometroExport consultarHorometro(HorometroDto horometro) throws Exception {
+
+        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoRepository repo = destination.getRepository();
+        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_OBT_LEC_ULT_HOR");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("IP_CDEMB", horometro.getIp_cdemb());
+        importx.setValue("IP_NRMAR", horometro.getIp_nrmar());
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        stfcConnection.execute(destination);
+        JCoTable T_MAREA = tables.getTable("T_MAREA");
+        JCoTable T_EVENT = tables.getTable("T_EVENT");
+        JCoTable T_LECHOR = tables.getTable("T_LECHOR");
+        JCoTable T_MENSAJE = tables.getTable("T_MENSAJE");
+        Metodos metodo = new Metodos();
+        List<HashMap<String, Object>> ListarT_MAREA= metodo.ListarObjetos(T_MAREA);
+        List<HashMap<String, Object>> ListarT_EVENTO= metodo.ListarObjetos(T_EVENT);
+        List<HashMap<String, Object>> ListarT_LECHOR= metodo.ListarObjetos(T_LECHOR);
+        List<HashMap<String, Object>> ListarT_MENSAJE= metodo.ListarObjetos(T_MENSAJE);
+        HorometroExport dto= new HorometroExport();
+        dto.setT_marea(ListarT_MAREA);
+        dto.setT_event(ListarT_EVENTO);
+        dto.setT_lechor(ListarT_LECHOR);
+        dto.setT_mensaje(ListarT_MENSAJE);
+        
+        return dto;
+    }
 
 
 }

@@ -11,4 +11,6 @@ public interface JCOEmbarcacionService {
 
     MareaDto consultaMarea(MareaOptions marea) throws Exception;
 
+    HorometroExport consultarHorometro(HorometroDto horometro) throws Exception;
+
 }

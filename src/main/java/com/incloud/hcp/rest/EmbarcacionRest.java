@@ -111,9 +111,18 @@ public class EmbarcacionRest {
         }
 
     }
+    @PostMapping(value = "/consultarHorometro/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<HorometroExport> consultaMarea(@RequestBody HorometroDto horometro){
 
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.consultarHorometro(horometro))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
 
-
+    }
 
     @PostMapping(value = "/BusquedasEmbarcacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> BuscarEmbarcaciones(@RequestBody BusquedaEmbarcacionImports imports){
