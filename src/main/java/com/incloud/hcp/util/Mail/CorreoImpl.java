@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.activation.FileDataSource;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
+import javax.servlet.ServletContext;
+import java.io.*;
 import java.util.Base64;
 
 /*
@@ -87,7 +88,15 @@ public class CorreoImpl implements CorreoService {
             String fds=imports.getNombreArchivo();
             FileDataSource f=new FileDataSource(fds);
             //helper.addAttachment(imports.getNombreArchivo(), new ClassPathResource(imports.getRutaArchivo()));
-            helper.addAttachment(imports.getNombreArchivo(), f);
+            File file = new File("../archivosTemporales/MetodoSendMail.txt");
+
+
+
+            String directorioRaiz = System.getProperty("user.dir");
+            log.error("Directorio de trabajo = " + directorioRaiz);
+
+
+            helper.addAttachment(imports.getNombreArchivo(), file);
 
             javaMailSender.send(msg);
             msj.setMensaje("Ok");
@@ -100,11 +109,12 @@ public class CorreoImpl implements CorreoService {
         return msj;
     }
 
-    public String Decode(String base64){
+    public String Decode(String base64) throws IOException {
         Base64.Decoder decoder= Base64.getDecoder();
             byte[]decoded= decoder.decode(base64);
+        OutputStream out = new ByteArrayOutputStream();
+        out.write(decoded);
 
-           
         return new  String(decoded);
     }
 }
