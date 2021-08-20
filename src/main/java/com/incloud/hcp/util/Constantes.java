@@ -16,6 +16,9 @@ public class Constantes {
     public static String ZFL_RFC_ADIC_MAES_EMBAR="ZFL_RFC_ADIC_MAES_EMBAR";
     public static String ZFL_RFC_MANT_MAESTRO_EMB="ZFL_RFC_MANT_MAESTRO_EMB";
     public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
+    public static String ZFL_RFC_GPES_CONS_MAREA="ZFL_RFC_GPES_CONS_MAREA";
+    public static String ZFL_RFC_CONS_DESCA="ZFL_RFC_CONS_DESCA";
+    public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";
 
 
     //Nombre de Destination

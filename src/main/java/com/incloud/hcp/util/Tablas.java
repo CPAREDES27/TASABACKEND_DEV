@@ -28,6 +28,12 @@ public class Tablas {
     public static String S_EPE="S_EPE";
     public static String S_BPE="S_BPE";
     public static String STR_HOR="STR_HOR";
+    public static String OPTIONS="OPTIONS";
+
+    /* Reporte de pesca */
+    public static String S_MAREA="S_MAREA";
+    public static String STR_DES="STR_DES";
+    public static String S_CALA="S_CALA";
 
 
     public static String T_MENSAJE="T_MENSAJE";
