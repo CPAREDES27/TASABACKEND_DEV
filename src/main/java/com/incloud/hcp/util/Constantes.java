@@ -21,5 +21,7 @@ public class Constantes {
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";
 
+    //Nombre de Ruta de Archivos
+    public static String RUTA_ARCHIVO_IMPORTAR="/home/vcap/app/ArchivosCorreo/";
 
 }

@@ -19,6 +19,9 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
 
     public MensajeDto EditarEstructuraInf(EstructuraInformacionImports estructuraInformacionImports)throws Exception{
 
+        MensajeDto msj= new MensajeDto();
+
+        try{
         logger.error("EditarEstructuraInf_1");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         //JCo
@@ -44,7 +47,6 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
 
         JCoTable tableExport = tables.getTable(Tablas.T_MENSAJE);
 
-        MensajeDto msj= new MensajeDto();
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
 
@@ -56,6 +58,12 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
         }
         logger.error("EditarEstructuraInf_6");
 
+    }catch (Exception e){
+        msj.setMANDT("00");
+        msj.setCMIN("Error");
+        msj.setCDMIN("Exception");
+        msj.setDSMIN(e.getMessage());
+    }
         return msj;
     }
 

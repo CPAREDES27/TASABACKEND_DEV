@@ -32,16 +32,5 @@ public class CorreoRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/EnviarConAdjunto", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EnviarConAdjunto(@RequestBody CorreoDto imports) {
-        //Parametro dto = new Parametro();
 
-        try {
-            return Optional.ofNullable(this.correoService.EnviarConAdjunto(imports))
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
-            throw new RuntimeException(e.toString());
-        }
-    }
 }

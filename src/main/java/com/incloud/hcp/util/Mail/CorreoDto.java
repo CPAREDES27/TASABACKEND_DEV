@@ -9,6 +9,15 @@ public class CorreoDto {
     private String rutaArchivo;
     private String nombreArchivo;
     private String[] to;
+    private String base64;
+
+    public String getBase64() {
+        return base64;
+    }
+
+    public void setBase64(String base64) {
+        this.base64 = base64;
+    }
 
     public String[] getTo() {
         return to;
