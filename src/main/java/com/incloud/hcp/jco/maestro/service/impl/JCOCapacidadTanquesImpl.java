@@ -23,28 +23,36 @@ public class JCOCapacidadTanquesImpl implements JCOCapacidadTanquesService {
 
 
     public Mensaje Editar(CapacidadTanquesImports importsParam)throws Exception{
-
-        HashMap<String, Object> imports = new HashMap<String, Object>();
-        imports.put("P_USER", importsParam.getP_user());
-
-
-        logger.error("ListarEventosPesca_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_ACT_CAMP_TAB);
-        JCoParameterList jcoTables = function.getTableParameterList();
-
-        logger.error("ListarEventosPesca_4");;
-
-        List<HashMap<String, Object>> data=importsParam.getData();
-
-        EjecutarRFC exec= new EjecutarRFC();
-        exec.setImports(function, imports);
-        exec.setTable(jcoTables,Tablas.STR_SET,data);
-        function.execute(destination);
-
         Mensaje msje= new Mensaje();
+
+        try {
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("P_USER", importsParam.getP_user());
+
+
+            logger.error("ListarEventosPesca_1");
+            ;
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_ACT_CAMP_TAB);
+            JCoParameterList jcoTables = function.getTableParameterList();
+
+            logger.error("ListarEventosPesca_4");
+            ;
+
+            List<HashMap<String, Object>> data = importsParam.getData();
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, imports);
+            exec.setTable(jcoTables, Tablas.STR_SET, data);
+            function.execute(destination);
             msje.setMensaje("Ok");
+
+        }catch (Exception e){
+            msje.setMensaje(e.getMessage());
+        }
+
+
 
         return msje;
     }

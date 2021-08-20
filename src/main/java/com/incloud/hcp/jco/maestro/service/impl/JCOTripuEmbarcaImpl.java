@@ -22,44 +22,34 @@ public class JCOTripuEmbarcaImpl implements JCOTripEmbarcService {
 
     public Mensaje EditarTripuEmbarca(TripuEmbarcaImports impor)throws Exception{
 
-        HashMap<String, Object> imports = new HashMap<String, Object>();
-        imports.put("P_USER", impor.getP_user());
-
-        logger.error("ListarEventosPesca_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_TRIPU_EMBAR);
-        JCoParameterList jcoTables = function.getTableParameterList();
-
-        logger.error("ListarEventosPesca_4");;
-
-        List<HashMap<String, Object>> str_emb=impor.getStr_emb();
-
-        EjecutarRFC exec= new EjecutarRFC();
-        exec.setImports(function, imports);
-        exec.setTable(jcoTables,Tablas.STR_EMB,str_emb);
-
-        function.execute(destination);
-
-        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
-
-        MensajeDto msj= new MensajeDto();
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-
-            msj.setMANDT(tableExport.getString("MANDT"));
-            msj.setCMIN(tableExport.getString("CMIN"));
-            msj.setCDMIN(tableExport.getString("CDMIN"));
-            msj.setDSMIN(tableExport.getString("DSMIN"));
-            //lista.add(param);
-        }
-
         Mensaje msje= new Mensaje();
-        if(msj.getDSMIN()=="") {
+        try {
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("P_USER", impor.getP_user());
+
+            logger.error("ListarEventosPesca_1");
+            ;
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_TRIPU_EMBAR);
+            JCoParameterList jcoTables = function.getTableParameterList();
+
+            logger.error("ListarEventosPesca_4");
+            ;
+
+            List<HashMap<String, Object>> str_emb = impor.getStr_emb();
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, imports);
+            exec.setTable(jcoTables, Tablas.STR_EMB, str_emb);
+
+            function.execute(destination);
             msje.setMensaje("Ok");
-        }else{
-            msje.setMensaje(msj.getDSMIN());
+
+        }catch (Exception e){
+            msje.setMensaje(e.getMessage());
         }
+
 
 
         return msje;

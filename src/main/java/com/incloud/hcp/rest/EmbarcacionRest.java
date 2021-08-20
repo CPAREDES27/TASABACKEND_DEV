@@ -1,12 +1,11 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
-import com.incloud.hcp.jco.gestionpesca.dto.Options;
+import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
-import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.util.Mensaje;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +87,42 @@ public class EmbarcacionRest {
         }
 
     }
+    @PostMapping(value = "/ObtenerFlota/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FlotaDto> obtenerDistribucionFlota(@RequestBody String user){
 
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.obtenerDistribucionFlota(user))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/consultaMarea/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MareaDto> consultaMarea(@RequestBody MareaOptions marea){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.consultaMarea(marea))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/consultarHorometro/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<HorometroExport> consultaMarea(@RequestBody HorometroDto horometro){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.consultarHorometro(horometro))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
     @PostMapping(value = "/BusquedasEmbarcacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> BuscarEmbarcaciones(@RequestBody BusquedaEmbarcacionImports imports){
@@ -127,7 +161,7 @@ public class EmbarcacionRest {
 
     }
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionEditImports imports){
+    public ResponseEntity<Mensaje> Nuevo(@RequestBody EmbarcacionEditImports imports){
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.Editar(imports))

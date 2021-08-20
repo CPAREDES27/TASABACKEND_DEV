@@ -22,7 +22,7 @@ public class HistoricoCompetenciaRest {
     private JCOHistCompeService jcoHistCompeService;
 
     @PostMapping(value = "/Editar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarCaptanques(@RequestBody CapacidadTanquesImports imports) {
+    public ResponseEntity<Mensaje> Editar(@RequestBody CapacidadTanquesImports imports) {
         //Parametro dto = new Parametro();
 
         try {

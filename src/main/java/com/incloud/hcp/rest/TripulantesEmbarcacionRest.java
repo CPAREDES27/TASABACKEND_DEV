@@ -22,7 +22,7 @@ public class TripulantesEmbarcacionRest {
     JCOTripEmbarcService jcoTripEmbarcService;
 
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarEstructuraInf(@RequestBody TripuEmbarcaImports imports){
+    public ResponseEntity<Mensaje> Editar(@RequestBody TripuEmbarcaImports imports){
 
         try {
             return Optional.ofNullable(this.jcoTripEmbarcService.EditarTripuEmbarca(imports))
