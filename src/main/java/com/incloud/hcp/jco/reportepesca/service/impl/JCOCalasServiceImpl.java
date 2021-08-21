@@ -9,14 +9,16 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class JCOCalasServiceImpl implements JCOCalasService {
     @Override
-    public CalaExports obtenerCalas(CalaImports imports) throws Exception {
+    public CalaExports ObtenerCalas(CalaImports imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
         importParams.put("ROWCOUNT", imports.getRowcount());

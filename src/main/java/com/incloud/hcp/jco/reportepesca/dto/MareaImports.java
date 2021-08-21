@@ -5,7 +5,7 @@ import java.util.List;
 public class MareaImports {
     private String p_user;
     private String rowcount;
-    private List<MaestroOptionsMarea> p_options;
+    private List<MaestroOptionsMarea> options;
 
     public String getP_user() {
         return p_user;
@@ -23,11 +23,11 @@ public class MareaImports {
         this.rowcount = rowcount;
     }
 
-    public List<MaestroOptionsMarea> getP_options() {
-        return p_options;
+    public List<MaestroOptionsMarea> getOptions() {
+        return options;
     }
 
-    public void setP_options(List<MaestroOptionsMarea> p_options) {
-        this.p_options = p_options;
+    public void setOptions(List<MaestroOptionsMarea> options) {
+        this.options = options;
     }
 }

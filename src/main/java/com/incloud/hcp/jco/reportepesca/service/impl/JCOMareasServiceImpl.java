@@ -29,7 +29,7 @@ public class JCOMareasServiceImpl implements JCOMareasService {
 
         // Obtener los options
         List<HashMap<String, Object>> options = new ArrayList<HashMap<String, Object>>();
-        for (MaestroOptionsMarea option : imports.getP_options()) {
+        for (MaestroOptionsMarea option : imports.getOptions()) {
             HashMap<String, Object> optionRecord = new HashMap<>();
             optionRecord.put("WA", option.getWa());
             options.add(optionRecord);

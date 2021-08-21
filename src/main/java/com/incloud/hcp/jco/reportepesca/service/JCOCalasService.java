@@ -4,5 +4,5 @@ import com.incloud.hcp.jco.reportepesca.dto.CalaExports;
 import com.incloud.hcp.jco.reportepesca.dto.CalaImports;
 
 public interface JCOCalasService {
-    CalaExports obtenerCalas(CalaImports imports) throws Exception;
+    CalaExports ObtenerCalas(CalaImports imports) throws Exception;
 }
