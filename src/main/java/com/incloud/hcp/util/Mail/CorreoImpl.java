@@ -84,7 +84,6 @@ public class CorreoImpl implements CorreoService {
                 helper.addAttachment(imports.getNombreArchivo(), file);
             }
 
-
             javaMailSender.send(msg);
             msj.setMensaje("Ok");
 
