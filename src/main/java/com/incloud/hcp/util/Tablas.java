@@ -34,6 +34,9 @@ public class Tablas {
     public static String S_MAREA="S_MAREA";
     public static String STR_DES="STR_DES";
     public static String S_CALA="S_CALA";
+    public static String T_MCHPM="T_MCHPM";
+    public static String T_DCHPM="T_DCHPM";
+    public static String T_BODEG="T_BODEG";
 
 
     public static String T_MENSAJE="T_MENSAJE";
