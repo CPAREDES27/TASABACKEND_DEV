@@ -1,5 +1,8 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+import com.incloud.hcp.util.Ftp.FtpImports;
+import com.incloud.hcp.util.Ftp.FtpService;
 import com.incloud.hcp.util.Mail.CorreoDto;
 import com.incloud.hcp.util.Mail.CorreoService;
 import com.incloud.hcp.util.Mensaje;
@@ -25,6 +28,8 @@ public class CorreoRest {
 
     @Autowired
     private ReportesService reportesService;
+    @Autowired
+    private FtpService ftpService;
 
     @PostMapping(value = "/EnviarCorreo", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoDto imports) {
@@ -40,7 +45,6 @@ public class CorreoRest {
     }
     @PostMapping(value = "/Reporte", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReportesExports> Enviar() {
-        //Parametro dto = new Parametro();
 
         try {
             return Optional.ofNullable(this.reportesService.ExportarReporteExcel())
@@ -51,4 +55,15 @@ public class CorreoRest {
         }
     }
 
+    @PostMapping(value = "/Ftp", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> SubirArchivoFtp(@RequestBody FtpImports imports) {
+
+        try {
+            return Optional.ofNullable(this.ftpService.SubirArchivoFtp(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

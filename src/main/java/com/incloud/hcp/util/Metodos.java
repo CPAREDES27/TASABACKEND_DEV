@@ -38,6 +38,23 @@ public class Metodos {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     value = dateFormat.format(dateValue);
                 }*/
+                if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")) {
+                    /* String date="Sat Jun 01 12:53:10 UTC 2013";
+                    SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
+                    Date currentdate=sdf.parse(date);
+                    SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+                    value= sdf2.format(currentdate);*/
+                    String date=String.valueOf(value);
+                    SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
+                    // SimpleDateFormat mes=new SimpleDateFormat("MM");
+                    //SimpleDateFormat anio=new SimpleDateFormat("yyyy");
+                    String fecha= dia.format(value);
+                    //String month= mes.format(value);
+                    //String year= anio.format(value);
+
+                    value= fecha;
+
+                }
 
                 newRecord.put(key, value);
             }

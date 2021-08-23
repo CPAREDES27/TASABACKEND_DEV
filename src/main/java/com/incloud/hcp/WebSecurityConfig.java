@@ -25,8 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter  {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http
-			.sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session is created by approuter
+				//.sessionManagement()
+				//  .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session is created by approuter
+				.cors()
 			.and()
 				.authorizeRequests()
 				.antMatchers("/**").authenticated()
