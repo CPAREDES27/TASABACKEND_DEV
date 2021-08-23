@@ -8,7 +8,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
+import java.io.FileInputStream;
 
 
 import java.io.*;
@@ -41,13 +43,28 @@ public class FtpImpl implements FtpService {
 
             if(logueo){
                 ftpclient.setFileType(BINARY_FILE_TYPE);
+                ftpclient.enterLocalPassiveMode();
+
+                if (imports.getRuta()!="") {
+                    ftpclient.changeWorkingDirectory(imports.getRuta());
+                }
                 String path=Constantes.RUTA_ARCHIVO_IMPORTAR+ imports.getNombreArchivo();
 
                 CrearArchivo(imports.getBase64(), path);
-                bool=subirFichero(path, imports.getNombreArchivo(), ftpclient);
-                ftpclient.listDirectories();
-                msj.setMensaje("Conexion exitosa, Archivo subio: "+bool + "- Lista carpetas: "+ftpclient.listDirectories()+" -Directorio actual: "+ ftpclient.printWorkingDirectory());
+                File f=new File(path);
+                InputStream fis = new FileInputStream(f);
+                bool=ftpclient.storeFile(f.getName(),fis);
+                int respons= ftpclient.getReplyCode();
+                if(bool) {
+                    msj.setMensaje("Ok, " + respons );
+                }else{
+                    msj.setMensaje("No se cargó el archivo, ");
+
+                }
+
                 ftpclient.disconnect();
+            }else   {
+                msj.setMensaje("Error de acceso");
             }
 
         }catch (IOException e){
@@ -74,23 +91,6 @@ public class FtpImpl implements FtpService {
 
     }
 
-    public  boolean subirFichero(String pathFich, String fich, FTPClient ftpClient){
 
-        InputStream is;
-        boolean fichSubido = false;
 
-        try {
-            // Capturar el fichero de su ruta.
-            is = new BufferedInputStream(new FileInputStream(pathFich));
-
-            // Subir el fichero en sí.
-            fichSubido = ftpClient.storeFile(fich, is);
-            is.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return fichSubido;
-    }
 }

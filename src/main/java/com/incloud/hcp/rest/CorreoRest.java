@@ -56,7 +56,7 @@ public class CorreoRest {
     }
 
     @PostMapping(value = "/Ftp", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> SubirArchivoFtp(FtpImports imports) {
+    public ResponseEntity<Mensaje> SubirArchivoFtp(@RequestBody FtpImports imports) {
 
         try {
             return Optional.ofNullable(this.ftpService.SubirArchivoFtp(imports))

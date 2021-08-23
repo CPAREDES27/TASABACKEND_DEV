@@ -3,6 +3,15 @@ package com.incloud.hcp.util.Ftp;
 public class FtpImports {
     private String base64;
     private String nombreArchivo;
+    private String ruta;
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
 
     public String getNombreArchivo() {
         return nombreArchivo;
