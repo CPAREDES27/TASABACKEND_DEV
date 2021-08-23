@@ -27,4 +27,9 @@ public class Constantes {
     //Nombre de Ruta de Archivos
     public static String RUTA_ARCHIVO_IMPORTAR="/home/vcap/app/ArchivosCorreo/";
 
+    //Configuracion FTP
+    public static String  ftp_usuario="dlpuser";
+    public static String ftp_contraseña="rNrKYTX9g7z3RgJRmxWuGHbeu";
+    public static String ftp_servidor="ftp.dlptest.com";
+    public static String ftp_puerto="21";
 }
