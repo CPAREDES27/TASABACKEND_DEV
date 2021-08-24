@@ -36,23 +36,15 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
             JCoRepository repo = destination.getRepository();
             JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_JOB_FUENT_EXTERN);
-            JCoParameterList jcoTables = function.getTableParameterList();
-            logger.error("getTableParameterList "+function.getTableParameterList());
-            logger.error("getMetaData "+ jcoTables.getMetaData());
+            JCoParameterList jcoTablesExport = function.getExportParameterList();
+
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, imports);
 
             function.execute(destination);
+           String value= jcoTablesExport.getValue(0).toString();
+            msj.setMensaje(value);
 
-            JCoTable tableExport = jcoTables.getTable(Tablas.W_MENSAJE);
-
-            for (int i = 0; i < tableExport.getNumRows(); i++) {
-                tableExport.setRow(i);
-                msj.setMensaje(tableExport.getString());
-                logger.error("table export carga archvos: "+ tableExport.getString());
-                logger.error("getFieldIterator: "+ tableExport.getFieldIterator());
-
-            }
 
         }catch (Exception e){
             msj.setMensaje(e.getMessage());

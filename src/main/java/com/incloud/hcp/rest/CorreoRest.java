@@ -43,7 +43,7 @@ public class CorreoRest {
             throw new RuntimeException(e.toString());
         }
     }
-    /*
+
     @PostMapping(value = "/Reporte", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReportesExports> Enviar() {
 
@@ -54,7 +54,7 @@ public class CorreoRest {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
-    }*/
+    }
 
 
 }

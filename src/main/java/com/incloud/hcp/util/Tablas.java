@@ -29,7 +29,11 @@ public class Tablas {
     public static String S_BPE="S_BPE";
     public static String STR_HOR="STR_HOR";
     public static String OPTIONS="OPTIONS";
+    public static String P_OPTIONS="P_OPTIONS";
     public static String STR_DSF="STR_DSF";
+    public static String STR_EMP="STR_EMP";
+    public static String ST_VVI="ST_VVI";
+    public static String ST_PVA="ST_PVA";
 
     /* Reporte de pesca */
     public static String S_MAREA="S_MAREA";
@@ -42,6 +46,7 @@ public class Tablas {
 
     public static String T_MENSAJE="T_MENSAJE";
     public static String W_MENSAJE="W_MENSAJE";
+
 
 
 }
