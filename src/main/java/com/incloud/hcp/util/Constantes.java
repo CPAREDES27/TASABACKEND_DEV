@@ -16,6 +16,9 @@ public class Constantes {
     public static String ZFL_RFC_ADIC_MAES_EMBAR="ZFL_RFC_ADIC_MAES_EMBAR";
     public static String ZFL_RFC_MANT_MAESTRO_EMB="ZFL_RFC_MANT_MAESTRO_EMB";
     public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
+    public static String ZFL_RFC_MUEVE_EMBARCA="ZFL_RFC_MUEVE_EMBARCA";
+    public static String ZFL_RFC_JOB_FUENT_EXTERN="ZFL_RFC_JOB_FUENT_EXTERN";
+
 
     //Reportes de pesca
     public static String ZFL_RFC_GPES_CONS_MAREA="ZFL_RFC_GPES_CONS_MAREA";
