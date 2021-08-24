@@ -17,11 +17,15 @@ public class Constantes {
     public static String ZFL_RFC_MANT_MAESTRO_EMB="ZFL_RFC_MANT_MAESTRO_EMB";
     public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
 
-    //Reportes de pesca
+    // Reportes de pesca
     public static String ZFL_RFC_GPES_CONS_MAREA="ZFL_RFC_GPES_CONS_MAREA";
     public static String ZFL_RFC_CONS_DESCA="ZFL_RFC_CONS_DESCA";
     public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";
     public static String ZFL_RFC_GESP_CONSULTA_CHDPM="ZFL_RFC_GESP_CONSULTA_CHDPM";
+
+    // Política de precios
+    public static String ZFL_RFC_LECT_PREC_PESC="ZFL_RFC_LECT_PREC_PESC";
+    public static String ZFL_RFC_MANT_PRECIO_PESC="ZFL_RFC_MANT_PRECIO_PESC";
 
 
     //Nombre de Destination
