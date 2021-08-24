@@ -24,7 +24,7 @@ public class ReportesImpl implements ReportesService {
 
 
       try {
-          String filename = Constantes.RUTA_ARCHIVO_IMPORTAR+ "Reporte.xlsx" ;
+          String path = Constantes.RUTA_ARCHIVO_IMPORTAR+ "Reporte.xlsx" ;
           HSSFWorkbook workbook = new HSSFWorkbook();
           HSSFSheet sheet = workbook.createSheet("Libro1");
 
@@ -39,12 +39,15 @@ public class ReportesImpl implements ReportesService {
           row.createCell(1).setCellValue("Sankumarsingh");
           row.createCell(2).setCellValue("India");
           row.createCell(3).setCellValue("sankumarsingh@gmail.com");
-          FileOutputStream fileOut = new FileOutputStream(filename);
+          FileOutputStream fileOut = new FileOutputStream(path);
           workbook.write(fileOut);
           fileOut.close();
           workbook.close();
-          String Base64=CrearBase64(filename);
-          re.setBase64(Base64);
+
+          byte[] fileContent = FileUtils.readFileToByteArray(new File(path));
+          String encodedString = java.util.Base64.getEncoder().encodeToString(fileContent);
+          //String Base64=CrearBase64(filename);
+          re.setBase64(encodedString);
           re.setMensaje("ok");
 
       } catch ( Exception e ) {
@@ -57,6 +60,10 @@ public class ReportesImpl implements ReportesService {
       File file = new File(fileName);
       byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
       return new String(encoded, StandardCharsets.US_ASCII);
+
+
+
+
   }
 
 }

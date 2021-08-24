@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.maestro.service.JCOEmpresaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
+import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
             }
 
             EjecutarRFC exe = new EjecutarRFC();
-            exe.setTable(tables, "P_OPTIONS", tmpOptions);
+            exe.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
 
             logger.error("obtenerEmpresa_5");
             ;
@@ -61,7 +62,7 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
             logger.error("obtenerEmpresa_6");
 
 
-            JCoTable tableExport = tables.getTable("STR_EMP");
+            JCoTable tableExport = tables.getTable(Tablas.STR_EMP);
 
             logger.error("obtenerEmpresa_7");
 

@@ -257,5 +257,58 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         return msj;
     }
 
+    public MensajeDto MoverEmbarcacion(MoverEmbarcaImports importsParam)throws Exception{
+
+        MensajeDto msj=new MensajeDto();
+        try {
+
+
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_CDPTA", importsParam.getP_cdtpa());
+
+
+            List<HashMap<String, Object>> data = importsParam.getData();
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_MUEVE_EMBARCA);
+            JCoParameterList jcoTables = function.getTableParameterList();
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, imports);
+            exec.setTable(jcoTables, Tablas.STR_DSF, data);
+            function.execute(destination);
+
+            JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+
+
+            for (int i = 0; i < tableExport.getNumRows(); i++) {
+                tableExport.setRow(i);
+
+                msj.setMANDT(tableExport.getString("MANDT"));
+                msj.setCMIN(tableExport.getString("CMIN"));
+                msj.setCDMIN(tableExport.getString("CDMIN"));
+                msj.setDSMIN(tableExport.getString("DSMIN"));
+                //lista.add(param);
+            }
+
+            if(msj.getMANDT()==null && msj.getCMIN()==null &&
+                    msj.getCDMIN()==null && msj.getDSMIN()==null ){
+                msj.setCMIN("200");
+                msj.setDSMIN("ok");
+            }
+
+        }catch (Exception e){
+            msj.setMANDT("00");
+            msj.setCMIN("Error");
+            msj.setCDMIN("Exception");
+            msj.setDSMIN(e.getMessage());
+        }
+
+        return msj;
+    }
 
 }
