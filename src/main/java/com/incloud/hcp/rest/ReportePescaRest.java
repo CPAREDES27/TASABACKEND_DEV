@@ -1,6 +1,7 @@
 package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.reportepesca.dto.*;
+import com.incloud.hcp.jco.reportepesca.service.JCOCDHPMService;
 import com.incloud.hcp.jco.reportepesca.service.JCOCalasService;
 import com.incloud.hcp.jco.reportepesca.service.JCODescargasService;
 import com.incloud.hcp.jco.reportepesca.service.JCOMareasService;
@@ -30,6 +31,8 @@ public class ReportePescaRest {
     @Autowired
     private JCOCalasService jcoCalasService;
 
+    @Autowired
+    private JCOCDHPMService jcocdhpmService;
 
     @PostMapping(value = "/ConsultarMareas/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MareaExports> ConsultarMareas(@RequestBody MareaImports imports) {
@@ -58,6 +61,16 @@ public class ReportePescaRest {
     public ResponseEntity<CalaExports> ConsultarCalas(@RequestBody CalaImports imports) {
         try {
             return Optional.ofNullable(this.jcoCalasService.ObtenerCalas(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }
+
+    @PostMapping(value = "/ReporteTDC_CHD", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CHDPMExports> ConsultarCDHPM(@RequestBody CHDPMImports imports) {
+        try {
+            return Optional.ofNullable(this.jcocdhpmService.ObtenerCHDPM(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException(ex.toString());

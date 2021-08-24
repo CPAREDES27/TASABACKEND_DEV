@@ -43,6 +43,7 @@ public class CorreoRest {
             throw new RuntimeException(e.toString());
         }
     }
+    /*
     @PostMapping(value = "/Reporte", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ReportesExports> Enviar() {
 
@@ -53,17 +54,7 @@ public class CorreoRest {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
-    }
+    }*/
 
-    @PostMapping(value = "/Ftp", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> SubirArchivoFtp(@RequestBody FtpImports imports) {
 
-        try {
-            return Optional.ofNullable(this.ftpService.SubirArchivoFtp(imports))
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
-            throw new RuntimeException(e.toString());
-        }
-    }
 }
