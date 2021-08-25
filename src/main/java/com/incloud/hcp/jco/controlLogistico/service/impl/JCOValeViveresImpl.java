@@ -1,7 +1,7 @@
 package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresExports;
-import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresImports;
+import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaExports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
 import com.incloud.hcp.util.Constantes;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class JCOValeViveresImpl implements JCOValeVivereService {
 
-    public ValeViveresExports ListarValeViveres(ValeViveresImports imports)throws Exception{
+    public ValeViveresExports ListarValeViveres(ControlLogImports imports)throws Exception{
 
         ValeViveresExports vve= new ValeViveresExports();
 
@@ -52,7 +52,7 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
         return vve;
     }
-    public VvGuardaExports GuardarValeViveres(ValeViveresImports imports)throws Exception{
+    public VvGuardaExports GuardarValeViveres(ControlLogImports imports)throws Exception{
 
         VvGuardaExports vve = new VvGuardaExports();
 

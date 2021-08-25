@@ -2,7 +2,7 @@ package com.incloud.hcp.rest;
 
 
 import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresExports;
-import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresImports;
+import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaExports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class ValeViveresRest {
     JCOValeVivereService jcoValeVivereService;
 
     @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ValeViveresExports> Editar(@RequestBody ValeViveresImports imports){
+    public ResponseEntity<ValeViveresExports> Editar(@RequestBody ControlLogImports imports){
 
         try {
             return Optional.ofNullable(this.jcoValeVivereService.ListarValeViveres(imports))
@@ -35,7 +35,7 @@ public class ValeViveresRest {
     }
 
     @PostMapping(value = "/Guardar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<VvGuardaExports> Guardar(@RequestBody ValeViveresImports imports){
+    public ResponseEntity<VvGuardaExports> Guardar(@RequestBody ControlLogImports imports){
 
         try {
             return Optional.ofNullable(this.jcoValeVivereService.GuardarValeViveres(imports))

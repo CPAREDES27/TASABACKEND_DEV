@@ -6,6 +6,7 @@ public class EmpresaImports {
     private String p_cdusr;
     private String p_ruc;
     private List<MaestroOptions> options;
+    private String [] fields;
 
 
 

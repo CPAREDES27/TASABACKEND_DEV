@@ -48,9 +48,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }
             logger.error("obtenerMaestro_2");
 
+            String []fields=importsParam.getFields();
             //ejecutar RFC ZFL_RFC_READ_TABLE
             EjecutarRFC exec = new EjecutarRFC();
-            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions);
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
 
         }catch (Exception e){
             me.setMensaje(e.getMessage());

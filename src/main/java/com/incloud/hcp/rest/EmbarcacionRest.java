@@ -63,16 +63,7 @@ public class EmbarcacionRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/metodo")
-    public List<Options> modelParam(@RequestBody List<Options> person) {
 
-        List<Options> lista = new ArrayList<Options>();
-        person.stream().forEach(persona ->{
-            lista.add(persona);
-        });
-
-        return lista;
-    }
 
 
     @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
@@ -153,6 +144,18 @@ public class EmbarcacionRest {
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.Nuevo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/CrearMarea/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MensajeDto> Nuevo(@RequestBody MarEventoDtoImport imports){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.crearMareaPropios(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
