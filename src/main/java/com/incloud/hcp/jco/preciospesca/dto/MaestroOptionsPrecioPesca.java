@@ -1,4 +1,4 @@
-package com.incloud.hcp.jco.politicaprecios.dto;
+package com.incloud.hcp.jco.preciospesca.dto;
 
 public class MaestroOptionsPrecioPesca {
     private String wa;

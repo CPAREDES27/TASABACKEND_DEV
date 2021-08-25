@@ -1,8 +1,8 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.politicaprecios.dto.PrecioPescaExports;
-import com.incloud.hcp.jco.politicaprecios.dto.PrecioPescaImports;
-import com.incloud.hcp.jco.politicaprecios.service.JCOPrecioPescaService;
+import com.incloud.hcp.jco.preciospesca.dto.PrecioPescaExports;
+import com.incloud.hcp.jco.preciospesca.dto.PrecioPescaImports;
+import com.incloud.hcp.jco.preciospesca.service.JCOPoliticaPreciosService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ public class PreciosPescaRest {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private JCOPrecioPescaService jcoPrecioPescaService;
+    private JCOPoliticaPreciosService jcoPoliticaPreciosService;
 
     @PostMapping(value = "/Buscar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PrecioPescaExports> ConsultarPreciosPesca(@RequestBody PrecioPescaImports imports) {
         try {
-            return Optional.ofNullable(this.jcoPrecioPescaService.ObtenerPrecioPesca(imports)).map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            return Optional.ofNullable(this.jcoPoliticaPreciosService.ObtenerPrecioPesca(imports)).map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException(ex.toString());
         }
