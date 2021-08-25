@@ -55,6 +55,15 @@ public class Metodos {
                     value= fecha;
 
                 }
+                if (field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+
+                    String date=String.valueOf(value);
+                    SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
+                    String fecha= dia.format(value);
+                    value= fecha;
+                }
 
                 newRecord.put(key, value);
             }
