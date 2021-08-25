@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
-public class ValeViveresImports {
+public class ControlLogImports {
 
     private String p_user;
     private String rowcount;

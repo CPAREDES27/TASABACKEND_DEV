@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.maestro.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MaestroImports {
@@ -68,6 +69,14 @@ public class MaestroImports {
         this.options = options;
     }
 
+    public String[] getFields() {
+        return fields;
+    }
+
+    public void setFields(String[] fields) {
+        this.fields = fields;
+    }
+
     private String tabla;
     private String delimitador;
     private String no_data;
@@ -76,5 +85,7 @@ public class MaestroImports {
     private String p_user;
     private String order;
     private List<MaestroOptions> options;
+    private String[] fields;
+
 
 }
