@@ -25,7 +25,7 @@ public class JCOPrecioPescaServiceImpl implements JCOPrecioPescaService {
 
         //Obtener los options
         List<HashMap<String,Object>> options=new ArrayList<HashMap<String, Object>>();
-        for (MaestroOptionsPrecioPesca option: imports.getOptions()) {
+        for (MaestroOptionsPrecioPesca option: imports.getP_options()) {
             HashMap<String, Object> optionRecord = new HashMap<>();
             optionRecord.put("WA", option.getWa());
             options.add(optionRecord);
@@ -39,7 +39,7 @@ public class JCOPrecioPescaServiceImpl implements JCOPrecioPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "OPTIONS", options);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
 
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
