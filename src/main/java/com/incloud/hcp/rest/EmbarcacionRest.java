@@ -51,12 +51,11 @@ public class EmbarcacionRest {
         }
     }
 
-    @RequestMapping(value = "/listaTipoEmbarcacion", method = RequestMethod.POST)
-    public ResponseEntity<List<TipoEmbarcacionDto>> listaTipoEmbarcacion(@RequestBody List<Options> options
-    ) {
+    @RequestMapping(value = "/listaTipoEmbarcacion", method = RequestMethod.GET)
+    public ResponseEntity<List<TipoEmbarcacionDto>> listaTipoEmbarcacion(@RequestBody String usuario) {
         //Parametro dto = new Parametro();
         try {
-            return Optional.ofNullable(this.jcoTipoEmbarcacionService.listaTipoEmbarcacion(options))
+            return Optional.ofNullable(this.jcoTipoEmbarcacionService.listaTipoEmbarcacion(usuario))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -64,7 +63,17 @@ public class EmbarcacionRest {
         }
     }
 
-
+    @RequestMapping(value = "/listaPlantas", method = RequestMethod.GET)
+    public ResponseEntity<MaestroExport> listaPlantas(@RequestBody String usuario) {
+        //Parametro dto = new Parametro();
+        try {
+            return Optional.ofNullable(this.jcoTipoEmbarcacionService.listarPlantas(usuario))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+    }
 
     @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ConsultarEmbarcacionesNew(@RequestBody EmbarcacionImports imports){
