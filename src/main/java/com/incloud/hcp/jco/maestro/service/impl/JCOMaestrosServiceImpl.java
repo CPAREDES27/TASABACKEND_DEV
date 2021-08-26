@@ -60,6 +60,43 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
 
+    public MaestroExport obtenerMaestro2 (MaestroImports importsParam) throws Exception {
+
+        MaestroExport me=new MaestroExport();
+        try {
+            //setear mapeo de parametros import
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("QUERY_TABLE", importsParam.getTabla());
+            imports.put("DELIMITER", importsParam.getDelimitador());
+            imports.put("NO_DATA", importsParam.getNo_data());
+            imports.put("ROWSKIPS", importsParam.getRowskips());
+            imports.put("ROWCOUNT", importsParam.getRowcount());
+            imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_ORDER", importsParam.getOrder());
+            logger.error("obtenerMaestro_1");
+            //setear mapeo de tabla options
+            List<MaestroOptions> options = importsParam.getOptions();
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptions mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+                record.put("WA", mo.getWa());
+                tmpOptions.add(record);
+            }
+            logger.error("obtenerMaestro_2");
+
+            String []fields=importsParam.getFields();
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            EjecutarRFC exec = new EjecutarRFC();
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+
+        }catch (Exception e){
+            me.setMensaje(e.getMessage());
+        }
+
+        return me;
+    }
+
     public MensajeDto editarMaestro (MaestroEditImports importsParam) throws Exception{
 
         MensajeDto msj= new MensajeDto();

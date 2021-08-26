@@ -35,6 +35,7 @@ public class GeneralRest {
 
     }
 
+
     @PostMapping(value = "/Update_Table/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
 
