@@ -1,7 +1,7 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresExports;
+import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaExports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
@@ -23,7 +23,7 @@ public class ValeViveresRest {
     JCOValeVivereService jcoValeVivereService;
 
     @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ValeViveresExports> Editar(@RequestBody ControlLogImports imports){
+    public ResponseEntity<ControlLogExports> Editar(@RequestBody ControlLogImports imports){
 
         try {
             return Optional.ofNullable(this.jcoValeVivereService.ListarValeViveres(imports))

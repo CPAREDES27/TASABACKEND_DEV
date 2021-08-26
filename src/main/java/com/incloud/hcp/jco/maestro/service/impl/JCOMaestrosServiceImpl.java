@@ -125,7 +125,47 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     }
 
+    public AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception{
 
+        AppMaestrosExports ame=new AppMaestrosExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMPRESAS);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_CDUSR", imports.getP_rol());
+            importx.setValue("P_RUC", imports.getP_app());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable t_approles = tables.getTable(Tablas.T_APPROLES);
+            JCoTable t_tabcolumna = tables.getTable(Tablas.T_TABCOLUMNA);
+            JCoTable t_tabselec = tables.getTable(Tablas.T_TABSELEC);
+            JCoTable t_tabform = tables.getTable(Tablas.T_TABFORM);
+
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> List_t_approles = metodo.ListarObjetos(t_approles);
+            List<HashMap<String, Object>> List_t_tabcolumna = metodo.ListarObjetos(t_tabcolumna);
+            List<HashMap<String, Object>> List_t_tabselec = metodo.ListarObjetos(t_tabselec);
+            List<HashMap<String, Object>> List_t_tabform = metodo.ListarObjetos(t_tabform);
+
+            ame.setT_approles(List_t_approles);
+            ame.setT_tabcolumna(List_t_tabcolumna);
+            ame.setT_tabselec(List_t_tabselec);
+            ame.setT_tabform(List_t_tabform);
+            ame.setMensaje("Ok");
+
+        }catch (Exception e){
+            ame.setMensaje(e.getMessage());
+        }
+
+        return ame;
+    }
 
 
 

@@ -4,6 +4,16 @@ public class ControlLogImports {
 
     private String p_user;
     private String rowcount;
+    private String[] fields;
+
+
+    public String[] getFields() {
+        return fields;
+    }
+
+    public void setFields(String[] fields) {
+        this.fields = fields;
+    }
 
 
     public String getP_user() {

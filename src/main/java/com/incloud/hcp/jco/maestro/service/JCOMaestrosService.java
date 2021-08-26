@@ -10,4 +10,6 @@ public interface JCOMaestrosService {
 
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
 
+    AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
+
 }

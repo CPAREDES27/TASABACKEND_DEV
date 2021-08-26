@@ -26,6 +26,7 @@ public class Constantes {
     public static String ZFL_RFC_COMB_CONS_MODIF_DATOS="ZFL_RFC_COMB_CONS_MODIF_DATOS";
     public static String ZFL_RFC_CONS_HORO="ZFL_RFC_CONS_HORO";
     public static String ZFL_RFC_GEST_ACEITES="ZFL_RFC_GEST_ACEITES";
+    public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
 
 
 
