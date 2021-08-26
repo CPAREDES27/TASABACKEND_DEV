@@ -11,7 +11,42 @@ public class LogRegCombusImports {
     private String p_lcco;
     private String p_canti;
     private List<MaestroOptions> options;
+    private String[] fieldsStr_csmar;
+    private String[] fieldsStr_csmaj;
+    private String[] fieldsStr_lgcco;
+    private String[] fieldsT_mensaje;
 
+    public String[] getFieldsStr_csmar() {
+        return fieldsStr_csmar;
+    }
+
+    public void setFieldsStr_csmar(String[] fieldsStr_csmar) {
+        this.fieldsStr_csmar = fieldsStr_csmar;
+    }
+
+    public String[] getFieldsStr_csmaj() {
+        return fieldsStr_csmaj;
+    }
+
+    public void setFieldsStr_csmaj(String[] fieldsStr_csmaj) {
+        this.fieldsStr_csmaj = fieldsStr_csmaj;
+    }
+
+    public String[] getFieldsStr_lgcco() {
+        return fieldsStr_lgcco;
+    }
+
+    public void setFieldsStr_lgcco(String[] fieldsStr_lgcco) {
+        this.fieldsStr_lgcco = fieldsStr_lgcco;
+    }
+
+    public String[] getFieldsT_mensaje() {
+        return fieldsT_mensaje;
+    }
+
+    public void setFieldsT_mensaje(String[] fieldsT_mensaje) {
+        this.fieldsT_mensaje = fieldsT_mensaje;
+    }
 
     public String getP_user() {
         return p_user;
