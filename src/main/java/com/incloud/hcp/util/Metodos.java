@@ -79,7 +79,7 @@ public class Metodos {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 
-        if(fields.length>1){
+        if(fields.length>=1){
             for (int i = 0; i < jcoTable.getNumRows(); i++) {
                 jcoTable.setRow(i);
                 JCoFieldIterator iter = jcoTable.getFieldIterator();

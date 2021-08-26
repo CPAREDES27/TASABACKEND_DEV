@@ -124,6 +124,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         importx.setValue("P_USER", marea.getUser());
         importx.setValue("P_MAREA", marea.getP_marea());
+        importx.setValue("P_EMBARCACION", marea.getP_embarcacion());
+        importx.setValue("P_FLAG", marea.getP_flag());
         logger.error("ListarEventosPesca_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         stfcConnection.execute(destination);
@@ -132,18 +134,23 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoTable S_MAREA = tables.getTable("S_MAREA");
         logger.error("ListarEventosPesca_6");
         JCoTable S_EVENTO = tables.getTable("S_EVENTO");
-
+        JCoTable STR_FLBSP = tables.getTable("STR_FLBSP");
+        JCoTable STR_PSCINC = tables.getTable("STR_PSCINC");
 
         logger.error("ListarEventosPesca_7");
 
         Metodos metodo = new Metodos();
-        List<HashMap<String, Object>> ListarS_MAREA= metodo.ListarObjetos(S_MAREA);
-        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ListarObjetos(S_EVENTO);
-
+        List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(S_MAREA,marea.getFieldMarea());
+        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ObtenerListObjetos(S_EVENTO,marea.getFieldEvento());
+        List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
+        List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
 
         MareaDto dto= new MareaDto();
         dto.setS_marea(ListarS_MAREA);
         dto.setS_evento(ListarS_EVENTO);
+        dto.setStr_flbsp(ListarSTR_FLBSP);
+        dto.setStr_pscinc(ListarSTR_PSCINC);
+
 
         dto.setMensaje("Ok");
 

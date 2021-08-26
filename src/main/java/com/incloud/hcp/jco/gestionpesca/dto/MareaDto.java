@@ -6,7 +6,25 @@ import java.util.List;
 public class MareaDto {
     private List<HashMap<String, Object>> s_marea;
     private List<HashMap<String, Object>> s_evento;
+    private List<HashMap<String, Object>> str_flbsp;
+    private List<HashMap<String, Object>> str_pscinc;
     private String mensaje;
+
+    public List<HashMap<String, Object>> getStr_flbsp() {
+        return str_flbsp;
+    }
+
+    public void setStr_flbsp(List<HashMap<String, Object>> str_flbsp) {
+        this.str_flbsp = str_flbsp;
+    }
+
+    public List<HashMap<String, Object>> getStr_pscinc() {
+        return str_pscinc;
+    }
+
+    public void setStr_pscinc(List<HashMap<String, Object>> str_pscinc) {
+        this.str_pscinc = str_pscinc;
+    }
 
     public List<HashMap<String, Object>> getS_marea() {
         return s_marea;
