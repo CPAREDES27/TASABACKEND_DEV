@@ -1,6 +1,7 @@
 package com.incloud.hcp.rest;
 
 
+import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusImports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
@@ -32,5 +33,17 @@ public class AnalisisCombustibleRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+    @PostMapping(value = "/Detalle", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ControlLogExports> Detalle(@RequestBody AnalisisCombusImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoAnalisisCombustibleService.Detalle(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
 
 }

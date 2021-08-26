@@ -134,12 +134,16 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMPRESAS);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_APP_MAESTROS);
+            logger.error("stfcConnection: "+stfcConnection.toString());
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("P_CDUSR", imports.getP_rol());
-            importx.setValue("P_RUC", imports.getP_app());
+            importx.setValue("P_ROL", imports.getP_rol());
+            importx.setValue("P_APP", imports.getP_app());
 
-            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            JCoParameterList tables = stfcConnection.getExportParameterList();
+            stfcConnection.execute(destination);
+
             stfcConnection.execute(destination);
 
             JCoTable t_approles = tables.getTable(Tablas.T_APPROLES);

@@ -147,7 +147,8 @@ public class Metodos {
                 if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")||
                         field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
                         field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")||
+                field.getTypeAsString().equals("DATE") && key.equals("FIEVN")){
 
                     String date=String.valueOf(value);
                     SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");

@@ -35,6 +35,7 @@ public class Tablas {
     public static String ST_VVI="ST_VVI";
     public static String ST_PVA="ST_PVA";
     public static String STR_CSMAR="STR_CSMAR";
+    public static String STR_DEV="STR_DEV";
 
 
     //App Maestros
