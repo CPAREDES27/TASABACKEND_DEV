@@ -4,7 +4,8 @@ public class AnalisisCombusImports {
 
     private String p_user;
     private String p_nrmar;
-    private String[]fields;
+    private String[] fields;
+
 
     public String[] getFields() {
         return fields;

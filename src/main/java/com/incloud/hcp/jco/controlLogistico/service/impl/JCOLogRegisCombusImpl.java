@@ -50,20 +50,22 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
             stfcConnection.execute(destination);
 
             JCoTable STR_LGCCO = tables.getTable(Tablas.STR_LGCCO);
+            JCoTable STR_CSMAJ = tables.getTable(Tablas.STR_CSMAJ);
+            JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
             Metodos metodo = new Metodos();
-            //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
 
             List<HashMap<String, Object>> str_lgcco = metodo.ObtenerListObjetos(STR_LGCCO, imports.getFieldsStr_lgcco());
-            List<HashMap<String, Object>> str_csmaj = metodo.ObtenerListObjetos(STR_LGCCO, imports.getFieldsStr_csmaj());
-            List<HashMap<String, Object>> str_csmar = metodo.ObtenerListObjetos(STR_LGCCO, imports.getFieldsStr_csmar());
-            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(STR_LGCCO, imports.getFieldsT_mensaje());
+            List<HashMap<String, Object>> str_csmaj = metodo.ObtenerListObjetos(STR_CSMAJ, imports.getFieldsStr_csmaj());
+            List<HashMap<String, Object>> str_csmar = metodo.ObtenerListObjetos(STR_CSMAR, imports.getFieldsStr_csmar());
+            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldsT_mensaje());
 
 
             lrce.setStr_lgcco(str_lgcco);
-            lrce.setStr_lgcco(str_csmaj);
-            lrce.setStr_lgcco(str_csmar);
-            lrce.setStr_lgcco(t_mensaje);
+            lrce.setStr_csmaj(str_csmaj);
+            lrce.setStr_csmar(str_csmar);
+            lrce.setT_mensaje(t_mensaje);
             lrce.setMensaje("Ok");
         }catch (Exception e){
             lrce .setMensaje(e.getMessage());

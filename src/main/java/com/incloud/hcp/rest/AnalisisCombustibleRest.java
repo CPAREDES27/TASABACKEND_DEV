@@ -1,9 +1,7 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusImports;
-import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
-import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
+import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,7 @@ public class AnalisisCombustibleRest {
     private JCOAnalisisCombustibleService jcoAnalisisCombustibleService;
 
     @PostMapping(value = "/Listar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ControlLogExports> Editar(@RequestBody ControlLogImports imports) {
+    public ResponseEntity<AnalisisCombusLisExports> Editar(@RequestBody AnalisisCombusLisImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoAnalisisCombustibleService.Listar(imports))
