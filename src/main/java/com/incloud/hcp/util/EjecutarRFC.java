@@ -76,6 +76,7 @@ public class EjecutarRFC {
         return me;
     }
 
+
     public void setImports(JCoFunction function, HashMap<String, Object> imports){
 
         JCoParameterList jcoImport = function.getImportParameterList();
@@ -245,17 +246,22 @@ public class EjecutarRFC {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 
-        if(fields.length>=1) {
 
+        if(fields.length>=1) {
             for (int i = 0; i < jcoTable.getNumRows(); i++) {
                 jcoTable.setRow(i);
                 String ArrayResponse[] = jcoTable.getString().split("\\|");
                 HashMap<String, Object> newRecord = new HashMap<String, Object>();
-                for (int j = 0; j < ArrayResponse.length; j++) {
+                for (int j = 0; j < jcoFields.getNumRows(); j++) {
                     jcoFields.setRow(j);
                     String key = (String) jcoFields.getValue("FIELDNAME");
-                    Object value = ArrayResponse[j].trim();
+                    Object   value="";
+                    try{
+                        value = ArrayResponse[j].trim();
+                    }catch (Exception e){
+                        value="";
 
+                    }
                     for (int k = 0; k < fields.length; k++) {
                         logger.error("key: " + key + " k: " + fields[k]);
                         ;
@@ -288,10 +294,17 @@ public class EjecutarRFC {
                 jcoTable.setRow(i);
                 String ArrayResponse[] = jcoTable.getString().split("\\|");
                 HashMap<String, Object> newRecord = new HashMap<String, Object>();
-                for (int j = 0; j < ArrayResponse.length; j++) {
+                for (int j = 0; j < jcoFields.getNumRows(); j++) {
                     jcoFields.setRow(j);
                     String key = (String) jcoFields.getValue("FIELDNAME");
-                    Object value = ArrayResponse[j].trim();
+
+                    Object value = "";
+                    try{
+                        value = ArrayResponse[j].trim();
+                    }catch (Exception e){
+                        value="";
+
+                    }
 
                     newRecord.put(key, value);
 
@@ -306,7 +319,6 @@ public class EjecutarRFC {
 
         return data;
     }
-
 
 }
 

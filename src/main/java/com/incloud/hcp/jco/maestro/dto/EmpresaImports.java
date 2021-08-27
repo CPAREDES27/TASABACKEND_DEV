@@ -8,7 +8,13 @@ public class EmpresaImports {
     private List<MaestroOptions> options;
     private String [] fields;
 
+    public String[] getFields() {
+        return fields;
+    }
 
+    public void setFields(String[] fields) {
+        this.fields = fields;
+    }
 
     public List<MaestroOptions> getOptions() {
         return options;

@@ -79,7 +79,7 @@ public class Metodos {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 
-        if(fields.length>1){
+        if(fields.length>=1){
             for (int i = 0; i < jcoTable.getNumRows(); i++) {
                 jcoTable.setRow(i);
                 JCoFieldIterator iter = jcoTable.getFieldIterator();
@@ -102,7 +102,13 @@ public class Metodos {
                             if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR") ||
                                     field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
                                     field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+                                    field.getTypeAsString().equals("DATE") && key.equals("FFTVS") ||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECON")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FXMAR")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECCONMOV")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECAR")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECZA")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FCMOD")) {
 
                                 String date = String.valueOf(value);
                                 SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
@@ -147,7 +153,8 @@ public class Metodos {
                 if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")||
                         field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
                         field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")||
+                field.getTypeAsString().equals("DATE") && key.equals("FIEVN")){
 
                     String date=String.valueOf(value);
                     SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");

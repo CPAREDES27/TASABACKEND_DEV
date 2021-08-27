@@ -26,6 +26,7 @@ public class Constantes {
     public static String ZFL_RFC_COMB_CONS_MODIF_DATOS="ZFL_RFC_COMB_CONS_MODIF_DATOS";
     public static String ZFL_RFC_CONS_HORO="ZFL_RFC_CONS_HORO";
     public static String ZFL_RFC_GEST_ACEITES="ZFL_RFC_GEST_ACEITES";
+    public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
 
 
 
@@ -54,4 +55,9 @@ public class Constantes {
     public static String ftp_contraseña="rNrKYTX9g7z3RgJRmxWuGHbeu";
     public static String ftp_servidor="ftp.dlptest.com";
     public static String ftp_puerto="21";
+
+    //CENTRO TASA FLOTA
+    public static int CENTRO_TASA_FLOTA = 42;
+
+
 }

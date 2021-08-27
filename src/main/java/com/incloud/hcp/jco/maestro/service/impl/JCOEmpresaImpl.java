@@ -67,7 +67,9 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
             logger.error("obtenerEmpresa_7");
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            String [] fields=imports.getFields();
+            List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
 
             me.setData(data);
             me.setMensaje("Ok");

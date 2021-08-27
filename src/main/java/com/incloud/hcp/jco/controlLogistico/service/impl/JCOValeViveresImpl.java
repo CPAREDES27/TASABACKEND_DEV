@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.controlLogistico.service.impl;
 
-import com.incloud.hcp.jco.controlLogistico.dto.ValeViveresExports;
+import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaExports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
@@ -11,16 +11,15 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class JCOValeViveresImpl implements JCOValeVivereService {
 
-    public ValeViveresExports ListarValeViveres(ControlLogImports imports)throws Exception{
+    public ControlLogExports ListarValeViveres(ControlLogImports imports)throws Exception{
 
-        ValeViveresExports vve= new ValeViveresExports();
+        ControlLogExports vve= new ControlLogExports();
 
         try {
 
@@ -41,7 +40,9 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             JCoTable tableExport = tables.getTable(Tablas.S_DATA);
 
              Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            String [] fields=imports.getFields();
+            List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
 
 
             vve.setData(data);

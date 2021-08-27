@@ -3,7 +3,7 @@ package com.incloud.hcp.jco.controlLogistico.dto;
 import java.util.HashMap;
 import java.util.List;
 
-public class ValeViveresExports {
+public class ControlLogExports {
 
 
     private String mensaje;
