@@ -13,7 +13,7 @@ import java.util.List;
 public class ZFL_RFC_READ_TEABLEImplement {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public JCoTable Buscar(List<Options> options,String tabla) throws Exception{
+    public JCoTable Buscar(List<Options> options,String tabla,String usuario) throws Exception{
 
         List<Options> lista = new ArrayList<Options>();
 
@@ -27,7 +27,7 @@ public class ZFL_RFC_READ_TEABLEImplement {
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
-        importx.setValue("P_USER", "FGARCIA");
+        importx.setValue("P_USER", usuario);
         importx.setValue("QUERY_TABLE",tabla);
         importx.setValue("DELIMITER","|");
         logger.error("TIPO_4");;

@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -123,6 +124,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         importx.setValue("P_USER", marea.getUser());
         importx.setValue("P_MAREA", marea.getP_marea());
+        importx.setValue("P_EMBARCACION", marea.getP_embarcacion());
+        importx.setValue("P_FLAG", marea.getP_flag());
         logger.error("ListarEventosPesca_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         stfcConnection.execute(destination);
@@ -131,18 +134,23 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoTable S_MAREA = tables.getTable("S_MAREA");
         logger.error("ListarEventosPesca_6");
         JCoTable S_EVENTO = tables.getTable("S_EVENTO");
-
+        JCoTable STR_FLBSP = tables.getTable("STR_FLBSP");
+        JCoTable STR_PSCINC = tables.getTable("STR_PSCINC");
 
         logger.error("ListarEventosPesca_7");
 
         Metodos metodo = new Metodos();
-        List<HashMap<String, Object>> ListarS_MAREA= metodo.ListarObjetos(S_MAREA);
-        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ListarObjetos(S_EVENTO);
-
+        List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(S_MAREA,marea.getFieldMarea());
+        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ObtenerListObjetos(S_EVENTO,marea.getFieldEvento());
+        List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
+        List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
 
         MareaDto dto= new MareaDto();
         dto.setS_marea(ListarS_MAREA);
         dto.setS_evento(ListarS_EVENTO);
+        dto.setStr_flbsp(ListarSTR_FLBSP);
+        dto.setStr_pscinc(ListarSTR_PSCINC);
+
 
         dto.setMensaje("Ok");
 
@@ -176,6 +184,61 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         dto.setT_mensaje(ListarT_MENSAJE);
         
         return dto;
+    }
+    public MensajeDto crearMareaPropios(MarEventoDtoImport imports) throws Exception{
+
+        MensajeDto msj= new MensajeDto();
+        try{
+            HashMap<String, Object> importsSap = new HashMap<String, Object>();
+            importsSap.put("P_USER", imports.getP_user());
+            importsSap.put("P_INDTR",imports.getP_indir());
+            importsSap.put("P_NEWPR",imports.getP_newpr());
+            importsSap.put("P_NAME1",imports.getP_name1());
+            importsSap.put("P_STCD1",imports.getP_stcd1());
+            importsSap.put("P_STRAS",imports.getP_stras());
+            importsSap.put("P_ORTO2",imports.getP_orto2());
+            importsSap.put("P_ORTO1",imports.getP_orto1());
+            importsSap.put("P_REGIO",imports.getP_regio());
+            importsSap.put("P_DSMMA",imports.getP_dsmma());
+
+
+            List<HashMap<String, Object>> str_marea = imports.getStr_marea();
+            List<HashMap<String, Object>> str_event = imports.getStr_evento();
+            List<HashMap<String, Object>> str_horom = imports.getStr_horom();
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction("ZFL_RFC_MAR_EVENT");
+            JCoParameterList jcoTables = function.getTableParameterList();
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, importsSap);
+            exec.setTable(jcoTables, "STR_MAREA",str_marea );
+            exec.setTable(jcoTables, "STR_EVENT", str_event);
+            exec.setTable(jcoTables, "STR_HOROM", str_horom);
+
+            function.execute(destination);
+
+            JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+
+            for (int i = 0; i < tableExport.getNumRows(); i++) {
+                tableExport.setRow(i);
+
+                msj.setMANDT(tableExport.getString("MANDT"));
+                msj.setCMIN(tableExport.getString("CMIN"));
+                msj.setCDMIN(tableExport.getString("CDMIN"));
+                msj.setDSMIN(tableExport.getString("DSMIN"));
+                //lista.add(param);
+            }
+
+        }catch (Exception e){
+            msj.setMANDT("00");
+            msj.setCMIN("Error");
+            msj.setCDMIN("Exception");
+            msj.setDSMIN(e.getMessage());
+        }
+        return msj;
     }
 
 

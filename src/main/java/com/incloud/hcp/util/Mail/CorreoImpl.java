@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 import javax.activation.FileDataSource;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletContext;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -110,5 +113,45 @@ public class CorreoImpl implements CorreoService {
            log.error(e.getMessage());
         }
 
+    }
+
+    public Mensaje Enviar()throws Exception{
+
+        Mensaje msj= new Mensaje();
+        try {
+            String uri = "https://7454em4ils3nder-app.azurewebsites.net/api/VisitasaSendEmail?code=LXQwITmvDAAqXTgaDcBAkmbZXBCv5KnS6bY/XszaOjqHus4M3dbDzw==";
+
+            URL url = new URL(uri);
+            HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+            httpCon.setDoOutput(true);
+            httpCon.setRequestMethod("POST");
+            httpCon.setRequestProperty("conten-type", "application/json");
+            httpCon.setRequestProperty("apiKey", "r$3#23516ewew5");
+            OutputStream os = httpCon.getOutputStream();
+
+            OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+            osw.write("{\n" +
+                    "\n" +
+                    "    \"sendto\" : \"israeljfp23@gmail.com\",\n" +
+                    "\n" +
+                    "    \"emailsubject\" : \"Prueba\",\n" +
+                    "\n" +
+                    "    \"bodyhtml\" : \"Prueba correo\",\n" +
+                    "\n" +
+                    "    \"from\" : \"tasa@gmail.com\"\n" +
+                    "\n" +
+                    "}");
+            osw.flush();
+            osw.close();
+            os.close();  //don't forget to close the OutputStream
+            httpCon.connect();
+
+
+            msj.setMensaje("Ok, " +httpCon.getResponseCode() );
+        }catch (Exception e){
+            msj.setMensaje(e.getMessage());
+        }
+
+        return msj;
     }
 }

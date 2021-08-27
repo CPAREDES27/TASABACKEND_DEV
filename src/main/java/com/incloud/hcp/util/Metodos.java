@@ -29,6 +29,7 @@ public class Metodos {
                 JCoField field = iter.nextField();
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
+
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
@@ -55,6 +56,15 @@ public class Metodos {
                     value= fecha;
 
                 }
+                if (field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+
+                    String date=String.valueOf(value);
+                    SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
+                    String fecha= dia.format(value);
+                    value= fecha;
+                }
 
                 newRecord.put(key, value);
             }
@@ -62,5 +72,101 @@ public class Metodos {
         }
 
         return data;
+    }
+
+
+    public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+        if(fields.length>=1){
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                JCoFieldIterator iter = jcoTable.getFieldIterator();
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                while (iter.hasNextField()) {
+                    JCoField field = iter.nextField();
+                    String key = (String) field.getName();
+                    Object value = jcoTable.getValue(key);
+
+                    for (int k = 0; k < fields.length; k++) {
+                        logger.error("key: " + key + " k: " + fields[k]);
+                        ;
+
+                        if (fields[k].trim().equals(key.trim())) {
+
+                            if (field.getTypeAsString().equals("TIME")) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                                value = dateFormat.format(value);
+                            }
+                            if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR") ||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FFTVS") ||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECON")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FXMAR")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECCONMOV")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECAR")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FECZA")||
+                                    field.getTypeAsString().equals("DATE") && key.equals("FCMOD")) {
+
+                                String date = String.valueOf(value);
+                                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                String fecha = dia.format(value);
+                                value = fecha;
+                            }
+
+                            newRecord.put(key, value);
+
+                        }
+                    }
+
+
+                }
+                data.add(newRecord);
+            }
+        }else {
+            data=ObtenerListObjetosSinField(jcoTable);
+        }
+        return data;
+
+    }
+
+    public List<HashMap<String, Object>> ObtenerListObjetosSinField(JCoTable jcoTable)throws Exception{
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+        for (int i = 0; i < jcoTable.getNumRows(); i++) {
+            jcoTable.setRow(i);
+            JCoFieldIterator iter = jcoTable.getFieldIterator();
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            while (iter.hasNextField()) {
+                JCoField field = iter.nextField();
+                String key = (String) field.getName();
+                Object value = jcoTable.getValue(key);
+
+                if (field.getTypeAsString().equals("TIME")) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    value = dateFormat.format(value);
+                }
+
+                if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")||
+                        field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")||
+                field.getTypeAsString().equals("DATE") && key.equals("FIEVN")){
+
+                    String date=String.valueOf(value);
+                    SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
+                    String fecha= dia.format(value);
+                    value= fecha;
+                }
+
+                newRecord.put(key, value);
+            }
+            data.add(newRecord);
+        }
+        return data;
+
     }
 }

@@ -2,9 +2,12 @@ package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.sap.conn.jco.*;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class EjecutarRFC {
@@ -16,7 +19,7 @@ public class EjecutarRFC {
     public EjecutarRFC(){
     }
 
-    public MaestroExport Execute_ZFL_RFC_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam) throws Exception{
+    public MaestroExport Execute_ZFL_RFC_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
         JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
@@ -34,20 +37,37 @@ public class EjecutarRFC {
         logger.error("Execute_ZFL_RFC_READ_TABLE_3");;
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < DATA.getNumRows(); i++) {
-            DATA.setRow(i);
-            String ArrayResponse[] = DATA.getString().split("\\|");
-            HashMap<String, Object> newRecord = new HashMap<String, Object>();
-            for (int j = 0; j < FIELDS.getNumRows(); j++){
-                FIELDS.setRow(j);
-                String key = (String) FIELDS.getValue("FIELDNAME");
-                Object value = ArrayResponse[j].trim();
-                newRecord.put(key, value);
-            };
-            data.add(newRecord);
-        }
-        logger.error("Execute_ZFL_RFC_READ_TABLE_4");;
+        data=ObtenerListObj(DATA, FIELDS, fields);
+        //data=ObtenerListObjetos(DATA, fields);
 
+       /*
+        if(fields.length>=1) {
+            logger.error("ObtenerListObj_1");;
+
+            data=ObtenerListObj(DATA, FIELDS, fields);
+            logger.error("ObtenerListObj_2");;
+
+
+        }else{
+
+            for (int i = 0; i < DATA.getNumRows(); i++) {
+                DATA.setRow(i);
+                String ArrayResponse[] = DATA.getString().split("\\|");
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                for (int j = 0; j < FIELDS.getNumRows(); j++) {
+                    FIELDS.setRow(j);
+                    String key = (String) FIELDS.getValue("FIELDNAME");
+                    Object value = ArrayResponse[j].trim();
+
+                    newRecord.put(key, value);
+
+
+                }
+                ;
+                data.add(newRecord);
+            }
+        }*/
+        logger.error("Execute_ZFL_RFC_READ_TABLE_4");;
 
 
         MaestroExport me = new MaestroExport();
@@ -55,6 +75,7 @@ public class EjecutarRFC {
         me.setMensaje(mensaje);
         return me;
     }
+
 
     public void setImports(JCoFunction function, HashMap<String, Object> imports){
 
@@ -133,5 +154,175 @@ public class EjecutarRFC {
         return dto;
     }
 
+    /*
+    public List<HashMap<String, Object>> ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+        if(fields.length>=1) {
+
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                logger.error("jcoTable.getNumRows:  "+jcoTable.getNumRows());;
+                logger.error("jcotable.getString: "+jcoTable.getString());;
+
+                String ArrayResponse[] = jcoTable.getString().split("\\|");
+                String x=jcoTable.getString();
+                int con=0;
+
+                logger.error("contador: "+con);
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                for(int j=0; j<=jcoFields.getNumRows(); j++){
+
+                    jcoFields.setRow(j);
+                    String key = (String) jcoFields.getValue("FIELDNAME");
+                    Object value="";
+                    if(j<=ArrayResponse.length){
+                        value = ArrayResponse[j].trim();
+                    }
+                    else{
+                        value="";
+                    }
+                    for (int k = 0; k < fields.length; k++) {
+
+
+                        if (fields[k].trim().equals(key.trim())) {
+
+                            if (field.getTypeAsString().equals("TIME")) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                                value = dateFormat.format(value);
+                            }
+                            if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
+
+                                String date = String.valueOf(value);
+                                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                String fecha = dia.format(value);
+                                value = fecha;
+                            }
+                            newRecord.put(key, value);
+
+                        }
+                    }
+                }
+
+                data.add(newRecord);
+            }
+        }else {
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                logger.error("jcoTable.getNumRows:  "+jcoTable.getNumRows());;
+                logger.error("jcotable.getString: "+jcoTable.getString());;
+
+                String ArrayResponse[] = jcoTable.getString().split("\\|");
+                String x=jcoTable.getString();
+                int con=15;
+                logger.error("contador: "+con);
+                logger.error("numero de fields: "+ jcoFields.getNumRows());
+                logger.error("numero de strings: "+ ArrayResponse.length);
+                 HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                 for(int j=0; j<jcoFields.getNumRows(); j++){
+
+                        jcoFields.setRow(j);
+                        String key = (String) jcoFields.getValue("FIELDNAME");
+                        Object value;
+                        if(j<=ArrayResponse.length){
+                             value = ArrayResponse[j].trim();
+                        }
+                        else{
+                            value="";
+                        }
+                        newRecord.put(key, value);
+                    }
+
+                data.add(newRecord);
+            }
+        }
+
+
+
+        return data;
+    }*/
+    public List<HashMap<String, Object>> ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+
+        if(fields.length>=1) {
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                String ArrayResponse[] = jcoTable.getString().split("\\|");
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                for (int j = 0; j < jcoFields.getNumRows(); j++) {
+                    jcoFields.setRow(j);
+                    String key = (String) jcoFields.getValue("FIELDNAME");
+                    Object   value="";
+                    try{
+                        value = ArrayResponse[j].trim();
+                    }catch (Exception e){
+                        value="";
+
+                    }
+                    for (int k = 0; k < fields.length; k++) {
+                        logger.error("key: " + key + " k: " + fields[k]);
+                        ;
+
+                        if (fields[k].trim().equals(key.trim())) {
+
+                           /* if (field.getTypeAsString().equals("TIME")) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                                value = dateFormat.format(value);
+                            }*/
+                            if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
+
+                                String date = String.valueOf(value);
+                                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                String fecha = dia.format(value);
+                                value = fecha;
+                            }
+                            newRecord.put(key, value);
+
+                        }
+                    }
+
+
+                }
+                ;
+                data.add(newRecord);
+            }
+        }else {
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                String ArrayResponse[] = jcoTable.getString().split("\\|");
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                for (int j = 0; j < jcoFields.getNumRows(); j++) {
+                    jcoFields.setRow(j);
+                    String key = (String) jcoFields.getValue("FIELDNAME");
+
+                    Object value = "";
+                    try{
+                        value = ArrayResponse[j].trim();
+                    }catch (Exception e){
+                        value="";
+
+                    }
+
+                    newRecord.put(key, value);
+
+
+                }
+                ;
+                data.add(newRecord);
+            }
+        }
+
+
+
+        return data;
+    }
 
 }
+
+
+
+
+

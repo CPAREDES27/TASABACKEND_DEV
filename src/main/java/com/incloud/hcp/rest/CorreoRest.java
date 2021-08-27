@@ -43,18 +43,18 @@ public class CorreoRest {
             throw new RuntimeException(e.toString());
         }
     }
-    /*
-    @PostMapping(value = "/Reporte", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReportesExports> Enviar() {
+
+    @PostMapping(value = "/Correo", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> Enviar() {
 
         try {
-            return Optional.ofNullable(this.reportesService.ExportarReporteExcel())
+            return Optional.ofNullable(this.correoService.Enviar())
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
-    }*/
+    }
 
 
 }

@@ -18,14 +18,31 @@ public class Constantes {
     public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
     public static String ZFL_RFC_MUEVE_EMBARCA="ZFL_RFC_MUEVE_EMBARCA";
     public static String ZFL_RFC_JOB_FUENT_EXTERN="ZFL_RFC_JOB_FUENT_EXTERN";
+    public static String ZFL_RFC_LECT_MAES_VIVER="ZFL_RFC_LECT_MAES_VIVER";
     public static String ZFL_RFC_DISTR_FLOTA="ZFL_RFC_DISTR_FLOTA";
+    public static String ZFL_RFC_VALE_VIVER="ZFL_RFC_VALE_VIVER";
+    public static String ZFL_RFC_CONT_COMB_MARE="ZFL_RFC_CONT_COMB_MARE";
+    public static String ZFL_RFC_COMBUS_VEDA="ZFL_RFC_COMBUS_VEDA";
+    public static String ZFL_RFC_REG_COMB_MARE_SAP="ZFL_RFC_REG_COMB_MARE_SAP";
+    public static String ZFL_RFC_COMB_CONS_MODIF_DATOS="ZFL_RFC_COMB_CONS_MODIF_DATOS";
+    public static String ZFL_RFC_CONS_HORO="ZFL_RFC_CONS_HORO";
+    public static String ZFL_RFC_GEST_ACEITES="ZFL_RFC_GEST_ACEITES";
+    public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
 
 
-    //Reportes de pesca
+
+
+    // Reportes de pesca
     public static String ZFL_RFC_GPES_CONS_MAREA="ZFL_RFC_GPES_CONS_MAREA";
     public static String ZFL_RFC_CONS_DESCA="ZFL_RFC_CONS_DESCA";
     public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";
     public static String ZFL_RFC_GESP_CONSULTA_CHDPM="ZFL_RFC_GESP_CONSULTA_CHDPM";
+
+    // Política de precios
+    public static String ZFL_RFC_LECT_PREC_PESC="ZFL_RFC_LECT_PREC_PESC";
+    public static String ZFL_RFC_MANT_PRECIO_PESC="ZFL_RFC_MANT_PRECIO_PESC";
+    public static String ZFL_RFC_LECT_PRECIO_MAR="ZFL_RFC_LECT_PRECIO_MAR";
+    public static String ZFL_RFC_AGREGA_BONOS="ZFL_RFC_AGREGA_BONOS";
 
 
     //Nombre de Destination
@@ -39,4 +56,9 @@ public class Constantes {
     public static String ftp_contraseña="rNrKYTX9g7z3RgJRmxWuGHbeu";
     public static String ftp_servidor="ftp.dlptest.com";
     public static String ftp_puerto="21";
+
+    //CENTRO TASA FLOTA
+    public static int CENTRO_TASA_FLOTA = 42;
+
+
 }
