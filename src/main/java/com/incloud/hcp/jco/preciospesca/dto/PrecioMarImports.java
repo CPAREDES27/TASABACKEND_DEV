@@ -1,10 +1,12 @@
 package com.incloud.hcp.jco.preciospesca.dto;
 
+import java.util.List;
+
 public class PrecioMarImports {
     private String p_user;
     private String p_indpr;
     private String p_rows;
-    private String p_options;
+    private List<MaestroOptionsPrecioMar> p_options;
 
     public String getP_user() {
         return p_user;
@@ -30,11 +32,11 @@ public class PrecioMarImports {
         this.p_rows = p_rows;
     }
 
-    public String getP_options() {
+    public List<MaestroOptionsPrecioMar> getP_options() {
         return p_options;
     }
 
-    public void setP_options(String p_options) {
+    public void setP_options(List<MaestroOptionsPrecioMar> p_options) {
         this.p_options = p_options;
     }
 }

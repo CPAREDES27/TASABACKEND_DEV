@@ -39,6 +39,8 @@ public class Constantes {
     // Política de precios
     public static String ZFL_RFC_LECT_PREC_PESC="ZFL_RFC_LECT_PREC_PESC";
     public static String ZFL_RFC_MANT_PRECIO_PESC="ZFL_RFC_MANT_PRECIO_PESC";
+    public static String ZFL_RFC_LECT_PRECIO_MAR="ZFL_RFC_LECT_PRECIO_MAR";
+    public static String ZFL_RFC_AGREGA_BONOS="ZFL_RFC_AGREGA_BONOS";
 
 
     //Nombre de Destination
