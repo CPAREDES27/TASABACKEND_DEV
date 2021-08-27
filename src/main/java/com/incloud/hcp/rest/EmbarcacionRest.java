@@ -87,8 +87,8 @@ public class EmbarcacionRest {
         }
 
     }
-    @PostMapping(value = "/ObtenerFlota/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FlotaDto> obtenerDistribucionFlota(@RequestBody String user){
+    @GetMapping(value = "/ObtenerFlota", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FlotaDto> obtenerDistribucionFlota(String user){
 
         try {
             return Optional.ofNullable(this.jcoEmbarcacionService.obtenerDistribucionFlota(user))
