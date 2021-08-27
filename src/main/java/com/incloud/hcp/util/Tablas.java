@@ -39,6 +39,11 @@ public class Tablas {
     public static String T_DCHPM="T_DCHPM";
     public static String T_BODEG="T_BODEG";
 
+    /* Distribucion de flota */
+    public static String STR_ZLT="STR_ZLT";
+    public static String STR_DI="STR_DI";
+    public static String STR_PTA="STR_PTA";
+    public static String STR_DP="STR_DP";
 
     public static String T_MENSAJE="T_MENSAJE";
     public static String W_MENSAJE="W_MENSAJE";
