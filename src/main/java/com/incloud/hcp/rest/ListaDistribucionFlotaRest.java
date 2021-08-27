@@ -23,7 +23,7 @@ public class ListaDistribucionFlotaRest {
     @Autowired
     private JCODistribucionFlotaService jcoDistribucionFlotaService;
 
-    @GetMapping(value = "/listar", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/listar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<DistribucionFlotaExports> Listar(@RequestBody DistribucionFlotaImports imports) {
         //Parametro dto = new Parametro();
 
