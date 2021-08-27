@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class ValeViveresRest {
 
     @Autowired
-    JCOValeVivereService jcoValeVivereService;
+    private JCOValeVivereService jcoValeVivereService;
 
     @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ControlLogExports> Editar(@RequestBody ControlLogImports imports){
