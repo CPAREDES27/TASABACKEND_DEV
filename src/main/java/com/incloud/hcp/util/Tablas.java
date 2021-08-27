@@ -41,7 +41,7 @@ public class Tablas {
     public static String T_OPCIONES="T_OPCIONES";
     public static String STR_EVN="STR_EVN";
     public static String STR_LHO="STR_LHO";
-    public static String ET_MENSJ ="EP_MENSJ";
+    public static String ET_MENSJ ="ET_MENSJ";
     public static String T_RNV="T_RNV";
     public static String T_RPN="T_RPN";
 
