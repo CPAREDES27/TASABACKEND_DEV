@@ -65,13 +65,17 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                 for (int j = 0; j < s_str_pta.getNumRows(); j++) {
                     s_str_pta.setRow(j);
                     PlantasDto n_planta = new PlantasDto();
-                    if(s_str_pta.getString("CDZL") == s_str_zlt.getString("CDZL")){
+                    String cz1 = s_str_pta.getString("CDZLT");
+                    String cz2 = s_str_zlt.getString("CDZLT");
+                    logger.error("cz1 : " + cz1 + " - cz2 : " + cz2);
+                    if(s_str_pta.getString("CDZLT").equalsIgnoreCase(s_str_zlt.getString("CDZLT"))){
+                        logger.error("cz12 : " + cz1 + " - cz22 : " + cz2);
                         n_planta.setPlantaName(s_str_pta.getString("DESCR"));
                         List<EmbarcacionesDto> embarcaciones = new ArrayList<EmbarcacionesDto>();
                         for (int k = 0; k < s_str_di.getNumRows(); k++) {
                             s_str_di.setRow(k);
                             EmbarcacionesDto n_embarcacion =  new EmbarcacionesDto();
-                            if(s_str_di.getString("CDPT") == s_str_pta.getString("CDPT")){
+                            if(s_str_di.getString("CDPTA").equalsIgnoreCase(s_str_pta.getString("CDPTA"))){
                                 //n_embarcacion.setFlagEmba(s_str_di.);
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CDEMB"));
@@ -91,6 +95,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                         plantas.add(n_planta);
                     }
                 }
+                logger.error("cantidad de plantas : " + plantas.size());
                 n_zona.setListaPlantas(plantas);
                 zonas.add(n_zona);
             }
