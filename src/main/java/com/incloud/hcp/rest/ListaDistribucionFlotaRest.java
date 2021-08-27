@@ -1,4 +1,6 @@
 package com.incloud.hcp.rest;
+import com.incloud.hcp.jco.distribucionflota.dto.DistrFlotaOptExport;
+import com.incloud.hcp.jco.distribucionflota.dto.DistrFlotaOptions;
 import com.incloud.hcp.jco.distribucionflota.dto.DistribucionFlotaExports;
 import com.incloud.hcp.jco.distribucionflota.dto.DistribucionFlotaImports;
 import com.incloud.hcp.jco.distribucionflota.service.JCODistribucionFlotaService;
@@ -29,6 +31,19 @@ public class ListaDistribucionFlotaRest {
 
         try {
             return Optional.ofNullable(this.jcoDistribucionFlotaService.ListarDistribucionFlota(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/listaDinamica", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DistrFlotaOptExport> ListarDinamica(@RequestBody DistrFlotaOptions imports) {
+        //Parametro dto = new Parametro();
+
+        try {
+            return Optional.ofNullable(this.jcoDistribucionFlotaService.ListarDistFltColumDinamic(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

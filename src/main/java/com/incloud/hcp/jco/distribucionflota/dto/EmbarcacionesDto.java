@@ -13,6 +13,15 @@ public class EmbarcacionesDto {
     private String DescZonaCala;
     private String EstSisFrio;
     private String Semaforo;
+    private String Color;
+
+    public String getColor() {
+        return Color;
+    }
+
+    public void setColor(String color) {
+        Color = color;
+    }
 
     public String getFlagEmba() {
         return FlagEmba;
