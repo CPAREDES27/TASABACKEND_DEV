@@ -20,7 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AnalisisCombustibleRest {
 
     @Autowired
-    JCOAnalisisCombustibleService jcoAnalisisCombustibleService;
+    private JCOAnalisisCombustibleService jcoAnalisisCombustibleService;
 
     @PostMapping(value = "/Listar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ControlLogExports> Editar(@RequestBody ControlLogImports imports) {

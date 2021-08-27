@@ -39,6 +39,11 @@ public class Tablas {
     public static String STR_LGCCO="STR_LGCCO";
     public static String T_FLOCC="T_FLOCC";
     public static String T_OPCIONES="T_OPCIONES";
+    public static String STR_EVN="STR_EVN";
+    public static String STR_LHO="STR_LHO";
+    public static String ET_MENSJ ="EP_MENSJ";
+    public static String T_RNV="T_RNV";
+    public static String T_RPN="T_RPN";
 
     //App Maestros
     public static String T_APPROLES="T_APPROLES";
