@@ -1,7 +1,7 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
 import com.incloud.hcp.jco.preciospesca.dto.*;
-import com.incloud.hcp.jco.preciospesca.service.JCOPoliticaPreciosService;
+import com.incloud.hcp.jco.preciospesca.service.JCOPreciosPescaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -14,7 +14,44 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class JCOPoliticaPreciosImpl implements JCOPoliticaPreciosService {
+public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
+
+    @Override
+    public PrecioProbPescaExports ObtenerPrecioProbPesca(PrecioProbPescaImports imports) throws Exception {
+        HashMap<String, Object> importParams = new HashMap<>();
+        importParams.put("P_USER", imports.getP_user());
+
+        //Obtener los options
+        List<HashMap<String, Object>> options = new ArrayList<>();
+        for (MaestroOptionsPrecioProbPesca option : imports.getP_options()) {
+            HashMap<String, Object> optionRecord = new HashMap<>();
+            optionRecord.put("WA", option.getWa());
+            options.add(optionRecord);
+        }
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_PROB_PED_PESCA);
+
+        JCoParameterList paramsTable = function.getTableParameterList();
+
+        EjecutarRFC executeRFC = new EjecutarRFC();
+        executeRFC.setImports(function, importParams);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
+
+        JCoParameterList tables = function.getTableParameterList();
+        function.execute(destination);
+        JCoTable tblSTR_APP = tables.getTable(Tablas.STR_APP);
+
+        Metodos metodos = new Metodos();
+        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
+
+        PrecioProbPescaExports dto = new PrecioProbPescaExports();
+        dto.setStr_app(listSTR_APP);
+        dto.setMensaje("OK");
+
+        return dto;
+    }
 
     @Override
     public PrecioPescaExports ObtenerPrecioPesca(PrecioPescaImports imports) throws Exception {
@@ -39,6 +76,7 @@ public class JCOPoliticaPreciosImpl implements JCOPoliticaPreciosService {
         executeRFC.setImports(function, importParams);
         executeRFC.setTable(paramsTable, "P_OPTIONS", options);
 
+        //Exports
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblSTR_PPC = tables.getTable(Tablas.STR_PPC);
@@ -57,6 +95,8 @@ public class JCOPoliticaPreciosImpl implements JCOPoliticaPreciosService {
     public PrecioPescaMantExports MantPrecioPesca(PrecioPescaMantImports imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
+        importParams.put("P_INDTR", imports.getP_indtr());
+        importParams.put("P_CAMPO", imports.getP_campo());
 
         // Obtener los parámetros del PPC
         List<HashMap<String, Object>> str_ppcs = new ArrayList<>();

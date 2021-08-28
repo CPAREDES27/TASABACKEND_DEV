@@ -3,7 +3,7 @@ package com.incloud.hcp.jco.preciospesca.dto;
 import java.util.HashMap;
 import java.util.List;
 
-public class AprobacionPrecioExports {
+public class CampoTablaExports {
     private List<HashMap<String, Object>> t_mensaje;
     private String mensaje;
 

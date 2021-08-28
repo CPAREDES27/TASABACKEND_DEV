@@ -42,6 +42,7 @@ public class Constantes {
     public static String ZFL_RFC_MANT_PRECIO_PESC="ZFL_RFC_MANT_PRECIO_PESC";
     public static String ZFL_RFC_LECT_PRECIO_MAR="ZFL_RFC_LECT_PRECIO_MAR";
     public static String ZFL_RFC_AGREGA_BONOS="ZFL_RFC_AGREGA_BONOS";
+    public static String ZFL_RFC_PROB_PED_PESCA="ZFL_RFC_PROB_PED_PESCA";
 
 
     //Nombre de Destination

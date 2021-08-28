@@ -2,7 +2,7 @@ package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.preciospesca.dto.PrecioPescaExports;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioPescaImports;
-import com.incloud.hcp.jco.preciospesca.service.JCOPoliticaPreciosService;
+import com.incloud.hcp.jco.preciospesca.service.JCOPreciosPescaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class PreciosPescaRest {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private JCOPoliticaPreciosService jcoPoliticaPreciosService;
+    private JCOPreciosPescaService jcoPoliticaPreciosService;
 
     @PostMapping(value = "/Buscar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PrecioPescaExports> ConsultarPreciosPesca(@RequestBody PrecioPescaImports imports) {

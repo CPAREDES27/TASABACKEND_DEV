@@ -1,9 +1,9 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
-import com.incloud.hcp.jco.preciospesca.dto.AprobacionPrecioExports;
-import com.incloud.hcp.jco.preciospesca.dto.AprobacionPreciosImports;
+import com.incloud.hcp.jco.preciospesca.dto.CampoTablaExports;
+import com.incloud.hcp.jco.preciospesca.dto.CampoTablaImports;
 import com.incloud.hcp.jco.preciospesca.dto.Set;
-import com.incloud.hcp.jco.preciospesca.service.JCOAprobacionPreciosService;
+import com.incloud.hcp.jco.preciospesca.service.JCOCampoTablaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class JCOAprobacionPreciosServiceImpl implements JCOAprobacionPreciosService {
+public class JCOCampoTablaServiceImpl implements JCOCampoTablaService {
     @Override
-    public AprobacionPrecioExports AprobarPrecios(AprobacionPreciosImports imports) throws Exception {
+    public CampoTablaExports Actualizar(CampoTablaImports imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
 
@@ -49,7 +49,7 @@ public class JCOAprobacionPreciosServiceImpl implements JCOAprobacionPreciosServ
         Metodos metodos = new Metodos();
         List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);
 
-        AprobacionPrecioExports dto = new AprobacionPrecioExports();
+        CampoTablaExports dto = new CampoTablaExports();
         dto.setT_mensaje(listT_MENSAJE);
         dto.setMensaje("OK");
 

@@ -60,6 +60,7 @@ public class Tablas {
     // Política de precios
     public static String STR_PPC="STR_PPC";
     public static String STR_PM="STR_PM";
+    public static String STR_APP="STR_APP";
 
 
     public static String T_MENSAJE="T_MENSAJE";

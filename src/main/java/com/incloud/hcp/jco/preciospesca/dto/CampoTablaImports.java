@@ -2,7 +2,7 @@ package com.incloud.hcp.jco.preciospesca.dto;
 
 import java.util.List;
 
-public class AprobacionPreciosImports {
+public class CampoTablaImports {
     private String p_user;
     private List<Set> str_set;
 
