@@ -51,8 +51,8 @@ public class EmbarcacionRest {
         }
     }
 
-    @RequestMapping(value = "/listaTipoEmbarcacion", method = RequestMethod.GET)
-    public ResponseEntity<List<TipoEmbarcacionDto>> listaTipoEmbarcacion(@RequestBody String usuario) {
+    @GetMapping(value = "/listaTipoEmbarcacion", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TipoEmbarcacionDto>> listaTipoEmbarcacion(String usuario) {
         //Parametro dto = new Parametro();
         try {
             return Optional.ofNullable(this.jcoTipoEmbarcacionService.listaTipoEmbarcacion(usuario))
@@ -63,8 +63,8 @@ public class EmbarcacionRest {
         }
     }
 
-    @RequestMapping(value = "/listaPlantas", method = RequestMethod.GET)
-    public ResponseEntity<MaestroExport> listaPlantas(@RequestBody String usuario) {
+    @GetMapping(value = "/listaPlantas", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> listaPlantas(String usuario) {
         //Parametro dto = new Parametro();
         try {
             return Optional.ofNullable(this.jcoTipoEmbarcacionService.listarPlantas(usuario))
@@ -87,8 +87,8 @@ public class EmbarcacionRest {
         }
 
     }
-    @PostMapping(value = "/ObtenerFlota/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<FlotaDto> obtenerDistribucionFlota(@RequestBody String user){
+    @GetMapping(value = "/ObtenerFlota", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<FlotaDto> obtenerDistribucionFlota(String user){
 
         try {
             return Optional.ofNullable(this.jcoEmbarcacionService.obtenerDistribucionFlota(user))

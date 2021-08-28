@@ -19,7 +19,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class LogRegistroCombusRest {
 
     @Autowired
-    JCOLogRegisCombusService jcoLogRegisCombusService;
+    private JCOLogRegisCombusService jcoLogRegisCombusService;
 
     @PostMapping(value = "/Listar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<LogRegCombusExports> Editar(@RequestBody LogRegCombusImports imports) {
