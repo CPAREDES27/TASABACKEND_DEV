@@ -68,12 +68,17 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             importx.setValue("P_USER", imports.getP_user());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoParameterList export = stfcConnection.getExportParameterList();
 
             EjecutarRFC exe = new EjecutarRFC();
             exe.setTable(tables, Tablas.ST_VVI, imports.getSt_vvi());
             exe.setTable(tables, Tablas.ST_PVA, imports.getSt_pva());
 
             stfcConnection.execute(destination);
+
+            vve.setP_orden(export.getValue("P_ORDEN").toString());
+            vve.setP_merc(export.getValue("P_MERC").toString());
+            vve.setP_vale(export.getValue("P_VALE").toString());
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
