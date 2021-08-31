@@ -45,6 +45,8 @@ public class Tablas {
     public static String ET_MENSJ ="ET_MENSJ";
     public static String T_RNV="T_RNV";
     public static String T_RPN="T_RPN";
+    public static String DOMTAB="DOMTAB";
+    public static String LIST_OUT="LIST_OUT";
 
     //App Maestros
     public static String T_APPROLES="T_APPROLES";

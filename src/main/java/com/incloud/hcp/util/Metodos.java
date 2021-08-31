@@ -99,21 +99,16 @@ public class Metodos {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
                             }
-                            if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR") ||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FFTVS") ||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FECON")||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FXMAR")||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FECCONMOV")||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FECAR")||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FECZA")||
-                                    field.getTypeAsString().equals("DATE") && key.equals("FCMOD")) {
+                            try {
+                                if (field.getTypeAsString().equals("DATE")) {
 
-                                String date = String.valueOf(value);
-                                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                                String fecha = dia.format(value);
-                                value = fecha;
+                                    String date = String.valueOf(value);
+                                    SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                    String fecha = dia.format(value);
+                                    value = fecha;
+                                }
+                            }catch (Exception e){
+                                value=String.valueOf(value);
                             }
 
                             newRecord.put(key, value);
@@ -149,17 +144,16 @@ public class Metodos {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
                 }
+                try {
+                    if (field.getTypeAsString().equals("DATE")) {
 
-                if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")||
-                        field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
-                        field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")||
-                field.getTypeAsString().equals("DATE") && key.equals("FIEVN")){
-
-                    String date=String.valueOf(value);
-                    SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
-                    String fecha= dia.format(value);
-                    value= fecha;
+                        String date = String.valueOf(value);
+                        SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                        String fecha = dia.format(value);
+                        value = fecha;
+                    }
+                }catch (Exception e){
+                    value=String.valueOf(value);
                 }
 
                 newRecord.put(key, value);

@@ -48,12 +48,10 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 record.put("WA", mo.getWa());
                 tmpOptions.add(record);
             }
-
-            stfcConnection.execute(destination);
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
-            EjecutarRFC exec=new EjecutarRFC();
+             EjecutarRFC exec=new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
+            stfcConnection.execute(destination);
             JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
@@ -79,7 +77,6 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
 
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
@@ -89,22 +86,17 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             importx.setValue("P_NRMAR", imports.getP_nrmar());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
-
+            stfcConnection.execute(destination);
             JCoTable tableExport = tables.getTable(Tablas.STR_DEV);
 
 
             Metodos metodo = new Metodos();
             //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
-            logger.error("analisis_1");
             String[] fields=imports.getFields();
-            List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
-            logger.error("analisis_2");
-            for(int i=0; i<data.size();i++){
-                logger.error("aa: "+data.toString());
+           List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
 
-            }
             ce.setData(data);
-            ce.setMensaje("Ok: "+ tableExport.getString());
+            ce.setMensaje("Ok");
 
         }catch (Exception e){
             ce .setMensaje(e.getMessage());
