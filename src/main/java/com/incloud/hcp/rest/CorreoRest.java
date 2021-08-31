@@ -6,8 +6,6 @@ import com.incloud.hcp.util.Ftp.FtpService;
 import com.incloud.hcp.util.Mail.CorreoDto;
 import com.incloud.hcp.util.Mail.CorreoService;
 import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.Reportes.ReportesExports;
-import com.incloud.hcp.util.Reportes.ReportesService;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,10 +24,6 @@ public class CorreoRest {
     @Autowired
     private CorreoService correoService;
 
-    @Autowired
-    private ReportesService reportesService;
-    @Autowired
-    private FtpService ftpService;
 
     @PostMapping(value = "/EnviarCorreo", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoDto imports) {

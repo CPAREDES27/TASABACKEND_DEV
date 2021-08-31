@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogImports;
 import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaExports;
+import com.incloud.hcp.jco.controlLogistico.dto.VvGuardaImports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -53,7 +54,7 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
         return vve;
     }
-    public VvGuardaExports GuardarValeViveres(ControlLogImports imports)throws Exception{
+    public VvGuardaExports GuardarValeViveres(VvGuardaImports imports)throws Exception{
 
         VvGuardaExports vve = new VvGuardaExports();
 
@@ -66,23 +67,21 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
 
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exe = new EjecutarRFC();
+            exe.setTable(tables, Tablas.ST_VVI, imports.getSt_vvi());
+            exe.setTable(tables, Tablas.ST_PVA, imports.getSt_pva());
 
             stfcConnection.execute(destination);
 
-            JCoTable tableExport = tables.getTable(Tablas.ST_VVI);
-            JCoTable tableExport2 = tables.getTable(Tablas.ST_PVA);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> st_vvi = metodo.ListarObjetos(tableExport);
-            List<HashMap<String, Object>> st_pva = metodo.ListarObjetos(tableExport2);
+            //List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldsT_mensaje());
 
-
-            vve.setSt_vvi(st_vvi);
-            vve.setSt_pva(st_pva);
+            vve.setT_mensaje(t_mensaje);
             vve.setMensaje("Ok");
 
         }catch (Exception e){

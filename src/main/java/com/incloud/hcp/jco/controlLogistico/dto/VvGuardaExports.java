@@ -6,8 +6,15 @@ import java.util.List;
 public class VvGuardaExports {
 
     private String mensaje;
-    private List<HashMap<String, Object>> st_vvi;
-    private List<HashMap<String, Object>> st_pva;
+    private List<HashMap<String, Object>> t_mensaje;
+
+    public List<HashMap<String, Object>> getT_mensaje() {
+        return t_mensaje;
+    }
+
+    public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
+        this.t_mensaje = t_mensaje;
+    }
 
     public String getMensaje() {
         return mensaje;
@@ -17,19 +24,5 @@ public class VvGuardaExports {
         this.mensaje = mensaje;
     }
 
-    public List<HashMap<String, Object>> getSt_vvi() {
-        return st_vvi;
-    }
 
-    public void setSt_vvi(List<HashMap<String, Object>> st_vvi) {
-        this.st_vvi = st_vvi;
-    }
-
-    public List<HashMap<String, Object>> getSt_pva() {
-        return st_pva;
-    }
-
-    public void setSt_pva(List<HashMap<String, Object>> st_pva) {
-        this.st_pva = st_pva;
-    }
 }
