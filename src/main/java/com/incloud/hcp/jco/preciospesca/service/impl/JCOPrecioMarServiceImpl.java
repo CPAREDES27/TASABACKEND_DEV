@@ -9,11 +9,13 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
     @Override
     public PrecioMarExports ObtenerPrecioMar(PrecioMarImports imports) throws Exception {

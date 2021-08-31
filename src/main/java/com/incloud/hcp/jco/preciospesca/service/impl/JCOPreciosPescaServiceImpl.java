@@ -148,4 +148,42 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         return dto;
     }
+
+    @Override
+    public ConsPrecioPescaExports ConsultarPrecioPesca(ConsPrecioPescaImports imports) throws Exception {
+        HashMap<String, Object> importParams = new HashMap<>();
+        importParams.put("IP_CANTI", imports.getIp_canti());
+
+        //Obtener los options
+        List<HashMap<String, Object>> options = new ArrayList<HashMap<String, Object>>();
+        for (MaestroOptionsConsPrecioPesca option : imports.getT_opcion()) {
+            HashMap<String, Object> optionRecord = new HashMap<>();
+            optionRecord.put("WA", option.getWa());
+            options.add(optionRecord);
+        }
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_PREC_PESC);
+
+        JCoParameterList paramsTable = function.getTableParameterList();
+
+        EjecutarRFC executeRFC = new EjecutarRFC();
+        executeRFC.setImports(function, importParams);
+        executeRFC.setTable(paramsTable, "T_OPCION", options);
+
+        //Exports
+        JCoParameterList tables = function.getTableParameterList();
+        function.execute(destination);
+        JCoTable tblT_PREPES = tables.getTable(Tablas.T_PREPES);
+
+        Metodos metodos = new Metodos();
+        List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
+
+        ConsPrecioPescaExports dto = new ConsPrecioPescaExports();
+        dto.setT_prepes(listT_PREPES);
+        dto.setMensaje("OK");
+
+        return dto;
+    }
 }

@@ -10,14 +10,16 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class JCOBonosServiceImpl implements JCOBonosService {
     @Override
-    public BonoExport agregarBono(BonoImport imports) throws Exception {
+    public BonoExport AgregarBono(BonoImport imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
         importParams.put("P_TCONS", imports.getP_tcons());

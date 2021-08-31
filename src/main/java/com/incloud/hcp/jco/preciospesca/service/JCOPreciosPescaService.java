@@ -8,4 +8,6 @@ public interface JCOPreciosPescaService {
     PrecioPescaExports ObtenerPrecioPesca(PrecioPescaImports imports) throws Exception;
 
     PrecioPescaMantExports MantPrecioPesca(PrecioPescaMantImports imports) throws Exception;
+
+    ConsPrecioPescaExports ConsultarPrecioPesca(ConsPrecioPescaImports imports) throws Exception;
 }

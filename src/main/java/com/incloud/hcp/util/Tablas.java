@@ -67,6 +67,7 @@ public class Tablas {
     public static String STR_PPC="STR_PPC";
     public static String STR_PM="STR_PM";
     public static String STR_APP="STR_APP";
+    public static String T_PREPES="T_PREPES";
 
 
     /* Distribucion de flota */
