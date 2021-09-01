@@ -1,4 +1,4 @@
-package com.incloud.hcp.jco.preciospesca.dto;
+package com.incloud.hcp.jco.maestro.dto;
 
 import java.util.HashMap;
 import java.util.List;

@@ -72,7 +72,7 @@ public class JCOBonosServiceImpl implements JCOBonosService {
         //Exports
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
-        JCoTable tblT_Mensaje = tables.getTable(Tablas.T_MENSAJE);
+        JCoTable tblT_Mensaje = tables.getTable(Tablas.T_MENSAJES);
 
         Metodos metodos = new Metodos();
         List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);

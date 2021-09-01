@@ -1,6 +1,6 @@
-package com.incloud.hcp.jco.preciospesca.dto;
+package com.incloud.hcp.jco.maestro.dto;
 
-public class Set {
+public class SetDto {
     private String nmtab;
     private String cmset;
     private String cmopt;

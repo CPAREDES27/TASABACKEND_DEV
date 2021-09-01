@@ -82,6 +82,7 @@ public class Tablas {
     public static String ET_ZFLRPS="ET_ZFLRPS";
 
     public static String T_MENSAJE="T_MENSAJE";
+    public static String T_MENSAJES="T_MENSAJES";
     public static String W_MENSAJE="W_MENSAJE";
 
 

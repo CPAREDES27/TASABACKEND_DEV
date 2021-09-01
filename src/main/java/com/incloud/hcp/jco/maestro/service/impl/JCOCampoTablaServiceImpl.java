@@ -1,9 +1,9 @@
-package com.incloud.hcp.jco.preciospesca.service.impl;
+package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.preciospesca.dto.CampoTablaExports;
-import com.incloud.hcp.jco.preciospesca.dto.CampoTablaImports;
-import com.incloud.hcp.jco.preciospesca.dto.Set;
-import com.incloud.hcp.jco.preciospesca.service.JCOCampoTablaService;
+import com.incloud.hcp.jco.maestro.dto.CampoTablaExports;
+import com.incloud.hcp.jco.maestro.dto.CampoTablaImports;
+import com.incloud.hcp.jco.maestro.dto.SetDto;
+import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -22,13 +22,12 @@ public class JCOCampoTablaServiceImpl implements JCOCampoTablaService {
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
 
-        // Obtener los parámetros del PPC
         List<HashMap<String, Object>> str_set = new ArrayList<>();
-        for (Set set : imports.getStr_set()) {
+        for (SetDto setDto : imports.getStr_set()) {
             HashMap<String, Object> setRecord = new HashMap<>();
-            setRecord.put("NMTAB", set.getNmtab());
-            setRecord.put("CMSET", set.getCmset());
-            setRecord.put("CMOPT", set.getCmopt());
+            setRecord.put("NMTAB", setDto.getNmtab());
+            setRecord.put("CMSET", setDto.getCmset());
+            setRecord.put("CMOPT", setDto.getCmopt());
 
             str_set.add(setRecord);
         }
