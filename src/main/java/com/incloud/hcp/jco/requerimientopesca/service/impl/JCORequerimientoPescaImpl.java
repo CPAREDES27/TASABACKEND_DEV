@@ -77,7 +77,7 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
 
         ReqPescaDto req_p = new ReqPescaDto();
         List<RequerimientoPesca> listaReqPesca = new ArrayList<RequerimientoPesca>();
-
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         try {
             List<RequerimientoPesca> options = importsParam.getReqList();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
@@ -87,7 +87,8 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
                 record.put("NRREQ", mo.getNrreq());
                 record.put("CDPTA", mo.getCdpta());
                 record.put("ZDSZAR", mo.getZdszar());
-                record.put("FHREQ", mo.getFhreq());
+                if(mo.getFhreq() != null && !mo.getFhreq().isEmpty()){record.put("FHREQ", formato.parse(mo.getFhreq()));}else{record.put("FHREQ", null);}
+                //record.put("FHREQ", formato.parse(mo.getFhreq()));
                 record.put("HRREQ", mo.getHrreq());
                 record.put("CNPRQ", mo.getCnprq());
                 record.put("CNPCM", mo.getCnpcm());
@@ -95,7 +96,7 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
                 tmpOptions.add(record);
             }
 
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("IP_TPOPE", importsParam.getIp_tpope());
             imports.put("IP_FINIT", formato.parse(importsParam.getIp_finit()));
@@ -106,7 +107,7 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
 
             JCoRepository repo = destination.getRepository();
             JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CARGA_REQ_PESCA);
-            JCoParameterList jcoTables = function.getTableParameterList();
+            JCoParameterList jcoTables = function.getImportParameterList();
 
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, imports);
@@ -115,7 +116,8 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
             function.execute(destination);
 
             Metodos metodo = new Metodos();
-            JCoTable s_mensaje = jcoTables.getTable(Tablas.ET_MENSJ);
+            JCoParameterList exports = function.getExportParameterList();
+            JCoTable s_mensaje = exports.getTable(Tablas.ET_MENSJ);
 
             List<HashMap<String, Object>> mensaje = metodo.ListarObjetos(s_mensaje);
 
