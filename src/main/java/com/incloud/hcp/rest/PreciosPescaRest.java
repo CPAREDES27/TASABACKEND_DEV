@@ -77,7 +77,7 @@ public class PreciosPescaRest {
     }
 
     @PostMapping(value = "/AgregarBono", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<BonoExport> ConsultarPrecioMar(@RequestBody BonoImport imports) {
+    public ResponseEntity<BonoExport> AgregarBono(@RequestBody BonoImport imports) {
         try {
             return Optional.ofNullable(this.jcoBonosService.AgregarBono(imports)).map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
