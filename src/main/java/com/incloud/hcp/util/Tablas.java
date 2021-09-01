@@ -78,6 +78,8 @@ public class Tablas {
     public static String STR_PTA="STR_PTA";
     public static String STR_DP="STR_DP";
 
+    /*REQUERIMIENTO DE PESCA*/
+    public static String ET_ZFLRPS="ET_ZFLRPS";
 
     public static String T_MENSAJE="T_MENSAJE";
     public static String W_MENSAJE="W_MENSAJE";

@@ -1,6 +1,7 @@
 package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.PuntosDescargaImports;
 import com.incloud.hcp.jco.maestro.service.JCOPuntosDescargaService;
 import com.incloud.hcp.util.UsuarioDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class PuntoDescargaRest {
 
 
     @PostMapping(value = "/Listar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> ListarPuntosDescarga(@RequestBody UsuarioDto imports){
+    public ResponseEntity<MaestroExport> ListarPuntosDescarga(@RequestBody PuntosDescargaImports imports){
 
         try {
             return Optional.ofNullable(this.jcoPuntosDescargaService.ListarPuntosDes(imports))

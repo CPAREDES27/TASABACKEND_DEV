@@ -30,8 +30,8 @@ public class Constantes {
     public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
     public static String ZFL_RFC_GET_LISTAED="ZFL_RFC_GET_LISTAED";
 
-
-
+    // Requerimiento de pesca
+    public static String ZFL_RFC_CARGA_REQ_PESCA="ZFL_RFC_CARGA_REQ_PESCA";
 
 
     // Reportes de pesca
