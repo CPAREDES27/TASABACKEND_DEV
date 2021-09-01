@@ -123,9 +123,12 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
         importx.setValue("P_USER", marea.getUser());
-        importx.setValue("P_MAREA", marea.getP_marea());
-        importx.setValue("P_EMBARCACION", marea.getP_embarcacion());
-        importx.setValue("P_FLAG", marea.getP_flag());
+        //importx.setValue("P_MAREA", marea.getP_marea());
+        importx.setValue("P_MAREA", Integer.parseInt(marea.getP_marea()));
+        //importx.setValue("P_EMBARCACION", marea.getP_embarcacion());
+        //importx.setValue("P_FLAG", marea.getP_flag());
+        importx.setActive("P_FLAG", true);
+
         logger.error("ListarEventosPesca_4");;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         stfcConnection.execute(destination);
