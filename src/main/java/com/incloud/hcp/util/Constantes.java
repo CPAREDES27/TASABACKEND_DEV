@@ -48,6 +48,9 @@ public class Constantes {
     public static String ZFL_RFC_PROB_PED_PESCA="ZFL_RFC_PROB_PED_PESCA";
     public static String ZFL_RFC_CONS_PREC_PESC="ZFL_RFC_CONS_PREC_PESC";
 
+    //Tolvas
+    public static String ZFL_RFC_SEGUI_DESCA="ZFL_RFC_SEGUI_DESCA";
+    public static String ZFL_RFC_SAVE_DESC_MANUAL ="ZFL_RFC_SAVE_DESC_MANUAL";
 
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";

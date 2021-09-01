@@ -54,7 +54,8 @@ public class Tablas {
     public static String T_TABSELEC="T_TABSELEC";
     public static String T_TABFORM="T_TABFORM";
 
-
+    //tolvas
+    public static String STR_SDE="STR_SDE";
 
 
     // Reporte de pesca
