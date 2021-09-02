@@ -15,9 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 //@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -67,7 +65,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             listaEmbarcacion.add(dto);
             //lista.add(param);
         }
-
         return listaEmbarcacion;
     }
 
@@ -98,7 +95,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         Metodos metodo = new Metodos();
         List<HashMap<String, Object>> ListarST_CEP= metodo.ListarObjetos(STR_ZLT);
-        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetos(STR_DI);
+        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetosDIR(STR_DI);
         List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetos(STR_PTA);
         List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetos(STR_DP);
 

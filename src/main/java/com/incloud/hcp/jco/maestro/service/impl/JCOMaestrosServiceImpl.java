@@ -43,6 +43,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptions mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
+                validaCentro(importsParam.getTabla(),mo.getWa());
                 record.put("WA", mo.getWa());
                 tmpOptions.add(record);
             }
@@ -56,10 +57,34 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }catch (Exception e){
             me.setMensaje(e.getMessage());
         }
-
         return me;
     }
 
+    public boolean validaCentro(String tabla,String cadena){
+        String cadenaTemp= cadena.trim();
+        String cadenaFinal= cadenaTemp.replaceAll("\\s+","");
+
+
+        logger.error("CADENAFINAL: "+ cadenaFinal.substring(0,cadenaFinal.length()));
+        logger.error("CADENAFINAL2: "+ cadenaFinal.substring(6,cadenaFinal.length()));
+        if(tabla.equals("ZFLCNS")){
+            if(cadenaFinal.substring(0,cadenaFinal.length()).equals("CDCNS")){
+                if (cadenaFinal.substring(6, cadenaFinal.length()).length()>0) {
+                    logger.error("RECIBIDO: ok "+ tabla +" "+ cadena );
+                    return true;
+                }else{
+                    logger.error("NO CENTRO");
+                    return false;
+                }
+
+            }else{
+                return false;
+            }
+        }
+
+
+        return true;
+    }
     public MaestroExport obtenerMaestro2 (MaestroImports importsParam) throws Exception {
 
         MaestroExport me=new MaestroExport();
