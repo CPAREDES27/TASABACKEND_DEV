@@ -47,6 +47,7 @@ public class Tablas {
     public static String T_RPN="T_RPN";
     public static String DOMTAB="DOMTAB";
     public static String LIST_OUT="LIST_OUT";
+    public static String T_DATA="T_DATA";
 
     //App Maestros
     public static String T_APPROLES="T_APPROLES";
@@ -56,7 +57,8 @@ public class Tablas {
 
     //tolvas
     public static String STR_SDE="STR_SDE";
-
+    public static String STR_DPS="STR_DPS";
+    public static String S_DERECHO="S_DERECHO";
 
     // Reporte de pesca
     public static String S_MAREA="S_MAREA";

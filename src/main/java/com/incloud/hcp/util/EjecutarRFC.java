@@ -130,12 +130,12 @@ public class EjecutarRFC {
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_UPDATE_TABLE_2");
         JCoParameterList jcoTables = function.getTableParameterList();
-        JCoTable tableImport = jcoTables.getTable("T_DATA");
+        JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
         tableImport.appendRow();
         tableImport.setValue("DATA", data);
         logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
         function.execute(destination);
-        JCoTable tableExport = jcoTables.getTable("T_MENSAJE");
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
 
         MensajeDto dto = new MensajeDto();
         for (int i = 0; i < tableExport.getNumRows(); i++) {

@@ -38,12 +38,15 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("P_ORDER", importsParam.getOrder());
             logger.error("obtenerMaestro_1");
             //setear mapeo de tabla options
+
             List<MaestroOptions> options = importsParam.getOptions();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptions mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-                validaCentro(importsParam.getTabla(),mo.getWa());
+                if( mo.getWa()!=null) {
+                    validaCentro(importsParam.getTabla(), mo.getWa());
+                }
                 record.put("WA", mo.getWa());
                 tmpOptions.add(record);
             }
@@ -61,6 +64,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
     public boolean validaCentro(String tabla,String cadena){
+
         String cadenaTemp= cadena.trim();
         String cadenaFinal= cadenaTemp.replaceAll("\\s+","");
 
