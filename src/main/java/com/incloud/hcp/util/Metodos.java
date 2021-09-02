@@ -130,7 +130,7 @@ public class Metodos {
                 newRecord.put(key, value);
             }
             if(newRecord.containsKey("ESMAR")){
-                if(newRecord.containsValue("A") || newRecord.containsValue("C")){
+                if(newRecord.containsValue("") || newRecord.containsValue("A") && newRecord.containsValue("") || newRecord.containsValue("C")){
                     data.add(newRecord);
                 }
             }
