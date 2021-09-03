@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.gestionpesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public class ValidaMareaExports {
     private String p_correcto;
     private String p_primeracondicioncn;
     private String p_segundacondicions;
-    private List<HashMap<String, Object>> t_mensaje;
+    private MensajeDto t_mensaje;
     private String mensaje;
 
     public String getMensaje() {
@@ -43,11 +45,11 @@ public class ValidaMareaExports {
         this.p_segundacondicions = p_segundacondicions;
     }
 
-    public List<HashMap<String, Object>> getT_mensaje() {
+    public MensajeDto getT_mensaje() {
         return t_mensaje;
     }
 
-    public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
+    public void setT_mensaje(MensajeDto t_mensaje) {
         this.t_mensaje = t_mensaje;
     }
 }
