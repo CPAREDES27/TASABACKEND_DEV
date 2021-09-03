@@ -4,6 +4,6 @@ import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.tolvas.dto.RegistroTolvasImports;
 
 public interface JCORegistroTolvasService {
-    MaestroExport Listar(RegistroTolvasImports imports)throws Exception;
+    MaestroExport Guardar(RegistroTolvasImports imports)throws Exception;
 
 }

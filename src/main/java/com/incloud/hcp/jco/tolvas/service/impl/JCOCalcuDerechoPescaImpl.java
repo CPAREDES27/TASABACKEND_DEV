@@ -47,14 +47,13 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec=new EjecutarRFC();
-            if(imports.getOptions().size()>=1) {
+            if(imports.getOptions()!=null) {
                 exec.setTable(tables, Tablas.OPTIONS, tmpOptions);
             }
            // exec.setTable(tables, Tablas.S_DERECHO, imports.getS_derecho());
            // exec.setTable(tables, Tablas.STR_DPS, imports.getStr_dps());
             //stfcConnection.execute(destination);
-
-            if(!imports.getStr_dps().isEmpty()){
+            if(imports.getStr_dps().size()>=1){
 
                 exec.setTable(tables, Tablas.STR_DPS, imports.getStr_dps());
                 stfcConnection.execute(destination);
@@ -64,7 +63,7 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
 
                 cd.setT_mensaje(t_mensaje);
             }
-            if(!imports.getS_derecho().isEmpty()){
+            if(imports.getS_derecho().size()>=1){
                 exec.setTable(tables, Tablas.S_DERECHO, imports.getS_derecho());
                 stfcConnection.execute(destination);
                 JCoTable STR_DPS = tables.getTable(Tablas.STR_DPS);
@@ -74,11 +73,9 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
                 List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldt_mensaje());
 
                 cd.setStr_dps(str_dps);
-               // int i= imports.getS_derecho().size();
-                //int e= imports.getStr_dps().size();
                 cd.setT_mensaje(t_mensaje);
-               // cd.setMensaje("s_derecho: " +String.valueOf(i) + "str_dps: "+ String.valueOf(e));
             }
+
 /*
             JCoTable STR_DPS = tables.getTable(Tablas.STR_DPS);
             JCoTable S_DERECHO = tables.getTable(Tablas.S_DERECHO);

@@ -30,7 +30,7 @@ public class TolvasRest {
     public ResponseEntity<MaestroExport> Listar(@RequestBody RegistroTolvasImports imports) {
 
         try {
-            return Optional.ofNullable(this.jcoRegistroTolvasService.Listar(imports))
+            return Optional.ofNullable(this.jcoRegistroTolvasService.Guardar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
@@ -47,8 +47,8 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/calculoderechopesca_listar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CalcuDerechoPescaExports> Listar(@RequestBody CalcuDerechoPescaImports imports) {
+    @PostMapping(value = "/calculoderechopesca_Guardar", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CalcuDerechoPescaExports> Guardar(@RequestBody CalcuDerechoPescaImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoCalcuDerechoPescaService.Listar(imports))

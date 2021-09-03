@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class JCORegistroTolvasImpl implements JCORegistroTolvasService {
 
-    public MaestroExport Listar(RegistroTolvasImports imports)throws Exception{
+    public MaestroExport Guardar(RegistroTolvasImports imports)throws Exception{
 
         MaestroExport m= new MaestroExport();
 
