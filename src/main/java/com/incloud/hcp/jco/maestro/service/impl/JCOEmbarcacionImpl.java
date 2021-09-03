@@ -1,11 +1,16 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.gestionpesca.dto.BodegaImport;
+import com.incloud.hcp.jco.gestionpesca.dto.Options;
+import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
+import com.incloud.hcp.jco.maestro.service.RFCCompartidos.ZFL_RFC_READ_TEABLEImplement;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,7 +21,8 @@ import java.util.List;
 public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
+    @Autowired
+    private ZFL_RFC_READ_TEABLEImplement zfl_rfc_read_teableImplement;
     @Override
     public MaestroExport ListarEmbarcaciones(EmbarcacionImports importsParam) throws Exception {
         MaestroExport dto = new MaestroExport();
@@ -257,6 +263,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
         return msj;
     }
+
 
     public MensajeDto MoverEmbarcacion(MoverEmbarcaImports importsParam)throws Exception{
 

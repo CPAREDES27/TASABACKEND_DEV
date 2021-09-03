@@ -16,6 +16,7 @@ public class Application extends SpringBootServletInitializer {
 	 */
 
 	public static void main(String[] args) {
+		System.setProperty("server.connection-timeout","300000");
 		SpringApplication.run(Application.class, args);
 	}
 

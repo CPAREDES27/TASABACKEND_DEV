@@ -40,6 +40,19 @@ public class GeneralRest {
     }
 
 
+    @PostMapping(value = "/Read_Table2/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ConsultarMaestro2(@RequestBody MaestroImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.obtenerMaestro2(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
     @PostMapping(value = "/Update_Table/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
 

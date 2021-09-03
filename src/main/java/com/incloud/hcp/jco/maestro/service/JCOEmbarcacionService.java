@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.maestro.service;
 
+import com.incloud.hcp.jco.gestionpesca.dto.BodegaImport;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.util.Mensaje;
 

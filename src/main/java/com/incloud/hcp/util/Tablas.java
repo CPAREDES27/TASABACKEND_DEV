@@ -2,6 +2,7 @@ package com.incloud.hcp.util;
 
 public class Tablas {
 
+    public static String ZFLPTA="ZFLPTA";
     public static String ZFLEMB="ZFLEMB";
     public static String STR_SET="STR_SET";
     public static String STR_EMB="STR_EMB";

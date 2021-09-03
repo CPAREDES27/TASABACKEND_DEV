@@ -2,10 +2,7 @@ package com.incloud.hcp.jco.gestionpesca.service.impl;
 
 import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
-import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -15,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -241,5 +239,49 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return msj;
     }
 
+    public String ValidarBodegaCert(BodegaImport imports) throws Exception{
 
+        boolean bOk  = true;
+        String werks =" ";
+        String bodCert = " ";
+        String[] fields = {"WERKS"};
+        String value="";
+
+
+        MaestroExport me=new MaestroExport();
+        List<EmbarcacionDto> listaEmbarcacion = new ArrayList<EmbarcacionDto>();
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repo = destination.getRepository();
+        ;
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+
+        importx.setValue("P_USER", "FGARCIA");
+        importx.setValue("DELIMITER","|");
+        importx.setValue("QUERY_TABLE",Tablas.ZFLPTA);
+
+        ;
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        JCoTable tableImport = tables.getTable("OPTIONS");
+        tableImport.appendRow();
+
+        tableImport.setValue("WA", imports.getOptions());
+        //Ejecutar Funcion
+        stfcConnection.execute(destination);
+        logger.error("listaEmbarcacion_6");
+        //DestinationAcce
+
+        //Recuperar Datos de SAP
+
+        JCoTable tableExport = tables.getTable("DATA");
+        JCoTable FIELDS = tables.getTable("FIELDS");
+        String[] ArrayResponse;
+        for(int i=0;i< tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            ArrayResponse= tableExport.getString().split("\\|");
+
+        }
+        return "ArrayResponse";
+    }
 }

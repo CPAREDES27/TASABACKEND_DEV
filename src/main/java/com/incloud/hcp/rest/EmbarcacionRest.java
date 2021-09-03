@@ -63,6 +63,7 @@ public class EmbarcacionRest {
         }
     }
 
+
     @GetMapping(value = "/listaPlantas", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> listaPlantas(String usuario) {
         //Parametro dto = new Parametro();
@@ -81,6 +82,17 @@ public class EmbarcacionRest {
         try {
             return Optional.ofNullable(this.EmbarcacionService.ListarEmbarcaciones(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/ValidarBodegaCert/", produces = APPLICATION_JSON_VALUE)
+    public String ValidarBodegaCert(@RequestBody BodegaImport imports){
+
+        try {
+            return this.jcoEmbarcacionService.ValidarBodegaCert(imports);
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());

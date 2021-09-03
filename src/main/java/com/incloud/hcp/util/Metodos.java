@@ -130,10 +130,16 @@ public class Metodos {
                 newRecord.put(key, value);
             }
             if(newRecord.containsKey("ESMAR")){
-                if(newRecord.containsValue("") || newRecord.containsValue("A") && newRecord.containsValue("") || newRecord.containsValue("C")){
-                    data.add(newRecord);
+                 if(newRecord.containsValue("C")){
+                    if(newRecord.containsKey("ESCMA")){
+                        if(newRecord.containsValue("P")){
+                            data.add(newRecord);
+                        }
+                    }
+
                 }
             }
+
 
         }
 

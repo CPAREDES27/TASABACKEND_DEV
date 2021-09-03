@@ -8,6 +8,8 @@ public interface JCOMaestrosService {
 
     MaestroExport obtenerMaestro (MaestroImports imports) throws Exception;
 
+    MaestroExport obtenerMaestro2 (MaestroImports imports) throws Exception;
+
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
 
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
