@@ -47,14 +47,12 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec=new EjecutarRFC();
-            if(imports.getOptions()!=null) {
+            if(imports.getOptions().size()>=1) {
                 exec.setTable(tables, Tablas.OPTIONS, tmpOptions);
             }
-           // exec.setTable(tables, Tablas.S_DERECHO, imports.getS_derecho());
-           // exec.setTable(tables, Tablas.STR_DPS, imports.getStr_dps());
-            //stfcConnection.execute(destination);
-            if(imports.getStr_dps().size()>=1){
 
+            if(imports.getStr_dps().size()>=1 && imports.getS_derecho().size()>=1 ){
+                exec.setTable(tables, Tablas.S_DERECHO, imports.getS_derecho());
                 exec.setTable(tables, Tablas.STR_DPS, imports.getStr_dps());
                 stfcConnection.execute(destination);
                 JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
@@ -63,7 +61,7 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
 
                 cd.setT_mensaje(t_mensaje);
             }
-            if(imports.getS_derecho().size()>=1){
+            if(imports.getS_derecho().size()>=1 && imports.getStr_dps().size()<1 ){
                 exec.setTable(tables, Tablas.S_DERECHO, imports.getS_derecho());
                 stfcConnection.execute(destination);
                 JCoTable STR_DPS = tables.getTable(Tablas.STR_DPS);
@@ -75,25 +73,16 @@ public class JCOCalcuDerechoPescaImpl implements JCOCalcuDerechoPescaService {
                 cd.setStr_dps(str_dps);
                 cd.setT_mensaje(t_mensaje);
             }
+            if(imports.getStr_dps().size()>=1 && imports.getS_derecho().size()<1 ){
+                exec.setTable(tables, Tablas.STR_DPS, imports.getStr_dps());
+                stfcConnection.execute(destination);
+                JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
-/*
-            JCoTable STR_DPS = tables.getTable(Tablas.STR_DPS);
-            JCoTable S_DERECHO = tables.getTable(Tablas.S_DERECHO);
-            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+                List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldt_mensaje());
 
-
-            List<HashMap<String, Object>> str_dps = metodo.ObtenerListObjetos(STR_DPS, imports.getFieldstr_dps());
-            List<HashMap<String, Object>> s_derecho = metodo.ObtenerListObjetos(S_DERECHO, imports.getFields_derecho());
-            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldt_mensaje());
-
-
-            cd.setStr_dps(str_dps);
-            cd.setS_derecho(s_derecho);
-            cd.setT_mensaje(t_mensaje);
-
- */
+                cd.setT_mensaje(t_mensaje);
+            }
             cd.setMensaje("Ok");
-
         }catch (Exception e){
             cd .setMensaje(e.getMessage());
         }
