@@ -209,5 +209,17 @@ public class EmbarcacionRest {
         }
 
     }
+    @PostMapping(value = "/ValidarMarea/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ValidaMareaExports> ValidarMarea(@RequestBody ValidaMareaImports imports){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.ValidarMarea(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
 }

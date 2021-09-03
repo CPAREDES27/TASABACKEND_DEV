@@ -29,6 +29,8 @@ public class Constantes {
     public static String ZFL_RFC_GEST_ACEITES="ZFL_RFC_GEST_ACEITES";
     public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
     public static String ZFL_RFC_GET_LISTAED="ZFL_RFC_GET_LISTAED";
+    public static String ZFL_RFC_VAL_MAREA_PRODUCE="ZFL_RFC_VAL_MAREA_PRODUCE";
+
 
     // Requerimiento de pesca
     public static String ZFL_RFC_CARGA_REQ_PESCA="ZFL_RFC_CARGA_REQ_PESCA";

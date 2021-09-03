@@ -285,4 +285,35 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return  me;
     }
+
+    public ValidaMareaExports ValidarMarea(ValidaMareaImports imports)throws Exception{
+
+        ValidaMareaExports vm= new ValidaMareaExports();
+        try{
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_VAL_MAREA_PRODUCE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_CODEMB", imports.getP_codemb());
+            importx.setValue("P_CODPTA", imports.getP_codpta());
+
+            JCoParameterList export = stfcConnection.getExportParameterList();
+
+            JCoTable T_MENSAJE=export.getTable(Tablas.T_MENSAJE);
+            Metodos m= new Metodos();
+            List<HashMap<String, Object>>t_mensaje =m.ObtenerListObjetos(T_MENSAJE, imports.getFieldt_mensaje());
+
+
+            vm.setP_correcto(export.getValue("P_CORRECTO").toString());
+            vm.setP_primeracondicioncn(export.getValue("P_PRIMERACONDICIONCN").toString());
+            vm.setP_segundacondicions(export.getValue("P_SEGUNDACODICIONS").toString());
+            vm.setT_mensaje(t_mensaje);
+            vm.setMensaje("Ok");
+
+        }catch (Exception e){
+            vm.setMensaje(e.getMessage());
+        }
+
+        return vm;
+    }
 }

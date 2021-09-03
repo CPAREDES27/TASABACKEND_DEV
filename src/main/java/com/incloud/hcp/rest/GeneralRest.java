@@ -67,7 +67,7 @@ public class GeneralRest {
                 HashMap<String, Object> record = new HashMap<String, Object>();
 
                 record.put("WA", mo.getKey());
-                tmpOptions.add(record);
+
             }
             return Optional.ofNullable(me)
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
