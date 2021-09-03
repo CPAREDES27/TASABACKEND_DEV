@@ -89,10 +89,11 @@ public class EmbarcacionRest {
 
     }
     @PostMapping(value = "/ValidarBodegaCert/", produces = APPLICATION_JSON_VALUE)
-    public String ValidarBodegaCert(@RequestBody BodegaImport imports){
+    public ResponseEntity<BodegaExport> ValidarBodegaCert(@RequestBody BodegaImport imports){
 
         try {
-            return this.jcoEmbarcacionService.ValidarBodegaCert(imports);
+            return Optional.ofNullable(this.jcoEmbarcacionService.ValidarBodegaCert(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());

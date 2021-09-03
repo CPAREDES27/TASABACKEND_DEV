@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -239,16 +240,15 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return msj;
     }
 
-    public String ValidarBodegaCert(BodegaImport imports) throws Exception{
-
+    public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
+        Metodos metodo = new Metodos();
         boolean bOk  = true;
         String werks =" ";
         String bodCert = " ";
         String[] fields = {"WERKS"};
-        String value="";
 
 
-        MaestroExport me=new MaestroExport();
+
         List<EmbarcacionDto> listaEmbarcacion = new ArrayList<EmbarcacionDto>();
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;
@@ -266,7 +266,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoTable tableImport = tables.getTable("OPTIONS");
         tableImport.appendRow();
 
-        tableImport.setValue("WA", imports.getOptions());
+        tableImport.setValue("WA", "CDPTA = '0144'");
         //Ejecutar Funcion
         stfcConnection.execute(destination);
         logger.error("listaEmbarcacion_6");
@@ -276,12 +276,13 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
-        String[] ArrayResponse;
-        for(int i=0;i< tableExport.getNumRows();i++){
-            tableExport.setRow(i);
-            ArrayResponse= tableExport.getString().split("\\|");
 
-        }
-        return "ArrayResponse";
+
+        BodegaExport me = new BodegaExport();
+        String campo= metodo.ObtenerCampo(tableExport,FIELDS);
+        me.setMensaje(campo);
+
+
+        return  me;
     }
 }

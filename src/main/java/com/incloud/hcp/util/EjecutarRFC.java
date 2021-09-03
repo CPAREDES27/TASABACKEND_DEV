@@ -245,7 +245,7 @@ public class EjecutarRFC {
 
         return data;
     }*/
-    public List<HashMap<String, Object>> ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
+    public List<HashMap<String, Object>>    ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 
@@ -258,7 +258,7 @@ public class EjecutarRFC {
                 for (int j = 0; j < jcoFields.getNumRows(); j++) {
                     jcoFields.setRow(j);
                     String key = (String) jcoFields.getValue("FIELDNAME");
-                    Object   value="";
+                        Object   value="";
                     try{
                         value = ArrayResponse[j].trim();
                     }catch (Exception e){

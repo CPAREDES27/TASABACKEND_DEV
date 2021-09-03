@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,30 @@ public class GeneralRest {
 
         try {
             return Optional.ofNullable(this.MaestroService.obtenerMaestro2(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/Read_Table3/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExportKey> ConsultarMaestro3(@RequestBody MaestroImportsKey imports){
+
+        try {
+            MaestroExportKey me = new MaestroExportKey();
+            MaestroOptionsKey me2 = new MaestroOptionsKey();
+
+            List<MaestroOptionsKey> options = imports.getOptions();
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptionsKey mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+
+                record.put("WA", mo.getKey());
+                tmpOptions.add(record);
+            }
+            return Optional.ofNullable(me)
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

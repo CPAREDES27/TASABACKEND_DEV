@@ -15,5 +15,5 @@ public interface JCOEmbarcacionService {
 
     HorometroExport consultarHorometro(HorometroDto horometro) throws Exception;
     MensajeDto crearMareaPropios(MarEventoDtoImport imports) throws Exception;
-    String ValidarBodegaCert(BodegaImport imports) throws Exception;
+    BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception;
 }

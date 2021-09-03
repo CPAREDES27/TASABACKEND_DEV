@@ -235,4 +235,24 @@ public class Metodos {
         return data;
 
     }
+
+    public String ObtenerCampo(JCoTable tableExport, JCoTable FIELDS){
+        String campo="";
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                if(key.equals("CDPTA")){
+                    value=ArrayResponse[j].trim();
+                    campo=value.toString();
+                    logger.error("CDPTA: "+campo);
+                }
+            }
+
+        }
+        return campo;
+    }
 }

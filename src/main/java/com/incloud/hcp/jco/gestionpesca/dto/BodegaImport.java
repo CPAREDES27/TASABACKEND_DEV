@@ -5,13 +5,13 @@ import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import java.util.List;
 
 public class BodegaImport {
-    private List<MaestroOptions> options;
+        private List<MaestroOptions> options;
 
-    public List<MaestroOptions> getOptions() {
-        return options;
-    }
+        public List<MaestroOptions> getOptions() {
+            return options;
+        }
 
-    public void setOptions(List<MaestroOptions> options) {
-        this.options = options;
-    }
+        public void setOptions(List<MaestroOptions> options) {
+            this.options = options;
+        }
 }
