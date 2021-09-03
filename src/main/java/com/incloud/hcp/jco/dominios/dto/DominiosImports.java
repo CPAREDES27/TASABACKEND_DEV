@@ -1,22 +1,15 @@
 package com.incloud.hcp.jco.dominios.dto;
 
+import java.util.List;
+
 public class DominiosImports {
-    private String status;
-    private String domname;
+    private List<DominioParams> dominios;
 
-    public String getDomname() {
-        return domname;
+    public List<DominioParams> getDominios() {
+        return dominios;
     }
 
-    public void setDomname(String domname) {
-        this.domname = domname;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setDominios(List<DominioParams> dominios) {
+        this.dominios = dominios;
     }
 }

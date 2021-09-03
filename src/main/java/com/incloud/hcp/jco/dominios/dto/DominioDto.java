@@ -7,7 +7,6 @@ public class DominioDto {
     public List<DominiosExports> data;
     public String mensaje;
 
-
     public List<DominiosExports> getData() {
         return data;
     }
