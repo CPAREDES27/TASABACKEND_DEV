@@ -94,7 +94,7 @@ public class GeneralRest {
 
 
                 if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
-                    record.put("WA",mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"'%");
+                    record.put("WA",mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
                 }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put("WA",mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
                 }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
@@ -106,7 +106,7 @@ public class GeneralRest {
 
                 if(i>0){
                     if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
-                        record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"'%");
+                        record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
                     }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                         record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
                     }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
