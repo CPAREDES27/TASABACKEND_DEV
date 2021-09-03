@@ -4,11 +4,13 @@ package com.incloud.hcp.rest;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
+import com.incloud.hcp.util.EjecutarRFC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -55,20 +57,71 @@ public class GeneralRest {
     }
 
     @PostMapping(value = "/Read_Table3/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExportKey> ConsultarMaestro3(@RequestBody MaestroImportsKey imports){
+    public ResponseEntity<MaestroExport> ConsultarMaestro3(@RequestBody MaestroImportsKey imports){
 
         try {
-            MaestroExportKey me = new MaestroExportKey();
+            MaestroExport me=new MaestroExport();
             MaestroOptionsKey me2 = new MaestroOptionsKey();
 
+            HashMap<String, Object> importz = new HashMap<String, Object>();
+            importz.put("QUERY_TABLE", imports.getTabla());
+            importz.put("DELIMITER", imports.getDelimitador());
+            importz.put("NO_DATA", imports.getNo_data());
+            importz.put("ROWSKIPS", imports.getRowskips());
+            importz.put("ROWCOUNT", imports.getRowcount());
+            importz.put("P_USER", imports.getP_user());
+            importz.put("P_ORDER", imports.getOrder());
+            String control="";
+
             List<MaestroOptionsKey> options = imports.getOptions();
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
+                if(mo.getControl().equals("INPUT"))
+                {
+                    control="LIKE";
+                }
+                if (mo.getControl().equals("COMBOBOX")) {
+                    control="=";
+                }
+                if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals("") )){
+                    control="BETWEEN";
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    control="=";
+                }
 
-                record.put("WA", mo.getKey());
+
+
+                if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA",mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"'%");
+                }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA",mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
+                }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
+                    record.put("WA", mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA",mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                }
+
+
+                if(i>0){
+                    if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"'%");
+                    }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
+                    }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
+                        record.put("WA","AND"+" "+  mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
+                    }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put("WA","AND"+" "+  mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'");
+                    }
+
+                }
+                tmpOptions.add(record);
 
             }
+            String []fields=imports.getFields();
+            EjecutarRFC exec = new EjecutarRFC();
+            me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
             return Optional.ofNullable(me)
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {

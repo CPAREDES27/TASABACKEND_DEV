@@ -4,6 +4,15 @@ public class MaestroOptionsKey {
     private String key;
     private String valueLow;
     private String valueHigh;
+    private String control;
+
+    public String getControl() {
+        return control;
+    }
+
+    public void setControl(String control) {
+        this.control = control;
+    }
 
     public String getKey() {
         return key;
