@@ -124,6 +124,20 @@ public class Metodos {
         return data;
     }
 
+    public String returnTable(String table){
+        String tablita="";
+        if(table.equals("MONEDA")){
+            tablita="ZFLMND";
+        }
+        return tablita;
+    }
+    public String returnWA(String table){
+        String wa="";
+        if(table.equals("MONEDA")){
+            wa="ESREG = 'S'";
+        }
+        return wa;
+    }
 
     public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{
 

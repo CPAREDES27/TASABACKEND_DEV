@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface JCODominiosService {
 
-    List<HashMap<String, Object>>  Listar(DominiosImports imports)throws Exception;
+    DominioDto  Listar(DominiosImports imports)throws Exception;
 }
 

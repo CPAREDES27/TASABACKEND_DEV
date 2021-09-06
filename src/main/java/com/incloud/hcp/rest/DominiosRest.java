@@ -24,7 +24,7 @@ public class DominiosRest {
     private JCODominiosService jcoDominiosService;
 
     @PostMapping(value = "/Listar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<HashMap<String, Object>>> Listar(@RequestBody DominiosImports imports) {
+    public ResponseEntity<DominioDto> Listar(@RequestBody DominiosImports imports) {
         //Parametro dto = new Parametro();
 
         try {

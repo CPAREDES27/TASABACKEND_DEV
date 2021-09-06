@@ -7,8 +7,6 @@ import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,21 +15,21 @@ import java.util.List;
 
 @Service
 public class JCODominiosImpl implements JCODominiosService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    public List<HashMap<String, Object>>  Listar(DominiosImports imports) throws Exception {
+
+    public DominioDto Listar(DominiosImports imports) throws Exception {
 
         DominioDto domDto = new DominioDto();
         List<DominiosExports> listExports = new ArrayList<>();
         Metodos metodo = new Metodos();
-        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-
         try {
+
+
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
             for (DominioParams domParams : imports.getDominios()) {
 
-                //if (domParams.getDomname().equals("ZDO_ZCDTEV")){
+            if(domParams.getDomname().equals("ZDO_ZCDTEV")) {
                 DominiosExports exports = new DominiosExports();
 
                 List<DominioExportsData> listDatas = new ArrayList<>();
@@ -47,64 +45,72 @@ public class JCODominiosImpl implements JCODominiosService {
                 JCoTable lis_out = tables.getTable(Tablas.LIST_OUT);
 
                 exports.setDominio(domParams.getDomname());
-
-
                 for (int i = 0; i < lis_out.getNumRows(); i++) {
                     lis_out.setRow(i);
+                    DominioExportsData data = new DominioExportsData();
                     HashMap<String, Object> newRecord = new HashMap<String, Object>();
-                    if(i==0){
-                        HashMap<String, Object> newRecord2 = new HashMap<String, Object>();
-                        newRecord2.put("DOMINIO",domParams.getDomname());
-                        data.add(newRecord2);
-                    }
-                    String key = (String)lis_out.getString("DDTEXT");
-                    String valor=(String) lis_out.getString("DOMVALUE_L");
-                    logger.error("KEYS NOW "+ " "+key+" "+" "+valor);
-                    newRecord.put("Descripcion",key);
-                    newRecord.put("ID",valor);
-                    data.add(newRecord);
+
+                    data.setDescripcion(lis_out.getString("DDTEXT"));
+                    data.setId(lis_out.getString("DOMVALUE_L"));
+                    listDatas.add(data);
                 }
+                exports.setData(listDatas);
+                listExports.add(exports);
+                domDto.setData(listExports);
+                domDto.setMensaje("Ok");
 
-            /*else{
-                    DominiosExports exports = new DominiosExports();
+            }else{
+                DominiosExports exports = new DominiosExports();
 
-                    List<DominioExportsData> listDatas = new ArrayList<>();
-                    JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-                    JCoParameterList importx = stfcConnection.getImportParameterList();
+                List<DominioExportsData> listDatas = new ArrayList<>();
+                JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+                JCoParameterList importx = stfcConnection.getImportParameterList();
+                String TABLE_READ_TABLE =metodo.returnTable(domParams.getDomname());
+                String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
+                importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
+                importx.setValue("DELIMITER", "|");
+                importx.setValue("P_USER", "FGARCIA");
 
-                    importx.setValue("QUERY_TABLE", "ZFLMND");
-                    importx.setValue("DELIMITER", "|");
-                    importx.setValue("P_USER", "FGARCIA");
-                                        ;
-                    JCoParameterList tables = stfcConnection.getTableParameterList();
-                    JCoTable tableImport = tables.getTable("OPTIONS");
-                    tableImport.appendRow();
+                JCoParameterList tables = stfcConnection.getTableParameterList();
+                JCoTable tableImport = tables.getTable("OPTIONS");
+                tableImport.appendRow();
 
-                    tableImport.setValue("WA", "ESREG = 'S'");
-                    //Ejecutar Funcion
-                    stfcConnection.execute(destination);
+                tableImport.setValue("WA", "WA_READ_TABLE");
+                stfcConnection.execute(destination);
+                JCoTable lis_out = tables.getTable("DATA");
+                JCoTable FIELDS = tables.getTable("FIELDS");
 
-                    JCoTable tableExport = tables.getTable("DATA");
-                    JCoTable FIELDS = tables.getTable("FIELDS");
-                    exports.setDominio(domParams.getDomname());
-                    for (int i = 0; i < tableExport.getNumRows(); i++) {
-                        tableExport.setRow(i);
-                        String ArrayResponse[] = tableExport.getString().split("\\|");
-                        HashMap<String, Object> newRecord = new HashMap<String, Object>();
-                        newRecord.put("dominio","MONEDA");
+                exports.setDominio(domParams.getDomname());
+                for (int i = 0; i < lis_out.getNumRows(); i++) {
+                    lis_out.setRow(i);
+                    DominioExportsData data = new DominioExportsData();
+                    String ArrayResponse[] = lis_out.getString().split("\\|");
+                    for(int j=0;j<FIELDS.getNumRows();j++){
+                        FIELDS.setRow(j);
+                        String key = (String) FIELDS.getValue("FIELDNAME");
 
-                        for (int j = 0; j < FIELDS.getNumRows(); j++) {
-                            FIELDS.setRow(j);
-                            String key = (String) FIELDS.getValue("FIELDNAME");
-                            Object value = "";
-                            value = ArrayResponse[j].trim();
-                            newRecord.put(key,value);
+                        if(key.equals("CDMND")){
+
+                            Object value=ArrayResponse[j];
+                            data.setId(value.toString().trim());
+
 
                         }
-                        data.add(newRecord);
+                        if(key.equals("DSMND")){
+                            Object values=ArrayResponse[j];
+                            data.setDescripcion(values.toString().trim());
+                        }
+
 
                     }
-                }*/
+                    listDatas.add(data);
+                }
+                exports.setData(listDatas);
+                listExports.add(exports);
+                domDto.setData(listExports);
+                domDto.setMensaje("Ok");
+
+            }
             }
 
 
@@ -112,7 +118,7 @@ public class JCODominiosImpl implements JCODominiosService {
             domDto.setMensaje(e.getMessage());
         }
 
-        return data;
+        return domDto;
     }
 
 

@@ -1,23 +1,22 @@
 package com.incloud.hcp.jco.dominios.dto;
 
 public class DominioExportsData {
-    private String ddtext;
-    private String domvalue_l;
+    private String descripcion;
+    private String id;
 
-
-    public String getDdtext() {
-        return ddtext;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDdtext(String ddtext) {
-        this.ddtext = ddtext;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getDomvalue_l() {
-        return domvalue_l;
+    public String getId() {
+        return id;
     }
 
-    public void setDomvalue_l(String domvalue_l) {
-        this.domvalue_l = domvalue_l;
+    public void setId(String id) {
+        this.id = id;
     }
 }
