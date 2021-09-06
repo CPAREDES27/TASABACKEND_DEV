@@ -71,6 +71,7 @@ public class Tablas {
     public static String T_MCHPM="T_MCHPM";
     public static String T_DCHPM="T_DCHPM";
     public static String T_BODEG="T_BODEG";
+    public static String IT_MAREA="IT_MAREA";
 
     // Política de precios
     public static String STR_PPC="STR_PPC";
