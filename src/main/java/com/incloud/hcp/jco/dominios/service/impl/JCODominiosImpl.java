@@ -66,8 +66,8 @@ public class JCODominiosImpl implements JCODominiosService {
                 JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
                 JCoParameterList importx = stfcConnection.getImportParameterList();
                 String TABLE_READ_TABLE =metodo.returnTable(domParams.getDomname());
-                String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
-                importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
+
+                importx.setValue("QUERY_TABLE", "ZFLMND");
                 importx.setValue("DELIMITER", "|");
                 importx.setValue("P_USER", "FGARCIA");
 
@@ -75,7 +75,7 @@ public class JCODominiosImpl implements JCODominiosService {
                 JCoTable tableImport = tables.getTable("OPTIONS");
                 tableImport.appendRow();
 
-                tableImport.setValue("WA", "WA_READ_TABLE");
+                tableImport.setValue("WA", "ESREG = 'S'");
                 stfcConnection.execute(destination);
                 JCoTable lis_out = tables.getTable("DATA");
                 JCoTable FIELDS = tables.getTable("FIELDS");
