@@ -67,6 +67,16 @@ public class ReportePescaRest {
         }
     }
 
+    @PostMapping(value = "/ConsultarBiomasa", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BiomasaExports> ConsultarBiomasa(@RequestBody BiomasaImports imports) {
+        try {
+            return Optional.ofNullable(this.jcoCalasService.ConsultarBiomasa(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }
+
     @PostMapping(value = "/ReporteTDC_CHD", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CHDPMExports> ConsultarCDHPM(@RequestBody CHDPMImports imports) {
         try {
