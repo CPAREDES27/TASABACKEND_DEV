@@ -31,8 +31,8 @@ public class JCODominiosImpl implements JCODominiosService {
 
             for (DominioParams domParams : imports.getDominios()) {
 
-                if (domParams.getDomname().startsWith("ZDO")){
-                    DominiosExports exports = new DominiosExports();
+                //if (domParams.getDomname().equals("ZDO_ZCDTEV")){
+                DominiosExports exports = new DominiosExports();
 
                 List<DominioExportsData> listDatas = new ArrayList<>();
                 JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GET_LISTAED);
@@ -47,18 +47,25 @@ public class JCODominiosImpl implements JCODominiosService {
                 JCoTable lis_out = tables.getTable(Tablas.LIST_OUT);
 
                 exports.setDominio(domParams.getDomname());
+
+
                 for (int i = 0; i < lis_out.getNumRows(); i++) {
                     lis_out.setRow(i);
-
                     HashMap<String, Object> newRecord = new HashMap<String, Object>();
-                    String key = (String)lis_out.getString("DOTEXT");
+                    if(i==0){
+                        HashMap<String, Object> newRecord2 = new HashMap<String, Object>();
+                        newRecord2.put("DOMINIO",domParams.getDomname());
+                        data.add(newRecord2);
+                    }
+                    String key = (String)lis_out.getString("DDTEXT");
                     String valor=(String) lis_out.getString("DOMVALUE_L");
                     logger.error("KEYS NOW "+ " "+key+" "+" "+valor);
-                    newRecord.put(key,valor);
+                    newRecord.put("Descripcion",key);
+                    newRecord.put("ID",valor);
                     data.add(newRecord);
                 }
 
-            }else{
+            /*else{
                     DominiosExports exports = new DominiosExports();
 
                     List<DominioExportsData> listDatas = new ArrayList<>();
@@ -97,12 +104,12 @@ public class JCODominiosImpl implements JCODominiosService {
                         data.add(newRecord);
 
                     }
-                }
+                }*/
             }
 
 
         } catch (Exception e) {
-        domDto.setMensaje(e.getMessage());
+            domDto.setMensaje(e.getMessage());
         }
 
         return data;
