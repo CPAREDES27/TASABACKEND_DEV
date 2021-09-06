@@ -5,6 +5,15 @@ public class MaestroOptionsKey {
     private String valueLow;
     private String valueHigh;
     private String control;
+    private String cantidad;
+
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
 
     public String getControl() {
         return control;
