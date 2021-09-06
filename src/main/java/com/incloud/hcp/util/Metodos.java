@@ -87,58 +87,36 @@ public class Metodos {
 
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
-                if(key.equals("ESMAR")){
-                    if(value.equals("A")){
+
                         if (field.getTypeAsString().equals("TIME")) {
                             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                             value = dateFormat.format(value);
                         }
-                /*if (field.getTypeAsString().equals("DATE")) {
-                    Date dateValue = tableExport.getDate(key);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    value = dateFormat.format(dateValue);
-                }*/
-                        if (field.getTypeAsString().equals("DATE") && key.equals("FEMAR")) {
-                    /* String date="Sat Jun 01 12:53:10 UTC 2013";
-                    SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy");
-                    Date currentdate=sdf.parse(date);
-                    SimpleDateFormat sdf2=new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
-                    value= sdf2.format(currentdate);*/
-                            String date=String.valueOf(value);
-                            SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
-                            // SimpleDateFormat mes=new SimpleDateFormat("MM");
-                            //SimpleDateFormat anio=new SimpleDateFormat("yyyy");
-                            String fecha= dia.format(value);
-                            //String month= mes.format(value);
-                            //String year= anio.format(value);
 
-                            value= fecha;
+                       if (field.getTypeAsString().equals("DATE") && key.equals("FEARR") ) {
+                            try{
+                                String date=String.valueOf(value);
+                                SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
+                                String fecha= dia.format(value);
+                                value= fecha;
+                            }catch(Exception e){
+                                value="";
+                             }
 
                         }
-                        if (field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
-                                field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                                field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
 
-                            String date=String.valueOf(value);
-                            SimpleDateFormat dia=new SimpleDateFormat("dd/MM/yyyy");
-                            String fecha= dia.format(value);
-                            value= fecha;
-                        }
-                    }
-                }
+
 
                 newRecord.put(key, value);
             }
+            data.add(newRecord);
             if(newRecord.containsKey("ESMAR")){
-                 if(newRecord.containsValue("C")){
-                    if(newRecord.containsKey("ESCMA")){
-                        if(newRecord.containsValue("P")){
-                            data.add(newRecord);
-                        }
-                    }
+                 if(newRecord.containsValue("C") || newRecord.containsValue("A")){
 
+                     data.add(newRecord);
                 }
             }
+
 
 
         }

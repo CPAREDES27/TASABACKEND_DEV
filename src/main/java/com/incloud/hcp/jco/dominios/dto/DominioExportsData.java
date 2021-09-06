@@ -4,6 +4,7 @@ public class DominioExportsData {
     private String ddtext;
     private String domvalue_l;
 
+
     public String getDdtext() {
         return ddtext;
     }

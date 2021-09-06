@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,7 +24,7 @@ public class DominiosRest {
     private JCODominiosService jcoDominiosService;
 
     @PostMapping(value = "/Listar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<DominioDto> Listar(@RequestBody DominiosImports imports) {
+    public ResponseEntity<List<HashMap<String, Object>>> Listar(@RequestBody DominiosImports imports) {
         //Parametro dto = new Parametro();
 
         try {
