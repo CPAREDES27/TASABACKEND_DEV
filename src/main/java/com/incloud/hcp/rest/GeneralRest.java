@@ -5,6 +5,8 @@ import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.util.EjecutarRFC;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,14 +57,14 @@ public class GeneralRest {
         }
 
     }
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @PostMapping(value = "/Read_Table3/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ConsultarMaestro3(@RequestBody MaestroImportsKey imports){
 
         try {
             MaestroExport me=new MaestroExport();
             MaestroOptionsKey me2 = new MaestroOptionsKey();
-
+            logger.error("TAMAÑO import: "+imports.getOption().size());
             HashMap<String, Object> importz = new HashMap<String, Object>();
             importz.put("QUERY_TABLE", imports.getTabla());
             importz.put("DELIMITER", imports.getDelimitador());
@@ -90,8 +92,6 @@ public class GeneralRest {
                 }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     control="=";
                 }
-
-
 
                 if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put("WA",mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");

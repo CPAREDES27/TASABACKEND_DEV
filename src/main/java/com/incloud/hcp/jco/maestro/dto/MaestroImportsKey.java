@@ -78,11 +78,21 @@ public class MaestroImportsKey {
 
     private String tabla;
     private String delimitador;
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
     private String no_data;
     private int rowskips;
     private int rowcount;
     private String p_user;
     private String order;
+    private List<MaestroOptions> option;
     private List<MaestroOptionsKey> options;
     private String[] fields;
 }
