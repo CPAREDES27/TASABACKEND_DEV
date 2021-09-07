@@ -73,12 +73,20 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     if(s_str_pta.getString("CDZLT").equalsIgnoreCase(s_str_zlt.getString("CDZLT"))){
                         logger.error("cz12 : " + cz1 + " - cz22 : " + cz2);
                         n_planta.setPlantaName(s_str_pta.getString("DESCR"));
+                        n_planta.setTot_PescaReq(s_str_pta.getString("CNPRQ"));
                         List<EmbarcacionesDto> embarcaciones = new ArrayList<EmbarcacionesDto>();
+                        int vi_contadorEmb = 0;
+                        int vi_contadorBod = 0;
+                        int vi_contadorDecl = 0;
                         for (int k = 0; k < s_str_di.getNumRows(); k++) {
                             s_str_di.setRow(k);
                             EmbarcacionesDto n_embarcacion =  new EmbarcacionesDto();
                             if(s_str_di.getString("CDPTA").equalsIgnoreCase(s_str_pta.getString("CDPTA"))){
                                 //n_embarcacion.setFlagEmba(s_str_di.);
+                                vi_contadorEmb++;
+                                vi_contadorBod = Integer.parseInt(s_str_di.getString("CDEMB")) + vi_contadorBod;
+                                vi_contadorDecl = Integer.parseInt(s_str_di.getString("CNPCM")) + vi_contadorDecl;
+
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CDEMB"));
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
@@ -120,6 +128,9 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                             }
 
                         }
+                        n_planta.setTot_emb(String.valueOf(vi_contadorEmb));
+                        n_planta.setTot_bod(String.valueOf(vi_contadorBod));
+                        n_planta.setTot_decl(String.valueOf(vi_contadorDecl));
                         n_planta.setListaEmbarcaciones(embarcaciones);
                         plantas.add(n_planta);
                     }
