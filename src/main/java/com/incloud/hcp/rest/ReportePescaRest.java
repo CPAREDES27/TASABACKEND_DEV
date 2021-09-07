@@ -1,10 +1,7 @@
 package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.reportepesca.dto.*;
-import com.incloud.hcp.jco.reportepesca.service.JCOCDHPMService;
-import com.incloud.hcp.jco.reportepesca.service.JCOCalasService;
-import com.incloud.hcp.jco.reportepesca.service.JCODescargasService;
-import com.incloud.hcp.jco.reportepesca.service.JCOMareasService;
+import com.incloud.hcp.jco.reportepesca.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,9 @@ public class ReportePescaRest {
 
     @Autowired
     private JCOCDHPMService jcocdhpmService;
+
+    @Autowired
+    private JCOBiometriaService jcoBiometriaService;
 
     @PostMapping(value = "/ConsultarMareas/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MareaExports> ConsultarMareas(@RequestBody MareaImports imports) {
@@ -66,11 +66,31 @@ public class ReportePescaRest {
             throw new RuntimeException(ex.toString());
         }
     }
+/*
+    @PostMapping(value = "/ConsultarBiomasa", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BiomasaExports> ConsultarBiomasa(@RequestBody BiomasaImports imports) {
+        try {
+            return Optional.ofNullable(this.jcoCalasService.ConsultarBiomasa(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }*/
 
     @PostMapping(value = "/ReporteTDC_CHD", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CHDPMExports> ConsultarCDHPM(@RequestBody CHDPMImports imports) {
         try {
             return Optional.ofNullable(this.jcocdhpmService.ObtenerCHDPM(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }
+
+    @PostMapping(value = "/ReporteBiometria", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<BiometriaExports> ReporteBiometria(@RequestBody BiometriaImports imports) {
+        try {
+            return Optional.ofNullable(this.jcoBiometriaService.ReporteBiometria(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException(ex.toString());

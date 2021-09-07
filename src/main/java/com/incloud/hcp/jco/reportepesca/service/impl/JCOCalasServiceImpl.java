@@ -1,8 +1,6 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
-import com.incloud.hcp.jco.reportepesca.dto.CalaExports;
-import com.incloud.hcp.jco.reportepesca.dto.CalaImports;
-import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsMarea;
+import com.incloud.hcp.jco.reportepesca.dto.*;
 import com.incloud.hcp.jco.reportepesca.service.JCOCalasService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
