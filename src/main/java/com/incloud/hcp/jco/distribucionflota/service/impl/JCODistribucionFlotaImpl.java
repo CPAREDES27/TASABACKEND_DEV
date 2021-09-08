@@ -59,6 +59,10 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             /************************************* lOGICA DE ARMADO DE REQUEST *****************************/
 
             List<ZonasDto> zonas = new ArrayList<ZonasDto>();
+            List<DescargasDto> Descargas = new ArrayList<DescargasDto>();
+            double vd_totdesc_cbod = 0;
+            double vd_totdesc_decl = 0;
+            double vd_totdesc_desc = 0;
             for (int i = 0; i < s_str_zlt.getNumRows(); i++) {
                 s_str_zlt.setRow(i);
                 ZonasDto n_zona = new ZonasDto();
@@ -75,20 +79,52 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                         n_planta.setPlantaName(s_str_pta.getString("DESCR"));
                         n_planta.setTot_PescaReq(s_str_pta.getString("CNPRQ"));
                         List<EmbarcacionesDto> embarcaciones = new ArrayList<EmbarcacionesDto>();
+                        //VARIABLES TOTALES
                         int vi_contadorEmb = 0;
-                        int vi_contadorBod = 0;
-                        int vi_contadorDecl = 0;
+                        double vi_contadorBod = 0;
+                        double vi_contadorDecl = 0;
                         for (int k = 0; k < s_str_di.getNumRows(); k++) {
                             s_str_di.setRow(k);
                             EmbarcacionesDto n_embarcacion =  new EmbarcacionesDto();
                             if(s_str_di.getString("CDPTA").equalsIgnoreCase(s_str_pta.getString("CDPTA"))){
-                                //n_embarcacion.setFlagEmba(s_str_di.);
+                                //CARGA DEL TAP DESC
+                                boolean bOk = true;
+                                String estMarea = s_str_di.getString("ESMAR");
+                                String estMareaCie = s_str_di.getString("ESCMA");
+                                String embaNomin = s_str_di.getString("EMPTO");
+                                String indProp = s_str_di.getString("INPRP");
+
+                                if (embaNomin.equalsIgnoreCase("N") && indProp.equalsIgnoreCase("P")) {
+                                    bOk = false;
+
+                                }
+
+                                if((estMarea.equalsIgnoreCase("C") && estMareaCie.equalsIgnoreCase("T")) && bOk) {
+                                    DescargasDto o_descarga = new DescargasDto();
+
+                                    o_descarga.setCbodEmba(s_str_di.getString("CPPMS"));
+                                    o_descarga.setCodEmba(s_str_di.getString("CDEMB"));
+                                    o_descarga.setCodPlanta(s_str_di.getString("CDPTA"));
+                                    o_descarga.setDescEmba(s_str_di.getString("NMEMB"));
+                                    o_descarga.setDescPlanta(s_str_di.getString("DESCR"));
+                                    o_descarga.setPescDecl(s_str_di.getString("CNPCM"));
+                                    o_descarga.setPescDesc(s_str_di.getString("CNPDS"));
+
+                                    Descargas.add(o_descarga);
+
+                                    vd_totdesc_decl = vd_totdesc_decl + Double.parseDouble(o_descarga.getPescDecl());
+                                    vd_totdesc_desc = vd_totdesc_desc + Double.parseDouble(o_descarga.getPescDesc());
+                                    vd_totdesc_cbod = vd_totdesc_cbod + Double.parseDouble(o_descarga.getCbodEmba());
+
+                                }
+
+                                //SUMATORIA DE VARIABLES TOTALES
                                 vi_contadorEmb++;
-                                vi_contadorBod = Integer.parseInt(s_str_di.getString("CDEMB")) + vi_contadorBod;
-                                vi_contadorDecl = Integer.parseInt(s_str_di.getString("CNPCM")) + vi_contadorDecl;
+                                vi_contadorBod = Double.parseDouble(s_str_di.getString("CPPMS")) + vi_contadorBod;
+                                vi_contadorDecl = Double.parseDouble(s_str_di.getString("CNPCM")) + vi_contadorDecl;
 
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
-                                n_embarcacion.setCbodEmba(s_str_di.getString("CDEMB"));
+                                n_embarcacion.setCbodEmba(s_str_di.getString("CPPMS"));
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
                                 n_embarcacion.setEstado(s_str_di.getString("DSEEC"));
                                 n_embarcacion.setHoraArribo(s_str_di.getString("HEARR"));
@@ -143,6 +179,98 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             //String prueba = "";
             //prueba.compareTo();
             dto.setListaZonas(zonas);
+            /************************************* lOGICA DE SETEO DE RESUMEN *****************************/
+            dto.setListaDescargas(Descargas);
+            dto.setTot_desc_cbod(String.valueOf(vd_totdesc_cbod));
+            dto.setTot_desc_desc(String.valueOf(vd_totdesc_desc));
+            dto.setTot_desc_dscl(String.valueOf(vd_totdesc_decl));
+
+            List<PropiosDto> lst_propios = new ArrayList<PropiosDto>();
+            List<TercerosDto> lst_terceros = new ArrayList<TercerosDto>();
+            List<TotalDto> lst_totales = new ArrayList<TotalDto>();
+
+            double vd_totterc_cbod= 0;
+            double vd_totterc_dscl = 0;
+            double vd_totterc_ep = 0;
+            double vd_totprop_cbod= 0;
+            double vd_totprop_dscl = 0;
+            double vd_totprop_ep = 0;
+            double vd_tottot_cbod= 0;
+            double vd_tottot_dscl = 0;
+            double vd_tottot_ep = 0;
+
+            for (int i = 0; i < s_str_dp.getNumRows(); i++) {
+                s_str_dp.setRow(i);
+                TotalDto resumenTotal = new TotalDto();
+                BigDecimal b_cnpcm = new BigDecimal(s_str_dp.getString("CNPCM"));
+                BigDecimal b_cnpdt = new BigDecimal(s_str_dp.getString("CNPDT"));
+                if (b_cnpcm.compareTo(new BigDecimal(0))> 0) {
+                    PropiosDto resumenProp = new PropiosDto();
+
+                    resumenProp.setDescPlanta(s_str_dp.getString("DESCR"));
+                    resumenProp.setPescDeclProp(s_str_dp.getString("CNPCM"));
+                    resumenProp.setEmbaPescProp(s_str_dp.getString("CNEMB"));
+                    resumenProp.setCbodProp(s_str_dp.getString("CPPMP"));
+
+                    resumenTotal.setDescPlanta(s_str_dp.getString("DESCR"));
+                    resumenTotal.setPescDeclProp(s_str_dp.getString("CNPCM"));
+                    resumenTotal.setEmbaPescProp(s_str_dp.getString("CNEMB"));
+                    resumenTotal.setCbodProp(s_str_dp.getString("CPPMP"));
+
+                    vd_totprop_cbod = vd_totprop_cbod + Double.parseDouble(resumenProp.getCbodProp());
+                    vd_totprop_dscl = vd_totprop_dscl + Double.parseDouble(resumenProp.getPescDeclProp());
+                    vd_totprop_ep = vd_totprop_ep + Double.parseDouble(resumenProp.getEmbaPescProp());
+
+                    vd_tottot_cbod = vd_tottot_cbod + Double.parseDouble(resumenProp.getCbodProp());
+                    vd_tottot_dscl = vd_tottot_dscl + Double.parseDouble(resumenProp.getPescDeclProp());
+                    vd_tottot_ep = vd_tottot_ep + Double.parseDouble(resumenProp.getEmbaPescProp());
+
+                    lst_propios.add(resumenProp);
+                    lst_totales.add(resumenTotal);
+
+                }
+
+                if (b_cnpdt.compareTo(new BigDecimal(0))> 0) {
+                    TercerosDto resumenTerc = new TercerosDto();
+
+                    resumenTerc.setDescPlanta(s_str_dp.getString("DESCR"));
+                    resumenTerc.setPescDeclProp(s_str_dp.getString("CNPDT"));
+                    resumenTerc.setEmbaPescProp(s_str_dp.getString("CNEMT"));
+                    resumenTerc.setCbodProp(s_str_dp.getString("CPPMT"));
+
+                    resumenTotal.setDescPlanta(s_str_dp.getString("DESCR"));
+                    resumenTotal.setPescDeclProp(s_str_dp.getString("CNPDT"));
+                    resumenTotal.setEmbaPescProp(s_str_dp.getString("CNEMT"));
+                    resumenTotal.setCbodProp(s_str_dp.getString("CPPMT"));
+
+                    vd_totterc_cbod = vd_totterc_cbod + Double.parseDouble(resumenTerc.getCbodProp());
+                    vd_totterc_dscl = vd_totterc_dscl + Double.parseDouble(resumenTerc.getPescDeclProp());
+                    vd_totterc_ep = vd_totterc_ep + Double.parseDouble(resumenTerc.getEmbaPescProp());
+
+                    vd_tottot_cbod = vd_tottot_cbod + Double.parseDouble(resumenTerc.getCbodProp());
+                    vd_tottot_dscl = vd_tottot_dscl + Double.parseDouble(resumenTerc.getPescDeclProp());
+                    vd_tottot_ep = vd_tottot_ep + Double.parseDouble(resumenTerc.getEmbaPescProp());
+
+                    lst_terceros.add(resumenTerc);
+                    lst_totales.add(resumenTotal);
+
+                }
+
+            }
+
+            dto.setListaPropios(lst_propios);
+            dto.setTot_prop_cbod(String.valueOf(vd_totprop_cbod));
+            dto.setTot_prop_dscl(String.valueOf(vd_totprop_dscl));
+            dto.setTot_prop_ep(String.valueOf(vd_totprop_ep));
+            dto.setListaTerceros(lst_terceros);
+            dto.setTot_terc_cbod(String.valueOf(vd_totterc_cbod));
+            dto.setTot_terc_dscl(String.valueOf(vd_totterc_dscl));
+            dto.setTot_terc_ep(String.valueOf(vd_totterc_ep));
+            dto.setListaTotal(lst_totales);
+            dto.setTot_tot_cbod(String.valueOf(vd_tottot_cbod));
+            dto.setTot_tot_dscl(String.valueOf(vd_tottot_dscl));
+            dto.setTot_tot_ep(String.valueOf(vd_tottot_ep));
+            /*----------------------------------- Fin de SETEO de resumen----------------------------------*/
 
         }catch (Exception e){
             dto.setMensaje(e.getMessage());
