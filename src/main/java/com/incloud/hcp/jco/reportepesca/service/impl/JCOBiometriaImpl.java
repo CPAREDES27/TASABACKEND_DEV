@@ -84,32 +84,28 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
     private String CrearExcel(JCoTable et_biom, JCoTable et_espe, double min, double max, String codigoMotivoMarea){
         String path="";
-        logger.error("codigoMotivoMarea: "+codigoMotivoMarea);
         Workbook workbook = new HSSFWorkbook();
-        logger.error("LOG CREAR EXCEL");
         //Crea hoja nueva
         Sheet sheet = workbook.createSheet("Reporte Biometria");
 
 
         String[]CellMedidas= CellMedidas(min, max, codigoMotivoMarea);
         Object[] fields= ListarFields(et_biom, CellMedidas);
+        String[] field= ListarFields(et_biom, CellMedidas);
 
-        List<String[]> registros=ListarRegistros(et_biom);
+        List<String[]> registros=ListarRegistros(et_biom, CellMedidas);
         List<String[]> medidas=ListarMedidas(et_espe);
-
-        String[] a=medidas.get(0);
-        logger.error("LOG LISTA REGISTRO MEDIDA SIZE: "+a.length);
-        for(int b=0; b<a.length; b++){
-
-            logger.error("LOG LISTA REGISTRO MEDIDA SIZE: "+a[b]);
-
+        List<String[]> registrosTotal=registrosTotal(registros, medidas, field);
+        String []a=registrosTotal.get(0);
+        for(int i=0; i<a.length; i++){
+            logger.error("registrosTotal: "+a[i]);
         }
 
         Map<String, Object[]> datos = new TreeMap<String, Object[]>();
         datos.put("1", fields);
 
         int keys=2;
-        for(int i=0; i<registros.size(); i++){
+        for(int i=0; i<registrosTotal.size(); i++){
             Object[] obj= registros.get(i);
 
             datos.put(String.valueOf(keys), obj);
@@ -157,7 +153,6 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
     private String[] ListarFields(JCoTable jcoTable, String[] CellMedidas){
 
-        logger.error("CellMedidas size: "+CellMedidas.length);
         JCoFieldIterator iter = jcoTable.getFieldIterator();
         int con=0;
         String[] f=new String[100];
@@ -172,7 +167,6 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             fields[i]=jcoTable.getField(i).getName();
 
         }
-        logger.error("LOG AGREGAR CABECERAS MEDIDAS");
         for(int j=0; j<CellMedidas.length; j++){
 
             fields[con]=CellMedidas[j];
@@ -183,10 +177,9 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
     }
 
-    private List<String[]> ListarRegistros(JCoTable jcoTable){
+    private List<String[]> ListarRegistros(JCoTable jcoTable , String []CellMedidas){
 
         List<String[]> campos= new ArrayList<String[]>();
-
         JCoFieldIterator iter = jcoTable.getFieldIterator();
 
         int con=0;
@@ -194,9 +187,10 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             JCoField field = iter.nextField();
             con++;
         }
+        int cantidadRegistros=con+CellMedidas.length;;
         for (int i = 0; i < jcoTable.getNumRows(); i++) {
             jcoTable.setRow(i);
-            String[] registros = new String[con];
+            String[] registros = new String[cantidadRegistros];
             JCoFieldIterator ite = jcoTable.getFieldIterator();
             int j=0;
             while (ite.hasNextField()) {
@@ -230,8 +224,7 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
     }
 
     private String[] CellMedidas(double min, double max, String codigoMotivoMarea){
-        logger.error("LOG CELL MEDIDAS");
-        logger.error("codigoMotivoMarea: "+codigoMotivoMarea);
+
 
         String[] celdas= new String[10];
         double prom=(max-min)+1;
@@ -239,13 +232,12 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
         int cantidadCeldas=0;
 
         if(codigoMotivoMarea.compareTo("2")==0){
-            logger.error("entro al 2");
+
            for(double i=0; i<prom; i+=0.5){
                 con++;
            }
             cantidadCeldas=con+2;
             celdas= new String[cantidadCeldas];
-            logger.error("LOG CELL MEDIDAS SIZE: "+celdas.length);
             celdas[0]="DSSPCI";
             celdas[1]="PCSPC";
             int n=2;
@@ -256,32 +248,27 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
                 n++;
             }
 
-            logger.error("celdas: "+celdas[3]);
             return celdas;
 
 
         }else if(codigoMotivoMarea.compareTo("1")==0){
-            logger.error("entro al 1");
             for(int i=0; i<prom; i++){
                 con++;
             }
             cantidadCeldas=con+2;
             celdas= new String[cantidadCeldas];
-            logger.error("LOG CELL MEDIDAS SIZE: "+celdas.length);
             celdas[0]="DSSPCI";
             celdas[1]="PCSPC";
             int n=2;
             double cel=min;
             for (int j=0; j<con; j++) {
                 celdas[n] = String.valueOf(cel);
-                logger.error("cel: "+cel);
-                logger.error("celdas: "+celdas[n]);
+
                 cel ++;
                 n++;
 
             }
 
-            logger.error("celdas: "+celdas[3]);
             return celdas;
         }
        return celdas;
@@ -323,17 +310,52 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
         return campos;
     }
 
-    private List<String[]> registros(List<String[]> et_biom, List<String> et_espe){
+    private List<String[]> registrosTotal(List<String[]> et_biom, List<String[]> et_espe, String[]fields){
 
-        List<String[]> registros= new ArrayList<String[]>();
+        List<String[]> registrosTotal= new ArrayList<String[]>();
 
         for(int i=0; i<et_biom.size(); i++){
+            /**ET_BIOM posicion:
+             * NRMAR : 3
+             * NREVN:15
+             * ET_ESPE posicion:
+             * NRMAR: 0
+             * NREVN: 1
+             * TMMED: 2
+             * CNSPC: 3
+             */
 
-            String[] lista=et_biom.get(i);
-            for(int j=0; j<lista.length; j++){
+            String[] listaBiom=et_biom.get(i);
 
+            for(int j=0; j<et_espe.size(); j++){
+                String[] listaEspe=et_espe.get(j);
+
+                if(listaBiom[3].trim().compareTo(listaEspe[0].trim())==0 &&
+                        listaBiom[16].trim().compareTo(listaEspe[1].trim())==0){
+                    for (int k=0; k<fields.length; k++){
+
+                                double med=Double.parseDouble(listaEspe[2]);
+                                String x=String.valueOf(med);
+                            if(fields[k].trim().compareTo(x.trim())==0){
+
+                                listaBiom[k]=listaEspe[3];
+
+                                logger.error("listabiomCabezera["+k+"]: "+listaBiom[k]);
+                            }
+                            else if(listaBiom[k]==null){
+                                listaBiom[k]="0";
+
+                            }
+                    }
+                }
             }
+            registrosTotal.add(listaBiom);
         }
-        return registros;
+        String []a=et_biom.get(0);
+        for (int i=0; i<a.length; i++){
+            logger.error("a: "+a[i]);
+        }
+
+        return registrosTotal;
     }
 }
