@@ -62,40 +62,125 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
 
-    public MaestroExport obtenerMaestro2 (MaestroImports importsParam) throws Exception {
+    public MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception {
 
         MaestroExport me=new MaestroExport();
-        try {
-            //setear mapeo de parametros import
-            HashMap<String, Object> imports = new HashMap<String, Object>();
-            imports.put("QUERY_TABLE", importsParam.getTabla());
-            imports.put("DELIMITER", importsParam.getDelimitador());
-            imports.put("NO_DATA", importsParam.getNo_data());
-            imports.put("ROWSKIPS", importsParam.getRowskips());
-            imports.put("ROWCOUNT", importsParam.getRowcount());
-            imports.put("P_USER", importsParam.getP_user());
-            imports.put("P_ORDER", importsParam.getOrder());
-            logger.error("obtenerMaestro_1");
-            //setear mapeo de tabla options
-            List<MaestroOptions> options = importsParam.getOptions();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
+        MaestroOptionsKey me2 = new MaestroOptionsKey();
+
+        List<MaestroOptions> option = imports.getOption();
+        logger.error("TAMAÑO import: "+option.size());
+        List<MaestroOptionsKey> option2 = imports.getOptions();
+        logger.error("TAMAÑO import: "+option2.size());
+            /*for(int j =0;j<option.size();j++){
+                MaestroOptions mop= option.get(j);
+                logger.error("GET IMPORT: "+mop.getWa());
+            }*/
+        HashMap<String, Object> importz = new HashMap<String, Object>();
+        importz.put("QUERY_TABLE", imports.getTabla());
+        importz.put("DELIMITER", imports.getDelimitador());
+        importz.put("NO_DATA", imports.getNo_data());
+        importz.put("ROWSKIPS", imports.getRowskips());
+        importz.put("ROWCOUNT", imports.getRowcount());
+        importz.put("P_USER", imports.getP_user());
+        importz.put("P_ORDER", imports.getOrder());
+        String control="";
+
+        List<MaestroOptionsKey> options = imports.getOptions();
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        if(option.size()>0 && option2.size()==0){
+            for(int j=0;j<option.size();j++){
+                MaestroOptions mop = option.get(j);
+                HashMap<String, Object> record2 = new HashMap<String, Object>();
+                record2.put("WA",mop.getWa());
+                tmpOptions.add(record2);
             }
-            logger.error("obtenerMaestro_2");
+        }
+        if(option.size() >0 && option2.size()>0){
+            for(int j=0;j<option.size();j++){
+                MaestroOptions mop = option.get(j);
+                HashMap<String, Object> record2 = new HashMap<String, Object>();
+                record2.put("WA",mop.getWa());
+                tmpOptions.add(record2);
+            }
 
-            String []fields=importsParam.getFields();
-            //ejecutar RFC ZFL_RFC_READ_TABLE
-            EjecutarRFC exec = new EjecutarRFC();
-            me = exec.Execute_ZFL_RFC_READ_TABLE2(imports, tmpOptions, fields);
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptionsKey mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+                if(mo.getControl().equals("INPUT"))
+                {
+                    control="LIKE";
+                }
+                if (mo.getControl().equals("COMBOBOX")) {
+                    control="=";
+                }
+                if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals("") )){
+                    control="BETWEEN";
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    control="=";
+                }
 
-        }catch (Exception e){
-            me.setMensaje(e.getMessage());
+                if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
+                }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
+                }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
+                    record.put("WA","AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put("WA","AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                }
+                tmpOptions.add(record);
+
+            }
+
         }
 
+        if(option2.size()>0 && option.size()==0) {
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptionsKey mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+                if (mo.getControl().equals("INPUT")) {
+                    control = "LIKE";
+                }
+                if (mo.getControl().equals("COMBOBOX")) {
+                    control = "=";
+                }
+                if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                    control = "BETWEEN";
+                } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    control = "=";
+                }
+
+                if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    record.put("WA", mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                } else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
+                } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                }
+
+
+                if (i > 0) {
+                    if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                    } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    } else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
+                    } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    }
+
+                }
+                tmpOptions.add(record);
+
+            }
+        }
+
+        String []fields=imports.getFields();
+        EjecutarRFC exec = new EjecutarRFC();
+        me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
         return me;
     }
 
