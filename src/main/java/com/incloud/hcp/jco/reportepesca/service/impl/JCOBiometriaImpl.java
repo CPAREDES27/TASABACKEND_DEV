@@ -212,16 +212,14 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
                     value = value.substring(11,19);
                 }
                 try {
-                    if (key.equals("HIEVN") || key.equals("HFEVN")) {
+                    if (key.equals("FIEVN") || key.equals("FFEVN")) {
+                           logger.error("fieldtype: "+field.getDate());
+                           Date date=field.getDate();
+                        SimpleDateFormat dia = new SimpleDateFormat("yyyy-MM-dd");
+                        String fecha = dia.format(date);
+                        value = fecha;
 
-                       // String date = String.valueOf(value);
-                        //SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                        //String fecha = dia.format(value);
-                        //value = fecha;
-                        DateFormat dateFormat = new SimpleDateFormat(
-                                "dd/MM/yyyy", Locale.US);
-                        dateFormat.parse(value);
-                        value =dateFormat.format(new Date());
+
                     }
                 }catch (Exception e){
                     value=String.valueOf(value);
