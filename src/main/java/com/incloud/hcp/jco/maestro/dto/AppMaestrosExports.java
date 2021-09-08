@@ -5,10 +5,9 @@ import java.util.List;
 
 public class AppMaestrosExports {
 
-    private List<HashMap<String, Object>> t_approles;
-    private List<HashMap<String, Object>> t_tabcolumna;
-    private List<HashMap<String, Object>> t_tabselec;
-    private List<HashMap<String, Object>> t_tabform;
+    private List<HashMap<String, Object>> t_tabapp;
+    private List<HashMap<String, Object>> t_tabfield;
+    private List<HashMap<String, Object>> t_tabservice;
     private String mensaje;
 
     public String getMensaje() {
@@ -19,36 +18,30 @@ public class AppMaestrosExports {
         this.mensaje = mensaje;
     }
 
-    public List<HashMap<String, Object>> getT_approles() {
-        return t_approles;
+    public List<HashMap<String, Object>> getT_tabapp() {
+        return t_tabapp;
     }
 
-    public void setT_approles(List<HashMap<String, Object>> t_approles) {
-        this.t_approles = t_approles;
+    public void setT_tabapp(List<HashMap<String, Object>> t_tabapp) {
+        this.t_tabapp = t_tabapp;
     }
 
-    public List<HashMap<String, Object>> getT_tabcolumna() {
-        return t_tabcolumna;
+    public List<HashMap<String, Object>> getT_tabfield() {
+        return t_tabfield;
     }
 
-    public void setT_tabcolumna(List<HashMap<String, Object>> t_tabcolumna) {
-        this.t_tabcolumna = t_tabcolumna;
+    public void setT_tabfield(List<HashMap<String, Object>> t_tabfield) {
+        this.t_tabfield = t_tabfield;
     }
 
-    public List<HashMap<String, Object>> getT_tabselec() {
-        return t_tabselec;
+    public List<HashMap<String, Object>> getT_tabservice() {
+        return t_tabservice;
     }
 
-    public void setT_tabselec(List<HashMap<String, Object>> t_tabselec) {
-        this.t_tabselec = t_tabselec;
+    public void setT_tabservice(List<HashMap<String, Object>> t_tabservice) {
+        this.t_tabservice = t_tabservice;
     }
 
-    public List<HashMap<String, Object>> getT_tabform() {
-        return t_tabform;
-    }
 
-    public void setT_tabform(List<HashMap<String, Object>> t_tabform) {
-        this.t_tabform = t_tabform;
-    }
 
 }

@@ -233,22 +233,20 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
             stfcConnection.execute(destination);
 
-            JCoTable t_approles = tables.getTable(Tablas.T_APPROLES);
-            JCoTable t_tabcolumna = tables.getTable(Tablas.T_TABCOLUMNA);
-            JCoTable t_tabselec = tables.getTable(Tablas.T_TABSELEC);
-            JCoTable t_tabform = tables.getTable(Tablas.T_TABFORM);
+            JCoTable t_tabapp = tables.getTable(Tablas.T_TABAPP);
+            JCoTable t_tabfield = tables.getTable(Tablas.T_TABFIELD);
+            JCoTable t_tabservice = tables.getTable(Tablas.T_TABSERVICE);
+
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> List_t_approles = metodo.ListarObjetos(t_approles);
-            List<HashMap<String, Object>> List_t_tabcolumna = metodo.ListarObjetos(t_tabcolumna);
-            List<HashMap<String, Object>> List_t_tabselec = metodo.ListarObjetos(t_tabselec);
-            List<HashMap<String, Object>> List_t_tabform = metodo.ListarObjetos(t_tabform);
+            List<HashMap<String, Object>> List_t_tabapp = metodo.ListarObjetos(t_tabapp);
+            List<HashMap<String, Object>> List_t_tabfield = metodo.ListarObjetos(t_tabfield);
+            List<HashMap<String, Object>> List_t_tabservice = metodo.ListarObjetos(t_tabservice);
 
-            ame.setT_approles(List_t_approles);
-            ame.setT_tabcolumna(List_t_tabcolumna);
-            ame.setT_tabselec(List_t_tabselec);
-            ame.setT_tabform(List_t_tabform);
+            ame.setT_tabapp(List_t_tabapp);
+            ame.setT_tabfield(List_t_tabfield);
+            ame.setT_tabservice(List_t_tabservice);
             ame.setMensaje("Ok");
 
         }catch (Exception e){

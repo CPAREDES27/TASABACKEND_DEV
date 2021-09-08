@@ -51,10 +51,9 @@ public class Tablas {
     public static String T_DATA="T_DATA";
 
     //App Maestros
-    public static String T_APPROLES="T_APPROLES";
-    public static String T_TABCOLUMNA="T_TABCOLUMNA";
-    public static String T_TABSELEC="T_TABSELEC";
-    public static String T_TABFORM="T_TABFORM";
+    public static String T_TABAPP ="T_TABAPP";
+    public static String T_TABFIELD ="T_TABFIELD";
+    public static String T_TABSERVICE ="T_TABSERVICE";
 
     //tolvas
     public static String STR_SDE="STR_SDE";
