@@ -51,7 +51,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_ztl = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldStr_pcp());
+            List<HashMap<String, Object>> str_ztl = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldStr_zlt());
             List<HashMap<String, Object>> str_pto = metodo.ObtenerListObjetos(STR_PTO, imports.getFieldStr_pto());
             List<HashMap<String, Object>> str_pcp = metodo.ObtenerListObjetos(STR_PCP, imports.getFieldStr_pcp());
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
