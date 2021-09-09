@@ -4,6 +4,7 @@ import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.JCOCalcuDerechoPescaService;
 import com.incloud.hcp.jco.tolvas.service.JCOIngresoDescManualService;
+import com.incloud.hcp.jco.tolvas.service.JCOPescaCompetenciaRService;
 import com.incloud.hcp.jco.tolvas.service.JCORegistroTolvasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class TolvasRest {
     private JCOIngresoDescManualService jcoIngresoDescManualService;
     @Autowired
     private JCOCalcuDerechoPescaService jcoCalcuDerechoPescaService;
+    @Autowired
+    private JCOPescaCompetenciaRService jcoPescaCompetenciaRService;
 
     @PostMapping(value = "/registrotolvas_listar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> Listar(@RequestBody RegistroTolvasImports imports) {
@@ -52,6 +55,17 @@ public class TolvasRest {
 
         try {
             return Optional.ofNullable(this.jcoCalcuDerechoPescaService.Listar(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/pescacompetenciaradial", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaCompetenciaRExports> pescaCompetenciaR(@RequestBody PescaCompetenciaRImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaCompetenciaRService.PescaCompetencia(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
