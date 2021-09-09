@@ -93,15 +93,14 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
             logger.error("ObtenerEmbarcaciones_1");
             //setear mapeo de tabla options
-            List<MaestroOptions> options = importsParam.getOptions();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            List<MaestroOptions> option = importsParam.getOption();
+            List<MaestroOptionsKey> options2 = importsParam.getOptions();
 
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            tmpOptions=metodo.ValidarOptions(option,options2);
+
+
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
