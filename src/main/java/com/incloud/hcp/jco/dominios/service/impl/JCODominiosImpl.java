@@ -67,9 +67,11 @@ public class JCODominiosImpl implements JCODominiosService {
                 JCoParameterList importx = stfcConnection.getImportParameterList();
                 String TABLE_READ_TABLE =metodo.returnTable(domParams.getDomname());
                 String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
+                String[] fieldname= metodo.returnField(domParams.getDomname());
                 importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
                 importx.setValue("DELIMITER", "|");
                 importx.setValue("P_USER", "FGARCIA");
+
 
                 JCoParameterList tables = stfcConnection.getTableParameterList();
                 JCoTable tableImport = tables.getTable("OPTIONS");
@@ -89,14 +91,14 @@ public class JCODominiosImpl implements JCODominiosService {
                         FIELDS.setRow(j);
                         String key = (String) FIELDS.getValue("FIELDNAME");
 
-                        if(key.equals("CDMND")){
+                        if(key.equals(fieldname[0])){
 
                             Object value=ArrayResponse[j];
                             data.setId(value.toString().trim());
 
 
                         }
-                        if(key.equals("DSMND")){
+                        if(key.equals(fieldname[1])){
                             Object values=ArrayResponse[j];
                             data.setDescripcion(values.toString().trim());
                         }

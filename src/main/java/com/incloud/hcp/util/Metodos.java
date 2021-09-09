@@ -129,14 +129,35 @@ public class Metodos {
         if(table.equals("MONEDA")){
             tablita="ZFLMND";
         }
+        if(table.equals("UBICPLANTA")){
+            tablita="ZFLUPT";
+        }
+        if(table.equals("LITORAL")){
+            tablita="ZFLZLT";
+        }
         return tablita;
     }
     public String returnWA(String table){
         String wa="";
-        if(table.equals("MONEDA")){
+        if(table.equals("MONEDA") || table.equals("UBICPLANTA") || table.equals("LITORAL")){
             wa="ESREG = 'S'";
         }
+
         return wa;
+    }
+    public String[] returnField(String table){
+
+        String[] fields= null;
+        if(table.equals("UBICPLANTA")){
+           fields= new  String[]{"CDUPT","DSUPT"};
+        }
+        if(table.equals("MONEDA")){
+            fields= new String[]{"CDMND","DSMND"};
+        }
+        if(table.equals("LITORAL")){
+            fields= new String[]{"CDZLT","DSZLT"};
+        }
+        return fields;
     }
 
     public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{
