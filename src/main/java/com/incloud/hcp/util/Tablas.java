@@ -59,6 +59,9 @@ public class Tablas {
     public static String STR_SDE="STR_SDE";
     public static String STR_DPS="STR_DPS";
     public static String S_DERECHO="S_DERECHO";
+    public static String STR_ZTL="STR_ZTL";
+    public static String STR_PTO="STR_PTO";
+    public static String STR_PCP="STR_PCP";
 
     // Reporte de pesca
     public static String S_MAREA="S_MAREA";

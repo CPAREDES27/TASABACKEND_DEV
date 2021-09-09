@@ -8,6 +8,7 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import io.swagger.models.auth.In;
 import javafx.scene.control.Tab;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -98,10 +99,6 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
         List<String[]> medidas=ListarMedidas(et_espe);
 
         List<String[]> registrosTotal=registrosTotal(registros, medidas, pscinc,field, CellMedidas);
-        String []a=registrosTotal.get(0);
-        for(int i=0; i<a.length; i++){
-            logger.error("registrosTotal: "+a[i]);
-        }
 
         Map<String, Object[]> datos = new TreeMap<String, Object[]>();
         //Object[] header=new Object[]{"REPORTE BIOMETRIA"};
@@ -213,7 +210,7 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
                 }
                 try {
                     if (key.equals("FIEVN") || key.equals("FFEVN")) {
-                           logger.error("fieldtype: "+field.getDate());
+
                            Date date=field.getDate();
                         SimpleDateFormat dia = new SimpleDateFormat("yyyy-MM-dd");
                         String fecha = dia.format(date);
@@ -375,7 +372,7 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             }
 
         }
-
+        sumarMuestra(registrosTotal, CellMedidas);
 
         return registrosTotal;
     }
@@ -417,5 +414,38 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
 
         return campos;
+    }
+
+    private void sumarMuestra(List<String[]> registroTotal, String [] cellMedidas){
+
+
+
+
+        for (int i=0; i<registroTotal.size(); i++){
+
+            String[]registro=registroTotal.get(i);
+
+            int cellTallas=registro.length-cellMedidas.length+2;
+            logger.error("ID: "+registro[0]);
+
+            int muestra=0;
+            for(int j=cellTallas; j<registro.length; j++){
+                logger.error("registro: "+registro[j]);
+
+                int talla= Integer.parseInt(registro[j]);
+                if(talla>0){
+
+                    muestra+=talla;
+                    logger.error("muestra: "+muestra);
+                }
+                logger.error("muestraTotal: "+muestra);
+                if(muestra>0) {
+                    registro[17] = String.valueOf(muestra);
+                }
+            }
+
+        }
+
+
     }
 }
