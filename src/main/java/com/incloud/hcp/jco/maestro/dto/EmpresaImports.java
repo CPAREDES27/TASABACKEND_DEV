@@ -7,6 +7,8 @@ public class EmpresaImports {
     private String p_ruc;
     private List<MaestroOptions> options;
     private String [] fields;
+    private List<MaestroOptionsKey> options;
+
 
     public String[] getFields() {
         return fields;
@@ -23,7 +25,6 @@ public class EmpresaImports {
     public void setOptions(List<MaestroOptions> options) {
         this.options = options;
     }
-
 
     public String getP_cdusr() {
         return p_cdusr;
