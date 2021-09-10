@@ -1,13 +1,16 @@
 package com.incloud.hcp.jco.distribucionflota.service.impl;
 
-import com.incloud.hcp.EmbarcacionDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.incloud.hcp.jco.distribucionflota.dto.*;
 import com.incloud.hcp.jco.distribucionflota.service.JCODistribucionFlotaService;
-import com.incloud.hcp.jco.maestro.dto.EmbarcacionImports;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MaestroImportsKey;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
+import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
@@ -22,6 +25,7 @@ import java.util.List;
 @Service
 public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private JCOMaestrosService MaestroService;
 
     @Override
     public DistribucionFlotaExports ListarDistribucionFlota(DistribucionFlotaImports importsParam) throws Exception {
@@ -83,6 +87,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                         int vi_contadorEmb = 0;
                         double vi_contadorBod = 0;
                         double vi_contadorDecl = 0;
+                        int vi_totdesc_est = 0;
                         for (int k = 0; k < s_str_di.getNumRows(); k++) {
                             s_str_di.setRow(k);
                             EmbarcacionesDto n_embarcacion =  new EmbarcacionesDto();
@@ -122,6 +127,9 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 vi_contadorEmb++;
                                 vi_contadorBod = Double.parseDouble(s_str_di.getString("CPPMS")) + vi_contadorBod;
                                 vi_contadorDecl = Double.parseDouble(s_str_di.getString("CNPCM")) + vi_contadorDecl;
+                                if(s_str_di.getString("DSEEC").equalsIgnoreCase("ESDE")){
+                                    vi_totdesc_est++;
+                                }
 
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CPPMS"));
@@ -167,6 +175,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                         n_planta.setTot_emb(String.valueOf(vi_contadorEmb));
                         n_planta.setTot_bod(String.valueOf(vi_contadorBod));
                         n_planta.setTot_decl(String.valueOf(vi_contadorDecl));
+                        n_planta.setTot_Est(String.valueOf(vi_totdesc_est));
                         n_planta.setListaEmbarcaciones(embarcaciones);
                         plantas.add(n_planta);
                     }
@@ -204,7 +213,37 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                 TotalDto resumenTotal = new TotalDto();
                 BigDecimal b_cnpcm = new BigDecimal(s_str_dp.getString("CNPCM"));
                 BigDecimal b_cnpdt = new BigDecimal(s_str_dp.getString("CNPDT"));
+
+
+               // MaestroExport maestroPl =  this.MaestroService.obtenerMaestro2();
+
                 if (b_cnpcm.compareTo(new BigDecimal(0))> 0) {
+
+                    MaestroImportsKey maestro = new MaestroImportsKey();
+                    String[] fields = {"CXPXD"};
+                    List<MaestroOptions> options = new ArrayList<MaestroOptions>();
+                    List<MaestroOptionsKey> options2 = new ArrayList<MaestroOptionsKey>();
+
+                    MaestroOptions item_option = new MaestroOptions();
+                    String v_planta = s_str_dp.getString("DESCR");
+                    item_option.setWa("DESCR ='"+ v_planta + "'");
+                    options.add(item_option);
+
+                    maestro.setDelimitador("|");
+                    maestro.setFields(fields);
+                    maestro.setNo_data("");
+                    maestro.setOption(options);
+                    maestro.setOptions(options2);
+                    maestro.setOrder("");
+                    maestro.setP_user(importsParam.getP_user());
+                    maestro.setRowcount(0);
+                    maestro.setRowskips(0);
+                    maestro.setTabla("ZFLPTA");
+                    String v_PescDecl = s_str_dp.getString("CNPCM");
+                    String v_dif = this.prueba(maestro,importsParam.getP_user(),v_PescDecl);
+                    resumenTotal.setDif(v_dif);
+
+                    /*-----------------------------------------------------------*/
                     PropiosDto resumenProp = new PropiosDto();
 
                     resumenProp.setDescPlanta(s_str_dp.getString("DESCR"));
@@ -231,6 +270,33 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                 }
 
                 if (b_cnpdt.compareTo(new BigDecimal(0))> 0) {
+
+                    MaestroImportsKey maestro = new MaestroImportsKey();
+                    String[] fields = {"CXPXD"};
+                    List<MaestroOptions> options = new ArrayList<MaestroOptions>();
+                    List<MaestroOptionsKey> options2 = new ArrayList<MaestroOptionsKey>();
+
+                    MaestroOptions item_option = new MaestroOptions();
+                    String v_planta = s_str_dp.getString("DESCR");
+                    item_option.setWa("DESCR ='"+ v_planta + "'");
+                    options.add(item_option);
+
+                    maestro.setDelimitador("|");
+                    maestro.setFields(fields);
+                    maestro.setNo_data("");
+                    maestro.setOption(options);
+                    maestro.setOptions(options2);
+                    maestro.setOrder("");
+                    maestro.setP_user(importsParam.getP_user());
+                    maestro.setRowcount(0);
+                    maestro.setRowskips(0);
+                    maestro.setTabla("ZFLPTA");
+                    String v_PescDecl = s_str_dp.getString("CNPDT");
+                    String v_dif = this.prueba(maestro,importsParam.getP_user(),v_PescDecl);
+                    resumenTotal.setDif(v_dif);
+
+                    /*-----------------------------------------------------------*/
+
                     TercerosDto resumenTerc = new TercerosDto();
 
                     resumenTerc.setDescPlanta(s_str_dp.getString("DESCR"));
@@ -398,6 +464,122 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             dto.setMensaje(e.getMessage());
         }
         return dto;
+
+    }
+
+
+    public String prueba(MaestroImportsKey p_maestro,String p_user, String p_pescDecl){
+    try {
+        String r_diferencia = "";
+        String v_cxpxd = "";
+        String v_porcMaxProc = "";
+        String v_horasProc = "";
+        ObjectMapper objectMapper = new ObjectMapper();
+        String usuarioJson = objectMapper.writeValueAsString(p_maestro);
+        logger.error("JSON : " + usuarioJson);
+
+        JCOMaestrosServiceImpl impMaestro = new JCOMaestrosServiceImpl();
+        MaestroExport maestroPl =  impMaestro.obtenerMaestro2(p_maestro);
+        logger.error("Prueba01");
+        List<HashMap<String, Object>> list = maestroPl.getData();
+        logger.error("cantidad de REG MET : " + list.size());
+        for (HashMap<String, Object> map : list) {
+            for (HashMap.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equalsIgnoreCase("CXPXD")){
+                    v_cxpxd = String.valueOf(value);
+                }
+            }
+
+        }
+        /*---------------------------------------------------------------------------------------------------------------*/
+        MaestroImportsKey maestro_cons1 = new MaestroImportsKey();
+        String[] fields_cons1 = {"VAL01"};
+        List<MaestroOptions> options_cons1 = new ArrayList<MaestroOptions>();
+        List<MaestroOptionsKey> options2_cons1 = new ArrayList<MaestroOptionsKey>();
+
+        MaestroOptions item_option_cons1 = new MaestroOptions();
+        item_option_cons1.setWa("CDCNS ='64'");
+        options_cons1.add(item_option_cons1);
+
+        maestro_cons1.setDelimitador("|");
+        maestro_cons1.setFields(fields_cons1);
+        maestro_cons1.setNo_data("");
+        maestro_cons1.setOption(options_cons1);
+        maestro_cons1.setOptions(options2_cons1);
+        maestro_cons1.setOrder("");
+        maestro_cons1.setP_user(p_user);
+        maestro_cons1.setRowcount(0);
+        maestro_cons1.setRowskips(0);
+        maestro_cons1.setTabla("ZFLCNS");
+
+        MaestroExport maestro_const1 =  impMaestro.obtenerMaestro2(maestro_cons1);
+        List<HashMap<String, Object>> list_cons1 = maestro_const1.getData();
+        for (HashMap<String, Object> map : list_cons1) {
+            for (HashMap.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equalsIgnoreCase("VAL01")){
+                    v_porcMaxProc = String.valueOf(value);
+                }
+            }
+
+        }
+        /*---------------------------------------------------------------------------------------------------------------*/
+        MaestroImportsKey maestro_cons2 = new MaestroImportsKey();
+        String[] fields_cons2 = {"VAL01"};
+        List<MaestroOptions> options_cons2 = new ArrayList<MaestroOptions>();
+        List<MaestroOptionsKey> options2_cons2 = new ArrayList<MaestroOptionsKey>();
+
+        MaestroOptions item_option_cons2 = new MaestroOptions();
+        item_option_cons2.setWa("CDCNS ='65'");
+        options_cons2.add(item_option_cons2);
+
+        maestro_cons2.setDelimitador("|");
+        maestro_cons2.setFields(fields_cons2);
+        maestro_cons2.setNo_data("");
+        maestro_cons2.setOption(options_cons2);
+        maestro_cons2.setOptions(options2_cons2);
+        maestro_cons2.setOrder("");
+        maestro_cons2.setP_user(p_user);
+        maestro_cons2.setRowcount(0);
+        maestro_cons2.setRowskips(0);
+        maestro_cons2.setTabla("ZFLCNS");
+
+        MaestroExport maestro_const2 =  impMaestro.obtenerMaestro2(maestro_cons2);
+        List<HashMap<String, Object>> list_cons2 = maestro_const2.getData();
+        for (HashMap<String, Object> map : list_cons2) {
+            for (HashMap.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equalsIgnoreCase("VAL01")){
+                    v_horasProc = String.valueOf(value);
+                }
+            }
+
+        }
+        /*------------------------------------------------------------------------------------------------------*/
+        BigDecimal capProc = new BigDecimal(v_cxpxd);
+        BigDecimal porcMaxProcBD = new BigDecimal(v_porcMaxProc);
+        BigDecimal horasProcBD = new BigDecimal(v_horasProc);
+        BigDecimal calculado = capProc.multiply(porcMaxProcBD).multiply(horasProcBD) ;
+        BigDecimal declarado = new BigDecimal(p_pescDecl);
+        BigDecimal diferencia = declarado.subtract(calculado) ;
+
+        if (diferencia.compareTo(new BigDecimal(0)) == -1){
+            diferencia = new BigDecimal(0);
+            r_diferencia = String.valueOf(diferencia);
+        } else {
+            r_diferencia = String.valueOf(diferencia);
+        }
+
+        return r_diferencia;
+
+    }catch(Exception e){
+        String mensaje = e.getMessage();
+        return mensaje;
+    }
 
     }
 
