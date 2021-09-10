@@ -85,7 +85,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
     }
     public MaestroExport BuscarEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception{
         MaestroExport me = new MaestroExport();
-
+        Metodos metodo=new Metodos();
         try {
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("P_USER", importsParam.getP_user());
@@ -93,14 +93,14 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
             logger.error("ObtenerEmbarcaciones_1");
             //setear mapeo de tabla options
-            List<MaestroOptions> options = importsParam.getOptions();
+            List<MaestroOptions> option = importsParam.getOption();
+            List<MaestroOptionsKey> options2 = importsParam.getOptions();
+
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            tmpOptions=metodo.ValidarOptions(option,options2);
+
+
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
@@ -109,6 +109,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoParameterList jcoTables = function.getTableParameterList();
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, imports);
+
             exec.setTable(jcoTables, "OPTIONS", tmpOptions);
             function.execute(destination);
             JCoTable DATA = jcoTables.getTable(Tablas.S_DATA);

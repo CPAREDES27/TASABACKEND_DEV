@@ -8,6 +8,7 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import io.swagger.models.auth.In;
 import javafx.scene.control.Tab;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.commons.codec.binary.Base64;
@@ -67,7 +69,7 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             List<HashMap<String, Object>> et_espe = metodos.ListarObjetos(ET_ESPE);
             List<HashMap<String, Object>> et_pscinc = metodos.ListarObjetos(ET_PSCINC);
 
-            String path=CrearExcel(ET_BIOM, ET_ESPE, min, max, imports.getIp_cdmma());
+            String path=CrearExcel(ET_BIOM, ET_ESPE, ET_PSCINC,min, max, imports.getIp_cdmma());
             logger.error("LOG CONVERTER DOUBLE");
             String base64=ConvertirABase64(path);
             dto.setEt_biom(et_biom);
@@ -82,31 +84,30 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
         return dto;
     }
 
-    private String CrearExcel(JCoTable et_biom, JCoTable et_espe, double min, double max, String codigoMotivoMarea){
+    private String CrearExcel(JCoTable et_biom, JCoTable et_espe, JCoTable et_pscinc, double min, double max, String codigoMotivoMarea){
         String path="";
         Workbook workbook = new HSSFWorkbook();
         //Crea hoja nueva
         Sheet sheet = workbook.createSheet("Reporte Biometria");
-
+        //sheet.setColumnWidth();
 
         String[]CellMedidas= CellMedidas(min, max, codigoMotivoMarea);
         Object[] fields= ListarFields(et_biom, CellMedidas);
         String[] field= ListarFields(et_biom, CellMedidas);
-
-        List<String[]> registros=ListarRegistros(et_biom, CellMedidas);
+        List<String[]> pscinc=ListarEt_pscinc(et_pscinc);
+        List<String[]> registros=ListarRegistros(et_biom,  CellMedidas);
         List<String[]> medidas=ListarMedidas(et_espe);
-        List<String[]> registrosTotal=registrosTotal(registros, medidas, field);
-        String []a=registrosTotal.get(0);
-        for(int i=0; i<a.length; i++){
-            logger.error("registrosTotal: "+a[i]);
-        }
+
+        List<String[]> registrosTotal=registrosTotal(registros, medidas, pscinc,field, CellMedidas);
 
         Map<String, Object[]> datos = new TreeMap<String, Object[]>();
+        //Object[] header=new Object[]{"REPORTE BIOMETRIA"};
+        //datos.put("1", header);
         datos.put("1", fields);
 
-        int keys=2;
+        int keys=3;
         for(int i=0; i<registrosTotal.size(); i++){
-            Object[] obj= registros.get(i);
+            Object[] obj= registrosTotal.get(i);
 
             datos.put(String.valueOf(keys), obj);
             keys++;
@@ -122,6 +123,7 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             Object[] arregloObjetos = datos.get(key);
             int numeroCelda = 0;
             for (Object obj : arregloObjetos) {
+
                 Cell cell = row.createCell(numeroCelda++);
                 if (obj instanceof String) {
                     cell.setCellValue((String) obj);
@@ -177,10 +179,10 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
     }
 
-    private List<String[]> ListarRegistros(JCoTable jcoTable , String []CellMedidas){
+    private List<String[]> ListarRegistros(JCoTable et_biom ,  String []CellMedidas){
 
         List<String[]> campos= new ArrayList<String[]>();
-        JCoFieldIterator iter = jcoTable.getFieldIterator();
+        JCoFieldIterator iter = et_biom.getFieldIterator();
 
         int con=0;
         while (iter.hasNextField()) {
@@ -188,37 +190,42 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             con++;
         }
         int cantidadRegistros=con+CellMedidas.length;;
-        for (int i = 0; i < jcoTable.getNumRows(); i++) {
-            jcoTable.setRow(i);
+        for (int i = 0; i < et_biom.getNumRows(); i++) {
+            et_biom.setRow(i);
             String[] registros = new String[cantidadRegistros];
-            JCoFieldIterator ite = jcoTable.getFieldIterator();
+            JCoFieldIterator ite = et_biom.getFieldIterator();
             int j=0;
             while (ite.hasNextField()) {
                 JCoField field = ite.nextField();
                 String key = (String) field.getName();
                 String value ="";
                 try {
-                    value = jcoTable.getValue(key).toString();
+                    value = et_biom.getValue(key).toString();
                 }catch (Exception e){
                     value="";
                 }
 
                 if (key.equals("HIEVN") || key.equals("HFEVN")) {
                     value = value.substring(11,19);
-                }/*
-                if (field.getTypeAsString().equals("DATE")) {
-                    String date = String.valueOf(value);
-                    SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                    String fecha = dia.format(value);
-                    value = fecha;
-                }*/
+                }
+                try {
+                    if (key.equals("FIEVN") || key.equals("FFEVN")) {
+
+                           Date date=field.getDate();
+                        SimpleDateFormat dia = new SimpleDateFormat("yyyy-MM-dd");
+                        String fecha = dia.format(date);
+                        value = fecha;
+
+
+                    }
+                }catch (Exception e){
+                    value=String.valueOf(value);
+                }
                 registros[j] = value;
                 j++;
             }
             campos.add(registros);
         }
-
-
 
         return campos;
     }
@@ -310,20 +317,11 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
         return campos;
     }
 
-    private List<String[]> registrosTotal(List<String[]> et_biom, List<String[]> et_espe, String[]fields){
+    private List<String[]> registrosTotal(List<String[]> et_biom, List<String[]> et_espe, List<String[]> et_pscinc,String[]fields, String[] CellMedidas){
 
         List<String[]> registrosTotal= new ArrayList<String[]>();
 
         for(int i=0; i<et_biom.size(); i++){
-            /**ET_BIOM posicion:
-             * NRMAR : 3
-             * NREVN:15
-             * ET_ESPE posicion:
-             * NRMAR: 0
-             * NREVN: 1
-             * TMMED: 2
-             * CNSPC: 3
-             */
 
             String[] listaBiom=et_biom.get(i);
 
@@ -340,22 +338,114 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
 
                                 listaBiom[k]=listaEspe[3];
 
-                                logger.error("listabiomCabezera["+k+"]: "+listaBiom[k]);
                             }
-                            else if(listaBiom[k]==null){
-                                listaBiom[k]="0";
 
-                            }
                     }
                 }
             }
+
             registrosTotal.add(listaBiom);
         }
-        String []a=et_biom.get(0);
-        for (int i=0; i<a.length; i++){
-            logger.error("a: "+a[i]);
+        int cantidadRegistros=fields.length;
+        for(int i=0; i<et_pscinc.size(); i++){
+
+            String[]pscinc= et_pscinc.get(i);
+            String[] registros = new String[cantidadRegistros];
+            registros[0]="0";
+            registros[3]=pscinc[0];
+            registros[16]=pscinc[1];
+            registros[20]=pscinc[2];
+            registros[21] = pscinc[3];
+
+            registrosTotal.add(registros);
         }
 
+        for(int i=0; i<registrosTotal.size(); i++){
+
+
+            String[] registro=registrosTotal.get(i);
+            int empiezaceldasMedidas=registro.length-(CellMedidas.length-1);
+            for(int l=empiezaceldasMedidas; l<registro.length; l++){
+                if(registro[l]==null){
+                    registro[l]="0";
+                }
+            }
+
+        }
+        sumarMuestra(registrosTotal, CellMedidas);
+
         return registrosTotal;
+    }
+
+    private List<String[]> ListarEt_pscinc(JCoTable jcoTable){
+
+        /**ET_PSCINC:
+         * DSSPC
+         * PCSPC
+         * NREVN
+         * NRMAR
+         */
+        List<String[]> campos= new ArrayList<String[]>();
+
+        for (int i = 0; i < jcoTable.getNumRows(); i++) {
+            jcoTable.setRow(i);
+            String[] registros = new String[4];
+            JCoFieldIterator ite = jcoTable.getFieldIterator();
+            int j=0;
+            while (ite.hasNextField()) {
+                JCoField field = ite.nextField();
+                String key = (String) field.getName();
+                String value ="";
+                try {
+                    value = jcoTable.getValue(key).toString();
+                }catch (Exception e){
+                    value="";
+                }
+                if(key.compareTo("DSSPC")==0 ||key.compareTo("PCSPC")==0 ||
+                        key.compareTo("NREVN")==0 ||key.compareTo("NRMAR")==0 ){
+
+                    registros[j] = value;
+                    j++;
+                }
+            }
+            campos.add(registros);
+        }
+
+
+
+        return campos;
+    }
+
+    private void sumarMuestra(List<String[]> registroTotal, String [] cellMedidas){
+
+
+
+
+        for (int i=0; i<registroTotal.size(); i++){
+
+            String[]registro=registroTotal.get(i);
+
+            int cellTallas=registro.length-cellMedidas.length+2;
+            logger.error("ID: "+registro[0]);
+
+            int muestra=0;
+            for(int j=cellTallas; j<registro.length; j++){
+                logger.error("registro: "+registro[j]);
+
+                int talla= Integer.parseInt(registro[j]);
+                if(talla>0){
+
+                    muestra+=talla;
+                    logger.error("muestra: "+muestra);
+                }
+                logger.error("muestraTotal: "+muestra);
+                if(muestra>0) {
+                    registro[17] = String.valueOf(muestra);
+                }
+            }
+
+        }
+
+
     }
 }

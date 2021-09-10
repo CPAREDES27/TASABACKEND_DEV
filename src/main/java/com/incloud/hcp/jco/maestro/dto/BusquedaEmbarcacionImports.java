@@ -5,8 +5,16 @@ import java.util.List;
 public class BusquedaEmbarcacionImports {
     private String p_user;
     private String rowcount;
-    private List<MaestroOptions> options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
 
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
+    }
 
     public String getP_user() {
         return p_user;
@@ -24,12 +32,12 @@ public class BusquedaEmbarcacionImports {
         this.rowcount = rowcount;
     }
 
-    public List<MaestroOptions> getOptions() {
-        return options;
+    public List<MaestroOptions> getOption() {
+        return option;
     }
 
-    public void setOptions(List<MaestroOptions> options) {
-        this.options = options;
+    public void setOption(List<MaestroOptions> options) {
+        this.option = options;
     }
 
 }
