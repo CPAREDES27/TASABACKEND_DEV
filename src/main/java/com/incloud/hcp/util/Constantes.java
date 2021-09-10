@@ -57,6 +57,8 @@ public class Constantes {
     public static String ZFL_RFC_GPES_DERE_PESCA ="ZFL_RFC_GPES_DERE_PESCA";
     public static String ZFL_RFC_PESC_DECLA_COMPE ="ZFL_RFC_PESC_DECLA_COMPE";
 
+    //Tripulantes
+    public static String ZFL_RFC_REGZAR_ADM_REGZAR ="ZFL_RFC_REGZAR_ADM_REGZAR";
 
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";

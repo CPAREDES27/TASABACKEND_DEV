@@ -95,6 +95,11 @@ public class Tablas {
     public static String T_MENSAJES="T_MENSAJES";
     public static String W_MENSAJE="W_MENSAJE";
 
+    //Tripulantes
+    public static String T_ZATRP="T_ZATRP";
+    public static String T_DZATR="T_DZATR";
+    public static String T_VGCER="T_VGCER";
+    public static String T_NZATR="T_NZATR";
 
 
 }
