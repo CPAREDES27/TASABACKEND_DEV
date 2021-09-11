@@ -8,9 +8,14 @@ import com.sap.conn.jco.JCoField;
 import com.sap.conn.jco.JCoFieldIterator;
 import com.sap.conn.jco.JCoParameterList;
 import com.sap.conn.jco.JCoTable;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,10 +40,10 @@ public class Metodos {
                 Object value = tableExport.getValue(key);
 
                 if(key.equals("ESPMR")){
-                    if(value="L"){
+                    if(value.equals("L")){
                         value="LIBERADO";
                     }else{
-                        vlaue="NO LIBERADO";
+                        value="NO LIBERADO";
                     }
 
                 }
@@ -383,5 +388,11 @@ public class Metodos {
 
         }
         return campo;
+    }
+
+    public String ConvertirABase64(String fileName)throws IOException {
+        File file = new File(fileName);
+        byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 }
