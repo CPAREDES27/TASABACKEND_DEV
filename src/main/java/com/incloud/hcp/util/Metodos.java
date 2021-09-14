@@ -51,7 +51,7 @@ public class Metodos {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
                 }
-           
+
 
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
