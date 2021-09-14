@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PDFImpl implements PDFService {
@@ -25,22 +27,31 @@ public class PDFImpl implements PDFService {
     public Mensaje GenerarPDF()throws Exception{
 
         Mensaje m=new Mensaje();
+        PDFDto dto= new PDFDto();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         try {
-            PlantillaPDF(path);
+
+
+            dto.setCapitania("CHICAMA");
+            dto.setNombreNave("TASA 34");
+            dto.setMatricula("PS-10415-PM");
+            dto.setAB("219.24");
+            dto.setZonaPesca("CHICAMA");
+            dto.setTiempoOperacio("24");
+            dto.setEstimadaArribo("25/06/2021");
+            dto.setRepresentante("DAVID DELGADO GONZALES");
+            dto.setEmergenciaNombre("TECNOLOGICA DE ALIMENTOS S.A.");
+            dto.setEmergenciaDireccion("Sub Lote 3A, Zona Industrial del Puerto Malabrigo, Di");
+            dto.setEmergenciaTelefono("");
+            dto.setNombrePatron("PANTA PAIBA, JULIO");
+            dto.setFecha("21/04/2021");
+            dto.setDni("03463796");
+
+
+            PlantillaPDF(path, dto);
             Metodos exec = new Metodos();
             m.setMensaje(exec.ConvertirABase64(path));
 
-            String capitania="CHICAMA";
-            String nombreNave="TASA 34";
-            String matricula="PS-10415-PM";
-            String AB="219.24";
-            String zonaPesca="CHICAMA";
-            String tiempoOperacio="24";
-            String estimadaArribo="25/06/2021";
-            String representante="DAVID DELGADO GONZALES";
-            String emergenciaNombre="TECNOLOGICA DE ALIMENTOS S.A.";
-            String emergenciaDireccion="Sub Lote 3A, Zona Industrial del Puerto Malabrigo, Di";
 
 
         }catch (Exception e){
@@ -51,9 +62,7 @@ public class PDFImpl implements PDFService {
 
 
 
-    public void PlantillaPDF(String path)throws Exception{
-
-
+    public void PlantillaPDF(String path, PDFDto dto)throws Exception{
 
 
         PDDocument document = new PDDocument();
@@ -92,14 +101,22 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(65, 765);
-        contentStream.drawString(PDFConstantes.capitania +"CHICAMA");
+        contentStream.drawString(PDFConstantes.capitania );
+        contentStream.endText();
+
+        //insertando capitania guardacostas marítimas
+        contentStream.beginText();
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(235, 765);
+        contentStream.drawString(dto.getCapitania());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(240, 764);
-        contentStream.drawString("______________________________________________________________________");
+        contentStream.moveTextPositionByAmount(235, 764);
+        contentStream.drawString("___________________________________________________________________________");
         contentStream.endText();
+
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
@@ -107,10 +124,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.uno);
         contentStream.endText();
 
+        //insertando nombre de nave
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 750);
+        contentStream.drawString(dto.getNombreNave());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 749);
-        contentStream.drawString("__________________________________________________________________________________________");
+        contentStream.drawString("_________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -119,10 +143,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.dos);
         contentStream.endText();
 
+        //insertando numero de matrícula
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 740);
+        contentStream.drawString(dto.getMatricula());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 739);
-        contentStream.drawString("_____________________________");
+        contentStream.drawString("_______________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -131,10 +162,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.tres);
         contentStream.endText();
 
+        //insertando A.B.
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(334, 740);
+        contentStream.drawString(dto.getAB());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(334, 739);
-        contentStream.drawString("_________________________________________________");
+        contentStream.drawString("__________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -143,16 +181,30 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.cuatro);
         contentStream.endText();
 
+        //insertando zona de pesca
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 730);
+        contentStream.drawString(dto.getZonaPesca());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 729);
-        contentStream.drawString("__________________________________________________________________________________________");
+        contentStream.drawString("_________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 720);
         contentStream.drawString(PDFConstantes.cinco);
+        contentStream.endText();
+
+        //insertar tiempo de operacion
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(200, 720);
+        contentStream.drawString(dto.getTiempoOperacio());
         contentStream.endText();
 
         contentStream.beginText();
@@ -167,6 +219,13 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.seis);
         contentStream.endText();
 
+        //insertar dia y hora estimado de arribo
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(200, 710);
+        contentStream.drawString(dto.getEstimadaArribo());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(200, 709);
@@ -179,10 +238,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.siete);
         contentStream.endText();
 
+        //insertando representante acreditado
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(200, 700);
+        contentStream.drawString(dto.getRepresentante());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(200, 699);
-        contentStream.drawString("_______________________________________________________________________________");
+        contentStream.drawString("____________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -193,7 +259,7 @@ public class PDFImpl implements PDFService {
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(180, 690);
+        contentStream.moveTextPositionByAmount(160, 690);
         contentStream.drawString(PDFConstantes.ochoA);
         contentStream.endText();
 
@@ -234,10 +300,18 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.onceA);
         contentStream.endText();
 
+        //Emergencia
+        //insertando nombre
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 216);
+        contentStream.drawString(dto.getEmergenciaNombre());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 215);
-        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.drawString("_________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -246,10 +320,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.onceB);
         contentStream.endText();
 
+        //insertando Dirección
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 204);
+        contentStream.drawString(dto.getEmergenciaDireccion());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 203);
-        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.drawString("_________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -258,10 +339,17 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.onceC);
         contentStream.endText();
 
+        //insertando telefono
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 192);
+        contentStream.drawString(dto.getEmergenciaTelefono());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 191);
-        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.drawString("_________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -270,16 +358,30 @@ public class PDFImpl implements PDFService {
         contentStream.drawString(PDFConstantes.doce);
         contentStream.endText();
 
+        //insertando nombre patron
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 180);
+        contentStream.drawString(dto.getNombrePatron());
+        contentStream.endText();
+
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 179);
-        contentStream.drawString("_______________________________________");
+        contentStream.drawString("_________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(350, 180);
         contentStream.drawString(PDFConstantes.trece);
+        contentStream.endText();
+
+        //insertando fecha
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(396, 180);
+        contentStream.drawString(dto.getFecha());
         contentStream.endText();
 
         contentStream.beginText();
@@ -292,6 +394,13 @@ public class PDFImpl implements PDFService {
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 168);
         contentStream.drawString(PDFConstantes.catorce);
+        contentStream.endText();
+
+        //insertando dni
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.moveTextPositionByAmount(150, 168);
+        contentStream.drawString(dto.getDni());
         contentStream.endText();
 
         contentStream.beginText();
@@ -396,11 +505,8 @@ public class PDFImpl implements PDFService {
                 {"6", "a", "b"},
                 {"7", "a", "b"}};
         drawTableCertificados(page, contentStream,365, 60, certificados);
-// Make sure that the content stream is closed:
+
         contentStream.close();
-
-// Save the results and ensure that the document is properly closed:
-
         document.save(path);
         document.close();
 
@@ -475,17 +581,17 @@ public class PDFImpl implements PDFService {
 
                 switch (j) {
                     case 1:
-                        if(j!=0){
-                            textx = 110;
-                        }else {
+                        if(i==0){
                             textx = 150;
+                        }else {
+                            textx = 100;
                         }
                         break;
                     case 2:
-                        if(j>0){
-                            textx=290;
+                        if(i==0){
+                            textx=300;
                         }else {
-                            textx = 300;
+                            textx = 290;
                         }
                         break;
                     case 3:
@@ -592,10 +698,10 @@ public class PDFImpl implements PDFService {
 
                 switch (j) {
                     case 1:
-                        if(j!=0){
-                            textx = 110;
-                        }else {
+                        if(i==0){
                             textx = 150;
+                        }else {
+                            textx = 100;
                         }
                         break;
                     case 2:
