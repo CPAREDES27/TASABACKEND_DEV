@@ -35,10 +35,10 @@ public class Metodos {
                 Object value = tableExport.getValue(key);
 
                 if(key.equals("ESPMR")){
-                    if(value="L"){
+                    if(value=="L"){
                         value="LIBERADO";
                     }else{
-                        vlaue="NO LIBERADO";
+                        value="NO LIBERADO";
                     }
 
                 }
@@ -144,14 +144,117 @@ public class Metodos {
         }
         if (table.equals("LITORAL")) {
             tablita = "ZFLZLT";
+        }else if (table.equals("GRUPOEMPRESA")) {
+            tablita = "ZFLGRE";
+
+        } else if (table.equals("INCIDENTE")) {
+            tablita = "ZFLINC";
+
+        } else if (table.equals("LITORAL")) {
+            tablita = "ZFLZLT";
+
+        } else if (table.equals("CLASEAVISOMANT")) {
+            tablita = "TQ80_T";
+
+        } else if (table.equals("ORGCOMPRAS")) {
+            tablita = "T024E";
+
+        } else if (table.equals("UNIDADMEDIDA")) {
+            tablita = "ZFLUMD";
+
+        } else if (table.equals("ORGVENTAS")) {
+            tablita = "TVKOT";
+
+        } else if (table.equals("CANALDISTRIBUCION")) {
+            tablita = "TVTWT";
+
+        } else if (table.equals("ORIGENDATOS")) {
+            tablita = "ZFLORD";
+
+        } else if (table.equals("SISTPESCA")) {
+            tablita = "ZFLSPE";
+        } else if (table.equals("GRUPFLOTA")) {
+            tablita = "ZFLGFL";
+        } else if (table.equals("GRUPCAPACIDAD")) {
+            tablita = "ZFLGCP";
+         } else if (table.equals("BODEGA")) {
+            tablita = "ZFLBOD";
+        } else if (table.equals("TEMPORADA")) {
+            tablita = "ZFLTPO";
+
+        } else if (table.equals("SUMINISTRO")) {
+
+            tablita = "ZFLSUM";
+
+        } else if (table.equals("ZONAPESCA")) {
+            tablita = "ZFLZPC";
+
+        } else if (table.equals("REPERCUSION")) {
+            tablita = "ZV_FLRE";
+
+        } else if (table.equals("SINIESTRO")) {
+            tablita = "ZFLINC";
+
+        } else if (table.equals("ACCIDENTE")) {
+            tablita = "ZFLINC";
+
+        } else if (table.equals("ENCUBICACION")) {
+            tablita = "ZFLUBI";
+
+        } else if (table.equals("TIPOEMBARCACION")) {
+            tablita = "ZFLTEM";
+
+        } else if (table.equals("ZONALITORAL")) {
+            tablita = "ZFLZLT";
+
+        } else if (table.equals("PLANTAPROPIA")) {
+            tablita = "ZV_FLPA";
+
+        } else if (table.equals("UBICPLANTA")) {
+            tablita = "ZFLUPT";
+
+        } else if (table.equals("MONEDASAP")) {
+            tablita = "ZFLMND";
+
+        } else if (table.equals("ESPECIE")) {
+            tablita = "ZFLSPC";
+
+        } else if (table.equals("CATEGORIA")) {
+            tablita = "ZFLCNS";
+
+        } else if (table.equals("ZONAAREA")) {
+            tablita = "ZFLZAR";
+
+        }
+        else if (table.equals("SISTVIRADO")) {
+            tablita = "ZTBC_DATA";
+
         }
         return tablita;
     }
 
     public String returnWA(String table) {
         String wa = "";
-        if (table.equals("MONEDA") || table.equals("UBICPLANTA") || table.equals("LITORAL")) {
+        if (table.equals("MONEDA") || table.equals("ESPECIE") || table.equals("UBICPLANTA") || table.equals("MONEDASAP") || table.equals("ZONALITORAL") || table.equals("TIPOEMBARCACION") || table.equals("GRUPCAPACIDAD") || table.equals("BODEGA") || table.equals("TEMPORADA") || table.equals("SUMINISTRO") || table.equals("ZONAPESCA") || table.equals("ORIGENDATOS") || table.equals("SISTPESCA") || table.equals("GRUPFLOTA") || table.equals("UBICPLANTA") || table.equals("LITORAL") || table.equals("INCIDENTE") ||table.equals("UNIDADMEDIDA")) {
             wa = "ESREG = 'S'";
+        }else if(table.equals("CLASEAVISOMANT") || table.equals("REPERCUSION") ||table.equals("ORGVENTAS") || table.equals("CANALDISTRIBUCION")){
+            wa= "SPRAS EQ 'S'";
+        }else if(table.equals("ORGVENTAS")){
+            wa= "SPRAS EQ 'S'";
+        }else if(table.equals("SINIESTRO")){
+            wa = "ESREG = 'S' AND CDTIN = 'S'";
+        }else if(table.equals("ACCIDENTE")){
+            wa = "ESREG = 'S' AND CDTIN = 'A' ";
+        }else if(table.equals("ENCUBICACION")){
+            wa = "CDUBI BETWEEN '1' AND '999'";
+        }else if(table.equals("PLANTAPROPIA")){
+            wa= "ESREG = 'S' AND (WERKS <> 'FP09' AND (INPRP = 'P'";
+        }else if(table.equals("CATEGORIA")){
+            wa= "DESCR = 'CATEGORIA PESCA COMPETENCIA'";
+        }else if(table.equals("ZONAAREA")){
+            wa = "ZESZAR = 'S'";
+        }else if(table.equals("SISTVIRADO")){
+            wa= "CODIG EQ 'SH' AND (STATU EQ '1'";
         }
 
         return wa;
@@ -162,13 +265,82 @@ public class Metodos {
         String[] fields = null;
         if (table.equals("UBICPLANTA")) {
             fields = new String[]{"CDUPT", "DSUPT"};
-        }
-        if (table.equals("MONEDA")) {
+        }else if (table.equals("MONEDA")) {
             fields = new String[]{"CDMND", "DSMND"};
-        }
-        if (table.equals("LITORAL")) {
+        }else if (table.equals("LITORAL")) {
             fields = new String[]{"CDZLT", "DSZLT"};
+        }else if ( table .equals("GRUPOEMPRESA")){
+            fields= new String[]{"CDGRE","DSGRE"};
         }
+        else if ( table .equals("INCIDENTE")){
+            fields= new String[]{"CDINC", "DSINC"};
+        }
+        else if ( table .equals("CLASEAVISOMANT")){
+            fields= new String[]{"CDGRE","DSGRE"};
+        }
+        else if ( table .equals("GRUPOEMPRESA")){
+            fields= new String[]{"QMART", "QMARTX"};
+        }
+        else if ( table .equals("ORGCOMPRAS")){
+            fields= new String[]{"EKORG", "EKOTX"};
+        }
+        else if ( table .equals("UNIDADMEDIDA")){
+            fields= new String[]{"CDUMD", "DSUMD"};
+        }
+        else if ( table .equals("ORGVENTAS")){
+            fields= new String[]{"VKORG", "VTEXT"};
+        }
+        else if ( table .equals("CANALDISTRIBUCION")){
+            fields= new String[]{"VTWEG", "VTEXT"};
+        }
+        else if ( table .equals("ORIGENDATOS")){
+            fields= new String[]{"CDORD", "DSCRP"};
+        }
+        else if ( table .equals("SISTPESCA")){
+            fields= new String[]{"CDSPE", "DSSPE"};
+        }
+        else if ( table .equals("GRUPFLOTA")){
+            fields= new String[]{"CDGFL", "DSGFL"};
+        }
+        else if ( table .equals("GRUPCAPACIDAD")){
+            fields= new String[]{"CDGCP", "DSGCP"};
+        } else if (table.equals("BODEGA")) {
+            fields = new String[] {"CDBOD", "DSBOD"};
+        }else if (table.equals("TEMPORADA")) {
+            fields = new String[] {"CDTPO", "DSTPO"};
+        } else if (table.equals("SUMINISTRO")) {
+            fields = new String[] {"CDSUM", "DSSUM"};
+        } else if (table.equals("ZONAPESCA")) {
+            fields = new String[] {"CDZPC", "DSZPC"};
+        } else if (table.equals("REPERCUSION")) {
+            fields = new String[] {"AUSWK", "AUSWKT"};
+        } else if (table.equals("SINIESTRO")) {
+            fields = new String[] {"CDINC", "DSINC"};
+        } else if (table.equals("ACCIDENTE")) {
+            fields = new String[] {"CDINC", "DSINC"};
+        } else if (table.equals("ENCUBICACION")) {
+            fields = new String[] {"CDUBI", "DSUBI"};
+        } else if (table.equals("TIPOEMBARCACION")) {
+            fields = new String[] {"CDTEM", "DESCR"};
+        } else if (table.equals("ZONALITORAL")) {
+            fields = new String[] {"CDZLT", "DSZLT"};
+        } else if (table.equals("PLANTAPROPIA")) {
+            fields = new String[] {"CDPTA", "DESCR"};
+        } else if (table.equals("UBICPLANTA")) {
+            fields = new String[] {"CDUPT", "DSUPT"};
+        } else if (table.equals("MONEDASAP")) {
+            fields = new String[] {"MDEXT", "DSMND"};
+        } else if (table.equals("ESPECIE")) {
+            fields = new String[] {"CDSPC", "DSSPC"};
+        } else if (table.equals("CATEGORIA")) {
+            fields = new String[] {"VAL01", "VAL02"};
+        } else if (table.equals("ZONAAREA")) {
+            fields = new String[] {"ZCDZAR", "ZDSZAR"};
+        }
+        else if (table.equals("SISTVIRADO")) {
+            fields = new String[] {"ARGUM", "DESCR"};
+        }
+
         return fields;
     }
 
