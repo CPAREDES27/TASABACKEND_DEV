@@ -59,7 +59,7 @@ public class Constantes {
 
     //Tripulantes
     public static String ZFL_RFC_REGZAR_ADM_REGZAR ="ZFL_RFC_REGZAR_ADM_REGZAR";
-
+    public static String ZFL_RFC_REGROL_ADM_REGROL ="ZFL_RFC_REGROL_ADM_REGROL";
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";
 
