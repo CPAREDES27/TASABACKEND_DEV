@@ -20,16 +20,16 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
     @Override
     public PrecioProbPescaExports ObtenerPrecioProbPesca(PrecioProbPescaImports imports) throws Exception {
+        Metodos metodos = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
 
-        //Obtener los options
-        List<HashMap<String, Object>> options = new ArrayList<>();
-        for (MaestroOptionsPrecioProbPesca option : imports.getP_options()) {
-            HashMap<String, Object> optionRecord = new HashMap<>();
-            optionRecord.put("WA", option.getWa());
-            options.add(optionRecord);
-        }
+        List<MaestroOptions> option = imports.getOption();
+        List<MaestroOptionsKey> options2 = imports.getOptions();
+
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodos.ValidarOptions(option,options2);
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -39,13 +39,12 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
 
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblSTR_APP = tables.getTable(Tablas.STR_APP);
-
-        Metodos metodos = new Metodos();
+        
         List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
 
         PrecioProbPescaExports dto = new PrecioProbPescaExports();

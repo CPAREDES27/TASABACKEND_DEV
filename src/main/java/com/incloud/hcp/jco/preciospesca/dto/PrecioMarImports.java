@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.preciospesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class PrecioMarImports {
@@ -8,8 +11,8 @@ public class PrecioMarImports {
     private String p_rows;
     private String p_calidad;
     private String p_flag;
-    private List<MaestroOptionsPrecioMar> p_options;
-
+    private List<MaestroOptions> p_option;
+    private List<MaestroOptionsKey> p_options;
     public String getP_user() {
         return p_user;
     }
@@ -50,11 +53,19 @@ public class PrecioMarImports {
         this.p_flag = p_flag;
     }
 
-    public List<MaestroOptionsPrecioMar> getP_options() {
+    public List<MaestroOptions> getP_option() {
+        return p_option;
+    }
+
+    public void setP_option(List<MaestroOptions> p_option) {
+        this.p_option = p_option;
+    }
+
+    public List<MaestroOptionsKey> getP_options() {
         return p_options;
     }
 
-    public void setP_options(List<MaestroOptionsPrecioMar> p_options) {
+    public void setP_options(List<MaestroOptionsKey> p_options) {
         this.p_options = p_options;
     }
 }
