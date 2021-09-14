@@ -62,8 +62,8 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             List<HashMap<String, Object>>  t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
 
 
-            rt.setT_dzart(t_zartr);
-            rt.setT_zartr(t_dzart);
+            rt.setT_dzart(t_dzart);
+            rt.setT_zartr(t_zartr);
             rt.setMensaje("Ok");
 
         }catch (Exception e){
