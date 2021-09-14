@@ -1,11 +1,31 @@
 package com.incloud.hcp.jco.reportepesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class MareaImports {
     private String p_user;
     private String rowcount;
-    private List<MaestroOptionsMarea> options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
+    }
 
     public String getP_user() {
         return p_user;
@@ -23,11 +43,5 @@ public class MareaImports {
         this.rowcount = rowcount;
     }
 
-    public List<MaestroOptionsMarea> getOptions() {
-        return options;
-    }
 
-    public void setOptions(List<MaestroOptionsMarea> options) {
-        this.options = options;
-    }
 }

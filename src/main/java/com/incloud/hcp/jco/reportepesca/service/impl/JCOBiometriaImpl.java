@@ -8,23 +8,16 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import io.swagger.models.auth.In;
-import javafx.scene.control.Tab;
 import org.apache.commons.io.FileUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.commons.codec.binary.Base64;
@@ -51,16 +44,16 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             EjecutarRFC executeRFC = new EjecutarRFC();
             executeRFC.setImports(function, importParams);
             executeRFC.setTable(importx, Tablas.IT_MAREA, imports.getIt_marea());
-            logger.error("LOG IMPORT TABLE");
+
             JCoParameterList paramExport = function.getExportParameterList();
             function.execute(destination);
-            logger.error("LOG EXECUTE FUNCTION");
+
             JCoTable ET_BIOM = paramExport.getTable(Tablas.ET_BIOM);
             JCoTable ET_ESPE = paramExport.getTable(Tablas.ET_ESPE);
             JCoTable ET_PSCINC = paramExport.getTable(Tablas.ET_PSCINC);
             double min=Double.parseDouble(paramExport.getValue("EP_MMIN").toString());
             double max=Double.parseDouble(paramExport.getValue("EP_MMAX").toString());
-            logger.error("LOG CONVERTER DOUBLE: "+ min + ", "+ max);
+
             dto.setEp_mmin(paramExport.getValue("EP_MMIN").toString());
             dto.setEp_mmax(paramExport.getValue("EP_MMAX").toString());
 
@@ -69,14 +62,15 @@ public class JCOBiometriaImpl implements JCOBiometriaService {
             List<HashMap<String, Object>> et_espe = metodos.ListarObjetos(ET_ESPE);
             List<HashMap<String, Object>> et_pscinc = metodos.ListarObjetos(ET_PSCINC);
 
-            String path=CrearExcel(ET_BIOM, ET_ESPE, ET_PSCINC,min, max, imports.getIp_cdmma());
-            logger.error("LOG CONVERTER DOUBLE");
+            String path=CrearExcel(ET_BIOM, ET_ESPE, ET_PSCINC, min, max, imports.getIp_cdmma());
             String base64=ConvertirABase64(path);
+
             dto.setEt_biom(et_biom);
             dto.setEt_espe(et_espe);
             dto.setEt_pscinc(et_pscinc);
             dto.setMensaje("OK");
             dto.setBase64(base64);
+
         }catch (Exception e){
 
             dto.setMensaje(e.getMessage());

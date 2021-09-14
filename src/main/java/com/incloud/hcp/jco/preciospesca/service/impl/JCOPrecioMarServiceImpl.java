@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.dto.MaestroOptionsPrecioMar;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarExports;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarImports;
@@ -19,6 +21,7 @@ import java.util.List;
 public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
     @Override
     public PrecioMarExports ObtenerPrecioMar(PrecioMarImports imports) throws Exception {
+        Metodos metodos = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
         importParams.put("P_INDPR", imports.getP_indpr());
@@ -26,13 +29,13 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
         importParams.put("P_CALIDAD", imports.getP_calidad());
         importParams.put("P_FLAG", imports.getP_flag());
 
-        // Options parameters
-        List<HashMap<String, Object>> options = new ArrayList<>();
-        for (MaestroOptionsPrecioMar option : imports.getP_options()) {
-            HashMap<String, Object> optionRecord = new HashMap<>();
-            optionRecord.put("WA", option.getWa());
-            options.add(optionRecord);
-        }
+        List<MaestroOptions> option = imports.getP_option();
+        List<MaestroOptionsKey> options2 = imports.getP_options();
+
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodos.ValidarOptions(option,options2);
+
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -42,14 +45,14 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
 
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblT_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
         JCoTable tblSTR_PM = tables.getTable(Tablas.STR_PM);
 
-        Metodos metodos = new Metodos();
+
         List<HashMap<String, Object>> listSTR_PM = metodos.ListarObjetos(tblSTR_PM);
         List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_MENSAJE);
 

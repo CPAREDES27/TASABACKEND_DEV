@@ -10,6 +10,7 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +21,10 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
     public PescaCompetenciaRExports PescaCompetencia(PescaCompetenciaRImports imports) throws Exception {
 
         PescaCompetenciaRExports pc=new PescaCompetenciaRExports();
-
+        List<HashMap<String, Object>> t_mensaje =new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, Object>> str_ztl =new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, Object>> str_pto =new ArrayList<HashMap<String, Object>>();
+        List<HashMap<String, Object>> str_pcp=new ArrayList<HashMap<String, Object>>();
 
         try {
 
@@ -43,18 +47,24 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             exec.setTable(tables, Tablas.STR_PCP,imports.getStr_pcp());
 
             stfcConnection.execute(destination);
-
-
-            JCoTable STR_ZLT = tables.getTable(Tablas.STR_ZLT);
-            JCoTable STR_PTO = tables.getTable(Tablas.STR_PTO);
-            JCoTable STR_PCP = tables.getTable(Tablas.STR_PCP);
-            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_ztl = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldStr_zlt());
-            List<HashMap<String, Object>> str_pto = metodo.ObtenerListObjetos(STR_PTO, imports.getFieldStr_pto());
-            List<HashMap<String, Object>> str_pcp = metodo.ObtenerListObjetos(STR_PCP, imports.getFieldStr_pcp());
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+
+            if(imports.getP_tipo().compareTo("G")==0){
+                JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+                t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            } else {
+
+                JCoTable STR_ZLT = tables.getTable(Tablas.STR_ZLT);
+                JCoTable STR_PTO = tables.getTable(Tablas.STR_PTO);
+                JCoTable STR_PCP = tables.getTable(Tablas.STR_PCP);
+                JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+
+
+                str_ztl = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldStr_zlt());
+                str_pto = metodo.ObtenerListObjetos(STR_PTO, imports.getFieldStr_pto());
+                str_pcp = metodo.ObtenerListObjetos(STR_PCP, imports.getFieldStr_pcp());
+                 t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            }
 
             pc.setStr_zlt(str_ztl);
             pc.setStr_pto(str_pto);
