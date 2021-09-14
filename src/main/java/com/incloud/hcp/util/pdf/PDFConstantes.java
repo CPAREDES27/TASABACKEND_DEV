@@ -13,6 +13,10 @@ public class PDFConstantes {
     public static String seis="6.- Día y hora estimada arribo: ";
     public static String siete="7.- Representante acreditado: ";
     public static String ocho="8.- DECLARO BAJO JURAMENTO ";
+    public static String ochoA="QUE LAS VIGENCIAS DE LAS LIBRETAS DE EMBARQUE CON QUE ZARPA LA TRIPULACIÓN Y DE";
+    public static String ochoB="LOS CERTIFICADOS DE LA NAVE, SON LOS MISMOS QUE FIGURAN EN LAS LIBRETAS DE EMBARQUE Y EN LOS CERTIFICADOS ";
+    public static String ochoC="CORRRESPONDIENTES, ASÍ COMO LA NAVE REÚNE LAS CONDICIONES ESTABLECIDAS PARA NAVEGAR EN FORMA SEGURA.";
+    public static String ochoD="";
     public static String nueve="9.- Rol de tripulación";
     public static String diez="10.- Certificados de: ";
     public static String once="11.- En caso de emergencia comunicar a: ";
@@ -26,11 +30,9 @@ public class PDFConstantes {
     public static String firma= "_____________________________";
     public static String capitaniaGuardacosta="CAPITANÍA GUARDACOSTA";
     public static String nota="NOTA:";
-    public static String notaUno="* ESTA DECLARACIÓN DEBE TRAMITARSE EN LA CAPITANÍA GUARDACOSTAS Y CONSERVESE EL ORIGINAL A BORDO";
-    public static String notaUno1="  DURANTE LA NAVEGACIÓN.";
-    public static String notaDos="* LA TRAMITACIÓN DE LA PRESENTE AUTORIZACIÓN ES GRATUITA. LAS CAPITANIAS GUARDACOSTAS NO SOLICITARAN";
-    public static String notaDos1="  DOCUMENTACIÓN ADICIONAL PARA AUTORIZAR EL ZARPE DIARIO.";
-    public static String notaTres="* CUALQUIER QUEJA O DENUNCIA DEBERÁ COMUNICARSE EN FORMA INMEIDATA AL CAPITÁN DE PUERTO Y/O PRIMER";
-    public static String notaTres1="  AYUDANTE DE LA JURISDICCIÓN A LOS TELEFONOS DE LA RELACIÓN QUE SE ENCUENTRA EN EL DORSO DE LA ";
-    public static String notaTres2="  DECLARACIÓN DE ARRIBO O AL SIGUIENTE CORREO ELECTRÓNICO dicapi@marina.mil.pe (DICAPI 1003 - DIRCONTROL)";
+    public static String notaUno="* ESTA DECLARACIÓN DEBE TRAMITARSE EN LA CAPITANÍA GUARDACOSTAS Y CONSERVESE EL ORIGINAL A BORDO DURANTE LA NAVEGACIÓN.";
+    public static String notaDos="* LA TRAMITACIÓN DE LA PRESENTE AUTORIZACIÓN ES GRATUITA. LAS CAPITANIAS GUARDACOSTAS NO SOLICITARAN DOCUMENTACIÓN ADICIONAL PARA AUTORIZAR EL ";
+    public static String notaDos1="  ZARPE DIARIO.";
+    public static String notaTres="* CUALQUIER QUEJA O DENUNCIA DEBERÁ COMUNICARSE EN FORMA INMEIDATA AL CAPITÁN DE PUERTO Y/O PRIMER AYUDANTE DE LA JURISDICCIÓN A LOS TELEFONOS DE ";
+    public static String notaTres1="  LA RELACIÓN QUE SE ENCUENTRA EN EL DORSO DE LA DECLARACIÓN DE ARRIBO O AL SIGUIENTE CORREO ELECTRÓNICO dicapi@marina.mil.pe (DICAPI 1003 - DIRCONTROL)";
 }
