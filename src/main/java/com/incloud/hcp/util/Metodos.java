@@ -51,12 +51,7 @@ public class Metodos {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
                 }
-                /*if (field.getTypeAsString().equals("DATE")) {
-                    Date dateValue = tableExport.getDate(key);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                    value = dateFormat.format(dateValue);
-                }*/
-
+           
 
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
