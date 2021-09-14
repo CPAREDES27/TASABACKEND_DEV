@@ -75,14 +75,16 @@ public class Metodos {
                 }
                 if (field.getTypeAsString().equals("DATE") && key.equals("FITVS") ||
                         field.getTypeAsString().equals("DATE") && key.equals("FCVVI") ||
-                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS")) {
+                        field.getTypeAsString().equals("DATE") && key.equals("FFTVS") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FIDES") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FECCONMOV") ||
+                        field.getTypeAsString().equals("DATE") && key.equals("FFDES") ) {
 
                     String date = String.valueOf(value);
                     SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                     String fecha = dia.format(value);
                     value = fecha;
                 }
-
                 newRecord.put(key, value);
             }
             data.add(newRecord);
@@ -253,13 +255,13 @@ public class Metodos {
         }else if(table.equals("ENCUBICACION")){
             wa = "CDUBI BETWEEN '1' AND '999'";
         }else if(table.equals("PLANTAPROPIA")){
-            wa= "ESREG = 'S' AND (WERKS <> 'FP09' AND (INPRP = 'P'";
+            wa= "ESREG = 'S' AND (WERKS <> 'FP09') AND (INPRP = 'P')";
         }else if(table.equals("CATEGORIA")){
             wa= "DESCR = 'CATEGORIA PESCA COMPETENCIA'";
         }else if(table.equals("ZONAAREA")){
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
-            wa= "CODIG EQ 'SH' AND (STATU EQ '1'";
+            wa= "CODIG EQ 'SH' AND (STATU EQ '1')";
         }
 
         return wa;
