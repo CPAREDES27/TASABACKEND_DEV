@@ -53,17 +53,17 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
 
             stfcConnection.execute(destination);
 
-            JCoTable T_ZATRP = tables.getTable(Tablas.T_ZATRP);
-            JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
+            JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
+            JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldsT_zartr());
-            List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldsT_dzart());
+            List<HashMap<String, Object>>  t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
+            List<HashMap<String, Object>>  t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
 
 
-            rt.setT_dzart(t_zatrp);
-            rt.setT_zartr(t_dzatr);
+            rt.setT_dzart(t_zartr);
+            rt.setT_zartr(t_dzart);
             rt.setMensaje("Ok");
 
         }catch (Exception e){
