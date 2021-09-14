@@ -1,10 +1,30 @@
 package com.incloud.hcp.jco.preciospesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class PrecioPescaImports {
     private String p_user;
-    private List<MaestroOptionsPrecioPesca> p_options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
+    }
 
     public String getP_user() {
         return p_user;
@@ -12,13 +32,5 @@ public class PrecioPescaImports {
 
     public void setP_user(String p_user) {
         this.p_user = p_user;
-    }
-
-    public List<MaestroOptionsPrecioPesca> getP_options() {
-        return p_options;
-    }
-
-    public void setP_options(List<MaestroOptionsPrecioPesca> p_options) {
-        this.p_options = p_options;
     }
 }

@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.dto.*;
 import com.incloud.hcp.jco.preciospesca.service.JCOPreciosPescaService;
 import com.incloud.hcp.util.Constantes;
@@ -55,16 +57,16 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
     @Override
     public PrecioPescaExports ObtenerPrecioPesca(PrecioPescaImports imports) throws Exception {
+        Metodos metodo = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
 
-        //Obtener los options
-        List<HashMap<String, Object>> options = new ArrayList<HashMap<String, Object>>();
-        for (MaestroOptionsPrecioPesca option : imports.getP_options()) {
-            HashMap<String, Object> optionRecord = new HashMap<>();
-            optionRecord.put("WA", option.getWa());
-            options.add(optionRecord);
-        }
+        List<MaestroOptions> option = imports.getOption();
+        List<MaestroOptionsKey> options2 = imports.getOptions();
+
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodo.ValidarOptions(option,options2);
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -74,15 +76,15 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
 
         //Exports
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblSTR_PPC = tables.getTable(Tablas.STR_PPC);
 
-        Metodos metodos = new Metodos();
-        List<HashMap<String, Object>> listSTR_PPC = metodos.ListarObjetos(tblSTR_PPC);
+
+        List<HashMap<String, Object>> listSTR_PPC = metodo.ListarObjetos(tblSTR_PPC);
 
         PrecioPescaExports dto = new PrecioPescaExports();
         dto.setStr_ppc(listSTR_PPC);
