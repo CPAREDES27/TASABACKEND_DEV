@@ -14,6 +14,24 @@ public class EmbarcacionesDto {
     private String EstSisFrio;
     private String Semaforo;
     private String Color;
+    private String NumMarea;
+    private String Indicador;
+
+    public String getNumMarea() {
+        return NumMarea;
+    }
+
+    public void setNumMarea(String numMarea) {
+        NumMarea = numMarea;
+    }
+
+    public String getIndicador() {
+        return Indicador;
+    }
+
+    public void setIndicador(String indicador) {
+        Indicador = indicador;
+    }
 
     public String getColor() {
         return Color;

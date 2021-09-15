@@ -141,6 +141,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 n_embarcacion.setDescZonaCala(s_str_di.getString("ZONA"));
                                 n_embarcacion.setEstSisFrio(s_str_di.getString("ESTSF"));
                                 n_embarcacion.setColor(s_str_di.getString("CLGFL"));
+                                n_embarcacion.setNumMarea(s_str_di.getString("NRMAR"));
+                                n_embarcacion.setIndicador(s_str_di.getString("INPRP"));
 
                                 String CodMotMarea = s_str_di.getString("CDMMA");
                                 String TDC = s_str_di.getString("TDC");
