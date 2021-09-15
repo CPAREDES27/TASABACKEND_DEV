@@ -333,11 +333,7 @@ public class Metodos {
 
     public List<HashMap<String, Object>> ValidarOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options){
 
-
-
         String control="";
-
-
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
 
         if(option.size()>0 && options.size()==0){

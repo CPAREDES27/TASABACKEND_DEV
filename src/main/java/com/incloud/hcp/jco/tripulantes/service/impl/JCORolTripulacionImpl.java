@@ -41,7 +41,6 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             for (int i = 0; i < options.size(); i++) {
                 Options o = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-
                 record.put("DATA", o.getData());
                 tmpOptions.add(record);
             }

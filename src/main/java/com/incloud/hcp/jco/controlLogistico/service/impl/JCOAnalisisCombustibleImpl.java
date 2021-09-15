@@ -6,6 +6,7 @@ import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusImports;
 import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -27,7 +28,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
     public AnalisisCombusLisExports Listar(AnalisisCombusLisImports imports)throws Exception{
 
         AnalisisCombusLisExports ce= new AnalisisCombusLisExports();
-
+        Metodos metodo = new Metodos();
         try {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -40,14 +41,14 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_ROW", imports.getP_row());
 
-            List<MaestroOptions> options = imports.getOptions();
+            List<MaestroOptions> option = imports.getOption();
+            List<MaestroOptionsKey> options2 = imports.getOptions();
+
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            tmpOptions=metodo.ValidarOptions(option,options2);
+
+
             JCoParameterList tables = stfcConnection.getTableParameterList();
              EjecutarRFC exec=new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
@@ -55,7 +56,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
-            Metodos metodo = new Metodos();
+
             List<HashMap<String, Object>> str_csmar = metodo.ObtenerListObjetos(STR_CSMAR, imports.getFieldsStr_csmar());
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldsT_mensaje());
 

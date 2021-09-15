@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.tolvas.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tolvas.dto.RegistroTolvasImports;
 import com.incloud.hcp.jco.tolvas.service.JCORegistroTolvasService;
 import com.incloud.hcp.util.Constantes;
@@ -21,7 +22,7 @@ public class JCORegistroTolvasImpl implements JCORegistroTolvasService {
     public MaestroExport Guardar(RegistroTolvasImports imports)throws Exception{
 
         MaestroExport m= new MaestroExport();
-
+        Metodos metodo = new Metodos();
         try {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -33,21 +34,20 @@ public class JCORegistroTolvasImpl implements JCORegistroTolvasService {
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("ROWCOUNT", imports.getRowcount());
 
-            List<MaestroOptions> options = imports.getOptions();
+            List<MaestroOptions> option = imports.getP_option();
+            List<MaestroOptionsKey> options2 = imports.getP_options();
+
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            tmpOptions=metodo.ValidarOptions(option,options2);
+
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec=new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
             stfcConnection.execute(destination);
             JCoTable STR_SDE = tables.getTable(Tablas.STR_SDE);
 
-            Metodos metodo = new Metodos();
+
             List<HashMap<String, Object>> str_sde = metodo.ObtenerListObjetos(STR_SDE, imports.getFields());
 
             m.setData(str_sde);

@@ -44,7 +44,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblSTR_APP = tables.getTable(Tablas.STR_APP);
-        
+
         List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
 
         PrecioProbPescaExports dto = new PrecioProbPescaExports();
@@ -152,16 +152,16 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
     @Override
     public ConsPrecioPescaExports ConsultarPrecioPesca(ConsPrecioPescaImports imports) throws Exception {
+        Metodos metodos = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("IP_CANTI", imports.getIp_canti());
 
-        //Obtener los options
-        List<HashMap<String, Object>> options = new ArrayList<HashMap<String, Object>>();
-        for (MaestroOptionsConsPrecioPesca option : imports.getT_opcion()) {
-            HashMap<String, Object> optionRecord = new HashMap<>();
-            optionRecord.put("WA", option.getWa());
-            options.add(optionRecord);
-        }
+        List<MaestroOptions> option = imports.getP_option();
+        List<MaestroOptionsKey> options2 = imports.getP_options();
+
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodos.ValidarOptions(option,options2);
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -171,14 +171,14 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "T_OPCION", options);
+        executeRFC.setTable(paramsTable, "T_OPCION", tmpOptions);
 
         //Exports
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblT_PREPES = tables.getTable(Tablas.T_PREPES);
 
-        Metodos metodos = new Metodos();
+
         List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
 
         ConsPrecioPescaExports dto = new ConsPrecioPescaExports();

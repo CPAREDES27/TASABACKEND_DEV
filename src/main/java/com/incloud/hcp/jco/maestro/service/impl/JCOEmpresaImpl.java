@@ -24,6 +24,7 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
     public MaestroExport ListarEmpresas(EmpresaImports imports)throws Exception{
 
         MaestroExport me=new MaestroExport();
+        Metodos metodo = new Metodos();
         try {
             logger.error("obtenerEmpresa_1");
             ;
@@ -43,14 +44,12 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
-            List<MaestroOptions> options = imports.getOptions();
+            List<MaestroOptions> option = imports.getOption();
+            List<MaestroOptionsKey> options2 = imports.getOptions();
+
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            tmpOptions=metodo.ValidarOptions(option,options2);
 
             EjecutarRFC exe = new EjecutarRFC();
             exe.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
@@ -66,7 +65,7 @@ public class JCOEmpresaImpl implements JCOEmpresaService {
 
             logger.error("obtenerEmpresa_7");
 
-            Metodos metodo = new Metodos();
+
             //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
             String [] fields=imports.getFields();
             List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
