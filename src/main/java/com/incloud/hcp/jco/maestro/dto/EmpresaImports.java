@@ -5,7 +5,8 @@ import java.util.List;
 public class EmpresaImports {
     private String p_cdusr;
     private String p_ruc;
-    private List<MaestroOptions> options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
     private String [] fields;
     //private List<MaestroOptionsKey> options;
 
@@ -18,11 +19,20 @@ public class EmpresaImports {
         this.fields = fields;
     }
 
-    public List<MaestroOptions> getOptions() {
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
         return options;
     }
 
-    public void setOptions(List<MaestroOptions> options) {
+    public void setOptions(List<MaestroOptionsKey> options) {
         this.options = options;
     }
 

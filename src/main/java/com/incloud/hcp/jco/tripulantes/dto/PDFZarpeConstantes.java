@@ -1,6 +1,6 @@
-package com.incloud.hcp.util.pdf;
+package com.incloud.hcp.jco.tripulantes.dto;
 
-public class PDFConstantes {
+public class PDFZarpeConstantes {
 
     public static String titulo = "DECLARACIÓN DIARIA DE ZARPE PARA NAVES PESQUERAS";
     public static String titulo2 = "DE ARQUERO BRUTO MAYOR DE 10";
@@ -35,4 +35,39 @@ public class PDFConstantes {
     public static String notaDos1="  ZARPE DIARIO.";
     public static String notaTres="* CUALQUIER QUEJA O DENUNCIA DEBERÁ COMUNICARSE EN FORMA INMEIDATA AL CAPITÁN DE PUERTO Y/O PRIMER AYUDANTE DE LA JURISDICCIÓN A LOS TELEFONOS DE ";
     public static String notaTres1="  LA RELACIÓN QUE SE ENCUENTRA EN EL DORSO DE LA DECLARACIÓN DE ARRIBO O AL SIGUIENTE CORREO ELECTRÓNICO dicapi@marina.mil.pe (DICAPI 1003 - DIRCONTROL)";
+
+    //Campos de las tablas
+
+
+    //TABLA DZATR Rol Tripulacion
+    public static String NOMBR="NOMBR";
+    public static String NRLIB ="NRLIB";
+    public static String FEVIG ="FEVIG";
+    public static String STEXT ="STEXT";
+
+    //TABLA ZATRP Campos
+    public static String DSWKS ="DSWKS";
+    public static String MREMB ="MREMB";
+    public static String TOPER ="TOPER";
+    public static String FEARR  ="FEARR";
+    public static String HRARR ="HRARR";
+    public static String RACRE ="RACRE";
+    public static String DSEMP ="DSEMP";
+    public static String DFEMP ="DFEMP";
+    public static String TFEMP  ="TFEMP";
+    public static String NRDNI  ="NRDNI";
+    public static String FEZAT  ="FEZAT";
+    public static String CDZPC  ="CDZPC";
+    public static String AQBRT  ="AQBRT";
+
+    //TABLA VGCER
+    public static String DSCER   ="DSCER";
+    public static String DSETP   ="DSETP";
+    public static String FECCF   ="FECCF";
+
+    //Fields Rol Tripulacion
+    public static String[]fieldRolTripulacion= new String[]{"", "Apellidos y Nombres", "Matricula", "Vigencia", "Cargo a bordo"};
+    public static String[]fieldCertificados= new String[]{"", "", "Fecha de Vencimiento"};
+
+
 }

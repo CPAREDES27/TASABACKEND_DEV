@@ -1,12 +1,10 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeExports;
-import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeImports;
-import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionExports;
-import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionImports;
+import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.service.JCORegistroZarpeService;
 import com.incloud.hcp.jco.tripulantes.service.JCORolTripulacionService;
 import com.incloud.hcp.util.Mensaje;
+import com.incloud.hcp.jco.tripulantes.service.JCOPDFZarpeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,8 @@ public class TripulantesRest {
     private JCORegistroZarpeService jcoRegistroZarpeService;
     @Autowired
     private JCORolTripulacionService jcoRolTripulacionService;
+    @Autowired
+    private JCOPDFZarpeService JCOPDFZarpeService;
 
     @PostMapping(value = "/RegistroZarpe/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegistrosZarpeExports> RegistroZarpe(@RequestBody RegistrosZarpeImports imports){
@@ -49,4 +49,15 @@ public class TripulantesRest {
         }
 
     }
+    @PostMapping(value = "/PDFZarpe", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFZarpeExports> GenerarPdfZarpe(@RequestBody PDFZarpeImports imports) {
+
+        try {
+            return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDF(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
 }

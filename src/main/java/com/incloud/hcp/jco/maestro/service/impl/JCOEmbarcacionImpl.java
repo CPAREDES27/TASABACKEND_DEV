@@ -26,29 +26,29 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
     @Override
     public MaestroExport ListarEmbarcaciones(EmbarcacionImports importsParam) throws Exception {
         MaestroExport dto = new MaestroExport();
-
+        Metodos me = new Metodos();
         try {
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("P_USER", importsParam.getP_user());
             logger.error("ObtenerEmbarcaciones_1");
             //setear mapeo de tabla options
-            List<MaestroOptions> options = importsParam.getOptions();
+            List<MaestroOptions> option = importsParam.getOption();
+            List<MaestroOptionsKey> options = importsParam.getOptions();
+
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            tmpOptions=me.ValidarOptions(option,options);
+
+
             logger.error("ObtenerEmbarcaciones_2");
-            List<MaestroOptions> options2 = importsParam.getOptions2();
+            List<MaestroOptions> option2 = importsParam.getOption();
+            List<MaestroOptionsKey> options2 = importsParam.getOptions();
+
+
             List<HashMap<String, Object>> tmpOptions2 = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options2.size(); i++) {
-                MaestroOptions mo = options2.get(i);
-                HashMap<String, Object> record2 = new HashMap<String, Object>();
-                record2.put("WA", mo.getWa());
-                tmpOptions2.add(record2);
-            }
+            tmpOptions2=me.ValidarOptions(option2,options2);
+
+
             logger.error("ObtenerEmbarcaciones_3");
             //ejecutar RFC ZFL_RFC_READ_TABLE
             EjecutarRFC exec = new EjecutarRFC();
@@ -71,7 +71,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             function.execute(destination);
             JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
 
-            Metodos me = new Metodos();
+
             List<HashMap<String, Object>> data = me.ListarObjetos(tableExport);
 
 

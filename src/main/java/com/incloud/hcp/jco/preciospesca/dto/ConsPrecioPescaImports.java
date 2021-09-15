@@ -1,10 +1,14 @@
 package com.incloud.hcp.jco.preciospesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class ConsPrecioPescaImports {
     private String ip_canti;
-    private List<MaestroOptionsConsPrecioPesca> t_opcion;
+    private List<MaestroOptions> p_option;
+    private List<MaestroOptionsKey> p_options;
 
     public String getIp_canti() {
         return ip_canti;
@@ -14,11 +18,19 @@ public class ConsPrecioPescaImports {
         this.ip_canti = ip_canti;
     }
 
-    public List<MaestroOptionsConsPrecioPesca> getT_opcion() {
-        return t_opcion;
+    public List<MaestroOptions> getP_option() {
+        return p_option;
     }
 
-    public void setT_opcion(List<MaestroOptionsConsPrecioPesca> t_opcion) {
-        this.t_opcion = t_opcion;
+    public void setP_option(List<MaestroOptions> p_option) {
+        this.p_option = p_option;
+    }
+
+    public List<MaestroOptionsKey> getP_options() {
+        return p_options;
+    }
+
+    public void setP_options(List<MaestroOptionsKey> p_options) {
+        this.p_options = p_options;
     }
 }

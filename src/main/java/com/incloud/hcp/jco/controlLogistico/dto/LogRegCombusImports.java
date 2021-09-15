@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
 import java.util.List;
 
@@ -10,7 +11,25 @@ public class LogRegCombusImports {
     private String p_tope;
     private String p_lcco;
     private String p_canti;
-    private List<MaestroOptions> options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
+    }
+
     private String[] fieldsStr_csmar;
     private String[] fieldsStr_csmaj;
     private String[] fieldsStr_lgcco;
@@ -80,11 +99,4 @@ public class LogRegCombusImports {
         this.p_canti = p_canti;
     }
 
-    public List<MaestroOptions> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<MaestroOptions> options) {
-        this.options = options;
-    }
 }

@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,13 +11,23 @@ public class AnalisisCombusLisImports {
     private String p_row;
     private String[]  fieldsStr_csmar;
     private String[]  fieldsT_mensaje;
-    private List<MaestroOptions> options;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
 
-    public List<MaestroOptions> getOptions() {
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
         return options;
     }
 
-    public void setOptions(List<MaestroOptions> options) {
+    public void setOptions(List<MaestroOptionsKey> options) {
         this.options = options;
     }
 
