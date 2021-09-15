@@ -404,7 +404,9 @@ public class Metodos {
                     record.put("WA", mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
-                } else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))){
+                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
+                }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                     record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
@@ -416,7 +418,9 @@ public class Metodos {
                         record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
                     } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
-                    } else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                    }else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))) {
+                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
+                    }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                     } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
