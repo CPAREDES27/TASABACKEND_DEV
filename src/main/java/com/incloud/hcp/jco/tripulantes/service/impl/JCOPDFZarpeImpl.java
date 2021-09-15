@@ -1,9 +1,9 @@
-package com.incloud.hcp.util.pdf;
+package com.incloud.hcp.jco.tripulantes.service.impl;
 
-import com.incloud.hcp.util.Constant;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.Metodos;
+import com.incloud.hcp.jco.tripulantes.dto.*;
+import com.incloud.hcp.util.*;
+import com.incloud.hcp.jco.tripulantes.service.JCOPDFZarpeService;
+import com.sap.conn.jco.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -13,57 +13,148 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
-public class PDFImpl implements PDFService {
+public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private JCORegistroZarpeImpl jcoRegistroZarpe;
 
-    public Mensaje GenerarPDF()throws Exception{
+    public PDFZarpeExports GenerarPDF(PDFZarpeImports imports)throws Exception{
 
-        Mensaje m=new Mensaje();
-        PDFDto dto= new PDFDto();
+        PDFZarpeExports pdf=new PDFZarpeExports();
+        PDFZarpeDto dto= new PDFZarpeDto();
+
+
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         try {
 
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGZAR_ADM_REGZAR);
 
-            dto.setCapitania("CHICAMA");
-            dto.setNombreNave("TASA 34");
-            dto.setMatricula("PS-10415-PM");
-            dto.setAB("219.24");
-            dto.setZonaPesca("CHICAMA");
-            dto.setTiempoOperacio("24");
-            dto.setEstimadaArribo("25/06/2021");
-            dto.setRepresentante("DAVID DELGADO GONZALES");
-            dto.setEmergenciaNombre("TECNOLOGICA DE ALIMENTOS S.A.");
-            dto.setEmergenciaDireccion("Sub Lote 3A, Zona Industrial del Puerto Malabrigo, Di");
-            dto.setEmergenciaTelefono("");
-            dto.setNombrePatron("PANTA PAIBA, JULIO");
-            dto.setFecha("21/04/2021");
-            dto.setDni("03463796");
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_TOPE", imports.getP_tope());
+            importx.setValue("P_CDZAT", imports.getP_cdzat());
+            importx.setValue("P_WERKS", imports.getP_werks());
+            importx.setValue("P_WERKP", imports.getP_werkp());
+            importx.setValue("P_CANTI", imports.getP_canti());
+            importx.setValue("P_CDMMA", imports.getP_cdmma());
+            importx.setValue("P_PERNR", imports.getP_pernr());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_ZATRP = tables.getTable(Tablas.T_ZATRP);
+            JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
+            JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
+
+            for(int i=0; i<T_ZATRP.getNumRows(); i++){
+                T_ZATRP.setRow(i);
+
+                JCoField fieldF = T_ZATRP.getField(PDFZarpeConstantes.FEARR);
+                Date date=fieldF.getDate();
+                SimpleDateFormat dia = new SimpleDateFormat("yyyy-MM-dd");
+                String fecha = dia.format(date);
+
+                JCoField fieldH = T_ZATRP.getField(PDFZarpeConstantes.HRARR );
+                Date time =fieldH.getTime();
+                SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
+                String hora = hour.format(time);
+
+                //dto.setCapitania(T_ZATRP.getString("DSWKS"));
+                dto.setCapitania("");
+                dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
+                dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
+                dto.setAB(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
+                dto.setZonaPesca(T_ZATRP.getString(PDFZarpeConstantes.CDZPC));
+                dto.setTiempoOperacio(T_ZATRP.getString(PDFZarpeConstantes.TOPER));
+                dto.setEstimadaArribo(fecha+"   "+ hora);
+                dto.setRepresentante(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
+                dto.setEmergenciaNombre(T_ZATRP.getString(PDFZarpeConstantes.DSEMP));
+                dto.setEmergenciaDireccion(T_ZATRP.getString(PDFZarpeConstantes.DFEMP));
+                dto.setEmergenciaTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
+                dto.setFecha(T_ZATRP.getString(PDFZarpeConstantes.FEZAT));
 
 
-            PlantillaPDF(path, dto);
+            }
+            logger.error("RolTripulacion");
+            String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
+                                                        PDFZarpeConstantes.NRLIB,
+                                                        PDFZarpeConstantes.FEVIG,
+                                                        PDFZarpeConstantes.STEXT};
+            String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
+
+            RolTripulacion[0]=PDFZarpeConstantes.fieldRolTripulacion;
+            int con=1;
+            for(int i=0; i<T_DZATR.getNumRows(); i++){
+                T_DZATR.setRow(i);
+
+                String[] registros=new String[CamposRolTripulacion.length];
+
+                for(int j=0; j<CamposRolTripulacion.length; j++){
+                    registros[j]= T_DZATR.getString(CamposRolTripulacion[j]);
+                    String dni=  T_DZATR.getString(PDFZarpeConstantes.NRDNI);
+                    if(registros[j].trim().compareTo("PATRON E/P")==0 ){
+                        dto.setNombrePatron(registros[0]);
+                        dto.setDni(dni);
+                    }
+                }
+
+                RolTripulacion[con]=registros;
+                con++;
+            }
+            logger.error("Certificados");
+
+            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
+                                                         PDFZarpeConstantes.DSETP};
+            String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
+            Certificados[0]=PDFZarpeConstantes.fieldCertificados;
+            logger.error("Certificados_1");
+            con=1;
+            for(int i=0; i<T_VGCER.getNumRows(); i++){
+                T_VGCER.setRow(i);
+
+                String[] registros=new String[CamposCertificados.length];
+
+                for(int j=0; j<CamposCertificados.length; j++){
+                    registros[j]= T_VGCER.getString(CamposCertificados[j]);
+
+                }
+
+                Certificados[con]=registros;
+                con++;
+            }
+
+
+            logger.error("GenerarPDF_1 ");
+            logger.error("Certificados.length= "+ Certificados.length + ", Certificados[0].length= "+ Certificados[0].length);
+            PlantillaPDF(path, dto, RolTripulacion, Certificados);
+            logger.error("GenerarPDF_2");
             Metodos exec = new Metodos();
-            m.setMensaje(exec.ConvertirABase64(path));
-
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
 
 
         }catch (Exception e){
-            m.setMensaje(e.getMessage());
+            pdf.setMensaje(e.getMessage());
         }
-        return m;
+        return pdf;
     }
 
 
 
-    public void PlantillaPDF(String path, PDFDto dto)throws Exception{
+    public void PlantillaPDF(String path, PDFZarpeDto dto, String[][] rolTripulacion, String[][] certificados)throws Exception{
 
+        logger.error("PlantillaPDF");
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -89,19 +180,19 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 8);
         contentStream.moveTextPositionByAmount(170, 790);
-        contentStream.drawString(PDFConstantes.titulo);
+        contentStream.drawString(PDFZarpeConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
         contentStream.moveTextPositionByAmount(230, 780);
-        contentStream.drawString(PDFConstantes.titulo2);
+        contentStream.drawString(PDFZarpeConstantes.titulo2);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(65, 765);
-        contentStream.drawString(PDFConstantes.capitania );
+        contentStream.drawString(PDFZarpeConstantes.capitania );
         contentStream.endText();
 
         //insertando capitania guardacostas marítimas
@@ -121,7 +212,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 750);
-        contentStream.drawString(PDFConstantes.uno);
+        contentStream.drawString(PDFZarpeConstantes.uno);
         contentStream.endText();
 
         //insertando nombre de nave
@@ -140,7 +231,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 740);
-        contentStream.drawString(PDFConstantes.dos);
+        contentStream.drawString(PDFZarpeConstantes.dos);
         contentStream.endText();
 
         //insertando numero de matrícula
@@ -159,7 +250,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(300, 740);
-        contentStream.drawString(PDFConstantes.tres);
+        contentStream.drawString(PDFZarpeConstantes.tres);
         contentStream.endText();
 
         //insertando A.B.
@@ -178,7 +269,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 730);
-        contentStream.drawString(PDFConstantes.cuatro);
+        contentStream.drawString(PDFZarpeConstantes.cuatro);
         contentStream.endText();
 
         //insertando zona de pesca
@@ -197,7 +288,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 720);
-        contentStream.drawString(PDFConstantes.cinco);
+        contentStream.drawString(PDFZarpeConstantes.cinco);
         contentStream.endText();
 
         //insertar tiempo de operacion
@@ -216,7 +307,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 710);
-        contentStream.drawString(PDFConstantes.seis);
+        contentStream.drawString(PDFZarpeConstantes.seis);
         contentStream.endText();
 
         //insertar dia y hora estimado de arribo
@@ -235,7 +326,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 700);
-        contentStream.drawString(PDFConstantes.siete);
+        contentStream.drawString(PDFZarpeConstantes.siete);
         contentStream.endText();
 
         //insertando representante acreditado
@@ -254,50 +345,50 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 690);
-        contentStream.drawString(PDFConstantes.ocho);
+        contentStream.drawString(PDFZarpeConstantes.ocho);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(160, 690);
-        contentStream.drawString(PDFConstantes.ochoA);
+        contentStream.drawString(PDFZarpeConstantes.ochoA);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(60, 680);
-        contentStream.drawString(PDFConstantes.ochoB);
+        contentStream.drawString(PDFZarpeConstantes.ochoB);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(60, 670);
-        contentStream.drawString(PDFConstantes.ochoC);
+        contentStream.drawString(PDFZarpeConstantes.ochoC);
         contentStream.endText();
 
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 660);
-        contentStream.drawString(PDFConstantes.nueve);
+        contentStream.drawString(PDFZarpeConstantes.nueve);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 370);
-        contentStream.drawString(PDFConstantes.diez);
+        contentStream.drawString(PDFZarpeConstantes.diez);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 228);
-        contentStream.drawString(PDFConstantes.once);
+        contentStream.drawString(PDFZarpeConstantes.once);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(60, 216);
-        contentStream.drawString(PDFConstantes.onceA);
+        contentStream.drawString(PDFZarpeConstantes.onceA);
         contentStream.endText();
 
         //Emergencia
@@ -317,7 +408,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(60, 204);
-        contentStream.drawString(PDFConstantes.onceB);
+        contentStream.drawString(PDFZarpeConstantes.onceB);
         contentStream.endText();
 
         //insertando Dirección
@@ -336,7 +427,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(60, 192);
-        contentStream.drawString(PDFConstantes.onceC);
+        contentStream.drawString(PDFZarpeConstantes.onceC);
         contentStream.endText();
 
         //insertando telefono
@@ -355,7 +446,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 180);
-        contentStream.drawString(PDFConstantes.doce);
+        contentStream.drawString(PDFZarpeConstantes.doce);
         contentStream.endText();
 
         //insertando nombre patron
@@ -374,7 +465,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(350, 180);
-        contentStream.drawString(PDFConstantes.trece);
+        contentStream.drawString(PDFZarpeConstantes.trece);
         contentStream.endText();
 
         //insertando fecha
@@ -393,7 +484,7 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 168);
-        contentStream.drawString(PDFConstantes.catorce);
+        contentStream.drawString(PDFZarpeConstantes.catorce);
         contentStream.endText();
 
         //insertando dni
@@ -412,100 +503,68 @@ public class PDFImpl implements PDFService {
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 125);
-        contentStream.drawString(PDFConstantes.firma);
+        contentStream.drawString(PDFZarpeConstantes.firma);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(175, 115);
-        contentStream.drawString(PDFConstantes.firmaPatron);
+        contentStream.drawString(PDFZarpeConstantes.firmaPatron);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(350, 125);
-        contentStream.drawString(PDFConstantes.firma);
+        contentStream.drawString(PDFZarpeConstantes.firma);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(360, 115);
-        contentStream.drawString(PDFConstantes.capitaniaGuardacosta);
+        contentStream.drawString(PDFZarpeConstantes.capitaniaGuardacosta);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(50, 90);
-        contentStream.drawString(PDFConstantes.nota);
+        contentStream.drawString(PDFZarpeConstantes.nota);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 80);
-        contentStream.drawString(PDFConstantes.notaUno);
+        contentStream.drawString(PDFZarpeConstantes.notaUno);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 70);
-        contentStream.drawString(PDFConstantes.notaDos);
+        contentStream.drawString(PDFZarpeConstantes.notaDos);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 60);
-        contentStream.drawString(PDFConstantes.notaDos1);
+        contentStream.drawString(PDFZarpeConstantes.notaDos1);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 50);
-        contentStream.drawString(PDFConstantes.notaTres);
+        contentStream.drawString(PDFZarpeConstantes.notaTres);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 40);
-        contentStream.drawString(PDFConstantes.notaTres1);
+        contentStream.drawString(PDFZarpeConstantes.notaTres1);
         contentStream.endText();
 
-
-
-        //tablas
-
-        String[]fields= new String[]{"Item", "Apellidos y Nombres", "Matricula", "Vigencia", "Cargo a bordo"};
-        String[][] content = {fields,{"1","a","b", "c", "d"},
-                {"c", "d", "2"},
-                {"e", "f", "3"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"},
-                {"g", "h", "4"}};
-        drawTableRolTripulacion(page, contentStream, 655.0f, 60.0f, content);
-
-        String[]field= new String[]{"Item", "", "Fecha de Vencimiento"};
-        String[][] certificados = {field,{"1", "a", "b"},
-                {"2", "a", "b"},
-                {"3", "a", "b"},
-                {"4", "a", "b"},
-                {"5", "a", "b"},
-                {"6", "a", "b"},
-                {"7", "a", "b"}};
+        logger.error("PlantillaPDF_1");
+        drawTableRolTripulacion(page, contentStream, 655.0f, 60.0f, rolTripulacion);
+        logger.error("PlantillaPDF_2");
         drawTableCertificados(page, contentStream,365, 60, certificados);
-
+        logger.error("PlantillaPDF_3");
         contentStream.close();
         document.save(path);
         document.close();
@@ -514,6 +573,8 @@ public class PDFImpl implements PDFService {
 
     public  void drawTableRolTripulacion(PDPage page, PDPageContentStream contentStream,
                                  float y, float margin, String[][] content) throws IOException {
+
+        logger.error("drawTableRolTripulacion");
         final int rows = content.length;
         final int cols = content[0].length;
         final float rowHeight = 13.0f;
@@ -567,8 +628,6 @@ public class PDFImpl implements PDFService {
 
         //now add the text
 
-        contentStream.setFont(PDType1Font.HELVETICA, 8);
-
 
 
         float texty=y-10;
@@ -603,6 +662,7 @@ public class PDFImpl implements PDFService {
                 }
 
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 7);
                 contentStream.newLineAtOffset(textx, texty);
                 contentStream.showText(fields[j]);
                 contentStream.endText();
@@ -632,6 +692,8 @@ public class PDFImpl implements PDFService {
 
     public  void drawTableCertificados(PDPage page, PDPageContentStream contentStream,
                                          float y, float margin, String[][] content) throws IOException {
+
+        logger.error("drawTableCertificados");
         final int rows = content.length;
         final int cols = content[0].length;
         final float rowHeight = 13.0f;

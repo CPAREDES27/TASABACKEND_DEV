@@ -1,6 +1,6 @@
-package com.incloud.hcp.util.pdf;
+package com.incloud.hcp.jco.tripulantes.dto;
 
-public class PDFDto {
+public class PDFZarpeDto {
 
     private String capitania;
     private String nombreNave;
