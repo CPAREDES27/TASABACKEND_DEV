@@ -13,11 +13,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -25,8 +22,7 @@ import java.util.Date;
 public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private JCORegistroZarpeImpl jcoRegistroZarpe;
+
 
     public PDFZarpeExports GenerarPDF(PDFZarpeImports imports)throws Exception{
 
@@ -62,7 +58,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
                 JCoField fieldF = T_ZATRP.getField(PDFZarpeConstantes.FEARR);
                 Date date=fieldF.getDate();
-                SimpleDateFormat dia = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                 String fecha = dia.format(date);
 
                 JCoField fieldH = T_ZATRP.getField(PDFZarpeConstantes.HRARR );
@@ -70,8 +66,11 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
                 SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
                 String hora = hour.format(time);
 
-                //dto.setCapitania(T_ZATRP.getString("DSWKS"));
-                dto.setCapitania("");
+                String codigoZarpe=T_ZATRP.getString(PDFZarpeConstantes.CDZAT);
+                int codigoZ=Integer.parseInt(codigoZarpe);
+                String codigo =String.valueOf(codigoZ);
+                dto.setCodigoZarpe(codigo);
+                dto.setCapitania(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
                 dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
                 dto.setAB(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
@@ -89,7 +88,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
             logger.error("RolTripulacion");
             String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
                                                         PDFZarpeConstantes.NRLIB,
-                                                        PDFZarpeConstantes.FEVIG,
+                                                        PDFZarpeConstantes.FEFVG,
                                                         PDFZarpeConstantes.STEXT};
             String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
 
@@ -98,14 +97,22 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
             for(int i=0; i<T_DZATR.getNumRows(); i++){
                 T_DZATR.setRow(i);
 
-                String[] registros=new String[CamposRolTripulacion.length];
+                String[] registros=new String[CamposRolTripulacion.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
 
-                for(int j=0; j<CamposRolTripulacion.length; j++){
-                    registros[j]= T_DZATR.getString(CamposRolTripulacion[j]);
-                    String dni=  T_DZATR.getString(PDFZarpeConstantes.NRDNI);
-                    if(registros[j].trim().compareTo("PATRON E/P")==0 ){
-                        dto.setNombrePatron(registros[0]);
-                        dto.setDni(dni);
+                    }else {
+
+                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                            String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
+                            if (registros[j].trim().compareTo("PATRON E/P") == 0) {
+                                dto.setNombrePatron(registros[1]);
+                                dto.setDni(dni);
+                            }
+
+                        campos++;
                     }
                 }
 
@@ -123,11 +130,16 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
             for(int i=0; i<T_VGCER.getNumRows(); i++){
                 T_VGCER.setRow(i);
 
-                String[] registros=new String[CamposCertificados.length];
+                String[] registros=new String[CamposCertificados.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
 
-                for(int j=0; j<CamposCertificados.length; j++){
-                    registros[j]= T_VGCER.getString(CamposCertificados[j]);
-
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
+                    }else {
+                        registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        campos++;
+                    }
                 }
 
                 Certificados[con]=registros;
@@ -135,10 +147,8 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
             }
 
 
-            logger.error("GenerarPDF_1 ");
-            logger.error("Certificados.length= "+ Certificados.length + ", Certificados[0].length= "+ Certificados[0].length);
-            PlantillaPDF(path, dto, RolTripulacion, Certificados);
-            logger.error("GenerarPDF_2");
+           PlantillaPDF(path, dto, RolTripulacion, Certificados);
+
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
             pdf.setMensaje("Ok");
@@ -149,8 +159,6 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         }
         return pdf;
     }
-
-
 
     public void PlantillaPDF(String path, PDFZarpeDto dto, String[][] rolTripulacion, String[][] certificados)throws Exception{
 
@@ -294,13 +302,13 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertar tiempo de operacion
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 720);
+        contentStream.moveTextPositionByAmount(180, 720);
         contentStream.drawString(dto.getTiempoOperacio());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 719);
+        contentStream.moveTextPositionByAmount(180, 719);
         contentStream.drawString("_____________________________");
         contentStream.endText();
 
@@ -313,13 +321,13 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertar dia y hora estimado de arribo
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 710);
+        contentStream.moveTextPositionByAmount(180, 710);
         contentStream.drawString(dto.getEstimadaArribo());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 709);
+        contentStream.moveTextPositionByAmount(180, 709);
         contentStream.drawString("_____________________________");
         contentStream.endText();
 
@@ -332,14 +340,14 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertando representante acreditado
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 700);
+        contentStream.moveTextPositionByAmount(180, 700);
         contentStream.drawString(dto.getRepresentante());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(200, 699);
-        contentStream.drawString("____________________________________________________________________________________");
+        contentStream.moveTextPositionByAmount(180, 699);
+        contentStream.drawString("_________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -350,7 +358,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(160, 690);
+        contentStream.moveTextPositionByAmount(165, 690);
         contentStream.drawString(PDFZarpeConstantes.ochoA);
         contentStream.endText();
 
@@ -375,7 +383,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
-        contentStream.moveTextPositionByAmount(50, 370);
+        contentStream.moveTextPositionByAmount(50, 360);
         contentStream.drawString(PDFZarpeConstantes.diez);
         contentStream.endText();
 
@@ -563,8 +571,9 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         logger.error("PlantillaPDF_1");
         drawTableRolTripulacion(page, contentStream, 655.0f, 60.0f, rolTripulacion);
         logger.error("PlantillaPDF_2");
-        drawTableCertificados(page, contentStream,365, 60, certificados);
+        drawTableCertificados(page, contentStream,355, 60, certificados);
         logger.error("PlantillaPDF_3");
+        drawCuadroCodigoZarpe(page, contentStream, 830, 440,dto.getCodigoZarpe());
         contentStream.close();
         document.save(path);
         document.close();
@@ -577,20 +586,10 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         logger.error("drawTableRolTripulacion");
         final int rows = content.length;
         final int cols = content[0].length;
-        final float rowHeight = 13.0f;
+        final float rowHeight = 12.0f;
         final float tableWidth = page.getMediaBox().getWidth() - 2.0f * margin;
         final float tableHeight = rowHeight * (float) rows;
-        //final float colWidth = tableWidth / (float) cols;
         final float colWidth = 85.33f;
-
-        logger.error("page.getMediaBox().getWidth(): "+ page.getMediaBox().getWidth());
-        logger.error("tableWidth: "+ tableWidth);
-        logger.error("tableHeight: "+ tableHeight);
-        logger.error("colWidth: "+ colWidth);
-        logger.error("rows: "+ rows);
-        logger.error("cols: "+ cols);
-
-
 
         //draw the rows
         float nexty = y ;
@@ -608,21 +607,27 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         for (int i = 0; i <= cols+1; i++) {
 
             if(i==1){
-                nextx=margin+30;
+                nextx=margin+20;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }else if(i==2){
-                nextx=margin+219f;
+                nextx=margin+209f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
+            }else if(i==5){
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth+10;
             }else {
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
                 nextx += colWidth;
             }
+
         }
 
 
@@ -641,52 +646,44 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
                 switch (j) {
                     case 1:
                         if(i==0){
-                            textx = 150;
+                            textx = 140;
                         }else {
-                            textx = 100;
+                            textx = 90;
                         }
                         break;
                     case 2:
                         if(i==0){
-                            textx=300;
+                            textx=290;
                         }else {
-                            textx = 290;
+                            textx = 280;
                         }
                         break;
                     case 3:
-                        textx = 390;
+                        if(i==0){
+                            textx = 390;
+                        }else{
+                            textx = 385;
+                        }
                         break;
                     case 4:
-                        textx = 465;
+                        if(i==0){
+                            textx = 465;
+                        }else {
+                            textx = 450;
+                        }
                         break;
                 }
 
                 contentStream.beginText();
-                contentStream.setFont(PDType1Font.HELVETICA, 7);
+                contentStream.setFont(PDType1Font.HELVETICA, 6);
                 contentStream.newLineAtOffset(textx, texty);
                 contentStream.showText(fields[j]);
                 contentStream.endText();
 
 
             }
-            texty-=13;
+            texty-=12;
         }
-        /*
-        final float cellMargin = 2.0f;
-        float textx = margin + cellMargin;
-        float texty = y - 15.0f;
-        for (final String[] aContent : content) {
-            for (String text : aContent) {
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(textx, texty);
-                contentStream.showText(text);
-                contentStream.endText();
-                textx += colWidth;
-            }
-            texty -= rowHeight;
-            textx = margin + cellMargin;
-        }*/
 
     }
 
@@ -696,19 +693,11 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         logger.error("drawTableCertificados");
         final int rows = content.length;
         final int cols = content[0].length;
-        final float rowHeight = 13.0f;
+        final float rowHeight = 12.0f;
         final float tableWidth = 400.5f;
         final float tableHeight = rowHeight * (float) rows;
         //final float colWidth = tableWidth / (float) cols;
         final float colWidth = 170f;
-
-        logger.error("page.getMediaBox().getWidth(): "+ page.getMediaBox().getWidth());
-        logger.error("tableWidth: "+ tableWidth);
-        logger.error("tableHeight: "+ tableHeight);
-        logger.error("colWidth: "+ colWidth);
-        logger.error("rows: "+ rows);
-        logger.error("cols: "+ cols);
-
 
 
         //draw the rows
@@ -727,7 +716,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         for (int i = 0; i <= cols+1; i++) {
 
             if(i==1){
-                nextx=margin+30;
+                nextx=margin+20;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
@@ -745,16 +734,11 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         }
 
 
-        //now add the text
-
-        contentStream.setFont(PDType1Font.HELVETICA, 8);
-
-
         float texty=y-10;
         for(int i=0; i<content.length;i++) {
 
             String[]fields=content[i];
-            float textx=margin+5;
+            float textx=margin+10;
 
             for (int j = 0; j < fields.length; j++) {
 
@@ -767,21 +751,70 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
                         }
                         break;
                     case 2:
-                        textx = 330;
+                        if(i==0){
+                            textx = 340;
+                        }else {
+                            textx = 330;
+                        }
                         break;
 
                 }
 
                 contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 6);
                 contentStream.newLineAtOffset(textx, texty);
                 contentStream.showText(fields[j]);
                 contentStream.endText();
 
 
             }
-            texty-=13;
+            texty-=12;
         }
 
 
+    }
+    public void drawCuadroCodigoZarpe(PDPage page, PDPageContentStream contentStream, float y, float margin
+                                        ,String codigoZarpe)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+        final float rowHeight = 20.0f;
+        final float tableWidth = 95f;
+        final float tableHeight = 20;
+        //final float colWidth = tableWidth / (float) cols;
+        final float colWidth = 170f;
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx+=tableWidth;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
+        contentStream.newLineAtOffset(margin+10, y-15);
+        contentStream.showText("N°");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA, 11);
+        contentStream.newLineAtOffset(margin+40, y-15);
+        contentStream.showText(codigoZarpe);
+        contentStream.endText();
     }
 }
