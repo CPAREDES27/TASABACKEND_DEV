@@ -1,13 +1,8 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.maestro.dto.MensajeDto;
-import com.incloud.hcp.util.Ftp.FtpImports;
-import com.incloud.hcp.util.Ftp.FtpService;
 import com.incloud.hcp.util.Mail.CorreoDto;
 import com.incloud.hcp.util.Mail.CorreoService;
 import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.pdf.PDFService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +19,7 @@ public class CorreoRest {
 
     @Autowired
     private CorreoService correoService;
-    @Autowired
-    private PDFService pdfService;
+
 
 
     @PostMapping(value = "/EnviarCorreo", produces = APPLICATION_JSON_VALUE)
@@ -52,16 +46,7 @@ public class CorreoRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/pdf", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> PDF() {
 
-        try {
-            return Optional.ofNullable(this.pdfService.GenerarPDF())
-                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            throw new RuntimeException(e.toString());
-        }
-    }
 
 
 }
