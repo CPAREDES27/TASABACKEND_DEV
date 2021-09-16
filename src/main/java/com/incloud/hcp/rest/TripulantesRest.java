@@ -4,7 +4,6 @@ import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.service.JCORegistroZarpeService;
 import com.incloud.hcp.jco.tripulantes.service.JCORolTripulacionService;
 import com.incloud.hcp.jco.tripulantes.service.JCOSeguimientoTripuService;
-import com.incloud.hcp.util.Mensaje;
 import com.incloud.hcp.jco.tripulantes.service.JCOPDFZarpeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,7 +52,7 @@ public class TripulantesRest {
 
     }
     @PostMapping(value = "/PDFZarpe", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFZarpeExports> GenerarPdfZarpe(@RequestBody PDFZarpeImports imports) {
+    public ResponseEntity<PDFExports> GenerarPdfZarpe(@RequestBody PDFZarpeImports imports) {
 
         try {
             return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDFZarpe(imports))
@@ -64,10 +63,10 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/PDFTravesia", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFZarpeExports> GenerarPdfTravesia() {
+    public ResponseEntity<PDFExports> GenerarPdfTravesia(@RequestBody PDFZarpeImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDFTravesia())
+            return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDFTravesia(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

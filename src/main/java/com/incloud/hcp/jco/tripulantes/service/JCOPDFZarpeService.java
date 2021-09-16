@@ -1,11 +1,10 @@
 package com.incloud.hcp.jco.tripulantes.service;
 
-import com.incloud.hcp.jco.tripulantes.dto.PDFZarpeExports;
+import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
 import com.incloud.hcp.jco.tripulantes.dto.PDFZarpeImports;
-import com.incloud.hcp.util.Mensaje;
 
 public interface JCOPDFZarpeService {
 
-    PDFZarpeExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception;
-    PDFZarpeExports GenerarPDFTravesia()throws Exception;
+    PDFExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception;
+    PDFExports GenerarPDFTravesia(PDFZarpeImports imports)throws Exception;
 }

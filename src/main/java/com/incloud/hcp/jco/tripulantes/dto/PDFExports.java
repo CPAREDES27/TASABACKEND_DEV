@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
-public class PDFZarpeExports {
+public class PDFExports {
 
     private String base64;
     private String mensaje;

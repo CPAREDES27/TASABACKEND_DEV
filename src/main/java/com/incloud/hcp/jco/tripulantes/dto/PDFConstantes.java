@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
-public class PDFZarpeConstantes {
+public class PDFConstantes {
 
     public static String titulo = "DECLARACIÓN DIARIA DE ZARPE PARA NAVES PESQUERAS";
     public static String titulo2 = "DE ARQUERO BRUTO MAYOR DE 10";
@@ -40,27 +40,30 @@ public class PDFZarpeConstantes {
 
 
     //TABLA DZATR Rol Tripulacion
-    public static String NOMBR="NOMBR";
-    public static String NRLIB ="NRLIB";
-    public static String FEFVG ="FEFVG";
-    public static String STEXT ="STEXT";
+    public static String NOMBR="NOMBR";     //nombre
+    public static String NRLIB ="NRLIB";    //numero licencia
+    public static String FEFVG ="FEFVG";    //fecha fin vigencia
+    public static String STEXT ="STEXT";    //
+    public static String NRDNI  ="NRDNI";   //numero dni
+
 
     //TABLA ZATRP Campos
-    public static String CDZAT ="CDZAT";
-    public static String DSWKP ="DSWKP";
-    public static String DSWKS ="DSWKS";
-    public static String MREMB ="MREMB";
-    public static String TOPER ="TOPER";
-    public static String FEARR  ="FEARR";
-    public static String HRARR ="HRARR";
-    public static String RACRE ="RACRE";
-    public static String DSEMP ="DSEMP";
-    public static String DFEMP ="DFEMP";
-    public static String TFEMP  ="TFEMP";
-    public static String NRDNI  ="NRDNI";
-    public static String FEZAT  ="FEZAT";
-    public static String CDZPC  ="CDZPC";
-    public static String AQBRT  ="AQBRT";
+    public static String CDZAT ="CDZAT";    //codigo Zarpe
+    public static String DSWKP ="DSWKP";    //Capitania
+    public static String DSWKS ="DSWKS";    //nombreNave
+    public static String MREMB ="MREMB";    //matricula
+    public static String TOPER ="TOPER";    //tiempo operacion
+    public static String FEARR  ="FEARR";   //fecha arribo
+    public static String HRARR ="HRARR";    //hora arribo
+    public static String RACRE ="RACRE";    //Representante
+    public static String DSEMP ="DSEMP";    //EmergenciaNmobre
+    public static String DFEMP ="DFEMP";    //EmergenciaDireccion
+    public static String TFEMP  ="TFEMP";   //EmergenciaTelefono
+    public static String FEZAT  ="FEZAT";   //fecha zarpe
+    public static String CDZPC  ="CDZPC";   //zona pesca
+    public static String AQBRT  ="AQBRT";   //Arqueo bruto
+    public static String HRZAR  ="HRZAR";   //Hora zarpe
+
 
     //TABLA VGCER
     public static String DSCER   ="DSCER";
