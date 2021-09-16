@@ -16,6 +16,15 @@ public class PDFZarpeDto {
     private String nombrePatron;
     private String fecha;
     private String dni;
+    private String codigoZarpe;
+
+    public String getCodigoZarpe() {
+        return codigoZarpe;
+    }
+
+    public void setCodigoZarpe(String codigoZarpe) {
+        this.codigoZarpe = codigoZarpe;
+    }
 
     public String getCapitania() {
         return capitania;

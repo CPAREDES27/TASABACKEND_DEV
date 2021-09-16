@@ -60,6 +60,11 @@ public class Constantes {
     //Tripulantes
     public static String ZFL_RFC_REGZAR_ADM_REGZAR ="ZFL_RFC_REGZAR_ADM_REGZAR";
     public static String ZFL_RFC_REGROL_ADM_REGROL ="ZFL_RFC_REGROL_ADM_REGROL";
+    public static String ZPM_RFC_ADMIN_AVISO_AVERIA="ZPM_RFC_ADMIN_AVISO_AVERIA";
+    public static String ZHR_RFC_FLOTA_REPORT_DES_TRIPU="ZHR_RFC_FLOTA_REPORT_DES_TRIPU";
+    public static String ZFL_RFC_REGPRT_ADM_REGPRT="ZFL_RFC_REGPRT_ADM_REGPRT";
+    public static String ZFL_RFC_TFF_CON_TRA_FUE_FAE="ZFL_RFC_TFF_CON_TRA_FUE_FAE";
+
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";
 

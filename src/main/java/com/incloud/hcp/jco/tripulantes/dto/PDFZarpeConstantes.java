@@ -42,10 +42,12 @@ public class PDFZarpeConstantes {
     //TABLA DZATR Rol Tripulacion
     public static String NOMBR="NOMBR";
     public static String NRLIB ="NRLIB";
-    public static String FEVIG ="FEVIG";
+    public static String FEFVG ="FEFVG";
     public static String STEXT ="STEXT";
 
     //TABLA ZATRP Campos
+    public static String CDZAT ="CDZAT";
+    public static String DSWKP ="DSWKP";
     public static String DSWKS ="DSWKS";
     public static String MREMB ="MREMB";
     public static String TOPER ="TOPER";
@@ -64,6 +66,8 @@ public class PDFZarpeConstantes {
     public static String DSCER   ="DSCER";
     public static String DSETP   ="DSETP";
     public static String FECCF   ="FECCF";
+    public static String NRCER   ="NRCER";
+
 
     //Fields Rol Tripulacion
     public static String[]fieldRolTripulacion= new String[]{"", "Apellidos y Nombres", "Matricula", "Vigencia", "Cargo a bordo"};
