@@ -143,8 +143,6 @@ public class EjecutarRFC {
         MensajeDto dto = new MensajeDto();
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
-
-
             dto.setMANDT(tableExport.getString("MANDT"));
             dto.setCMIN(tableExport.getString("CMIN"));
             dto.setCDMIN(tableExport.getString("CDMIN"));
