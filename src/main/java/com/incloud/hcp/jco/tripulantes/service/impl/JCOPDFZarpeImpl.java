@@ -24,7 +24,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
 
 
-    public PDFZarpeExports GenerarPDF(PDFZarpeImports imports)throws Exception{
+    public PDFZarpeExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception{
 
         PDFZarpeExports pdf=new PDFZarpeExports();
         PDFZarpeDto dto= new PDFZarpeDto();
@@ -74,7 +74,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
                 dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
                 dto.setAB(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
-                dto.setZonaPesca(T_ZATRP.getString(PDFZarpeConstantes.CDZPC));
+                dto.setZonaPesca(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setTiempoOperacio(T_ZATRP.getString(PDFZarpeConstantes.TOPER));
                 dto.setEstimadaArribo(fecha+"   "+ hora);
                 dto.setRepresentante(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
@@ -163,7 +163,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
             }
 
 
-           PlantillaPDF(path, dto, RolTripulacion, Certificados);
+           PlantillaPDFZarpe(path, dto, RolTripulacion, Certificados);
 
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
@@ -176,7 +176,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         return pdf;
     }
 
-    public void PlantillaPDF(String path, PDFZarpeDto dto, String[][] rolTripulacion, String[][] certificados)throws Exception{
+    public void PlantillaPDFZarpe(String path, PDFZarpeDto dto, String[][] rolTripulacion, String[][] certificados)throws Exception{
 
         logger.error("PlantillaPDF");
 
@@ -419,14 +419,14 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertando nombre
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 216);
+        contentStream.moveTextPositionByAmount(130, 216);
         contentStream.drawString(dto.getEmergenciaNombre());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 215);
-        contentStream.drawString("_________________________________________________________________________________________________");
+        contentStream.moveTextPositionByAmount(130, 215);
+        contentStream.drawString("______________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -438,14 +438,14 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertando Dirección
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 204);
+        contentStream.moveTextPositionByAmount(130, 204);
         contentStream.drawString(dto.getEmergenciaDireccion());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 203);
-        contentStream.drawString("_________________________________________________________________________________________________");
+        contentStream.moveTextPositionByAmount(130, 203);
+        contentStream.drawString("______________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -457,14 +457,14 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         //insertando telefono
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 192);
+        contentStream.moveTextPositionByAmount(130, 192);
         contentStream.drawString(dto.getEmergenciaTelefono());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 7);
-        contentStream.moveTextPositionByAmount(150, 191);
-        contentStream.drawString("_________________________________________________________________________________________________");
+        contentStream.moveTextPositionByAmount(130, 191);
+        contentStream.drawString("______________________________________________________________________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -475,7 +475,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
         //insertando nombre patron
         contentStream.beginText();
-        contentStream.setFont(font, 7);
+        contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(150, 180);
         contentStream.drawString(dto.getNombrePatron());
         contentStream.endText();
@@ -483,7 +483,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(150, 179);
-        contentStream.drawString("_________________________________________");
+        contentStream.drawString("_____________________________________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -513,7 +513,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
         //insertando dni
         contentStream.beginText();
-        contentStream.setFont(font, 7);
+        contentStream.setFont(bold, 7);
         contentStream.moveTextPositionByAmount(150, 168);
         contentStream.drawString(dto.getDni());
         contentStream.endText();
@@ -833,4 +833,289 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         contentStream.showText(codigoZarpe);
         contentStream.endText();
     }
+
+    public PDFZarpeExports GenerarPDFTravesia()throws Exception{
+
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        PDFZarpeExports pdf=new PDFZarpeExports();
+        PlantillaPDFTravesia(path);
+        Metodos exec = new Metodos();
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return pdf;
+    }
+
+    public void PlantillaPDFTravesia(String path)throws Exception{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
+        String guardiaCostera= Constantes.RUTA_ARCHIVO_IMPORTAR+"logocapitania.png";
+        PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
+        PDImageXObject logoGuardiaCostera = PDImageXObject.createFromFile(guardiaCostera,document);
+
+        document.addPage(page);
+
+// Create a new font object selecting one of the PDF base fonts
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+// Start a new content stream which will "hold" the to be created content
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        //logos superiores
+        contentStream.drawImage(logoTasa, 50, 750);
+        contentStream.drawImage(logoGuardiaCostera, 280, 750);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 10);
+        contentStream.moveTextPositionByAmount(45, 710);
+        contentStream.drawString(PDFTravesiaConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 670);
+        contentStream.drawString(PDFTravesiaConstantes.uno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(200, 670);
+        contentStream.drawString("______________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 650);
+        contentStream.drawString(PDFTravesiaConstantes.dos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(200, 650);
+        contentStream.drawString("______________________________________________________________");
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 630);
+        contentStream.drawString(PDFTravesiaConstantes.tres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(300, 630);
+        contentStream.drawString(PDFTravesiaConstantes.fecha);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(450, 630);
+        contentStream.drawString(PDFTravesiaConstantes.hora);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 610);
+        contentStream.drawString(PDFTravesiaConstantes.cuatro);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(300, 610);
+        contentStream.drawString(PDFTravesiaConstantes.fecha);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(450, 610);
+        contentStream.drawString(PDFTravesiaConstantes.hora);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 590);
+        contentStream.drawString(PDFTravesiaConstantes.cinco);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(200, 590);
+        contentStream.drawString("______________________________________________________________");
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(100, 570);
+        contentStream.drawString(PDFTravesiaConstantes.latitud);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(280, 570);
+        contentStream.drawString(PDFTravesiaConstantes.longitud);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(420, 570);
+        contentStream.drawString(PDFTravesiaConstantes.tiempo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 550);
+        contentStream.drawString(PDFTravesiaConstantes.seis);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(200, 550);
+        contentStream.drawString("______________________________________________________________");
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 530);
+        contentStream.drawString(PDFTravesiaConstantes.siete);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(100, 510);
+        contentStream.drawString(PDFTravesiaConstantes.sieteA);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(370, 510);
+        contentStream.drawString(PDFTravesiaConstantes.sieteB);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 430);
+        contentStream.drawString(PDFTravesiaConstantes.ocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(170, 430);
+        contentStream.drawString("____________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 410);
+        contentStream.drawString(PDFTravesiaConstantes.nueve);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(170, 410);
+        contentStream.drawString("____________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 390);
+        contentStream.drawString(PDFTravesiaConstantes.diez);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 230);
+        contentStream.drawString(PDFTravesiaConstantes.once);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(270, 230);
+        contentStream.drawString("_________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(40, 210);
+        contentStream.drawString(PDFTravesiaConstantes.doce);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(50, 180);
+        contentStream.drawString("__________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(350, 210);
+        contentStream.drawString(PDFTravesiaConstantes.trece);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(350, 180);
+        contentStream.drawString("__________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(40, 140);
+        contentStream.drawString(PDFTravesiaConstantes.nota);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(40, 130);
+        contentStream.drawString(PDFTravesiaConstantes.notaUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(50, 120);
+        contentStream.drawString(PDFTravesiaConstantes.notaUnoA);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(40, 110);
+        contentStream.drawString(PDFTravesiaConstantes.notaDos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(40, 100);
+        contentStream.drawString(PDFTravesiaConstantes.notatres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(40, 90);
+        contentStream.drawString(PDFTravesiaConstantes.notaCuatro);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(50, 80);
+        contentStream.drawString(PDFTravesiaConstantes.notaCuatroA);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(50, 70);
+        contentStream.drawString(PDFTravesiaConstantes.notaCuatroB);
+        contentStream.endText();
+
+        drawCuadroCodigoZarpe(contentStream, 780, 440,"PRUEBA");
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+    }
+
 }

@@ -6,5 +6,6 @@ import com.incloud.hcp.util.Mensaje;
 
 public interface JCOPDFZarpeService {
 
-    PDFZarpeExports GenerarPDF(PDFZarpeImports imports)throws Exception;
+    PDFZarpeExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception;
+    PDFZarpeExports GenerarPDFTravesia()throws Exception;
 }
