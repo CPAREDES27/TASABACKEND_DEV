@@ -9,7 +9,6 @@ public class PDFZarpeImports {
     private String p_canti;
     private String p_cdmma;
     private String p_pernr;
-    private String[] t_nzatr;
 
     public String getP_pernr() {
         return p_pernr;
@@ -67,11 +66,5 @@ public class PDFZarpeImports {
         this.p_cdmma = p_cdmma;
     }
 
-    public String[] getT_nzatr() {
-        return t_nzatr;
-    }
 
-    public void setT_nzatr(String[] t_nzatr) {
-        this.t_nzatr = t_nzatr;
-    }
 }

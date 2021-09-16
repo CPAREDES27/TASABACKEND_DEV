@@ -136,9 +136,25 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
                     if(j==0){
                         registros[j]=String.valueOf(con);
-                    }else {
+                    }else if(j==1) {
+
                         registros[j] = T_VGCER.getString(CamposCertificados[campos]);
                         campos++;
+
+
+                    }else if(j==2){
+                        if(registros[1].trim().compareTo("ARQUEO")==0){
+
+                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
+
+                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
+                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0) {
+
+                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+                        }else{
+                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        }
+                    campos++;
                     }
                 }
 
@@ -571,9 +587,9 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
         logger.error("PlantillaPDF_1");
         drawTableRolTripulacion(page, contentStream, 655.0f, 60.0f, rolTripulacion);
         logger.error("PlantillaPDF_2");
-        drawTableCertificados(page, contentStream,355, 60, certificados);
+        drawTableCertificados(contentStream,355, 60, certificados);
         logger.error("PlantillaPDF_3");
-        drawCuadroCodigoZarpe(page, contentStream, 830, 440,dto.getCodigoZarpe());
+        drawCuadroCodigoZarpe(contentStream, 830, 440,dto.getCodigoZarpe());
         contentStream.close();
         document.save(path);
         document.close();
@@ -687,7 +703,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
     }
 
-    public  void drawTableCertificados(PDPage page, PDPageContentStream contentStream,
+    public  void drawTableCertificados(PDPageContentStream contentStream,
                                          float y, float margin, String[][] content) throws IOException {
 
         logger.error("drawTableCertificados");
@@ -773,7 +789,7 @@ public class JCOPDFZarpeImpl implements JCOPDFZarpeService {
 
 
     }
-    public void drawCuadroCodigoZarpe(PDPage page, PDPageContentStream contentStream, float y, float margin
+    public void drawCuadroCodigoZarpe( PDPageContentStream contentStream, float y, float margin
                                         ,String codigoZarpe)throws IOException{
 
         final int rows = 1;

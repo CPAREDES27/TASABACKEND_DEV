@@ -66,6 +66,8 @@ public class PDFZarpeConstantes {
     public static String DSCER   ="DSCER";
     public static String DSETP   ="DSETP";
     public static String FECCF   ="FECCF";
+    public static String NRCER   ="NRCER";
+
 
     //Fields Rol Tripulacion
     public static String[]fieldRolTripulacion= new String[]{"", "Apellidos y Nombres", "Matricula", "Vigencia", "Cargo a bordo"};
