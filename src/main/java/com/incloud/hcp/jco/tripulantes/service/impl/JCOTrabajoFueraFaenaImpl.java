@@ -1,8 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
-import com.incloud.hcp.jco.tripulantes.dto.Options;
-import com.incloud.hcp.jco.tripulantes.dto.TrabajoFueraFaenaExports;
-import com.incloud.hcp.jco.tripulantes.dto.TrabajoFueraFaenaImports;
+import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOTrabajoFueraFaenaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -84,5 +82,55 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         }
 
         return tff;
+    }
+
+    @Override
+    public GuardaTrabajoExports GuardaTrabajo(GuardaTrabajoImports imports) throws Exception {
+
+        GuardaTrabajoExports gt=new GuardaTrabajoExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_TFF_ACT_TRA_FUE_FAE);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("IP_TOPE", imports.getIp_tope());
+            importx.setValue("IP_NRTFF", imports.getIp_nrtff());
+
+
+            JCoParameterList export = stfcConnection.getExportParameterList();
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            EjecutarRFC exe = new EjecutarRFC();
+            exe.setTable(tables, Tablas.T_TRABFF, imports.getT_trabff());
+            exe.setTable(tables, Tablas.T_TRABAJ, imports.getT_trabaj());
+            exe.setTable(tables, Tablas.T_FECHAS, imports.getT_fechas());
+            exe.setTable(tables, Tablas.T_ACTCAM, imports.getT_actcam());
+            exe.setTable(tables, Tablas.T_TEXTOS, imports.getT_textos());
+
+
+            JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJ);
+
+            stfcConnection.execute(destination);
+            gt.setEp_nrtff(export.getValue(Tablas.EP_NRTFF).toString());
+
+            Metodos metodo = new Metodos();
+
+            List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+
+
+            gt.setT_mensaj(t_mensaj);
+            gt.setMensaje("Ok");
+
+        }catch (Exception e){
+            gt.setMensaje(e.getMessage());
+        }
+
+
+        return gt;
     }
 }

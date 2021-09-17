@@ -44,15 +44,15 @@ public class JCOProtestosImpl implements JCOProtestosService {
                 tmpOptions.add(record);
             }
             JCoParameterList export = stfcConnection.getExportParameterList();
-            pe.setEp_cdprt(export.getValue(Tablas.EP_CDPRT).toString());
-            pe.setEp_drpta(export.getValue(Tablas.EP_DRPTA).toString());
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
             exec.setTable(tables, Tablas.T_OPCION,tmpOptions);
 
             stfcConnection.execute(destination);
+
+            pe.setEp_cdprt(export.getValue(Tablas.EP_CDPRT).toString());
+            pe.setEp_drpta(export.getValue(Tablas.EP_DRPTA).toString());
 
             JCoTable T_BAPRT = tables.getTable(Tablas.T_BAPRT);
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);

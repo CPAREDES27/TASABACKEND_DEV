@@ -29,6 +29,7 @@ public class TripulantesRest {
     @Autowired
     private JCOTrabajoFueraFaenaService jcoTrabajoFueraFaenaService;
 
+
     @PostMapping(value = "/RegistroZarpe/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegistrosZarpeExports> RegistroZarpe(@RequestBody RegistrosZarpeImports imports){
 
@@ -101,6 +102,17 @@ public class TripulantesRest {
 
         try {
             return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.TrabajoFueraFaenaTransporte(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/GuardaTrabajo", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<GuardaTrabajoExports> GuardaTrabajo(@RequestBody GuardaTrabajoImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.GuardaTrabajo(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

@@ -64,6 +64,9 @@ public class Constantes {
     public static String ZHR_RFC_FLOTA_REPORT_DES_TRIPU="ZHR_RFC_FLOTA_REPORT_DES_TRIPU";
     public static String ZFL_RFC_REGPRT_ADM_REGPRT="ZFL_RFC_REGPRT_ADM_REGPRT";
     public static String ZFL_RFC_TFF_CON_TRA_FUE_FAE="ZFL_RFC_TFF_CON_TRA_FUE_FAE";
+    public static String ZFL_RFC_TFF_ACT_TRA_FUE_FAE="ZFL_RFC_TFF_ACT_TRA_FUE_FAE";
+    public static String ZFL_RFC_IMPR_FORM_PRODUCE="ZFL_RFC_IMPR_FORM_PRODUCE";
+    public static String ZFL_RFC_REG_SALUD_TRIP="ZFL_RFC_REG_SALUD_TRIP";
 
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";
