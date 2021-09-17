@@ -109,4 +109,8 @@ public class Tablas {
     public static String T_TEXTOS="T_TEXTOS";
     public static String EP_CDPRT="EP_CDPRT";
     public static String EP_DRPTA="EP_DRPTA";
+    public static String T_TRABFF="T_TRABFF";
+    public static String T_TRABAJ="T_TRABAJ";
+    public static String T_FECHAS="T_FECHAS";
+
 }
