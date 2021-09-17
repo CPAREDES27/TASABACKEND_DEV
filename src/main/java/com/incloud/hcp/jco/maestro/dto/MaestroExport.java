@@ -6,11 +6,11 @@ import java.util.List;
 
 public class MaestroExport {
 
-    public List<LinkedHashMap<String, Object>> getData() {
+    public List<HashMap<String, Object>> getData() {
         return data;
     }
 
-    public void setData(List<LinkedHashMap<String, Object>> data) {
+    public void setData(List<HashMap<String, Object>> data) {
         this.data = data;
     }
 
@@ -22,7 +22,7 @@ public class MaestroExport {
         this.mensaje = mensaje;
     }
 
-    public MaestroExport(List<LinkedHashMap<String, Object>> data, String mensaje) {
+    public MaestroExport(List<HashMap<String, Object>> data, String mensaje) {
         this.data = data;
         this.mensaje = mensaje;
     }
@@ -31,7 +31,7 @@ public class MaestroExport {
 
     }
 
-    private List<LinkedHashMap<String, Object>> data;
+    private List<HashMap<String, Object>> data;
     private String mensaje;
 
 }

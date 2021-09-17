@@ -12,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Service
 public class JCOMaestrosServiceImpl implements JCOMaestrosService {
@@ -94,6 +93,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     public MensajeDto editarMaestro (MaestroEditImports importsParam) throws Exception{
 
+        //DESPUES
         MensajeDto msj= new MensajeDto();
         try {
             HashMap<String, Object> imports = new HashMap<String, Object>();
@@ -106,7 +106,26 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             //ejecutar RFC ZFL_RFC_READ_TABLE
             EjecutarRFC exec = new EjecutarRFC();
             logger.error("EditarMaestro_2");
-            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
+
+
+            //CPAREDES GENERA CADENA CON ORDEN
+
+            String data ="";
+            List<MaestroUpdate> options = new ArrayList<MaestroUpdate>();
+            options=importsParam.getOpcion();
+            Collections.sort(options);
+            String cadena="|";
+            for(int i=0;i<options.size();i++){
+                MaestroUpdate obsj = new MaestroUpdate();
+                cadena+=options.get(i).getValor();
+                if(i<options.size()-1) {
+                    cadena += "|";
+                }
+            }
+            //CPAREDES GENERA CADENA CON ORDEN
+
+
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
             logger.error("EditarMaestro_3");
 
         }catch (Exception e){
@@ -117,6 +136,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             msj.setDSMIN(e.getMessage());
         }
         return msj;
+
 
     }
 

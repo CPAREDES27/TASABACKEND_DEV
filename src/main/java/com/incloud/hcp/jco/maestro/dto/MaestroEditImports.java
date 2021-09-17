@@ -1,12 +1,22 @@
 package com.incloud.hcp.jco.maestro.dto;
 
+import java.util.List;
+
 public class MaestroEditImports {
     private String tabla;
     private String flag;
     private String p_case;
     private String p_user;
     private String data;
+    private List<MaestroUpdate> opcion;
 
+    public List<MaestroUpdate> getOpcion() {
+        return opcion;
+    }
+
+    public void setOpcion(List<MaestroUpdate> opcion) {
+        this.opcion = opcion;
+    }
 
     public String getData() {
         return data;
