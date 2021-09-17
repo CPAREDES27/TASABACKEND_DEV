@@ -28,6 +28,8 @@ public class TripulantesRest {
     private JCOProtestosService jcoProtestosService;
     @Autowired
     private JCOTrabajoFueraFaenaService jcoTrabajoFueraFaenaService;
+    @Autowired
+    private JCOImpresFormatosProduceService jcoImpresFormatosProduceService;
 
 
     @PostMapping(value = "/RegistroZarpe/", produces = APPLICATION_JSON_VALUE)
@@ -113,6 +115,17 @@ public class TripulantesRest {
 
         try {
             return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.GuardaTrabajo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/ImpresionFormatosProduce", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ImpresFormatosProduceExports> ImpresionFormatosProduce(@RequestBody ImpresFormatosProduceImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoImpresFormatosProduceService.ImpresionFormatosProduce(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

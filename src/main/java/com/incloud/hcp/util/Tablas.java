@@ -114,6 +114,8 @@ public class Tablas {
     public static String T_FECHAS="T_FECHAS";
     public static String EP_NRTFF="EP_NRTFF";
     public static String T_ACTCAM="T_ACTCAM";
+    public static String T_RSPRCE="T_RSPRCE";
+    public static String T_DTPRCE="T_DTPRCE";
 
 
 }
