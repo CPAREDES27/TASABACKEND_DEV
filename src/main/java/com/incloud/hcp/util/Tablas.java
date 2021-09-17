@@ -116,6 +116,7 @@ public class Tablas {
     public static String T_ACTCAM="T_ACTCAM";
     public static String T_RSPRCE="T_RSPRCE";
     public static String T_DTPRCE="T_DTPRCE";
+    public static String T_TRIOBS="T_TRIOBS";
 
 
 }

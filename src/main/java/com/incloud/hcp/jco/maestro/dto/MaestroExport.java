@@ -31,7 +31,16 @@ public class MaestroExport {
 
     }
 
+    public List<HashMap<String, Object>> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<HashMap<String, Object>> fields) {
+        this.fields = fields;
+    }
+
     private List<HashMap<String, Object>> data;
+    private List<HashMap<String, Object>> fields;
     private String mensaje;
 
 }

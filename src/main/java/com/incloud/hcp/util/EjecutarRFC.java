@@ -39,11 +39,12 @@ public class EjecutarRFC {
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         data=ObtenerListObj(DATA, FIELDS, fields);
         //data=ObtenerListObjetos(DATA, fields);
-
+        List<HashMap<String, Object>> Fields = ObtenerFields(FIELDS, fields);
         logger.error("Execute_ZFL_RFC_READ_TABLE_4");;
 
 
         MaestroExport me = new MaestroExport();
+        me.setFields(Fields);
         me.setData(data);
         me.setMensaje(mensaje);
         return me;
@@ -298,8 +299,8 @@ public class EjecutarRFC {
                 for (int j = 0; j < jcoFields.getNumRows(); j++) {
                     jcoFields.setRow(j);
                     String key = (String) jcoFields.getValue("FIELDNAME");
-                    String contador ="00"+j+"_";
-                    String key2 = contador +key;
+                    //String contador ="00"+j+"_";
+                    //String key2 = contador +key;
                     Object value = "";
                     try{
                         value = ArrayResponse[j].trim();
@@ -308,7 +309,7 @@ public class EjecutarRFC {
 
                     }
 
-                    newRecord.put(key2, value);
+                    newRecord.put(key, value);
 
 
                 }
@@ -397,6 +398,59 @@ public class EjecutarRFC {
 
 
 
+        return data;
+    }
+
+    public List<HashMap<String, Object>> ObtenerFields(JCoTable jcoTable, String[] fields)throws Exception{
+
+        List<HashMap<String, Object>> data= new ArrayList<HashMap<String, Object>>();
+        int con=1;
+        if(fields.length>=1) {
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                JCoFieldIterator iter = jcoTable.getFieldIterator();
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+
+                while (iter.hasNextField()) {
+                    JCoField field = iter.nextField();
+                    String key = (String) field.getName();
+                    Object value = jcoTable.getValue(key);
+
+                    for (int k = 0; k < fields.length; k++) {
+
+
+                        if (fields[k].trim().equals(value.toString().trim())) {
+                            newRecord.put(key, value);
+                        }
+                    }
+                }
+                if(newRecord.size()>0) {
+                    newRecord.put("ORDEN", con);
+                    data.add(newRecord);
+                }
+
+                con++;
+            }
+        }else {
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                JCoFieldIterator iter = jcoTable.getFieldIterator();
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+
+                while (iter.hasNextField()) {
+                    JCoField field = iter.nextField();
+                    String key = (String) field.getName();
+                    Object value = jcoTable.getValue(key);
+
+                    newRecord.put(key, value);
+
+                }
+                newRecord.put("ORDEN", con);
+
+                data.add(newRecord);
+                con++;
+            }
+        }
         return data;
     }
 }
