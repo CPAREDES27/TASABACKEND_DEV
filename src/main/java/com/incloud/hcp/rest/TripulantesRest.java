@@ -1,10 +1,7 @@
 package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.tripulantes.dto.*;
-import com.incloud.hcp.jco.tripulantes.service.JCORegistroZarpeService;
-import com.incloud.hcp.jco.tripulantes.service.JCORolTripulacionService;
-import com.incloud.hcp.jco.tripulantes.service.JCOSeguimientoTripuService;
-import com.incloud.hcp.jco.tripulantes.service.JCOPDFZarpeService;
+import com.incloud.hcp.jco.tripulantes.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,8 @@ public class TripulantesRest {
     private JCOPDFZarpeService JCOPDFZarpeService;
     @Autowired
     private JCOSeguimientoTripuService jcoSeguimientoTripuService;
+    @Autowired
+    private JCOProtestosService jcoProtestosService;
 
     @PostMapping(value = "/RegistroZarpe/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RegistrosZarpeExports> RegistroZarpe(@RequestBody RegistrosZarpeImports imports){
@@ -78,6 +77,17 @@ public class TripulantesRest {
 
         try {
             return Optional.ofNullable(this.jcoSeguimientoTripuService.SeguimientoTripulantes(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/Protestos", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProtestosExports> Protestos(@RequestBody ProtestosImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoProtestosService.Protestos(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
-public class PDFConstantes {
+public class PDFZarpeConstantes {
 
     public static String titulo = "DECLARACIÓN DIARIA DE ZARPE PARA NAVES PESQUERAS";
     public static String titulo2 = "DE ARQUERO BRUTO MAYOR DE 10";

@@ -105,4 +105,8 @@ public class Tablas {
     public static String T_OPCION="T_OPCION";
     public static String T_DSTRIP="T_DSTRIP";
     public static String T_MENSAJ="T_MENSAJ";
+    public static String T_BAPRT="T_BAPRT";
+    public static String T_TEXTOS="T_TEXTOS";
+    public static String EP_CDPRT="EP_CDPRT";
+    public static String EP_DRPTA="EP_DRPTA";
 }
