@@ -298,7 +298,8 @@ public class EjecutarRFC {
                 for (int j = 0; j < jcoFields.getNumRows(); j++) {
                     jcoFields.setRow(j);
                     String key = (String) jcoFields.getValue("FIELDNAME");
-
+                    String contador ="00"+j+"_";
+                    String key2 = contador +key;
                     Object value = "";
                     try{
                         value = ArrayResponse[j].trim();
@@ -307,7 +308,7 @@ public class EjecutarRFC {
 
                     }
 
-                    newRecord.put(key, value);
+                    newRecord.put(key2, value);
 
 
                 }

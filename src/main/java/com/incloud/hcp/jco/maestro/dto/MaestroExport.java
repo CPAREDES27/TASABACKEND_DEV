@@ -1,15 +1,16 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MaestroExport {
 
-    public List<HashMap<String, Object>> getData() {
+    public List<LinkedHashMap<String, Object>> getData() {
         return data;
     }
 
-    public void setData(List<HashMap<String, Object>> data) {
+    public void setData(List<LinkedHashMap<String, Object>> data) {
         this.data = data;
     }
 
@@ -21,7 +22,7 @@ public class MaestroExport {
         this.mensaje = mensaje;
     }
 
-    public MaestroExport(List<HashMap<String, Object>> data, String mensaje) {
+    public MaestroExport(List<LinkedHashMap<String, Object>> data, String mensaje) {
         this.data = data;
         this.mensaje = mensaje;
     }
@@ -30,7 +31,7 @@ public class MaestroExport {
 
     }
 
-    private List<HashMap<String, Object>> data;
+    private List<LinkedHashMap<String, Object>> data;
     private String mensaje;
 
 }

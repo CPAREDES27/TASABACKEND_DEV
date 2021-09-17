@@ -255,40 +255,40 @@ public class Metodos {
             fields = new String[]{"CDMND", "DSMND"};
         }else if (table.equals("LITORAL")) {
             fields = new String[]{"CDZLT", "DSZLT"};
-        }else if ( table .equals("GRUPOEMPRESA")){
+        }else if (table.equals("GRUPOEMPRESA")){
             fields= new String[]{"CDGRE","DSGRE"};
         }
-        else if ( table .equals("INCIDENTE")){
+        else if (table.equals("INCIDENTE")){
             fields= new String[]{"CDINC", "DSINC"};
         }
-        else if ( table .equals("CLASEAVISOMANT")){
+        else if (table.equals("CLASEAVISOMANT")){
             fields= new String[]{"CDGRE","DSGRE"};
         }
-        else if ( table .equals("GRUPOEMPRESA")){
+        else if (table.equals("GRUPOEMPRESA")){
             fields= new String[]{"QMART", "QMARTX"};
         }
-        else if ( table .equals("ORGCOMPRAS")){
+        else if (table.equals("ORGCOMPRAS")){
             fields= new String[]{"EKORG", "EKOTX"};
         }
-        else if ( table .equals("UNIDADMEDIDA")){
+        else if (table.equals("UNIDADMEDIDA")){
             fields= new String[]{"CDUMD", "DSUMD"};
         }
-        else if ( table .equals("ORGVENTAS")){
+        else if (table.equals("ORGVENTAS")){
             fields= new String[]{"VKORG", "VTEXT"};
         }
-        else if ( table .equals("CANALDISTRIBUCION")){
+        else if (table.equals("CANALDISTRIBUCION")){
             fields= new String[]{"VTWEG", "VTEXT"};
         }
-        else if ( table .equals("ORIGENDATOS")){
+        else if (table.equals("ORIGENDATOS")){
             fields= new String[]{"CDORD", "DSCRP"};
         }
-        else if ( table .equals("SISTPESCA")){
+        else if (table.equals("SISTPESCA")){
             fields= new String[]{"CDSPE", "DSSPE"};
         }
-        else if ( table .equals("GRUPFLOTA")){
+        else if (table.equals("GRUPFLOTA")){
             fields= new String[]{"CDGFL", "DSGFL"};
         }
-        else if ( table .equals("GRUPCAPACIDAD")){
+        else if (table.equals("GRUPCAPACIDAD")){
             fields= new String[]{"CDGCP", "DSGCP"};
         } else if (table.equals("BODEGA")) {
             fields = new String[] {"CDBOD", "DSBOD"};
