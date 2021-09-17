@@ -59,7 +59,7 @@ public class JCOSeguimientoTripuImpl implements JCOSeguimientoTripuService {
             JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJ);
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> t_dstrip = metodo.ListarObjetos(T_DSTRIP);
+            List<HashMap<String, Object>> t_dstrip = metodo.ObtenerListObjetos(T_DSTRIP, imports.getFieldst_dstrip());
             List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetos(T_MENSAJ);
 
             st.setT_dstrip(t_dstrip);
