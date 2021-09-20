@@ -41,7 +41,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("listaEmbarcacion_4");
         ;
         JCoParameterList tables = stfcConnection.getTableParameterList();
-        JCoTable tableImport = tables.getTable("P_OPTIONS");
+            JCoTable tableImport = tables.getTable("P_OPTIONS");
         tableImport.appendRow();
         logger.error("listaEmbarcacion_5");
         ;

@@ -272,7 +272,7 @@ public class EjecutarRFC {
 
         return data;
     }*/
-    public List<HashMap<String, Object>>    ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
+    public List<HashMap<String, Object>>   ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
 

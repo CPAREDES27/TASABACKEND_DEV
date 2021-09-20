@@ -1,13 +1,7 @@
 package com.incloud.hcp.util;
 
-import com.incloud.hcp.jco.maestro.dto.MaestroImports;
-import com.incloud.hcp.jco.maestro.dto.MaestroImportsKey;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.sap.conn.jco.JCoField;
-import com.sap.conn.jco.JCoFieldIterator;
-import com.sap.conn.jco.JCoParameterList;
-import com.sap.conn.jco.JCoTable;
+import com.incloud.hcp.jco.maestro.dto.*;
+import com.sap.conn.jco.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -71,6 +65,7 @@ public class Metodos {
 
         return data;
     }
+
 
     public List<HashMap<String, Object>> ListarObjetosDIR(JCoTable tableExport) throws Exception {
 

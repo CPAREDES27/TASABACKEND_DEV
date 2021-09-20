@@ -12,7 +12,7 @@ public interface JCOMaestrosService {
 
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
 
-    MensajeDto editarMaestro2 (MaestroEditImports imports) throws Exception;
+    MaestroExport editarMaestro2 (MaestroEditImport imports) throws Exception;
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
 
 }

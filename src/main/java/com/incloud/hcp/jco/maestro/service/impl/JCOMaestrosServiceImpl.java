@@ -107,10 +107,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             EjecutarRFC exec = new EjecutarRFC();
             logger.error("EditarMaestro_2");
 
-
-
-
-
             msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
             logger.error("EditarMaestro_3");
 
@@ -125,23 +121,15 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
     }
-    public MensajeDto editarMaestro2 (MaestroEditImports importsParam) throws Exception{
+    public MaestroExport editarMaestro2 (MaestroEditImport importsParam) throws Exception{
 
         //DESPUES
-        MensajeDto msj= new MensajeDto();
+        MaestroExport me= new MaestroExport();
         try {
-            HashMap<String, Object> imports = new HashMap<String, Object>();
-            imports.put("I_TABLE", importsParam.getTabla());
-            imports.put("P_FLAG", importsParam.getFlag());
-            imports.put("P_CASE", importsParam.getP_case());
-            imports.put("P_USER", importsParam.getP_user());
 
-            logger.error("EditarMaestro_1");
-            //ejecutar RFC ZFL_RFC_READ_TABLE
-            EjecutarRFC exec = new EjecutarRFC();
-            logger.error("EditarMaestro_2");
-
-    /*
+            me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
+            //READ TABLE
+            /*
             //CPAREDES GENERA CADENA CON ORDEN
 
             String data ="";
@@ -157,23 +145,66 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 }
             }
             //CPAREDES GENERA CADENA CON ORDEN
-
 */
-            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
-            logger.error("EditarMaestro_3");
-
         }catch (Exception e){
 
-            msj.setMANDT("00");
-            msj.setCMIN("Error");
-            msj.setCDMIN("Exception");
-            msj.setDSMIN(e.getMessage());
+            logger.error(e.toString());
         }
-        return msj;
+        return me;
 
 
     }
-    public AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception{
+    public MaestroExport ConsultaReadTable(String key, String value, String table, String usuario) throws Exception{
+
+        String cadena=key+" = "+ "'"+value+"'";
+        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoRepository repo = destination.getRepository();
+        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("P_USER", usuario);
+        importx.setValue("QUERY_TABLE", table);
+        importx.setValue("DELIMITER", "|");
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+
+        JCoTable tableImport = tables.getTable("OPTIONS");
+        tableImport.appendRow();
+        tableImport.setValue("WA", key+" = "+"'"+value+"'");
+
+
+        JCoTable tableExport = tables.getTable("DATA");
+        JCoTable FIELDS = tables.getTable("FIELDS");
+        stfcConnection.execute(destination);
+        List<HashMap<String, Object>> datas = new ArrayList<HashMap<String, Object>>();
+        logger.error(tableExport.getString());
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            for (int j = 0; j < FIELDS.getNumRows(); j++) {
+                FIELDS.setRow(j);
+                String keys = (String) FIELDS.getValue("FIELDNAME");
+                //String contador ="00"+j+"_";
+                //String key2 = contador +key;
+                Object values = "";
+                try {
+                    values = ArrayResponse[j].trim();
+                } catch (Exception e) {
+                    values = "";
+
+                }
+
+                newRecord.put(keys, values);
+            }
+            datas.add(newRecord);
+        }
+
+            MaestroExport me = new MaestroExport();
+            me.setData(datas);
+
+
+        return me;
+    }
+    public AppMaestrosExports appMaestros(AppMaestrosImports imports) {
 
         AppMaestrosExports ame=new AppMaestrosExports();
 
