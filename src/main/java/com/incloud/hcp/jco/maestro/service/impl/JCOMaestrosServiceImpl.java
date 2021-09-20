@@ -139,7 +139,54 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
     }
+    public MensajeDto editarMaestro2 (MaestroEditImports importsParam) throws Exception{
 
+        //DESPUES
+        MensajeDto msj= new MensajeDto();
+        try {
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("I_TABLE", importsParam.getTabla());
+            imports.put("P_FLAG", importsParam.getFlag());
+            imports.put("P_CASE", importsParam.getP_case());
+            imports.put("P_USER", importsParam.getP_user());
+
+            logger.error("EditarMaestro_1");
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            EjecutarRFC exec = new EjecutarRFC();
+            logger.error("EditarMaestro_2");
+
+
+            //CPAREDES GENERA CADENA CON ORDEN
+
+            String data ="";
+            List<MaestroUpdate> options = new ArrayList<MaestroUpdate>();
+            options=importsParam.getOpcion();
+            Collections.sort(options);
+            String cadena="|";
+            for(int i=0;i<options.size();i++){
+                MaestroUpdate obsj = new MaestroUpdate();
+                cadena+=options.get(i).getValor();
+                if(i<options.size()-1) {
+                    cadena += "|";
+                }
+            }
+            //CPAREDES GENERA CADENA CON ORDEN
+
+
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
+            logger.error("EditarMaestro_3");
+
+        }catch (Exception e){
+
+            msj.setMANDT("00");
+            msj.setCMIN("Error");
+            msj.setCDMIN("Exception");
+            msj.setDSMIN(e.getMessage());
+        }
+        return msj;
+
+
+    }
     public AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception{
 
         AppMaestrosExports ame=new AppMaestrosExports();

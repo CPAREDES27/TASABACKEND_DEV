@@ -156,6 +156,34 @@ public class EjecutarRFC {
         return dto;
     }
 
+    public MensajeDto Execute_ZFL_RFC_UPDATE_TABLE2(HashMap<String, Object> imports, String data) throws Exception{
+
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_UPDATE_TABLE);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_1");
+        setImports(function, imports);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_2");
+        JCoParameterList jcoTables = function.getTableParameterList();
+        JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
+        tableImport.appendRow();
+        tableImport.setValue("DATA", data);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
+        function.execute(destination);
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+
+        MensajeDto dto = new MensajeDto();
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+            dto.setMANDT(tableExport.getString("MANDT"));
+            dto.setCMIN(tableExport.getString("CMIN"));
+            dto.setCDMIN(tableExport.getString("CDMIN"));
+            dto.setDSMIN(tableExport.getString("DSMIN"));
+
+        }
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_4");
+
+
+        return dto;
+    }
     /*
     public List<HashMap<String, Object>> ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
 
