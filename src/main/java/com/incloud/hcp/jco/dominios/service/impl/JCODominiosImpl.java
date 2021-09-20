@@ -89,7 +89,7 @@ public class JCODominiosImpl implements JCODominiosService {
                     String ArrayResponse[] = lis_out.getString().split("\\|");
                     for(int j=0;j<FIELDS.getNumRows();j++){
                         FIELDS.setRow(j);
-                        String key = "00"+ j+"_"+ (String) FIELDS.getValue("FIELDNAME");
+                        String key = (String) FIELDS.getValue("FIELDNAME");
 
                         if(key.equals(fieldname[0])){
 
