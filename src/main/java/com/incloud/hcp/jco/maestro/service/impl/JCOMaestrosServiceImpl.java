@@ -108,24 +108,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             logger.error("EditarMaestro_2");
 
 
-            //CPAREDES GENERA CADENA CON ORDEN
-
-            String data ="";
-            List<MaestroUpdate> options = new ArrayList<MaestroUpdate>();
-            options=importsParam.getOpcion();
-            Collections.sort(options);
-            String cadena="|";
-            for(int i=0;i<options.size();i++){
-                MaestroUpdate obsj = new MaestroUpdate();
-                cadena+=options.get(i).getValor();
-                if(i<options.size()-1) {
-                    cadena += "|";
-                }
-            }
-            //CPAREDES GENERA CADENA CON ORDEN
 
 
-            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
+
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
             logger.error("EditarMaestro_3");
 
         }catch (Exception e){
@@ -155,7 +141,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             EjecutarRFC exec = new EjecutarRFC();
             logger.error("EditarMaestro_2");
 
-
+    /*
             //CPAREDES GENERA CADENA CON ORDEN
 
             String data ="";
@@ -172,8 +158,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }
             //CPAREDES GENERA CADENA CON ORDEN
 
-
-            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
+*/
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
             logger.error("EditarMaestro_3");
 
         }catch (Exception e){
