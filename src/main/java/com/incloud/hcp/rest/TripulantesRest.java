@@ -21,7 +21,7 @@ public class TripulantesRest {
     @Autowired
     private JCORolTripulacionService jcoRolTripulacionService;
     @Autowired
-    private JCOPDFZarpeService JCOPDFZarpeService;
+    private JCOPDFsService JCOPDFsService;
     @Autowired
     private JCOSeguimientoTripuService jcoSeguimientoTripuService;
     @Autowired
@@ -61,7 +61,7 @@ public class TripulantesRest {
     public ResponseEntity<PDFExports> GenerarPdfZarpe(@RequestBody PDFZarpeImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDFZarpe(imports))
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFZarpe(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
@@ -72,7 +72,7 @@ public class TripulantesRest {
     public ResponseEntity<PDFExports> GenerarPdfTravesia(@RequestBody PDFZarpeImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFZarpeService.GenerarPDFTravesia(imports))
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTravesia(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
@@ -139,6 +139,17 @@ public class TripulantesRest {
 
         try {
             return Optional.ofNullable(this.jcoReporObservaTripuService.ReporteObservacionesTripulantes(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/PDFProtestos", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFProtestos(@RequestBody ProtestosImports imports) {
+
+        try {
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFProtestos(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

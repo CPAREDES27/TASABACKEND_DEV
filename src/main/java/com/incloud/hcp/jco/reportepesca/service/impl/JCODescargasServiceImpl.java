@@ -1,8 +1,6 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
-import com.incloud.hcp.jco.reportepesca.dto.DescargasExports;
-import com.incloud.hcp.jco.reportepesca.dto.DescargasImports;
-import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
+import com.incloud.hcp.jco.reportepesca.dto.*;
 import com.incloud.hcp.jco.reportepesca.service.JCODescargasService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -50,6 +48,34 @@ public class JCODescargasServiceImpl implements JCODescargasService {
 
         DescargasExports dto = new DescargasExports();
         dto.setStr_des(listSTR_DES);
+        dto.setMensaje("OK");
+
+        return dto;
+    }
+
+    @Override
+    public InterlocutorExports AgregarInterlocutor(InterlocutorImports imports) throws Exception {
+        HashMap<String, Object> importParams = new HashMap<>();
+        importParams.put("P_USER", imports.getP_user());
+        importParams.put("P_NRMAR", imports.getP_nrmar());
+        importParams.put("P_LIFNR", imports.getP_lifnr());
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_AGREGA_INTER);
+
+        EjecutarRFC executeRFC = new EjecutarRFC();
+        executeRFC.setImports(function, importParams);
+
+        JCoParameterList tables = function.getTableParameterList();
+        function.execute(destination);
+        JCoTable tblT_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+
+        Metodos metodos = new Metodos();
+        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_MENSAJE);
+
+        InterlocutorExports dto = new InterlocutorExports();
+        dto.setT_mensaje(listT_MENSAJE);
         dto.setMensaje("OK");
 
         return dto;
