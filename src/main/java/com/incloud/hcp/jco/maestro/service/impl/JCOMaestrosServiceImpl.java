@@ -128,6 +128,33 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         try {
 
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
+
+            List<MaestroUpdate> update = importsParam.getOpcion();
+            List<HashMap<String, Object>> data= me.getData();
+            HashMap<String,Object> newRecord = new HashMap<String,Object>();
+            logger.error("SALUDA2");
+            for(Map<String,Object> datas: data){
+                for(Map.Entry<String,Object> entry: datas.entrySet()){
+                    String key= entry.getKey();
+                    Object value= entry.getValue();
+                    for(int i=0;i<update.size();i++){
+                        logger.error("field "+ update.get(i).getField());
+                        if(key.equals(update.get(i).getField())){
+                            newRecord.put(key,update.get(i).getValor());
+                        }else{
+                            newRecord.put(key,value);
+                        }
+                    }
+                    logger.error("SALUDA"+ key +" = "+ value);
+                }
+            }
+            for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+                logger.error("NUEVA LISTA "+ entry.getValue());
+            }
+            logger.error("SALUDA3");
+
+
+
             //READ TABLE
             /*
             //CPAREDES GENERA CADENA CON ORDEN
