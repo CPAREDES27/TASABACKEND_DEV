@@ -4,28 +4,20 @@ import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.util.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOPDFsService;
 import com.sap.conn.jco.*;
-import io.swagger.models.auth.In;
-import org.apache.pdfbox.contentstream.PDContentStream;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.PDLayoutAttributeObject;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.color.PDGamma;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JCOPDFsImpl implements JCOPDFsService {
@@ -1415,7 +1407,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         PDFExports pdf= new PDFExports();
-
+        PDFProtestosDto dto = new PDFProtestosDto();
+        Metodos metodo=new Metodos();
         try {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -1437,7 +1430,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 record.put("DATA", o.getData());
                 tmpOptions.add(record);
             }
-            JCoParameterList export = stfcConnection.getExportParameterList();
+
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
@@ -1446,35 +1439,35 @@ public class JCOPDFsImpl implements JCOPDFsService {
             stfcConnection.execute(destination);
 
             JCoTable T_BAPRT = tables.getTable(Tablas.T_BAPRT);
+            T_BAPRT.setRow(0);
+
+            JCoField fieldF = T_BAPRT.getField(PDFProtestosConstantes.FECRE);
+            Date date=fieldF.getDate();
+            SimpleDateFormat dia = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es","ES"));
+            String fecha = dia.format(date);
+
+            dto.setTrato(T_BAPRT.getString(PDFProtestosConstantes.TRATO));
+            dto.setGradoSupervisor(T_BAPRT.getString(PDFProtestosConstantes.GRADO));
+            dto.setNombreSupervisor(T_BAPRT.getString(PDFProtestosConstantes.NAPSU));
+            dto.setDomicilioLegal(T_BAPRT.getString(PDFProtestosConstantes.DRPTA));
+            dto.setCargoSupervisor(T_BAPRT.getString(PDFProtestosConstantes.CARSU));
+            dto.setNombreBahia(T_BAPRT.getString(PDFProtestosConstantes.NAPBA));
+            dto.setDni(T_BAPRT.getString(PDFProtestosConstantes.NRDNI));
+            dto.setPuerto(T_BAPRT.getString(PDFProtestosConstantes.DSWKP));
+            dto.setFecha(fecha);
+            dto.setNombreEmbarcacion(T_BAPRT.getString(PDFProtestosConstantes.DSWKS));
+            dto.setMatricula(T_BAPRT.getString(PDFProtestosConstantes.MREMB));
+            dto.setNumeroProtesto(T_BAPRT.getString(PDFProtestosConstantes.CDPRT));
+
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
-            JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJ);
 
-            Metodos metodo = new Metodos();
-            List<HashMap<String, Object>>  t_baprt = metodo.ObtenerListObjetos(T_BAPRT, imports.getFieldst_baprt());
-            List<HashMap<String, Object>>  t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
-            List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+            String tdline="";
+            for(int i=0; i<T_TEXTOS.getNumRows(); i++){
+                T_TEXTOS.setRow(i);
+                tdline+= T_TEXTOS.getString(PDFProtestosConstantes.TDLINE);
+            }
 
-
-            String parrafoDos="Con la finalidad de dar cumplimiento a los diferentes dispositivos legales reglamentarios de " +
-                    "Capitanía, pongo de su conocimiento el siguiente protesto informativo, el día 09/12/2020 a las 06:15" +
-                    " horas aproximadamente nuestra E/P TASA 45 con matrícula CO- 22029-PM se encontraba acoderando a nuestra " +
-                    "chata PABLO VI con matrícula CO-6542-AM para descargar 140 Tons de anchoveta en nuestra planta, producto de" +
-                    " la marejada golpeó levemente la pluma de la chata con la proa del lado de estribor del barco, no hubieron" +
-                    " daños mayores.";
-
-            PDFProtestosDto dto = new PDFProtestosDto();
-            dto.setTrato("SEÑOR");
-            dto.setCargoUno("CAPITAN NAVIO");
-            dto.setNombreCargoUno("LUDWING ZANABRIA ACOSTA");
-            dto.setDomicilioLegal("Av Nestor Gambeta Km 14.1, Ex Fundo Márquez - Callao");
-            dto.setCargoDos("");
-            dto.setNombreCargoDos("JIMMY ANDERSO JARA SAENZ");
-            dto.setDni("47197836");
-            dto.setSegundoParrafo(parrafoDos);
-            dto.setPuerto("CALLAO");
-            dto.setFecha("10 de diciembre del 2020");
-            dto.setNombreEmbarcacion("TASA 45");
-            dto.setMatricula("CO-22029-PM");
+            dto.setSegundoParrafo(tdline);
 
 
             PlantillaPDFProtestos(path, dto);
@@ -1497,7 +1490,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDPage page = new PDPage(PDRectangle.A4);
         String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
         PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
-        PDRectangle mediabox=new PDRectangle();
         document.addPage(page);
 
         PDFont bold = PDType1Font.HELVETICA_BOLD;
@@ -1509,87 +1501,79 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 14);
-        contentStream.moveTextPositionByAmount(200, 750);
-        contentStream.drawString("PROTESTO DE MAR INFORMATIVO");
+        contentStream.moveTextPositionByAmount(190, 750);
+        contentStream.drawString(PDFProtestosConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(360, 710);
+        contentStream.moveTextPositionByAmount(365, 700);
         contentStream.drawString(dto.getPuerto()+", "+dto.getFecha());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 680);
+        contentStream.moveTextPositionByAmount(40, 670);
         contentStream.drawString(dto.getTrato());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 670);
-        contentStream.drawString(dto.getCargoUno());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
         contentStream.moveTextPositionByAmount(40, 660);
-        contentStream.drawString(dto.getNombreCargoUno());
+        contentStream.drawString(dto.getGradoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
         contentStream.moveTextPositionByAmount(40, 650);
-        contentStream.drawString(dto.getCargoDos());
+        contentStream.drawString(dto.getNombreSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
         contentStream.moveTextPositionByAmount(40, 640);
-        contentStream.drawString(PDFProtestosDto.capitaniaGuardacostas);
+        contentStream.drawString(dto.getCargoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
         contentStream.moveTextPositionByAmount(40, 630);
+        contentStream.drawString(PDFProtestosConstantes.capitaniaGuardacostas);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 12);
+        contentStream.moveTextPositionByAmount(40, 620);
         contentStream.drawString(dto.getPuerto());
         contentStream.endText();
 
-        String parrafoUno=PDFProtestosDto.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosDto.primerParrafo2+dto.getNombreCargoDos()
-                +PDFProtestosDto.primerParrafo3+dto.getDni()+PDFProtestosDto.primerParrafo4+dto.getNombreEmbarcacion()
-                +PDFProtestosDto.primerParrafo5+dto.getMatricula()+PDFProtestosDto.primerParrafo6;
+        String parrafoUno=PDFProtestosConstantes.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosConstantes.primerParrafo2+dto.getNombreBahia()
+                +PDFProtestosConstantes.primerParrafo3+dto.getDni()+PDFProtestosConstantes.primerParrafo4+dto.getNombreEmbarcacion()
+                +PDFProtestosConstantes.primerParrafo5+dto.getMatricula()+PDFProtestosConstantes.primerParrafo6;
 
-        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 600);
-        int finPD= justificarParrafoDos(contentStream,font,12f,  dto.getSegundoParrafo(), finPU-20);
+        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 590);
+        int finUno= justificarParrafo(contentStream,font,12f,  dto.getSegundoParrafo(), finPU-20);
+        int finDos= justificarParrafo(contentStream,font,12f,  PDFProtestosConstantes.textoFinal1, finUno-20);
+
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finPD-20);
-        contentStream.drawString(PDFProtestosDto.textoFinal1);
+        contentStream.moveTextPositionByAmount(40, finDos-20);
+        contentStream.drawString(PDFProtestosConstantes.textoFinal2);
         contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finPD-30);
-        contentStream.drawString(PDFProtestosDto.textoFinal2);
-        contentStream.endText();
+
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finPD-60);
-        contentStream.drawString(PDFProtestosDto.textoFinal3);
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finPD-100);
-        contentStream.drawString(PDFProtestosDto.atentamente);
+        contentStream.moveTextPositionByAmount(40, finDos-60);
+        contentStream.drawString(PDFProtestosConstantes.atentamente);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 9);
         contentStream.moveTextPositionByAmount(40, 90);
-        contentStream.drawString(PDFProtestosDto.nProtesto+"0000005004");
+        contentStream.drawString(PDFProtestosConstantes.nProtesto+ dto.getNumeroProtesto());
         contentStream.endText();
 
 
@@ -1607,23 +1591,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
         logger.error("justificarTexto");
         int width = 470;
         int startX = 40;
-       // float startY = 600;
 
 
         List<String> lines = new ArrayList<String>();
 
-
         int lastSpace = -1;
+        int con=0;
+        int c=0;
         while (text.length()> 0)
         {
-            if(lines.size()>0){
-                width=510;
-            }
+
             int spaceIndex = text.indexOf(' ', lastSpace + 1);
             if (spaceIndex < 0)
                 spaceIndex = text.length();
             String subString = text.substring(0, spaceIndex);
-            logger.error("subString: "+subString);
+
             float size = fontSize * pdfFont.getStringWidth(subString) / 1000;
 
             if (size > width)
@@ -1633,25 +1615,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 subString = text.substring(0, lastSpace);
                 lines.add(subString);
 
+
                 text = text.substring(lastSpace).trim();
 
                 lastSpace = -1;
+                logger.error("width antes: "+width);
+                if(!lines.isEmpty()){
+
+                    width = 510;
+                    logger.error("width dsps: "+width);
+                }
+                //logger.error("contador: "+c);
+                //logger.error("lines.lenght: "+lines.size());
+
+                //logger.error("primer if("+con+"): "+lines.get(con));
+                con++;
             }
             else if (spaceIndex == text.length())
             {
-                logger.error("lines.add(text) "+text);
+
                 lines.add(text);
 
                 text = "";
+
             }
             else
             {
                 lastSpace = spaceIndex;
             }
-        }
-            logger.error("lines.size: "+lines.size());
 
-        //for (String line: lines)
+            c++;
+
+        }
+
+
            for(int i=0; i<lines.size(); i++)
         {
 
@@ -1669,8 +1666,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
             if (lines.get(i).length() > 1)
             {
                  size = fontSize * pdfFont.getStringWidth(lines.get(i)) / 1000;
-
-                logger.error("size "+size);
+                if(i==0){
+                    width=477;
+                }else{
+                    width=510;
+                }
                 float  free = width - size;
                 int tam=lines.size()-1;
                 if(i==tam){
@@ -1682,10 +1682,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     }
                 }
             }
-            logger.error("charSpacing "+charSpacing);
+
             contentStream.setCharacterSpacing(charSpacing);
             contentStream.showText(lines.get(i));
-            //contentStream.newLineAtOffset(startX, -leading);
             contentStream.endText();
             startY-=fontSize;
 
@@ -1694,7 +1693,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
     }
 
-    public int justificarParrafoDos(PDPageContentStream contentStream, PDFont pdfFont, float fontSize,  String text, int startY)
+    public int justificarParrafo(PDPageContentStream contentStream, PDFont pdfFont, float fontSize,  String text, int startY)
             throws IOException{
 
 
@@ -1778,7 +1777,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(lines.get(i));
             //contentStream.newLineAtOffset(startX, -leading);
             contentStream.endText();
-            startY-=fontSize-2;
+            startY-=fontSize+2;
 
         }
         return startY;
