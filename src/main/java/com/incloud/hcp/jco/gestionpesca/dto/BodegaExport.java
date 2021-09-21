@@ -2,13 +2,13 @@ package com.incloud.hcp.jco.gestionpesca.dto;
 
 public class BodegaExport {
 
-    private String mensaje;
+    private boolean estado;
 
-    public String getMensaje() {
-        return mensaje;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 }

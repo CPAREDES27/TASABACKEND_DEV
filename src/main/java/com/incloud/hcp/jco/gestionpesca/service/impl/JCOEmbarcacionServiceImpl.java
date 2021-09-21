@@ -272,17 +272,19 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         BodegaExport me = new BodegaExport();
         String campo= metodo.ObtenerCampo(tableExport,FIELDS,"WERKS");
-        me.setMensaje(campo);
+
         if(campo != null && campo.length()>0){
-            werks=campo;
+            werks=campo; //0001
         }else{
             werks=imports.getCodPlanta();
             bOk=false;
         }
 
-        String tablasEmba= "ZFLEMB";
 
-        JCoFunction stfcConnections = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoDestination destinations = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repos = destinations.getRepository();
+        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE);
         JCoParameterList importz = stfcConnections.getImportParameterList();
 
         importz.setValue("DELIMITER","|");
@@ -291,23 +293,56 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoParameterList table = stfcConnections.getTableParameterList();
         JCoTable tableImports = table.getTable("OPTIONS");
         tableImports.appendRow();
-
         tableImports.setValue("WA", "CDEMB = "+"'"+imports.getCodEmba()+"'");
 
-        stfcConnections.execute(destination);
+        stfcConnections.execute(destinations);
 
 
         JCoTable tableExports = table.getTable("DATA");
         JCoTable FIELD = table.getTable("FIELDS");
 
         String bodega= metodo.ObtenerCampo(tableExports,FIELD,"HPACH");
-        me.setMensaje(bodega);
 
 
+        if(!bodega.equalsIgnoreCase("S")){
 
+            JCoDestination destination3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            ;
+            JCoRepository repos3 = destination3.getRepository();
+            JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+            JCoParameterList importz3 = stfcConnections3.getImportParameterList();
 
+            importz3.setValue("DELIMITER","|");
+            importz3.setValue("QUERY_TABLE","ZTB_CONSTANTES");
+
+            JCoParameterList table3 = stfcConnections.getTableParameterList();
+            JCoTable tableImports3 = table3.getTable("OPTIONS");
+            tableImports3.appendRow();
+            tableImports3.setValue("WA","APLICACION = 'FL'");
+            tableImports3.setValue("WA","AND PROGRAMA = 'ZFL_RFC_DISTR_FLOTA'");
+            tableImports3.setValue("WA","AND CAMPO = 'WERKS'");
+            stfcConnections3.execute(destination3);
+
+            JCoTable tableExports3 = table3.getTable("DATA");
+
+            for(int i=0;i<tableExports3.getNumRows();i++){
+                tableExports3.setRow(i);
+                String ArrayResponse[] = tableExports3.getString().split("\\|");
+                if(ArrayResponse[0].equalsIgnoreCase(werks)){
+                    bOk=false;
+                    logger.error("GG",ArrayResponse[0]);
+                    break;
+                }
+            }
+        }else{
+            bOk=true;
+        }
+
+        me.setEstado(bOk);
         return  me;
     }
+
+
 
     public ValidaMareaExports ValidarMarea(ValidaMareaImports imports)throws Exception{
 
