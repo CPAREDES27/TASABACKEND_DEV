@@ -288,13 +288,13 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         importz.setValue("DELIMITER","|");
         importz.setValue("QUERY_TABLE",Tablas.ZFLEMB);
 
-        JCoParameterList table = stfcConnection.getTableParameterList();
+        JCoParameterList table = stfcConnections.getTableParameterList();
         JCoTable tableImports = table.getTable("OPTIONS");
         tableImports.appendRow();
 
         tableImports.setValue("WA", "CDEMB = "+"'"+imports.getCodEmba()+"'");
 
-        stfcConnection.execute(destination);
+        stfcConnections.execute(destination);
 
 
         JCoTable tableExports = table.getTable("DATA");
