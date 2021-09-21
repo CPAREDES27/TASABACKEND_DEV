@@ -289,7 +289,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         importz.setValue("QUERY_TABLE",Tablas.ZFLPTA);
 
         JCoParameterList table = stfcConnection.getTableParameterList();
-        JCoTable tableImports = tables.getTable("OPTIONS");
+        JCoTable tableImports = table.getTable("OPTIONS");
         tableImports.appendRow();
 
         tableImports.setValue("WA", "CDEMB = "+"'"+imports.getCodEmba()+"'");
