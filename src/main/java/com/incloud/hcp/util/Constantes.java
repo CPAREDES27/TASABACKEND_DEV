@@ -76,10 +76,15 @@ public class Constantes {
     public static String RUTA_ARCHIVO_IMPORTAR="/home/vcap/app/ArchivosCorreo/";
 
     //Configuracion FTP
-    public static String  ftp_usuario="dlpuser";
-    public static String ftp_contraseña="rNrKYTX9g7z3RgJRmxWuGHbeu";
-    public static String ftp_servidor="ftp.dlptest.com";
+    public static String  ftp_usuario="";
+    public static String ftp_contraseña="";
+    public static String ftp_servidor="ftp.tasa";
     public static String ftp_puerto="21";
+
+    //public static String  ftp_usuario="dlpuser";
+    //public static String ftp_contraseña="rNrKYTX9g7z3RgJRmxWuGHbeu";
+    //public static String ftp_servidor="ftp.dlptest.com";
+    //public static String ftp_puerto="21";
 
     //CENTRO TASA FLOTA
     public static int CENTRO_TASA_FLOTA = 42;

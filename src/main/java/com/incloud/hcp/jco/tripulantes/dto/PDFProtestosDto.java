@@ -3,32 +3,28 @@ package com.incloud.hcp.jco.tripulantes.dto;
 public class PDFProtestosDto {
 
     private String trato;
-    private String cargoUno;
-    private String nombreCargoUno;
+    private String gradoSupervisor;
+    private String nombreSupervisor;
     private String domicilioLegal;
-    private String cargoDos;
-    private String nombreCargoDos;
+    private String cargoSupervisor;
+    private String nombreBahia;
     private String dni;
     private String segundoParrafo;
     private String puerto;
     private String fecha;
     private String nombreEmbarcacion;
     private String matricula;
+    private String numeroProtesto;
 
 
-    public static String capitaniaGuardacostas="CAPITANIA GUARDACOSTAS MARÍTIMA DE CALLAO";
-    public static String primerParrafo1="Tecnólogica de Alimentos con RUC. 20100971772, con domicilio legal en ";
-    public static String primerParrafo2=" debidamente representada por el señor BAHIA DE PUERTO, ";
-    public static String primerParrafo3=" identificado con DNI N° ";
-    public static String primerParrafo4=" y representante de la Embarcación ";
-    public static String primerParrafo5=" de matrícula ";
-    public static String primerParrafo6=" de propiedad de nuestra empresa, con el debido respeto tengo a bien direigirme a Ud. para informar lo siguiente:";
 
-    public static String textoFinal1="Lo que cumplimos con informar para los fines que estime vuestro despacho reservándonos";
-    public static String textoFinal2="el derecho de ampliar el presente protesto las veces que se estime conveniente";
-    public static String textoFinal3="Aprovecho la oportunidad para reiterar a Ud. los sentmientos de mi consideración y estima.";
-    public static String atentamente="Atentamente,";
-    public static String nProtesto="N° Protesto: ";
+    public String getNumeroProtesto() {
+        return numeroProtesto;
+    }
+
+    public void setNumeroProtesto(String numeroProtesto) {
+        this.numeroProtesto = numeroProtesto;
+    }
 
     public String getNombreEmbarcacion() {
         return nombreEmbarcacion;
@@ -70,20 +66,20 @@ public class PDFProtestosDto {
         this.trato = trato;
     }
 
-    public String getCargoUno() {
-        return cargoUno;
+    public String getGradoSupervisor() {
+        return gradoSupervisor;
     }
 
-    public void setCargoUno(String cargoUno) {
-        this.cargoUno = cargoUno;
+    public void setGradoSupervisor(String gradoSupervisor) {
+        this.gradoSupervisor = gradoSupervisor;
     }
 
-    public String getNombreCargoUno() {
-        return nombreCargoUno;
+    public String getNombreSupervisor() {
+        return nombreSupervisor;
     }
 
-    public void setNombreCargoUno(String nombreCargoUno) {
-        this.nombreCargoUno = nombreCargoUno;
+    public void setNombreSupervisor(String nombreSupervisor) {
+        this.nombreSupervisor = nombreSupervisor;
     }
 
     public String getDomicilioLegal() {
@@ -94,20 +90,20 @@ public class PDFProtestosDto {
         this.domicilioLegal = domicilioLegal;
     }
 
-    public String getCargoDos() {
-        return cargoDos;
+    public String getCargoSupervisor() {
+        return cargoSupervisor;
     }
 
-    public void setCargoDos(String cargoDos) {
-        this.cargoDos = cargoDos;
+    public void setCargoSupervisor(String cargoSupervisor) {
+        this.cargoSupervisor = cargoSupervisor;
     }
 
-    public String getNombreCargoDos() {
-        return nombreCargoDos;
+    public String getNombreBahia() {
+        return nombreBahia;
     }
 
-    public void setNombreCargoDos(String nombreCargoDos) {
-        this.nombreCargoDos = nombreCargoDos;
+    public void setNombreBahia(String nombreBahia) {
+        this.nombreBahia = nombreBahia;
     }
 
     public String getDni() {
