@@ -96,4 +96,14 @@ public class ReportePescaRest {
             throw new RuntimeException(ex.toString());
         }
     }
+
+    @PostMapping(value = "/AgregarInterlocutor", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<InterlocutorExports> AgregarInterlocutor(@RequestBody InterlocutorImports imports) {
+        try {
+            return Optional.ofNullable(this.jcoDescargasService.AgregarInterlocutor(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }
 }
