@@ -155,6 +155,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
 
+
+
             //READ TABLE
             /*
             //CPAREDES GENERA CADENA CON ORDEN
@@ -206,7 +208,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
             String ArrayResponse[] = tableExport.getString().split("\\|");
-            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            LinkedHashMap<String, Object> newRecord = new LinkedHashMap<String, Object>();
             for (int j = 0; j < FIELDS.getNumRows(); j++) {
                 FIELDS.setRow(j);
                 String keys = (String) FIELDS.getValue("FIELDNAME");
@@ -227,8 +229,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
             MaestroExport me = new MaestroExport();
             me.setData(datas);
-
-
         return me;
     }
     public AppMaestrosExports appMaestros(AppMaestrosImports imports) {
