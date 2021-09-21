@@ -5,13 +5,22 @@ import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import java.util.List;
 
 public class BodegaImport {
-        private List<MaestroOptions> options;
+        private String codEmba;
+        private String codPlanta;
 
-        public List<MaestroOptions> getOptions() {
-            return options;
-        }
+    public String getCodEmba() {
+        return codEmba;
+    }
 
-        public void setOptions(List<MaestroOptions> options) {
-            this.options = options;
-        }
+    public void setCodEmba(String codEmba) {
+        this.codEmba = codEmba;
+    }
+
+    public String getCodPlanta() {
+        return codPlanta;
+    }
+
+    public void setCodPlanta(String codPlanta) {
+        this.codPlanta = codPlanta;
+    }
 }

@@ -243,13 +243,10 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
     public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
         Metodos metodo = new Metodos();
         boolean bOk  = true;
-        String werks =" ";
+        String werks ="";
         String bodCert = " ";
         String[] fields = {"WERKS"};
 
-
-
-        List<EmbarcacionDto> listaEmbarcacion = new ArrayList<EmbarcacionDto>();
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;
         JCoRepository repo = destination.getRepository();
@@ -257,30 +254,56 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
-        importx.setValue("P_USER", "FGARCIA");
         importx.setValue("DELIMITER","|");
         importx.setValue("QUERY_TABLE",Tablas.ZFLPTA);
 
-        ;
         JCoParameterList tables = stfcConnection.getTableParameterList();
         JCoTable tableImport = tables.getTable("OPTIONS");
         tableImport.appendRow();
 
-        tableImport.setValue("WA", "CDPTA = '0144'");
-        //Ejecutar Funcion
-        stfcConnection.execute(destination);
-        logger.error("listaEmbarcacion_6");
-        //DestinationAcce
+        tableImport.setValue("WA", "CDPTA = "+"'"+imports.getCodPlanta()+"'");
 
-        //Recuperar Datos de SAP
+        stfcConnection.execute(destination);
+
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
 
 
         BodegaExport me = new BodegaExport();
-        String campo= metodo.ObtenerCampo(tableExport,FIELDS);
+        String campo= metodo.ObtenerCampo(tableExport,FIELDS,"WERKS");
         me.setMensaje(campo);
+        if(campo != null && campo.length()>0){
+            werks=campo;
+        }else{
+            werks=imports.getCodPlanta();
+            bOk=false;
+        }
+
+        String tablasEmba= "ZFLEMB";
+
+        JCoFunction stfcConnections = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importz = stfcConnections.getImportParameterList();
+
+        importz.setValue("DELIMITER","|");
+        importz.setValue("QUERY_TABLE",Tablas.ZFLPTA);
+
+        JCoParameterList table = stfcConnection.getTableParameterList();
+        JCoTable tableImports = tables.getTable("OPTIONS");
+        tableImports.appendRow();
+
+        tableImports.setValue("WA", "CDEMB = "+"'"+imports.getCodEmba()+"'");
+
+        stfcConnection.execute(destination);
+
+
+        JCoTable tableExports = table.getTable("DATA");
+        JCoTable FIELD = table.getTable("FIELDS");
+
+        String bodega= metodo.ObtenerCampo(tableExports,FIELD,"HPACH");
+        me.setMensaje(bodega);
+
+
 
 
         return  me;

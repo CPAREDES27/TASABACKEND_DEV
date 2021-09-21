@@ -518,7 +518,7 @@ public class Metodos {
 
     }
 
-    public String ObtenerCampo(JCoTable tableExport, JCoTable FIELDS){
+    public String ObtenerCampo(JCoTable tableExport, JCoTable FIELDS,String validador){
         String campo="";
         for(int i=0;i<tableExport.getNumRows();i++){
             tableExport.setRow(i);
@@ -527,10 +527,10 @@ public class Metodos {
                 FIELDS.setRow(j);
                 Object value="";
                 String key=(String) FIELDS.getValue("FIELDNAME");
-                if(key.equals("CDPTA")){
+                if(key.equals(validador)){
                     value=ArrayResponse[j].trim();
                     campo=value.toString();
-                    logger.error("CDPTA: "+campo);
+
                 }
             }
 
