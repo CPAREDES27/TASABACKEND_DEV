@@ -286,7 +286,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         JCoParameterList importz = stfcConnections.getImportParameterList();
 
         importz.setValue("DELIMITER","|");
-        importz.setValue("QUERY_TABLE",Tablas.ZFLPTA);
+        importz.setValue("QUERY_TABLE",Tablas.ZFLEMB);
 
         JCoParameterList table = stfcConnection.getTableParameterList();
         JCoTable tableImports = table.getTable("OPTIONS");
