@@ -102,13 +102,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("P_CASE", importsParam.getP_case());
             imports.put("P_USER", importsParam.getP_user());
 
-            logger.error("EditarMaestro_1");
-            //ejecutar RFC ZFL_RFC_READ_TABLE
+
             EjecutarRFC exec = new EjecutarRFC();
-            logger.error("EditarMaestro_2");
+
 
             msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
-            logger.error("EditarMaestro_3");
+
 
         }catch (Exception e){
 
@@ -121,65 +120,72 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
     }
-    public MaestroExport editarMaestro2 (MaestroEditImport importsParam) throws Exception{
+    public MensajeDto editarMaestro2 (MaestroEditImport importsParam) throws Exception{
 
         //DESPUES
         MaestroExport me= new MaestroExport();
+        MensajeDto msj= new MensajeDto();
         try {
 
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
 
             List<MaestroUpdate> update = importsParam.getOpcion();
             List<HashMap<String, Object>> data= me.getData();
-            HashMap<String,Object> newRecord = new HashMap<String,Object>();
+            LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
+            LinkedHashMap<String,Object> setDAta = new LinkedHashMap<String,Object>();
             logger.error("SALUDA2");
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
                     String key= entry.getKey();
                     Object value= entry.getValue();
-                    for(int i=0;i<update.size();i++){
-                        logger.error("field "+ update.get(i).getField());
-                        if(key.equals(update.get(i).getField())){
-                            newRecord.put(key,update.get(i).getValor());
-                        }else{
-                            newRecord.put(key,value);
-                        }
+                    if(!key.equals("MANDT")) {
+                        newRecord.put(key, value);
                     }
-                    logger.error("SALUDA"+ key +" = "+ value);
                 }
             }
-            for(Map.Entry<String,Object> entry:newRecord.entrySet()){
-                logger.error("NUEVA LISTA "+ entry.getValue());
-            }
-            logger.error("SALUDA3");
+
+            String mensajito="";
+            String valor="";
+           for(int i=0;i<update.size();i++){
+               mensajito=update.get(i).getField();
+               valor = update.get(i).getValor();
+               for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+                   if(entry.getKey().contains(mensajito)){
+                       entry.setValue(valor);
+                   }
+               }
+           }
 
 
-
-
-
-            //READ TABLE
-            /*
-            //CPAREDES GENERA CADENA CON ORDEN
-
-            String data ="";
-            List<MaestroUpdate> options = new ArrayList<MaestroUpdate>();
-            options=importsParam.getOpcion();
-            Collections.sort(options);
             String cadena="|";
-            for(int i=0;i<options.size();i++){
-                MaestroUpdate obsj = new MaestroUpdate();
-                cadena+=options.get(i).getValor();
-                if(i<options.size()-1) {
-                    cadena += "|";
-                }
+            for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+                cadena+=entry.getValue();
+                cadena+="|";
             }
-            //CPAREDES GENERA CADENA CON ORDEN
-*/
-        }catch (Exception e){
 
-            logger.error(e.toString());
+            cadena = cadena.substring(0,cadena.length()-1);
+            me.setMensaje(cadena);
+
+
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("I_TABLE", importsParam.getTabla());
+            imports.put("P_FLAG", importsParam.getFlag());
+            imports.put("P_CASE", importsParam.getP_case());
+            imports.put("P_USER", importsParam.getP_user());
+
+
+            EjecutarRFC exec = new EjecutarRFC();
+
+
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
+
+        }catch (Exception e){
+            msj.setMANDT("00");
+            msj.setCMIN("Error");
+            msj.setCDMIN("Exception");
+            msj.setDSMIN(e.getMessage());
         }
-        return me;
+        return msj;
 
 
     }

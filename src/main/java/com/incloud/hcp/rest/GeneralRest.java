@@ -74,7 +74,7 @@ public class GeneralRest {
     }
 
     @PostMapping(value = "/Update_Table2/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> EditarMaestro2(@RequestBody MaestroEditImport imports){
+    public ResponseEntity<MensajeDto> EditarMaestro2(@RequestBody MaestroEditImport imports){
 
         try {
             return Optional.ofNullable(this.MaestroService.editarMaestro2(imports))
