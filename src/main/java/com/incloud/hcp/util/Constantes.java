@@ -69,6 +69,14 @@ public class Constantes {
     public static String ZFL_RFC_IMPR_FORM_PRODUCE="ZFL_RFC_IMPR_FORM_PRODUCE";
     public static String ZFL_RFC_REG_SALUD_TRIP="ZFL_RFC_REG_SALUD_TRIP";
 
+    //Sistema Informacion Flota
+    public static String ZFL_RFC_PESCA_DECLA="ZFL_RFC_PESCA_DECLA";
+    public static String ZFL_RFC_PESCA_EMBARCA="ZFL_RFC_PESCA_EMBARCA";
+    public static String ZFL_RFC_PESCA_DECLARADA="ZFL_RFC_PESCA_DECLARADA";
+    public static String ZFL_RFC_PESC_DECLA_DIFE2="ZFL_RFC_PESC_DECLA_DIFE2";
+    public static String ZFL_RFC_PESCA_DESC_DIA="ZFL_RFC_PESCA_DESC_DIA";
+    public static String ZFL_RFC_DECLA_COMPE_RADIO="ZFL_RFC_DECLA_COMPE_RADIO";
+
     //Nombre de Destination
     public static String DESTINATION_NAME = "TASA_DEST_RFC";
 
@@ -78,7 +86,7 @@ public class Constantes {
     //Configuracion FTP
     public static String  ftp_usuario="";
     public static String ftp_contraseña="";
-    public static String ftp_servidor="ftp.tasa";
+    public static String ftp_servidor="10.251.3.193";
     public static String ftp_puerto="21";
 
     //public static String  ftp_usuario="dlpuser";
