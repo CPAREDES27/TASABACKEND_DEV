@@ -1,9 +1,9 @@
 package com.incloud.hcp.jco.maestro.dto;
 
-public class MaestroUpdate implements Comparable<MaestroUpdate> {
+public class MaestroUpdate   {
     private String field;
     private String valor;
-    private String orden;
+
 
     public String getField() {
         return field;
@@ -21,16 +21,7 @@ public class MaestroUpdate implements Comparable<MaestroUpdate> {
         this.valor = valor;
     }
 
-    public String getOrden() {
-        return orden;
-    }
 
-    public void setOrden(String orden) {
-        this.orden = orden;
-    }
 
-    @Override
-    public int compareTo(MaestroUpdate o) {
-        return orden.compareTo(o.getOrden());
-    }
+
 }
