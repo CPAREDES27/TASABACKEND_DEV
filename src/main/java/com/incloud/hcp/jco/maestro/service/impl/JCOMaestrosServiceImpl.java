@@ -176,6 +176,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("P_USER", importsParam.getP_user());
 
 
+
             EjecutarRFC exec = new EjecutarRFC();
 
 
@@ -201,7 +202,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importx.setValue("P_USER", usuario);
         importx.setValue("QUERY_TABLE", table);
         importx.setValue("DELIMITER", "|");
-        importx.setValue("P_FLAG","X");
+
         if(key == null || key ==""){
             importx.setValue("ROWCOUNT",1);
         }
