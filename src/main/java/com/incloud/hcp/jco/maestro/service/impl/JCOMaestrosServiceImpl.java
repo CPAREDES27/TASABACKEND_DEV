@@ -162,18 +162,34 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             if(importsParam.getKeyWhere() == null || importsParam.getKeyWhere() == "")
             {
                 cadena ="||";
+                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+
+                    if(contador >1) {
+                        cadena += entry.getValue();
+                        cadena += "|";
+                    }
+                    contador++;
+                }
             }else {
                  cadena = "|";
+                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+
+                    if(contador >0) {
+                        cadena += entry.getValue();
+                        cadena += "|";
+                    }
+                    contador++;
+                }
             }
 
-            for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+            /*for(Map.Entry<String,Object> entry:newRecord.entrySet()){
 
                 if(contador >1) {
                     cadena += entry.getValue();
                     cadena += "|";
                 }
                 contador++;
-            }
+            }*/
             logger.error("VERIFICAR DATA PASO5");
             cadena = cadena.substring(0,cadena.length()-1);
 
