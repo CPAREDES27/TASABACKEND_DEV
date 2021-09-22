@@ -4,8 +4,8 @@ package com.incloud.hcp.util.Ftp;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Mensaje;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileInputStream;
 import java.io.*;
 import java.util.Base64;
-import org.apache.commons.net.util.*;
+
 
 
 import static org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE;
@@ -95,6 +95,12 @@ public class FtpImpl implements FtpService {
             }
             boolean logueo=ftpclient.login(Constantes.ftp_usuario, Constantes.ftp_contraseña);
 
+           log.error("directorio: "+ftpclient.listDirectories().toString());
+            FTPFile[] listfiles=ftpclient.listDirectories();
+
+           for(int i=0; i<listfiles.length; i++){
+                log.error("listfiles["+i+"]: "+listfiles[i].toString());
+           }
             if(logueo){
                 ftpclient.setFileType(BINARY_FILE_TYPE);
                 ftpclient.enterLocalPassiveMode();
