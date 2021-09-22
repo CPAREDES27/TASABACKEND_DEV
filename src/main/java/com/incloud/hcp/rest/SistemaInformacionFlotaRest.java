@@ -3,9 +3,11 @@ package com.incloud.hcp.rest;
 import com.incloud.hcp.jco.requerimientopesca.dto.ReqPescaDto;
 import com.incloud.hcp.jco.requerimientopesca.dto.ReqPescaOptions;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
+import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaCompetenciaRadialService;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDeclaradaService;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDescargadaService;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaPorEmbarcacionService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +23,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class SistemaInformacionFlotaRest {
 
     @Autowired
-    JCOPescaDeclaradaService jcoPescaDeclaradaService;
+    private JCOPescaDeclaradaService jcoPescaDeclaradaService;
     @Autowired
-    JCOPescaPorEmbarcacionService jcoPescaPorEmbarcacionService;
+    private JCOPescaPorEmbarcacionService jcoPescaPorEmbarcacionService;
     @Autowired
-    JCOPescaDescargadaService jcoPescaDescargadaService;
+    private JCOPescaDescargadaService jcoPescaDescargadaService;
+    @Autowired
+    private JCOPescaCompetenciaRadialService jcoPescaCompetenciaRadialService;
 
     @PostMapping(value = "/PescaDeclarada", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PescaDeclaradaExports> PescaDeclarada(@RequestBody PescaDeclaradaImports imports) {
@@ -75,6 +79,17 @@ public class SistemaInformacionFlotaRest {
 
         try {
             return Optional.ofNullable(this.jcoPescaDescargadaService.PescaDescargada(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/PescaCompetenciaRadial", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaCompetenciaRadialExports> PescaCompetenciaRadial(@RequestBody PescaCompetenciaRadialImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaCompetenciaRadialService.PescaCompetenciaRadial(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
