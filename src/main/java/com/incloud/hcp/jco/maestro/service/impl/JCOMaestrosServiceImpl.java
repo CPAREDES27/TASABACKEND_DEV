@@ -131,14 +131,19 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
             LinkedHashMap<String,Object> setDAta = new LinkedHashMap<String,Object>();
             logger.error("VERIFICAR DATA PASO2");
+            int contador=0;
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
-                    String key= entry.getKey();
-                    Object value= entry.getValue();
-                    if(!key.equals("MANDT")) {
-                        newRecord.put(key, value);
-                    }
+
+
+                       String key= entry.getKey();
+                       Object value= entry.getValue();
+
+                           newRecord.put(key, value);
+
+
                 }
+
             }
             logger.error("VERIFICAR DATA PASO3");
             String mensajito="";
@@ -160,15 +165,20 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }else {
                  cadena = "|";
             }
+
             for(Map.Entry<String,Object> entry:newRecord.entrySet()){
-                cadena+=entry.getValue();
-                cadena+="|";
+
+                if(contador >1) {
+                    cadena += entry.getValue();
+                    cadena += "|";
+                }
+                contador++;
             }
             logger.error("VERIFICAR DATA PASO5");
             cadena = cadena.substring(0,cadena.length()-1);
 
 
-
+            logger.error("CADENA: " +cadena);
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("I_TABLE", importsParam.getTabla());
             imports.put("P_FLAG", importsParam.getFlag());
@@ -194,7 +204,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
     public MaestroExport ConsultaReadTable(String key, String value, String table, String usuario) throws Exception{
 
-
+        logger.error("STEP 1");
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         JCoRepository repo = destination.getRepository();
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
@@ -202,24 +212,25 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importx.setValue("P_USER", usuario);
         importx.setValue("QUERY_TABLE", table);
         importx.setValue("DELIMITER", "|");
+        logger.error("STEP 2");
 
-        if(key == null || key ==""){
-            importx.setValue("ROWCOUNT",1);
-        }
-
+        logger.error("STEP 3");
         JCoParameterList tables = stfcConnection.getTableParameterList();
-        if((key != null || key != "") && (value!= null || value !="")) {
+
+        if(!key.equals("")  && !value.equals("")) {
             JCoTable tableImport = tables.getTable("OPTIONS");
             tableImport.appendRow();
-
             tableImport.setValue("WA", key + " = " + "'" + value + "'");
         }
+        logger.error("STEP 4");
+
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
         stfcConnection.execute(destination);
         List<HashMap<String, Object>> datas = new ArrayList<HashMap<String, Object>>();
-        logger.error(tableExport.getString());
+
+        logger.error("STEP 5");
         for (int i = 0; i < tableExport.getNumRows(); i++) {
             tableExport.setRow(i);
             String ArrayResponse[] = tableExport.getString().split("\\|");
@@ -239,6 +250,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }
             datas.add(newRecord);
         }
+        logger.error("STEP 6");
 
             MaestroExport me = new MaestroExport();
             me.setData(datas);
