@@ -127,6 +127,8 @@ public class Tablas {
     public static String STR_PTR="STR_PTR";
     public static String STR_EMD="STR_EMD";
     public static String STR_EMR="STR_EMR";
+    public static String STR_DSD="STR_DSD";
+    public static String STR_GRE="STR_GRE";
 
 
 }

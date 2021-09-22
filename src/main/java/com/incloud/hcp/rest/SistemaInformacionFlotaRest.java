@@ -4,6 +4,7 @@ import com.incloud.hcp.jco.requerimientopesca.dto.ReqPescaDto;
 import com.incloud.hcp.jco.requerimientopesca.dto.ReqPescaOptions;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDeclaradaService;
+import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDescargadaService;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaPorEmbarcacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,8 @@ public class SistemaInformacionFlotaRest {
     JCOPescaDeclaradaService jcoPescaDeclaradaService;
     @Autowired
     JCOPescaPorEmbarcacionService jcoPescaPorEmbarcacionService;
+    @Autowired
+    JCOPescaDescargadaService jcoPescaDescargadaService;
 
     @PostMapping(value = "/PescaDeclarada", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PescaDeclaradaExports> PescaDeclarada(@RequestBody PescaDeclaradaImports imports) {
@@ -61,6 +64,17 @@ public class SistemaInformacionFlotaRest {
 
         try {
             return Optional.ofNullable(this.jcoPescaDeclaradaService.PescaDeclaradaDife(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/PescaDescargada", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaDescargadaExports> PescaDescargada(@RequestBody PescaDescargadaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaDescargadaService.PescaDescargada(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
