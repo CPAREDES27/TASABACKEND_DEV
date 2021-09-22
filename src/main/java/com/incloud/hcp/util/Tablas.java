@@ -131,7 +131,10 @@ public class Tablas {
     public static String STR_GRE="STR_GRE";
     public static String STR_PGE="STR_PGE";
     public static String STR_EPP="STR_EPP";
-
+    public static String STR_CET="STR_CET";
+    public static String STR_ZPL="STR_ZPL";
+    public static String STR_GZP="STR_GZP";
+    public static String STR_PED="STR_PED";
 
 
 }
