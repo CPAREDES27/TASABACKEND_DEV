@@ -51,7 +51,7 @@ public class JCOPescaCompetenciaRadialImpl implements JCOPescaCompetenciaRadialS
 
             stfcConnection.execute(destination);
 
-            JCoTable STR_ZTL = tables.getTable(Tablas.STR_ZTL);
+            JCoTable STR_ZLT = tables.getTable(Tablas.STR_ZLT);
             JCoTable STR_PTO = tables.getTable(Tablas.STR_PTO);
             JCoTable STR_GRE = tables.getTable(Tablas.STR_GRE);
             JCoTable STR_EMP = tables.getTable(Tablas.STR_EMP);
@@ -60,14 +60,14 @@ public class JCOPescaCompetenciaRadialImpl implements JCOPescaCompetenciaRadialS
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_ztl = metodo.ObtenerListObjetos(STR_ZTL, imports.getFieldstr_zlt());
+            List<HashMap<String, Object>> str_zlt = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldstr_zlt());
             List<HashMap<String, Object>> str_pto = metodo.ObtenerListObjetos(STR_PTO, imports.getFieldstr_pto());
             List<HashMap<String, Object>> str_gre = metodo.ObtenerListObjetos(STR_GRE, imports.getFieldstr_gre());
             List<HashMap<String, Object>> str_emp = metodo.ObtenerListObjetos(STR_EMP, imports.getFieldstr_emp());
             List<HashMap<String, Object>> str_pge = metodo.ObtenerListObjetos(STR_PGE, imports.getFieldstr_pge());
             List<HashMap<String, Object>> str_epp = metodo.ObtenerListObjetos(STR_EPP, imports.getFieldstr_epp());
 
-            pcr.setStr_zlt(str_ztl);
+            pcr.setStr_zlt(str_zlt);
             pcr.setStr_pto(str_pto);
             pcr.setStr_gre(str_gre);
             pcr.setStr_emp(str_emp);
