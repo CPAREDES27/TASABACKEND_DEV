@@ -1,9 +1,6 @@
 package com.incloud.hcp.jco.sistemainformacionflota.service.impl;
 
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaDiariaExports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaDiariaImports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaExports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaImports;
+import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDeclaradaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
@@ -97,4 +94,53 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
         return pdd;
     }
+
+    @Override
+    public PescaDeclaradaDifeExports PescaDeclaradaDife(PescaDeclaradaDifeImports imports) throws Exception {
+
+        PescaDeclaradaDifeExports pdd= new PescaDeclaradaDifeExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_DECLA_DIFE2);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user ());
+            importx.setValue("P_FECHA", imports.getP_fecha());
+            importx.setValue("P_FIDES", imports.getP_fides());
+            importx.setValue("P_FFDES", imports.getP_ffdes());
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            stfcConnection.execute(destination);
+
+            JCoTable STR_PTD = tables.getTable(Tablas.STR_PTD);
+            JCoTable STR_PTR = tables.getTable(Tablas.STR_PTR);
+            JCoTable STR_EMD = tables.getTable(Tablas.STR_EMD);
+            JCoTable STR_EMR = tables.getTable(Tablas.STR_EMR);
+
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> str_ptd = metodo.ObtenerListObjetos(STR_PTD, imports.getFieldstr_ptd());
+            List<HashMap<String, Object>> str_ptr = metodo.ObtenerListObjetos(STR_PTR, imports.getFieldstr_ptr());
+            List<HashMap<String, Object>> str_emd = metodo.ObtenerListObjetos(STR_EMD, imports.getFieldstr_emd());
+            List<HashMap<String, Object>> str_emr = metodo.ObtenerListObjetos(STR_EMR, imports.getFieldstr_emr());
+
+            pdd.setStr_ptd(str_ptd);
+            pdd.setStr_ptr(str_ptr);
+            pdd.setStr_emd(str_emd);
+            pdd.setStr_emr(str_emr);
+            pdd.setMensaje("Ok");
+
+        }catch (Exception e){
+            pdd.setMensaje(e.getMessage());
+        }
+
+        return pdd;
+    }
+
+
 }

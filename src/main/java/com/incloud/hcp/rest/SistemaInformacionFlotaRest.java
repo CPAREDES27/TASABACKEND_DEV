@@ -56,4 +56,14 @@ public class SistemaInformacionFlotaRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/PescaDeclaradaDife", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaDeclaradaDifeExports> PescaDeclaradaDife(@RequestBody PescaDeclaradaDifeImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaDeclaradaService.PescaDeclaradaDife(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }
