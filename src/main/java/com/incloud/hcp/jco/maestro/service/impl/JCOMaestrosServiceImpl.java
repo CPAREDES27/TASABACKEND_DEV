@@ -101,10 +101,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("P_FLAG", importsParam.getFlag());
             imports.put("P_CASE", importsParam.getP_case());
             imports.put("P_USER", importsParam.getP_user());
-
-
             EjecutarRFC exec = new EjecutarRFC();
-
 
             msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
 
@@ -128,12 +125,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         try {
 
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
-
+            logger.error("VERIFICAR DATA"+me.getData().toString());
             List<MaestroUpdate> update = importsParam.getOpcion();
             List<HashMap<String, Object>> data= me.getData();
             LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
             LinkedHashMap<String,Object> setDAta = new LinkedHashMap<String,Object>();
-            logger.error("SALUDA2");
+            logger.error("VERIFICAR DATA PASO2");
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
                     String key= entry.getKey();
@@ -143,7 +140,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                     }
                 }
             }
-
+            logger.error("VERIFICAR DATA PASO3");
             String mensajito="";
             String valor="";
            for(int i=0;i<update.size();i++){
@@ -155,16 +152,21 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                    }
                }
            }
-
-
-            String cadena="|";
+            logger.error("VERIFICAR DATA PASO4");
+            String cadena="";
+            if(importsParam.getKeyWhere() == null || importsParam.getKeyWhere() == "")
+            {
+                cadena ="||";
+            }else {
+                 cadena = "|";
+            }
             for(Map.Entry<String,Object> entry:newRecord.entrySet()){
                 cadena+=entry.getValue();
                 cadena+="|";
             }
-
+            logger.error("VERIFICAR DATA PASO5");
             cadena = cadena.substring(0,cadena.length()-1);
-            me.setMensaje(cadena);
+
 
 
             HashMap<String, Object> imports = new HashMap<String, Object>();
@@ -191,7 +193,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
     public MaestroExport ConsultaReadTable(String key, String value, String table, String usuario) throws Exception{
 
-        String cadena=key+" = "+ "'"+value+"'";
+
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         JCoRepository repo = destination.getRepository();
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
@@ -199,12 +201,18 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importx.setValue("P_USER", usuario);
         importx.setValue("QUERY_TABLE", table);
         importx.setValue("DELIMITER", "|");
+        importx.setValue("P_FLAG","X");
+        if(key == null || key ==""){
+            importx.setValue("ROWCOUNT",1);
+        }
+
         JCoParameterList tables = stfcConnection.getTableParameterList();
+        if((key != null || key != "") && (value!= null || value !="")) {
+            JCoTable tableImport = tables.getTable("OPTIONS");
+            tableImport.appendRow();
 
-        JCoTable tableImport = tables.getTable("OPTIONS");
-        tableImport.appendRow();
-        tableImport.setValue("WA", key+" = "+"'"+value+"'");
-
+            tableImport.setValue("WA", key + " = " + "'" + value + "'");
+        }
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
@@ -218,8 +226,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             for (int j = 0; j < FIELDS.getNumRows(); j++) {
                 FIELDS.setRow(j);
                 String keys = (String) FIELDS.getValue("FIELDNAME");
-                //String contador ="00"+j+"_";
-                //String key2 = contador +key;
                 Object values = "";
                 try {
                     values = ArrayResponse[j].trim();
