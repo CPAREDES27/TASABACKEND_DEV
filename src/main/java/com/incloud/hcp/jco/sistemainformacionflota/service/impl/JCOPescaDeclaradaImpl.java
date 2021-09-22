@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.sistemainformacionflota.service.impl;
 
+import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaDiariaExports;
+import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaDiariaImports;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaExports;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaDeclaradaImports;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDeclaradaService;
@@ -57,5 +59,42 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
         }
 
         return pd;
+    }
+
+    @Override
+    public PescaDeclaradaDiariaExports PescaDeclaradaDiaria(PescaDeclaradaDiariaImports imports) throws Exception {
+
+       PescaDeclaradaDiariaExports pdd=new PescaDeclaradaDiariaExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_DECLARADA);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user ());
+            importx.setValue("P_FEINI", imports.getP_feini());
+            importx.setValue("P_FEFIN", imports.getP_fefin());
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            stfcConnection.execute(destination);
+
+            JCoTable STR_DL = tables.getTable(Tablas.STR_DL);
+
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> str_dl = metodo.ObtenerListObjetos(STR_DL, imports.getFieldstr_dl());
+
+            pdd.setStr_dl(str_dl);
+            pdd.setMensaje("Ok");
+
+        }catch (Exception e){
+            pdd.setMensaje(e.getMessage());
+        }
+
+        return pdd;
     }
 }
