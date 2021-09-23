@@ -302,13 +302,17 @@ public class EjecutarRFC {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
                             }*/
-                            if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
+                           try {
+                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
 
-                                String date = String.valueOf(value);
-                                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                                String fecha = dia.format(value);
-                                value = fecha;
-                            }
+                                   String date = String.valueOf(value);
+                                   SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                   String fecha = dia.format(value);
+                                   value = fecha;
+                               }
+                           }catch (Exception e){
+                               value=String.valueOf(value);
+                           }
                             newRecord.put(key, value);
 
                         }
