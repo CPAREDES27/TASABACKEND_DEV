@@ -1,17 +1,17 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.CargaArchivoImports;
+import com.incloud.hcp.jco.maestro.dto.CargaDescargaArchivosExports;
+import com.incloud.hcp.jco.maestro.dto.CargaDescargaArchivosImports;
 import com.incloud.hcp.jco.maestro.service.JCOCargaArchivosService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
@@ -52,5 +52,50 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
 
         return msj;
+    }
+
+    @Override
+    public CargaDescargaArchivosExports CargaDescargaArchivos(CargaDescargaArchivosImports importsParam) throws Exception {
+
+        CargaDescargaArchivosExports cda=new CargaDescargaArchivosExports();
+
+
+        try {
+
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("I_TRAMA", importsParam.getI_trama());
+            imports.put("I_DIRECTORIO", importsParam.getI_directorio());
+            imports.put("I_FILENAME", importsParam.getI_filename());
+            imports.put("I_ACCION", importsParam.getI_accion());
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CRG_DESCRG_ARCH);
+            JCoParameterList export = function.getExportParameterList();
+
+            JCoParameterList tablas = function.getTableParameterList();
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, imports);
+
+            function.execute(destination);
+            JCoTable T_MENSAJE= tablas.getTable(Tablas.T_MENSAJE);
+
+            Metodos me=new Metodos();
+            List<HashMap<String, Object>> t_mensaje= me.ListarObjetos(T_MENSAJE);
+
+            cda.setT_mensaje(t_mensaje);
+            cda.setE_trama(export.getValue(Tablas.E_TRAMA).toString());
+            cda.setMensaje("Ok");
+
+
+        }catch (Exception e){
+            cda.setMensaje(e.getMessage());
+        }
+
+
+        return cda;
     }
 }

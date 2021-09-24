@@ -10,6 +10,7 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,8 +41,11 @@ public class JCOCDHPMServiceImpl implements JCOCDHPMService {
         List<HashMap<String, Object>> listT_DCHPM = metodos.ListarObjetos(tbl_DCHPM);
         List<HashMap<String, Object>> listT_BODEG = metodos.ListarObjetos(tbl_BODEG);
 
+        //Cardinalidad 1:1 de la lista listT_MCHPM
+        HashMap<String, Object> mchpm=listT_MCHPM.get(0);
+
         CHDPMExports dto = new CHDPMExports();
-        dto.setT_mchpm(listT_MCHPM);
+        dto.setMchpm(mchpm);
         dto.setT_dchpm(listT_DCHPM);
         dto.setT_bodeg(listT_BODEG);
         dto.setMensaje("OK");
