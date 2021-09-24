@@ -134,14 +134,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             int contador=0;
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
-
-
                        String key= entry.getKey();
                        Object value= entry.getValue();
-
-                           newRecord.put(key, value);
-
-
+                       newRecord.put(key, value);
                 }
 
             }
