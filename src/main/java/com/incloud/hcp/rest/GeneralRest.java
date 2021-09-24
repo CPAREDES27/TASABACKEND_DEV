@@ -77,7 +77,7 @@ public class GeneralRest {
     public ResponseEntity<MensajeDto> EditarMaestro2(@RequestBody MaestroEditImport imports){
 
         try {
-            return Optional.ofNullable(this.MaestroService.editaZFL_RFC_CONS_PREC_PESCrMaestro2(imports))
+            return Optional.ofNullable(this.MaestroService.editarMaestro2(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
