@@ -4,16 +4,25 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CHDPMExports {
-    private List<HashMap<String, Object>> t_DetailsReport;
+    private HashMap<String, Object> mchpm;
+    private List<HashMap<String, Object>> t_dchpm;
     private List<HashMap<String, Object>> t_bodeg;
     private String mensaje;
 
-    public List<HashMap<String, Object>> getT_DetailsReport() {
-        return t_DetailsReport;
+    public HashMap<String, Object> getMchpm() {
+        return mchpm;
     }
 
-    public void setT_DetailsReport(List<HashMap<String, Object>> t_DetailsReport) {
-        this.t_DetailsReport = t_DetailsReport;
+    public void setMchpm(HashMap<String, Object> mchpm) {
+        this.mchpm = mchpm;
+    }
+
+    public List<HashMap<String, Object>> getT_dchpm() {
+        return t_dchpm;
+    }
+
+    public void setT_dchpm(List<HashMap<String, Object>> t_dchpm) {
+        this.t_dchpm = t_dchpm;
     }
 
     public List<HashMap<String, Object>> getT_bodeg() {
