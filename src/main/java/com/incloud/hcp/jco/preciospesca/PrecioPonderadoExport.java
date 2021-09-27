@@ -6,13 +6,13 @@ import java.util.List;
 public class PrecioPonderadoExport {
     private List<HashMap<String, Object>> T_PRCPESCPTA;
     private String mensaje;
-    private String total;
+    private double total;
 
-    public String getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 

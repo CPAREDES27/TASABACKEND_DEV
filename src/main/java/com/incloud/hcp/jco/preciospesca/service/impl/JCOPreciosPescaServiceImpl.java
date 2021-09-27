@@ -12,9 +12,7 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
@@ -220,11 +218,24 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
 
         List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(T_PRCPESCPTA);
-
+        LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
         PrecioPonderadoExport dto = new PrecioPonderadoExport();
+        int contador=0;
+        double ponderado=0.0;
+        for(Map<String,Object> datas: listT_PREPES){
 
-        
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+                String key= entry.getKey();
+                Object value= entry.getValue();
+                if(key.equals("PRCPOND")){
+                    ponderado+=dto.getTotal()+ Double.valueOf(value.toString());
+                }
+            }
+            contador++;
+        }
+
         dto.setT_PRCPESCPTA(listT_PREPES);
+        dto.setTotal(ponderado/contador);
         dto.setMensaje("OK");
         return dto;
     }
