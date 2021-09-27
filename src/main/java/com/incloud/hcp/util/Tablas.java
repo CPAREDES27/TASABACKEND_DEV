@@ -13,6 +13,7 @@ public class Tablas {
     public static String ST_CEP="ST_CEP";
     public static String ESTCEP="ESTCEP";
     public static String ESTCCE="ESTCCE";
+    public static String T_PRCPESCPTA="T_PRCPESCPTA";
     public static String S_PE="S_PE";
     public static String S_PS="S_PS";
     public static String S_EE="S_EE";

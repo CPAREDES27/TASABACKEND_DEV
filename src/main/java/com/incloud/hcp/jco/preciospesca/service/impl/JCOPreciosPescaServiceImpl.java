@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.preciospesca.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
 import com.incloud.hcp.jco.preciospesca.dto.*;
 import com.incloud.hcp.jco.preciospesca.service.JCOPreciosPescaService;
 import com.incloud.hcp.util.Constantes;
@@ -185,6 +186,46 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         dto.setT_prepes(listT_PREPES);
         dto.setMensaje("OK");
 
+        return dto;
+    }
+
+    @Override
+    public PrecioPonderadoExport ObtenerPrecioPond(PrecioPonderadoImport imports) throws Exception {
+
+        Metodos metodos = new Metodos();
+        HashMap<String, Object> importParams = new HashMap<>();
+        importParams.put("IP_CANTI", 0);
+
+        List<MaestroOptions> option = imports.getOption();
+        List<MaestroOptionsKey> options = imports.getOptions();
+
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodos.ValidarOptions(option,options);
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_PREC_PESC_PLTA);
+
+        JCoParameterList paramsTable = function.getTableParameterList();
+
+        EjecutarRFC executeRFC = new EjecutarRFC();
+        executeRFC.setImports(function, importParams);
+        executeRFC.setTable(paramsTable, "T_OPCION", tmpOptions);
+
+        //Exports
+        JCoParameterList tables = function.getTableParameterList();
+        function.execute(destination);
+        JCoTable T_PRCPESCPTA = tables.getTable(Tablas.T_PRCPESCPTA);
+
+
+        List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(T_PRCPESCPTA);
+
+        PrecioPonderadoExport dto = new PrecioPonderadoExport();
+
+        
+        dto.setT_PRCPESCPTA(listT_PREPES);
+        dto.setMensaje("OK");
         return dto;
     }
 }

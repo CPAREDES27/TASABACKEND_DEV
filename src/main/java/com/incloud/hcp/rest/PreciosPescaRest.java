@@ -1,5 +1,6 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
 import com.incloud.hcp.jco.preciospesca.dto.*;
 import com.incloud.hcp.jco.preciospesca.service.JCOBonosService;
 import com.incloud.hcp.jco.preciospesca.service.JCOPrecioMarService;
@@ -62,6 +63,16 @@ public class PreciosPescaRest {
     public ResponseEntity<PrecioPescaMantExports> MantPreciosPesca(@RequestBody PrecioPescaMantImports imports) {
         try {
             return Optional.ofNullable(this.jcoPoliticaPreciosService.MantPrecioPesca(imports)).map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.toString());
+        }
+    }
+
+
+    @PostMapping(value = "/ObtenerPrecioPond", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PrecioPonderadoExport> ObtenerPrecioPond(@RequestBody PrecioPonderadoImport imports) {
+        try {
+            return Optional.ofNullable(this.jcoPoliticaPreciosService.ObtenerPrecioPond(imports)).map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
             throw new RuntimeException(ex.toString());
         }

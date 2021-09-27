@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.preciospesca.service;
 
+import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
 import com.incloud.hcp.jco.preciospesca.dto.*;
 
 public interface JCOPreciosPescaService {
@@ -10,4 +11,6 @@ public interface JCOPreciosPescaService {
     PrecioPescaMantExports MantPrecioPesca(PrecioPescaMantImports imports) throws Exception;
 
     ConsPrecioPescaExports ConsultarPrecioPesca(ConsPrecioPescaImports imports) throws Exception;
+
+    PrecioPonderadoExport ObtenerPrecioPond(PrecioPonderadoImport imports) throws  Exception;
 }
