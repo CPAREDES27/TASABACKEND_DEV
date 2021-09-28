@@ -235,7 +235,7 @@ public class Metodos {
         }else if(table.equals("ZONAAREA")){
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
-            wa= "CODIG EQ 'SH' AND (STATU EQ '1')";
+            wa= "(WERKS <> 'FP09') AND (INPRP = 'P')";
         }
 
         return wa;
@@ -320,6 +320,8 @@ public class Metodos {
         }
         else if (table.equals("SISTVIRADO")) {
             fields = new String[] {"ARGUM", "DESCR"};
+        }else if (table.equals("ALLPLANTAPROPIA")) {
+            fields = new String[] {"CDPTA", "DESCR"};
         }
 
         return fields;
