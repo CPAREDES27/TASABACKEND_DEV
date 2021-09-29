@@ -16,6 +16,15 @@ public class EmbarcacionesDto {
     private String Color;
     private String NumMarea;
     private String Indicador;
+    private String SemaforoColor;
+
+    public String getSemaforoColor() {
+        return SemaforoColor;
+    }
+
+    public void setSemaforoColor(String semaforoColor) {
+        SemaforoColor = semaforoColor;
+    }
 
     public String getNumMarea() {
         return NumMarea;
