@@ -22,21 +22,18 @@ public class JCOMareasServiceImpl implements JCOMareasService {
     @Override
     public MareaExports ObtenerMareas(MareaImports imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();
-        Metodos metodo=new Metodos();
+        Metodos metodo = new Metodos();
         importParams.put("P_USER", imports.getP_user());
         importParams.put("ROWCOUNT", imports.getRowcount());
-
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA);
 
         List<MaestroOptions> option = imports.getOption();
         List<MaestroOptionsKey> options2 = imports.getOptions();
 
+        List<HashMap<String, Object>> tmpOptions = metodo.ValidarOptions(option, options2);
 
-        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        tmpOptions=metodo.ValidarOptions(option,options2);
-
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA);
 
         JCoParameterList paramsTable = function.getTableParameterList();
 
@@ -48,7 +45,6 @@ public class JCOMareasServiceImpl implements JCOMareasService {
         function.execute(destination);
         JCoTable tblS_MAREA = tables.getTable(Tablas.S_MAREA);
 
-       ;
         List<HashMap<String, Object>> listS_MAREA = metodo.ListarObjetos(tblS_MAREA);
 
         MareaExports dto = new MareaExports();
