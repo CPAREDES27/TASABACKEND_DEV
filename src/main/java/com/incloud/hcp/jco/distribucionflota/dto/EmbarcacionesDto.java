@@ -4,6 +4,7 @@ public class EmbarcacionesDto {
 
     private String FlagEmba;
     private String DescEmba;
+    private String CodEmba;
     private String CbodEmba;
     private String PescDecl;
     private String Estado;
@@ -17,6 +18,14 @@ public class EmbarcacionesDto {
     private String NumMarea;
     private String Indicador;
     private String SemaforoColor;
+
+    public String getCodEmba() {
+        return CodEmba;
+    }
+
+    public void setCodEmba(String codEmba) {
+        CodEmba = codEmba;
+    }
 
     public String getSemaforoColor() {
         return SemaforoColor;
