@@ -1,14 +1,8 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.EventosPesca2Exports;
-import com.incloud.hcp.jco.maestro.dto.EventosPesca2Imports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaEditImports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaImports;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOConfigEventosPesca;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.Mensaje;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +83,35 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
     }
 
     @Override
-    public Mensaje EditarEventosPesca(EventosPescaEditImports imports) throws Exception {
-        return null;
+    public Mensaje EditarEventosPesca(EventosPescaEdit2Imports imports) throws Exception {
+        Mensaje msj = new Mensaje();
+        try {
+            HashMap<String, Object> importParams = new HashMap<String, Object>();
+            importParams.put("I_FLAG", "S");
+            importParams.put("P_USER", imports.getP_user());
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_MAES_EVEN_PES);
+
+            JCoParameterList jcoTables = function.getTableParameterList();
+
+            List<HashMap<String, Object>> estcce = new ArrayList<>();
+            List<HashMap<String, Object>> estcep = new ArrayList<>();
+            estcce.add(imports.getEstcce());
+            estcep.add(imports.getEstcep());
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, importParams);
+            exec.setTable(jcoTables, Tablas.ESTCCE, estcce);
+            exec.setTable(jcoTables, Tablas.ESTCEP, estcep);
+            function.execute(destination);
+            msj.setMensaje("Ok");
+
+        } catch (Exception e) {
+            msj.setMensaje(e.getMessage());
+        }
+
+        return msj;
     }
 }

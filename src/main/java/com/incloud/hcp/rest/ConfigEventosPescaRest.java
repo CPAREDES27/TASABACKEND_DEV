@@ -33,7 +33,7 @@ public class ConfigEventosPescaRest {
     }
 
     @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> EditarEventosPesca(@RequestBody EventosPescaEditImports imports) {
+    public ResponseEntity<Mensaje> EditarEventosPesca(@RequestBody EventosPescaEdit2Imports imports) {
 
         try {
             return Optional.ofNullable(this.jcoConfigEventosPesca.EditarEventosPesca(imports))
