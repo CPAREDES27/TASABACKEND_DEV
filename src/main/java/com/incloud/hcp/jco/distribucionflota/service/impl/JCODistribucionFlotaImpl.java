@@ -131,6 +131,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                     vi_totdesc_est++;
                                 }
 
+                                n_embarcacion.setCodEmba(s_str_di.getString("CDEMB"));
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CPPMS"));
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
