@@ -45,7 +45,9 @@ public class Metodos {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
                 }
-
+                if(key.equals("DSMIN")){
+                    value=value.toString();
+                }
 
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
@@ -97,19 +99,14 @@ public class Metodos {
                     }
 
                 }
-
-
                 newRecord.put(key, value);
             }
             data.add(newRecord);
             if (newRecord.containsKey("ESMAR")) {
                 if (newRecord.containsValue("C") || newRecord.containsValue("A")) {
-
                     data.add(newRecord);
                 }
             }
-
-
         }
 
         return data;
@@ -237,7 +234,6 @@ public class Metodos {
         }else if(table.equals("SISTVIRADO")){
             wa= "(WERKS <> 'FP09') AND (INPRP = 'P')";
         }
-
         return wa;
     }
 
