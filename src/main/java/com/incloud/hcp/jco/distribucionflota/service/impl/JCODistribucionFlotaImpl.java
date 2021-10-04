@@ -131,6 +131,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                     vi_totdesc_est++;
                                 }
 
+                                n_embarcacion.setCodEmba(s_str_di.getString("CDEMB"));
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CPPMS"));
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
@@ -143,6 +144,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 n_embarcacion.setColor(s_str_di.getString("CLGFL"));
                                 n_embarcacion.setNumMarea(s_str_di.getString("NRMAR"));
                                 n_embarcacion.setIndicador(s_str_di.getString("INPRP"));
+                                n_embarcacion.setSemaforo("");
+                                n_embarcacion.setSemaforoColor("");
 
                                 String CodMotMarea = s_str_di.getString("CDMMA");
                                 String TDC = s_str_di.getString("TDC");
@@ -152,21 +155,28 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 }else{
                                     n_TDC = new BigDecimal("0");
                                 }
+
                                 if (CodMotMarea.equalsIgnoreCase("2")){ //CHI
                                     if (n_TDC.compareTo(new BigDecimal(12)) == -1){
-                                        n_embarcacion.setSemaforo("images/green_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#A1F03F");
                                     } else if ((n_TDC.compareTo(new BigDecimal(13)) == -1) || (n_TDC.compareTo(new BigDecimal(13)) == 0)){
-                                        n_embarcacion.setSemaforo("images/yellow_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#FFC556");
                                     } else if ((n_TDC.compareTo(new BigDecimal(13)) == 1)){
-                                        n_embarcacion.setSemaforo("images/red_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#FF322D");
                                     }
                                 } else if (CodMotMarea.equalsIgnoreCase("1")){ //CHD
                                     if (n_TDC.compareTo(new BigDecimal(16)) == -1){
-                                        n_embarcacion.setSemaforo("images/green_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#A1F03F");
                                     } else if ((n_TDC.compareTo(new BigDecimal(17)) == -1) || (n_TDC.compareTo(new BigDecimal(17)) == 0)){
-                                        n_embarcacion.setSemaforo("images/yellow_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#FFC556");
                                     } else if ((n_TDC.compareTo(new BigDecimal(17)) == 1)){
-                                        n_embarcacion.setSemaforo("images/red_line.gif");
+                                        n_embarcacion.setSemaforo("sap-icon://color-fill");
+                                        n_embarcacion.setSemaforoColor("#FF322D");
                                     }
                                 }
 
