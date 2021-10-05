@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.reportepesca.dto.*;
 import com.incloud.hcp.jco.reportepesca.service.JCODescargasService;
 import com.incloud.hcp.util.Constantes;
@@ -18,27 +20,30 @@ public class JCODescargasServiceImpl implements JCODescargasService {
 
     @Override
     public DescargasExports ObtenerDescargas(DescargasImports imports) throws Exception {
+        Metodos metodo = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
         importParams.put("P_ROWS", imports.getP_rows());
 
         // Obtener los options
-        List<HashMap<String, Object>> options = new ArrayList<HashMap<String, Object>>();
-        for (MaestroOptionsDescarga option : imports.getP_options()) {
-            HashMap<String, Object> optionRecord = new HashMap<>();
-            optionRecord.put("DATA", option.getData());
-            options.add(optionRecord);
-        }
+        List<MaestroOptionsDescarga> optionData = imports.getP_options();
+        List<MaestroOptions> option = metodo.convertMaestroOptions(optionData);
+
+        List<MaestroOptionsKey> options2 = imports.getOptions();
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions = metodo.ValidarOptions(option, options2, "DATA");
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
         JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_DESCA);
 
+
         JCoParameterList paramsTable = function.getTableParameterList();
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "P_OPTIONS", options);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
 
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);

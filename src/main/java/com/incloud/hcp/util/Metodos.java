@@ -1,6 +1,7 @@
 package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
 import com.sap.conn.jco.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Metodos {
 
@@ -329,6 +332,14 @@ public class Metodos {
 
 
     public List<HashMap<String, Object>> ValidarOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options){
+        return ValidateOptions(option,options,"WA");
+    }
+
+    public List<HashMap<String, Object>> ValidarOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options,String optionMane){
+        return ValidateOptions(option,options,optionMane);
+    }
+
+    public List<HashMap<String, Object>> ValidateOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options, String optionName){
 
         String control="";
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
@@ -337,7 +348,7 @@ public class Metodos {
             for(int j=0;j<option.size();j++){
                 MaestroOptions mop = option.get(j);
                 HashMap<String, Object> record2 = new HashMap<String, Object>();
-                record2.put("WA",mop.getWa());
+                record2.put(optionName,mop.getWa());
                 tmpOptions.add(record2);
             }
         }
@@ -346,7 +357,7 @@ public class Metodos {
             for(int j=0;j<option.size();j++){
                 MaestroOptions mop = option.get(j);
                 HashMap<String, Object> record2 = new HashMap<String, Object>();
-                record2.put("WA",mop.getWa());
+                record2.put(optionName,mop.getWa());
                 tmpOptions.add(record2);
             }
 
@@ -365,14 +376,23 @@ public class Metodos {
                 }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     control="=";
                 }
+
+                if (mo.getControl().equals("MULTICOMBOBOX")) {
+                    control="=";
+                }
+
                 if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
-                    record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
+                    record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
                 }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
-                    record.put("WA","AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
+                    record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
                 }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
-                    record.put("WA","AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
+                    record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
                 }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
-                    record.put("WA","AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                    record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                }else if(mo.getControl().equals("MULTICOMBOBOX") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
+                    record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
+                }else if(mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                    record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
                 }
                 tmpOptions.add(record);
 
@@ -398,29 +418,29 @@ public class Metodos {
 
 
                 if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put("WA", mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))){
-                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
                 }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
-                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put("WA", mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                 }
 
 
                 if (i > 0) {
                     if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
                     } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                     }else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))) {
-                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
-                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                     } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put("WA", "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                     }
 
                 }
@@ -431,6 +451,7 @@ public class Metodos {
 
         return tmpOptions;
     }
+
     public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
@@ -544,5 +565,14 @@ public class Metodos {
         File file = new File(fileName);
         byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
         return new String(encoded, StandardCharsets.UTF_8);
+    }
+
+    public List<MaestroOptions> convertMaestroOptions(List<MaestroOptionsDescarga> options){
+        return options.stream().map(o->{
+            MaestroOptions maestroOptions=new MaestroOptions();
+            maestroOptions.setWa(o.getData());
+
+            return maestroOptions;
+        }).collect(Collectors.toList());
     }
 }
