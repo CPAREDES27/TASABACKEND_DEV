@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
+import com.incloud.hcp.CallBAPI;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
@@ -10,13 +11,15 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
-
+    private Logger logger = LoggerFactory.getLogger(CallBAPI.class);
     @Override
     public PrecioProbPescaExports ObtenerPrecioProbPesca(PrecioProbPescaImports imports) throws Exception {
         Metodos metodos = new Metodos();
@@ -137,11 +140,18 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         //Exports
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
+
+
         JCoTable tblT_Mensaje = tables.getTable(Tablas.T_MENSAJE);
+        String data = tblT_Mensaje.getString();
+        logger.error("CADENA: " + data);
+
 
         Metodos metodos = new Metodos();
-        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);
 
+
+
+        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);
         PrecioPescaMantExports dto = new PrecioPescaMantExports();
         dto.setT_mensaje(listT_MENSAJE);
         dto.setMensaje("OK");
