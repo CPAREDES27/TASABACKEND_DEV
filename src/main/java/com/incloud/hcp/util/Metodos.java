@@ -1,6 +1,7 @@
 package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
 import com.sap.conn.jco.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Metodos {
 
@@ -553,5 +555,14 @@ public class Metodos {
         File file = new File(fileName);
         byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
         return new String(encoded, StandardCharsets.UTF_8);
+    }
+
+    public List<MaestroOptions> convertMaestroOptions(List<MaestroOptionsDescarga> options){
+        return options.stream().map(o->{
+            MaestroOptions maestroOptions=new MaestroOptions();
+            maestroOptions.setWa(o.getData());
+
+            return maestroOptions;
+        }).collect(Collectors.toList());
     }
 }
