@@ -5,7 +5,7 @@ public class PDFZarpeDto {
     private String capitania;
     private String nombreNave;
     private String matricula;
-    private String AB;
+    private String arqueoBruto;
     private String zonaPesca;
     private String tiempoOperacio;
     private String estimadaArribo;
@@ -17,6 +17,10 @@ public class PDFZarpeDto {
     private String fecha;
     private String dni;
     private String codigoZarpe;
+
+
+
+
 
     public String getCodigoZarpe() {
         return codigoZarpe;
@@ -50,12 +54,12 @@ public class PDFZarpeDto {
         this.matricula = matricula;
     }
 
-    public String getAB() {
-        return AB;
+    public String getArqueoBruto() {
+        return arqueoBruto;
     }
 
-    public void setAB(String AB) {
-        this.AB = AB;
+    public void setArqueoBruto(String arqueoBruto) {
+        this.arqueoBruto = arqueoBruto;
     }
 
     public String getZonaPesca() {
