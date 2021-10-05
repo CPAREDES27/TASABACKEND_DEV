@@ -429,7 +429,7 @@ public class Metodos {
 
             }
         }
-
+        logger.error("arreglo: " +tmpOptions);
         return tmpOptions;
     }
     public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{
