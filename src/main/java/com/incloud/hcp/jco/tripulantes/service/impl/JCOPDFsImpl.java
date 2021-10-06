@@ -11,7 +11,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,15 +56,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
             for(int i=0; i<T_ZATRP.getNumRows(); i++){
                 T_ZATRP.setRow(i);
 
-                JCoField fieldF = T_ZATRP.getField(PDFZarpeConstantes.FEARR);
-                Date date=fieldF.getDate();
-                SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                String fecha = dia.format(date);
 
+                String fechaArribo=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEARR);
+                String fecha=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEZAT);
+                String hora=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRARR);
+
+                /*
                 JCoField fieldH = T_ZATRP.getField(PDFZarpeConstantes.HRARR );
                 Date time =fieldH.getTime();
                 SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
-                String hora = hour.format(time);
+                String hora = hour.format(time);*/
 
                 String codigoZarpe=T_ZATRP.getString(PDFZarpeConstantes.CDZAT);
                 int codigoZ=Integer.parseInt(codigoZarpe);
@@ -74,15 +74,15 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setCapitania(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
                 dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
-                dto.setAB(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
+                dto.setArqueoBruto(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
                 dto.setZonaPesca(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setTiempoOperacio(T_ZATRP.getString(PDFZarpeConstantes.TOPER));
-                dto.setEstimadaArribo(fecha+"   "+ hora);
+                dto.setEstimadaArribo(fechaArribo+"   "+ hora);
                 dto.setRepresentante(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
                 dto.setEmergenciaNombre(T_ZATRP.getString(PDFZarpeConstantes.DSEMP));
                 dto.setEmergenciaDireccion(T_ZATRP.getString(PDFZarpeConstantes.DFEMP));
                 dto.setEmergenciaTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
-                dto.setFecha(T_ZATRP.getString(PDFZarpeConstantes.FEZAT));
+                dto.setFecha(fecha);
 
 
             }
@@ -105,10 +105,22 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         registros[j]=String.valueOf(con);
 
                     }else {
+                            if(campos==2){
 
-                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                                try {
+                                    String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                                    registros[j] = fecha;
+                                }catch (Exception e){
+                                    registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                                }
+                            }else
+                            if(campos==3){
+                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
+                            }else {
+                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                            }
                             String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
-                            if (registros[j].trim().compareTo("PATRON E/P") == 0) {
+                            if (registros[j].trim().compareTo("PATRON EP") == 0) {
                                 dto.setNombrePatron(registros[1]);
                                 dto.setDni(dni);
                             }
@@ -123,7 +135,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             logger.error("Certificados");
 
             String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
-                                                         PDFZarpeConstantes.DSETP};
+                                                         PDFZarpeConstantes.FECCF};
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFZarpeConstantes.fieldCertificados;
             logger.error("Certificados_1");
@@ -149,9 +161,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
                         }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0) {
+                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
+                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
 
-                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
                         }else{
                             registros[j] = T_VGCER.getString(CamposCertificados[campos]);
                         }
@@ -183,23 +196,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
-        String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
-        String guardiaCostera= Constantes.RUTA_ARCHIVO_IMPORTAR+"logocapitania.png";
-        PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
-        PDImageXObject logoGuardiaCostera = PDImageXObject.createFromFile(guardiaCostera,document);
+
 
         document.addPage(page);
 
-// Create a new font object selecting one of the PDF base fonts
         PDFont bold = PDType1Font.HELVETICA_BOLD;
         PDFont font = PDType1Font.HELVETICA;
 
-// Start a new content stream which will "hold" the to be created content
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-        //logos superiores
-        contentStream.drawImage(logoTasa, 50, 800);
-        contentStream.drawImage(logoGuardiaCostera, 280, 800);
 
 
         contentStream.beginText();
@@ -282,7 +286,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 7);
         contentStream.moveTextPositionByAmount(334, 740);
-        contentStream.drawString(dto.getAB());
+        contentStream.drawString(dto.getArqueoBruto());
         contentStream.endText();
 
         contentStream.beginText();
@@ -586,11 +590,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         logger.error("PlantillaPDF_1");
-        drawTableRolTripulacion(page, contentStream, 655.0f, 60.0f, rolTripulacion);
+        drawTableRolTripulacion(page, contentStream, 655.0f, 50.0f, rolTripulacion);
         logger.error("PlantillaPDF_2");
-        drawTableCertificados(contentStream,355, 60, certificados);
-        logger.error("PlantillaPDF_3");
-        drawCuadroCodigoZarpe(contentStream, 830, 440,dto.getCodigoZarpe());
+        drawTableCertificados(contentStream,355, 50, certificados);
+
         contentStream.close();
         document.save(path);
         document.close();
@@ -637,7 +640,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
-                nextx += colWidth+10;
+                nextx += colWidth+30;
             }else {
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
@@ -677,16 +680,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         break;
                     case 3:
                         if(i==0){
-                            textx = 390;
+                            textx = 380;
                         }else{
-                            textx = 385;
+                            textx = 375;
                         }
                         break;
                     case 4:
                         if(i==0){
-                            textx = 465;
+                            textx = 475;
                         }else {
-                            textx = 450;
+                            textx = 460;
                         }
                         break;
                 }
@@ -926,10 +929,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
-        String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
-        String guardiaCostera= Constantes.RUTA_ARCHIVO_IMPORTAR+"logocapitania.png";
-        PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
-        PDImageXObject logoGuardiaCostera = PDImageXObject.createFromFile(guardiaCostera,document);
+        //String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
+        //String guardiaCostera= Constantes.RUTA_ARCHIVO_IMPORTAR+"logocapitania.png";
+        //PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
+        //PDImageXObject logoGuardiaCostera = PDImageXObject.createFromFile(guardiaCostera,document);
 
         document.addPage(page);
 
@@ -941,8 +944,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         //logos superiores
-        contentStream.drawImage(logoTasa, 50, 750);
-        contentStream.drawImage(logoGuardiaCostera, 280, 750);
+       //contentStream.drawImage(logoTasa, 50, 750);
+       // contentStream.drawImage(logoGuardiaCostera, 280, 750);
 
         contentStream.beginText();
         contentStream.setFont(bold, 10);
@@ -1452,12 +1455,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
             dto.setDomicilioLegal(T_BAPRT.getString(PDFProtestosConstantes.DRPTA));
             dto.setCargoSupervisor(T_BAPRT.getString(PDFProtestosConstantes.CARSU));
             dto.setNombreBahia(T_BAPRT.getString(PDFProtestosConstantes.NAPBA));
-            dto.setDni(T_BAPRT.getString(PDFProtestosConstantes.NRDNI));
+           // dto.setDni(T_BAPRT.getString(PDFProtestosConstantes.NRDNI));
             dto.setPuerto(T_BAPRT.getString(PDFProtestosConstantes.DSWKP));
             dto.setFecha(fecha);
             dto.setNombreEmbarcacion(T_BAPRT.getString(PDFProtestosConstantes.DSWKS));
             dto.setMatricula(T_BAPRT.getString(PDFProtestosConstantes.MREMB));
             dto.setNumeroProtesto(T_BAPRT.getString(PDFProtestosConstantes.CDPRT));
+            dto.setCargoBahia(T_BAPRT.getString(PDFProtestosConstantes.CARBA));
+            dto.setCarnetProcurador(T_BAPRT.getString(PDFProtestosConstantes.NRCPP));
 
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
 
@@ -1488,16 +1493,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
-        String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"logo.png";
-        PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
+
         document.addPage(page);
 
         PDFont bold = PDType1Font.HELVETICA_BOLD;
         PDFont font = PDType1Font.HELVETICA;
+
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-
-        contentStream.drawImage(logoTasa, 50, 770);
 
         contentStream.beginText();
         contentStream.setFont(bold, 14);
@@ -1519,39 +1521,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 660);
+        contentStream.moveTextPositionByAmount(40, 657);
         contentStream.drawString(dto.getGradoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 650);
+        contentStream.moveTextPositionByAmount(40, 644);
         contentStream.drawString(dto.getNombreSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 640);
+        contentStream.moveTextPositionByAmount(40, 631);
         contentStream.drawString(dto.getCargoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 630);
+        contentStream.moveTextPositionByAmount(40, 618);
         contentStream.drawString(PDFProtestosConstantes.capitaniaGuardacostas);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 620);
+        contentStream.moveTextPositionByAmount(40, 605);
         contentStream.drawString(dto.getPuerto());
         contentStream.endText();
 
-        String parrafoUno=PDFProtestosConstantes.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosConstantes.primerParrafo2+dto.getNombreBahia()
-                +PDFProtestosConstantes.primerParrafo3+dto.getDni()+PDFProtestosConstantes.primerParrafo4+dto.getNombreEmbarcacion()
+        String parrafoUno=
+                PDFProtestosConstantes.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosConstantes.primerParrafo2+dto.getCargoBahia()+", "+dto.getNombreBahia()+","
+                +PDFProtestosConstantes.primerParrafo3+dto.getCarnetProcurador()+","+PDFProtestosConstantes.primerParrafo4+dto.getNombreEmbarcacion()
                 +PDFProtestosConstantes.primerParrafo5+dto.getMatricula()+PDFProtestosConstantes.primerParrafo6;
 
-        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 590);
+        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 570);
         int finUno= justificarParrafo(contentStream,font,12f,  dto.getSegundoParrafo(), finPU-20);
         int finDos= justificarParrafo(contentStream,font,12f,  PDFProtestosConstantes.textoFinal1, finUno-20);
 
@@ -1566,16 +1569,27 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finDos-60);
+        contentStream.moveTextPositionByAmount(40, finDos-80);
         contentStream.drawString(PDFProtestosConstantes.atentamente);
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 9);
-        contentStream.moveTextPositionByAmount(40, 90);
-        contentStream.drawString(PDFProtestosConstantes.nProtesto+ dto.getNumeroProtesto());
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(40, 110);
+        contentStream.drawString(dto.getNombreBahia());
         contentStream.endText();
 
+        contentStream.beginText();
+        contentStream.setFont(font, 9);
+        contentStream.moveTextPositionByAmount(40, 97);
+        contentStream.drawString("CARNET DE "+dto.getCargoBahia());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 9);
+        contentStream.moveTextPositionByAmount(40, 84);
+        contentStream.drawString("N° "+dto.getCarnetProcurador());
+        contentStream.endText();
 
 
         contentStream.close();
@@ -1782,4 +1796,1186 @@ public class JCOPDFsImpl implements JCOPDFsService {
         }
         return startY;
     }
+
+    public PDFExports GenerarPDFZarpeTravesia(PDFZarpeImports imports)throws Exception{
+        PDFExports pdf = new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        PDFZarpeTravesiaDto dto= new PDFZarpeTravesiaDto();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGZAR_ADM_REGZAR);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_TOPE", imports.getP_tope());
+            importx.setValue("P_CDZAT", imports.getP_cdzat());
+            importx.setValue("P_WERKS", imports.getP_werks());
+            importx.setValue("P_WERKP", imports.getP_werkp());
+            importx.setValue("P_CANTI", imports.getP_canti());
+            importx.setValue("P_CDMMA", imports.getP_cdmma());
+            importx.setValue("P_PERNR", imports.getP_pernr());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_ZATRP = tables.getTable(Tablas.T_ZATRP);
+            JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
+            JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
+
+            for(int i=0; i<T_ZATRP.getNumRows(); i++){
+                T_ZATRP.setRow(i);
+
+                String fechaArribo=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEARR);
+                String fechaZarpe=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEZAT);
+                String horaArribo=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRARR);
+                String horaZarpe=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRZAR);
+
+
+                dto.setCapitaniaGuardacostas(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
+                dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
+                dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
+                dto.setArqueoBruto(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
+                dto.setColorCasco(T_ZATRP.getString(PDFZarpeConstantes.COCAS));
+                dto.setSuperEstructura(T_ZATRP.getString(PDFZarpeConstantes.COSUP));
+                dto.setPropietario(T_ZATRP.getString(PDFZarpeConstantes.DSEMP));
+                dto.setDomicilioFiscal(T_ZATRP.getString(PDFZarpeConstantes.DFEMP));
+                dto.setRepresentanteAcreditado(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
+                dto.setTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
+                dto.setDiaHoraArriboPuerto(fechaArribo+"   "+ horaArribo);
+                dto.setDiaHoraZarpe(fechaZarpe+"   "+ horaZarpe);
+
+
+            }
+            logger.error("RolTripulacion");
+            String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
+                    PDFZarpeConstantes.NRLIB,
+                    PDFZarpeConstantes.FEFVG,
+                    PDFZarpeConstantes.STEXT};
+
+            String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
+
+            RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
+            int con=1;
+            for(int i=0; i<T_DZATR.getNumRows(); i++){
+                T_DZATR.setRow(i);
+
+                String[] registros=new String[CamposRolTripulacion.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
+
+                    }else {
+
+                        if(campos==2){
+
+                            try {
+                                String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                                registros[j] = fecha;
+                            }catch (Exception e){
+                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                            }
+                        }else if(campos==3){
+                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
+                        }else {
+                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                        }
+                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                            dto.setNombreCapitanPatron(registros[1]);
+
+                        }
+
+                        campos++;
+                    }
+                }
+
+                RolTripulacion[con]=registros;
+                con++;
+            }
+            logger.error("Certificados");
+
+            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
+                                                        PDFZarpeConstantes.FECCF};
+
+            String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
+            Certificados[0]= PDFZarpeConstantes.fieldCertificados;
+            logger.error("Certificados_1");
+            con=1;
+            for(int i=0; i<T_VGCER.getNumRows(); i++){
+                T_VGCER.setRow(i);
+
+                String[] registros=new String[CamposCertificados.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
+                    }else if(j==1) {
+
+                        registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        campos++;
+
+
+                    }else if(j==2){
+                        if(registros[1].trim().compareTo("ARQUEO")==0){
+
+                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
+
+                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
+                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
+                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+
+                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
+                        }else{
+                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        }
+                        campos++;
+                    }
+                }
+
+                Certificados[con]=registros;
+                con++;
+            }
+
+
+            PlantillaPDFZarpeTravesia(path, dto, RolTripulacion, Certificados);
+
+            Metodos exec = new Metodos();
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
+
+
+        }catch (Exception e){
+            pdf.setMensaje(e.getMessage());
+        }
+        return pdf;
+    }
+    public void PlantillaPDFZarpeTravesia(String path, PDFZarpeTravesiaDto dto, String[][] rolTripulacion, String[][] certificados)throws Exception{
+
+        logger.error("PlantillaPDF");
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 12);
+        contentStream.moveTextPositionByAmount(180, 770);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 755);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.capitania );
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(250, 755);
+        contentStream.drawString(dto.getCapitaniaGuardacostas());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(250, 754);
+        contentStream.drawString("___________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 743);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.uno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(165, 743);
+        contentStream.drawString(dto.getNombreNave());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(165, 742);
+        contentStream.drawString("_______________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 731);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.dos);
+        contentStream.endText();
+
+        //insertando numero de matrícula
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 731);
+        contentStream.drawString(dto.getMatricula());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 730);
+        contentStream.drawString("_______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(300, 731);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.tres);
+        contentStream.endText();
+
+        //insertando A.B.
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(334, 731);
+        contentStream.drawString(dto.getArqueoBruto());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(334, 730);
+        contentStream.drawString("_________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 719);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.cuatro);
+        contentStream.endText();
+
+        //insertando zona de pesca
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 719);
+        contentStream.drawString(dto.getColorCasco());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 718);
+        contentStream.drawString("_______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(300, 719);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.cuatroB);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 719);
+        contentStream.drawString(dto.getSuperEstructura());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 718);
+        contentStream.drawString("_________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 707);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.cinco);
+        contentStream.endText();
+
+        //insertar tiempo de operacion
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 707);
+        contentStream.drawString(dto.getPropietario());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 706);
+        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 695);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.seis);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 695);
+        contentStream.drawString(dto.getDomicilioFiscal());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 694);
+        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 683);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.siete);
+        contentStream.endText();
+
+        //insertando representante acreditado
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(200, 683);
+        contentStream.drawString(dto.getRepresentanteAcreditado());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(200, 682);
+        contentStream.drawString("_______________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 671);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.ocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 671);
+        contentStream.drawString(dto.getDomicilioFiscal());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 670);
+        contentStream.drawString("_________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 659);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.nueve);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(120, 659);
+        contentStream.drawString(dto.getTelefono());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(120, 658);
+        contentStream.drawString("__________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(220, 659);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.diez);
+        contentStream.endText();
+
+        /*
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(270, 659);
+        contentStream.drawString(dto.getTelex());
+        contentStream.endText();*/
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(270, 658);
+        contentStream.drawString("________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(390, 659);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.once);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(430, 658);
+        contentStream.drawString("___________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 647);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.doce);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 350);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.trece);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 12);
+        contentStream.moveTextPositionByAmount(220, 200);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.planNavegacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 180);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.catorce);
+        contentStream.endText();
+
+        //insertando dni
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(160, 180);
+        contentStream.drawString(dto.getDiaHoraZarpe());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(160, 179);
+        contentStream.drawString("____________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 180);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.quince);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(440, 179);
+        contentStream.drawString("________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 165);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.dieciseis);
+        contentStream.endText();
+
+        /*
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(160, 165);
+        contentStream.drawString(dto.getRumboInicial());
+        contentStream.endText();*/
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(160, 164);
+        contentStream.drawString("____________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 150);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.diecisiete);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(210, 150);
+        contentStream.drawString(dto.getDiaHoraArriboPuerto());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(210, 149);
+        contentStream.drawString("_________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 135);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.dieciocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(210, 134);
+        contentStream.drawString("_________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(60, 120);
+        contentStream.drawString(dto.getNombreCapitanPatron());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(60, 120);
+        contentStream.drawString("_______________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 135);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.diecinueve);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(440, 134);
+        contentStream.drawString("________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(340, 120);
+        contentStream.drawString("______________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 110);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.veinte);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(50, 80);
+        contentStream.drawString("____________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 110);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.veintiuno);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(340, 80);
+        contentStream.drawString("______________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 70);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.veintidos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(100, 69);
+        contentStream.drawString("_________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 70);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.veintitres);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(420, 69);
+        contentStream.drawString("____________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(45, 60);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.nota);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(45, 50);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.notaUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(45, 45);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.notaDos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(45, 40);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.notaDos1);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(45, 35);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.notaTres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(45, 30);
+        contentStream.drawString(PDFZarpeTravesiaConstantes.notaTres1);
+        contentStream.endText();
+
+        logger.error("PlantillaPDF_1");
+        drawTableRolTripulacion(page, contentStream, 642.0f, 50.0f, rolTripulacion);
+        logger.error("PlantillaPDF_2");
+        drawTableCertificados(contentStream,340, 50, certificados);
+        logger.error("PlantillaPDF_3");
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+
+
+
+    }
+
+
+    public PDFExports GenerarPDFRolTripulacion(RolTripulacionImports imports)throws Exception{
+
+        PDFExports pdf = new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        PDFRolTripulacionDto dto= new PDFRolTripulacionDto();
+
+         try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGROL_ADM_REGROL);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_TOPE", imports.getP_tope());
+            importx.setValue("P_CDRTR", imports.getP_cdrtr());
+            importx.setValue("P_CANTI", imports.getP_canti());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
+            JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
+
+
+            for(int i=0; i<T_ZARTR.getNumRows(); i++){
+                T_ZARTR.setRow(i);
+
+                String fecha=ConvertirFecha(T_ZARTR, PDFRolTripulacionConstantes.FERTR);
+
+                dto.setNombreNave(T_ZARTR.getString(PDFRolTripulacionConstantes.DSWKS));
+                dto.setMatricula(T_ZARTR.getString(PDFRolTripulacionConstantes.MREMB));
+                dto.setArqueoBruto(T_ZARTR.getString(PDFRolTripulacionConstantes.AQBRT));
+                dto.setArmador(T_ZARTR.getString(PDFRolTripulacionConstantes.DSEMP));
+                dto.setArqueoNeto(T_ZARTR.getString(PDFRolTripulacionConstantes.AQNET));
+                dto.setNumTripulantes(T_ZARTR.getString(PDFRolTripulacionConstantes.NRTRP));
+                dto.setFecha(fecha);
+
+
+
+            }
+            logger.error("RolTripulacion");
+            String[] CamposRolTripulacion= new String[]{PDFRolTripulacionConstantes.NOMBR,
+                    PDFRolTripulacionConstantes.TITRP,
+                    PDFRolTripulacionConstantes.STEXT,
+                    PDFRolTripulacionConstantes.NRLIB,
+                    PDFRolTripulacionConstantes.FEFVG};
+            String[][] RolTripulacion=new String[T_DZART.getNumRows()+1][CamposRolTripulacion.length];
+
+            RolTripulacion[0]= PDFRolTripulacionConstantes.fieldRolTripulacion;
+            int con=1;
+            for(int i=0; i<T_DZART.getNumRows(); i++){
+                T_DZART.setRow(i);
+
+                String[] registros=new String[CamposRolTripulacion.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
+
+                    }else {
+
+                        if(campos==4){
+
+                            try {
+                                String fecha = ConvertirFecha(T_DZART, PDFRolTripulacionConstantes.FEFVG);
+                                registros[j] = fecha;
+                            }catch (Exception e){
+                                registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
+                            }
+                        }else if(campos==2){
+                            registros[j] = T_DZART.getString(CamposRolTripulacion[campos]).replace("/","");
+                        }else {
+                            registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
+                        }
+
+                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                            dto.setNombrePatron(registros[1]);
+
+                        }
+
+                        campos++;
+                    }
+                }
+
+                RolTripulacion[con]=registros;
+                con++;
+            }
+
+
+
+             PlantillaPDFRolTripulacion(path, dto, RolTripulacion);
+
+            Metodos exec = new Metodos();
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
+
+
+        }catch (Exception e){
+            pdf.setMensaje(e.getMessage());
+        }
+
+
+
+        return pdf;
+    }
+
+    public  void drawTableRolTripu(PDPage page, PDPageContentStream contentStream,
+                                         float y, float margin, String[][] content) throws IOException {
+
+        logger.error("drawTableRolTripulacion");
+        final int rows = content.length;
+        final int cols = content[0].length;
+        final float rowHeight = 15.0f;
+        final float tableWidth = page.getMediaBox().getWidth() - 2.0f * margin;
+        final float tableHeight = rowHeight * (float) rows;
+        final float colWidth = 94.33f;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols+2; i++) {
+
+            if(i==1){
+                nextx=margin+20;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }else if(i==2){
+                nextx=margin+200f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }
+            else if(i==5 || i==6){
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth-21;
+            }else {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth;
+            }
+
+        }
+
+
+        //now add the text
+
+
+
+        float texty=y-12;
+        for(int i=0; i<content.length; i++) {
+
+            String[]fields=content[i];
+            float textx=margin+5;
+
+            for (int j = 0; j < fields.length; j++) {
+
+                switch (j) {
+                    case 1:
+                        if(i==0){
+                            textx = 100;
+                        }else {
+                            textx = 58;
+                        }
+                        break;
+                    case 2:
+                        if(i==0){
+                            textx=265;
+                        }else {
+                            textx = 250;
+                        }
+                        break;
+                    case 3:
+                        if(i==0){
+                            textx = 340;
+                        }else{
+                            textx = 330;
+                        }
+                        break;
+                    case 4:
+                        if(i==0){
+                            textx = 440;
+                        }else {
+                            textx = 425;
+                        }
+                        break;
+                    case 5:
+                        textx = 510;
+                        break;
+                }
+
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, 6.5f);
+                contentStream.newLineAtOffset(textx, texty);
+                contentStream.showText(fields[j]);
+                contentStream.endText();
+
+
+            }
+            texty-=15;
+        }
+
+    }
+    public void PlantillaPDFRolTripulacion(String path, PDFRolTripulacionDto dto, String[][] rolTripulacion)throws Exception{
+
+        logger.error("PlantillaPDF");
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 12);
+        contentStream.moveTextPositionByAmount(40, 760);
+        contentStream.drawString(PDFRolTripulacionConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 740);
+        contentStream.drawString(PDFRolTripulacionConstantes.uno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 740);
+        contentStream.drawString(dto.getNombreNave());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 739);
+        contentStream.drawString("___________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 725);
+        contentStream.drawString(PDFRolTripulacionConstantes.dos);
+        contentStream.endText();
+
+        //insertando numero de matrícula
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 725);
+        contentStream.drawString(dto.getMatricula());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 724);
+        contentStream.drawString("_____________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(310, 725);
+        contentStream.drawString(PDFRolTripulacionConstantes.tres);
+        contentStream.endText();
+
+        //insertando A.B.
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 725);
+        contentStream.drawString(dto.getArmador());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 724);
+        contentStream.drawString("___________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 710);
+        contentStream.drawString(PDFRolTripulacionConstantes.cuatro);
+        contentStream.endText();
+
+        //insertando zona de pesca
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 710);
+        contentStream.drawString(dto.getArqueoBruto());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 709);
+        contentStream.drawString("_____________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(310, 710);
+        contentStream.drawString(PDFRolTripulacionConstantes.cinco);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 710);
+        contentStream.drawString(dto.getArqueoNeto());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 709);
+        contentStream.drawString("___________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 695);
+        contentStream.drawString(PDFRolTripulacionConstantes.seis);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(340, 695);
+        contentStream.drawString(dto.getNumTripulantes());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(340, 694);
+        contentStream.drawString("________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 250);
+        contentStream.drawString(PDFRolTripulacionConstantes.siete);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(90, 250);
+        contentStream.drawString(dto.getFecha());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(90, 249);
+        contentStream.drawString("________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(310, 250);
+        contentStream.drawString(PDFRolTripulacionConstantes.ocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(370, 249);
+        contentStream.drawString("__________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(70, 200);
+        contentStream.drawString("___________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(90, 190);
+        contentStream.drawString(PDFRolTripulacionConstantes.patronEmbarcacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(350, 200);
+        contentStream.drawString("__________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(380, 190);
+        contentStream.drawString(PDFRolTripulacionConstantes.verificadoPorGrado);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(70, 175);
+        contentStream.drawString(PDFRolTripulacionConstantes.nombre);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(125, 175);
+        contentStream.drawString("______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(330, 175);
+        contentStream.drawString(PDFRolTripulacionConstantes.nombre);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(380, 175);
+        contentStream.drawString("______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(70, 160);
+        contentStream.drawString(PDFRolTripulacionConstantes.dni);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(125, 160);
+        contentStream.drawString("______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(330, 160);
+        contentStream.drawString(PDFRolTripulacionConstantes.cip);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(380, 160);
+        contentStream.drawString("______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(210, 100);
+        contentStream.drawString("_______________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(250, 90);
+        contentStream.drawString(PDFRolTripulacionConstantes.capitanPuerto);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(35, 80);
+        contentStream.drawString(PDFRolTripulacionConstantes.nota);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(35, 70);
+        contentStream.drawString(PDFRolTripulacionConstantes.notaUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(35, 62);
+        contentStream.drawString(PDFRolTripulacionConstantes.notaDos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(35, 54);
+        contentStream.drawString(PDFRolTripulacionConstantes.notaTres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(35, 46);
+        contentStream.drawString(PDFRolTripulacionConstantes.notaTres1);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(35, 38);
+        contentStream.drawString(PDFRolTripulacionConstantes.notaCuatro);
+        contentStream.endText();
+
+        logger.error("PlantillaPDF_1");
+        drawTableRolTripu(page, contentStream, 685.0f, 30.0f, rolTripulacion);
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+
+    }
+
+    public String ConvertirFecha(JCoTable jCoTable, String tabla){
+
+        String fecha="";
+
+        try {
+            JCoField fieldF = jCoTable.getField(tabla);
+            Date date=fieldF.getDate();
+            SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+            fecha = dia.format(date);
+        }catch (Exception e){
+            fecha="";
+        }
+
+
+        return fecha;
+    }
+
+    public String ConvertirHora(JCoTable jCoTable, String tabla){
+
+        String hora="";
+        try {
+            JCoField fieldH = jCoTable.getField(tabla);
+            Date time = fieldH.getTime();
+            SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
+            hora = hour.format(time);
+        }catch (Exception e){
+            hora="";
+        }
+
+        return hora;
+    }
+
+
 }

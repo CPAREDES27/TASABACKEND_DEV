@@ -31,9 +31,14 @@ public class Constantes {
     public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
     public static String ZFL_RFC_GET_LISTAED="ZFL_RFC_GET_LISTAED";
     public static String ZFL_RFC_VAL_MAREA_PRODUCE="ZFL_RFC_VAL_MAREA_PRODUCE";
+<<<<<<< HEAD
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";
     public static String CODTIPOEVENTODESCARGA="6";
+=======
+    public static String ZFL_RFC_LECT_POSI_VIVER="ZFL_RFC_LECT_POSI_VIVER";
+
+>>>>>>> 9eae5f8503dc8d73741b9a61c8cc53e034cfda63
 
     //Carga y Descarga de archivos ZFL_RFC_CRG_DESCRG_ARCH
     public static String ZFL_RFC_CRG_DESCRG_ARCH="ZFL_RFC_CRG_DESCRG_ARCH";

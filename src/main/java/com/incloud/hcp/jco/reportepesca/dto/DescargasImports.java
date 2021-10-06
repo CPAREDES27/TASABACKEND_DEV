@@ -1,11 +1,14 @@
 package com.incloud.hcp.jco.reportepesca.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class DescargasImports {
     private String p_user;
     private String p_rows;
     private List<MaestroOptionsDescarga> p_options;
+    private List<MaestroOptionsKey> options;
 
     public String getP_user() {
         return p_user;
@@ -29,5 +32,13 @@ public class DescargasImports {
 
     public void setP_options(List<MaestroOptionsDescarga> p_options) {
         this.p_options = p_options;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
     }
 }

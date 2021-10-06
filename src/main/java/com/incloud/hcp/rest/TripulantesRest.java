@@ -155,4 +155,26 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+    @PostMapping(value = "/PDFZarpeTravesia", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFZarpeTravesia(@RequestBody PDFZarpeImports imports) {
+
+        try {
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFZarpeTravesia(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/PDFRolTripulacion", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFRolTripulacion(@RequestBody RolTripulacionImports imports) {
+
+        try {
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFRolTripulacion(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

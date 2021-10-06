@@ -63,6 +63,9 @@ public class PDFZarpeConstantes {
     public static String CDZPC  ="CDZPC";   //zona pesca
     public static String AQBRT  ="AQBRT";   //Arqueo bruto
     public static String HRZAR  ="HRZAR";   //Hora zarpe
+    public static String COCAS  ="COCAS";   //color de casco
+    public static String COSUP  ="COSUP";   //color de superestructura
+
 
 
     //TABLA VGCER

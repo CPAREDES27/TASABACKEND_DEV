@@ -1,11 +1,10 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.jco.maestro.dto;
 
-public class ControlLogImports {
+public class DetalleViveresImports {
 
     private String p_user;
-    private String rowcount;
+    private String p_code;
     private String[] fields;
-
 
     public String[] getFields() {
         return fields;
@@ -15,7 +14,6 @@ public class ControlLogImports {
         this.fields = fields;
     }
 
-
     public String getP_user() {
         return p_user;
     }
@@ -24,11 +22,11 @@ public class ControlLogImports {
         this.p_user = p_user;
     }
 
-    public String getRowcount() {
-        return rowcount;
+    public String getP_code() {
+        return p_code;
     }
 
-    public void setRowcount(String rowcount) {
-        this.rowcount = rowcount;
+    public void setP_code(String p_code) {
+        this.p_code = p_code;
     }
 }
