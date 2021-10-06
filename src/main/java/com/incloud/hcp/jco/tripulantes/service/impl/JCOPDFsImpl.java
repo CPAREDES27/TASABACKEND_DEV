@@ -1455,12 +1455,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
             dto.setDomicilioLegal(T_BAPRT.getString(PDFProtestosConstantes.DRPTA));
             dto.setCargoSupervisor(T_BAPRT.getString(PDFProtestosConstantes.CARSU));
             dto.setNombreBahia(T_BAPRT.getString(PDFProtestosConstantes.NAPBA));
-            dto.setDni(T_BAPRT.getString(PDFProtestosConstantes.NRDNI));
+           // dto.setDni(T_BAPRT.getString(PDFProtestosConstantes.NRDNI));
             dto.setPuerto(T_BAPRT.getString(PDFProtestosConstantes.DSWKP));
             dto.setFecha(fecha);
             dto.setNombreEmbarcacion(T_BAPRT.getString(PDFProtestosConstantes.DSWKS));
             dto.setMatricula(T_BAPRT.getString(PDFProtestosConstantes.MREMB));
             dto.setNumeroProtesto(T_BAPRT.getString(PDFProtestosConstantes.CDPRT));
+            dto.setCargoBahia(T_BAPRT.getString(PDFProtestosConstantes.CARBA));
+            dto.setCarnetProcurador(T_BAPRT.getString(PDFProtestosConstantes.NRCPP));
 
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
 
@@ -1519,39 +1521,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 660);
+        contentStream.moveTextPositionByAmount(40, 657);
         contentStream.drawString(dto.getGradoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 650);
+        contentStream.moveTextPositionByAmount(40, 644);
         contentStream.drawString(dto.getNombreSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 640);
+        contentStream.moveTextPositionByAmount(40, 631);
         contentStream.drawString(dto.getCargoSupervisor());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 630);
+        contentStream.moveTextPositionByAmount(40, 618);
         contentStream.drawString(PDFProtestosConstantes.capitaniaGuardacostas);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, 620);
+        contentStream.moveTextPositionByAmount(40, 605);
         contentStream.drawString(dto.getPuerto());
         contentStream.endText();
 
-        String parrafoUno=PDFProtestosConstantes.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosConstantes.primerParrafo2+dto.getNombreBahia()
-                +PDFProtestosConstantes.primerParrafo3+dto.getDni()+PDFProtestosConstantes.primerParrafo4+dto.getNombreEmbarcacion()
+        String parrafoUno=
+                PDFProtestosConstantes.primerParrafo1+dto.getDomicilioLegal()+PDFProtestosConstantes.primerParrafo2+dto.getCargoBahia()+", "+dto.getNombreBahia()+","
+                +PDFProtestosConstantes.primerParrafo3+dto.getCarnetProcurador()+","+PDFProtestosConstantes.primerParrafo4+dto.getNombreEmbarcacion()
                 +PDFProtestosConstantes.primerParrafo5+dto.getMatricula()+PDFProtestosConstantes.primerParrafo6;
 
-        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 590);
+        int finPU= justificarParrafoUno(contentStream,font,12f,  parrafoUno, 570);
         int finUno= justificarParrafo(contentStream,font,12f,  dto.getSegundoParrafo(), finPU-20);
         int finDos= justificarParrafo(contentStream,font,12f,  PDFProtestosConstantes.textoFinal1, finUno-20);
 
@@ -1566,16 +1569,27 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 12);
-        contentStream.moveTextPositionByAmount(40, finDos-60);
+        contentStream.moveTextPositionByAmount(40, finDos-80);
         contentStream.drawString(PDFProtestosConstantes.atentamente);
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 9);
-        contentStream.moveTextPositionByAmount(40, 90);
-        contentStream.drawString(PDFProtestosConstantes.nProtesto+ dto.getNumeroProtesto());
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(40, 110);
+        contentStream.drawString(dto.getNombreBahia());
         contentStream.endText();
 
+        contentStream.beginText();
+        contentStream.setFont(font, 9);
+        contentStream.moveTextPositionByAmount(40, 97);
+        contentStream.drawString("CARNET DE "+dto.getCargoBahia());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 9);
+        contentStream.moveTextPositionByAmount(40, 84);
+        contentStream.drawString("N° "+dto.getCarnetProcurador());
+        contentStream.endText();
 
 
         contentStream.close();

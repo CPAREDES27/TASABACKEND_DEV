@@ -15,8 +15,24 @@ public class PDFProtestosDto {
     private String nombreEmbarcacion;
     private String matricula;
     private String numeroProtesto;
+    private String carnetProcurador;
+    private String cargoBahia;
 
+    public String getCarnetProcurador() {
+        return carnetProcurador;
+    }
 
+    public void setCarnetProcurador(String carnetProcurador) {
+        this.carnetProcurador = carnetProcurador;
+    }
+
+    public String getCargoBahia() {
+        return cargoBahia;
+    }
+
+    public void setCargoBahia(String cargoBahia) {
+        this.cargoBahia = cargoBahia;
+    }
 
     public String getNumeroProtesto() {
         return numeroProtesto;
