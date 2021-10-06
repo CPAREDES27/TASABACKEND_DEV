@@ -526,6 +526,7 @@ public class Metodos {
         for(int i=0;i<tableExport.getNumRows();i++){
             tableExport.setRow(i);
             String ArrayResponse[] = tableExport.getString().split("\\|");
+
             for(int j=0;j<FIELDS.getNumRows();j++){
                 FIELDS.setRow(j);
                 Object value="";
@@ -540,7 +541,92 @@ public class Metodos {
         }
         return campo;
     }
+    public List<HashMap<String, Object>> obtenerDataEventosPesca2(JCoTable tableExport, JCoTable FIELDS,String fields[]){
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        Constantes c = new Constantes();
+        String campo="";
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            logger.error("array response: "+ArrayResponse);
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
 
+                for(int k=0;k<fields.length;k++) {
+
+                    if (key.equals(fields[k])) {
+                        value = ArrayResponse[j].trim();
+                        campo = value.toString();
+                        if(key.equals("CDTEV")){
+                            String sufijo = "";
+                            if (campo.equals(c.CODTIPOEVENTOZARPE)) {
+                                sufijo = "Zarp";
+                            } else if (campo.equals(c.CODTIPOEVENTOARRIBO)) {
+                                sufijo = "Arri";
+                            } else if (campo.equals(c.CODTIPOEVENTODESCARGA)) {
+                                sufijo = "Desc";
+                            }
+                            newRecord.put(sufijo + "ClaseMovComb", ArrayResponse[3]);
+                            newRecord.put(sufijo + "MatCombus", ArrayResponse[6]);
+                            newRecord.put(sufijo + "UniMedComb", ArrayResponse[5]);
+                            newRecord.put(sufijo + "AutorLectHoro", ArrayResponse[4]);
+                        }
+
+
+                    }
+                }
+            }
+            data.add(newRecord);
+        }
+        return data;
+    }
+    public List<HashMap<String, Object>> obtenerDataEventosPesca(JCoTable tableExport, JCoTable FIELDS,String fields[]){
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        String campo="";
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                for(int k=0;k<fields.length;k++) {
+                    if (key.equals(fields[k])) {
+                        value = ArrayResponse[j].trim();
+                        campo = value.toString();
+                        newRecord.put(key, campo);
+                    }
+                }
+            }
+            data.add(newRecord);
+        }
+        return data;
+    }
+
+    public String obtenerDataEventosPescaCadena(JCoTable tableExport, JCoTable FIELDS,String validador){
+        String campo="";
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                if(key.equals(validador)){
+                    value=ArrayResponse[j].trim();
+                    campo=value.toString();
+
+                }
+            }
+
+        }
+        return campo;
+    }
     public String ConvertirABase64(String fileName)throws IOException {
         File file = new File(fileName);
         byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
