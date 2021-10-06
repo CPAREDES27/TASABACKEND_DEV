@@ -50,6 +50,9 @@ public class Tablas {
     public static String DOMTAB="DOMTAB";
     public static String LIST_OUT="LIST_OUT";
     public static String T_DATA="T_DATA";
+    public static String S_POSICION="S_POSICION";
+
+
 
     //Carga y descarga de Archivo E_TRAMA
     public static String E_TRAMA="E_TRAMA";
