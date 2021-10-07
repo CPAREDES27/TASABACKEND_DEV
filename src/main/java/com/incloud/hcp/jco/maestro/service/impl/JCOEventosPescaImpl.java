@@ -278,6 +278,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
            logger.error("DATA ADVANCE: "+ dataAdvance[i]);
        }
 
+
        return obj;
     }
 
