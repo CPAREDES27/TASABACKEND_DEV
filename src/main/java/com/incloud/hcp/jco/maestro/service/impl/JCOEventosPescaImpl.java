@@ -255,10 +255,10 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        Metodos me =new Metodos();
        String[] horometros= me.obtenerHoroEvento(evento);
 
-       String centro= "TCO";
+       String centro= "T059";
        String table="ZFLHOR";
        String fields ="CDTHR";
-       String[] options = {"WERKS = '" + centro + "'","AND POINT NE ''", "AND ESREG ='S'",""};
+       String[] options = {"WERKS = '"+centro+"'","AND POINT NE ''", "AND ESREG ='S'",""};
        String horoEve = "";
        if(horometros != null && horometros.length>0){
            horoEve += "AND (";
@@ -277,7 +277,6 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        for(int i=0;i<dataAdvance.length;i++){
            logger.error("DATA ADVANCE: "+ dataAdvance[i]);
        }
-
 
        return obj;
     }
