@@ -22,6 +22,15 @@ public class PDFZarpeTravesiaDto {
     private String Fecha;
     private String AutorizadoPor;
     private String ValidoHasta;
+    private String dni;
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
     public String getCapitaniaGuardacostas() {
         return CapitaniaGuardacostas;

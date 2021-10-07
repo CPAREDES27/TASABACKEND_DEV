@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
 import com.incloud.hcp.jco.tripulantes.dto.*;
+import com.incloud.hcp.jco.tripulantes.dto.PDFTrimestralConstantes;
 import com.incloud.hcp.util.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOPDFsService;
 import com.sap.conn.jco.*;
@@ -2977,5 +2978,688 @@ public class JCOPDFsImpl implements JCOPDFsService {
         return hora;
     }
 
+    public PDFExports GenerarPDFTrimestral(PDFZarpeImports imports)throws Exception{
+
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+
+        PDFZarpeTravesiaDto dto= new PDFZarpeTravesiaDto();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGZAR_ADM_REGZAR);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_TOPE", imports.getP_tope());
+            importx.setValue("P_CDZAT", imports.getP_cdzat());
+            importx.setValue("P_WERKS", imports.getP_werks());
+            importx.setValue("P_WERKP", imports.getP_werkp());
+            importx.setValue("P_CANTI", imports.getP_canti());
+            importx.setValue("P_CDMMA", imports.getP_cdmma());
+            importx.setValue("P_PERNR", imports.getP_pernr());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_ZATRP = tables.getTable(Tablas.T_ZATRP);
+            JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
+            JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
+
+            for(int i=0; i<T_ZATRP.getNumRows(); i++){
+                T_ZATRP.setRow(i);
+
+
+                String fechaZarpe=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEZAT);
+
+
+                dto.setCapitaniaGuardacostas(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
+                dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
+                dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
+                dto.setArqueoBruto(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
+                dto.setColorCasco(T_ZATRP.getString(PDFZarpeConstantes.COCAS));
+                dto.setSuperEstructura(T_ZATRP.getString(PDFZarpeConstantes.COSUP));
+                dto.setPropietario(T_ZATRP.getString(PDFZarpeConstantes.DSEMP));
+                dto.setDomicilioFiscal(T_ZATRP.getString(PDFZarpeConstantes.DFEMP));
+                dto.setRepresentanteAcreditado(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
+                dto.setTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
+                dto.setFecha(fechaZarpe);
+
+
+            }
+            logger.error("RolTripulacion");
+            String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
+                    PDFZarpeConstantes.NRLIB,
+                    PDFZarpeConstantes.FEFVG,
+                    PDFZarpeConstantes.STEXT};
+
+            String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
+
+            RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
+
+            for(int i=0; i<T_DZATR.getNumRows(); i++){
+                T_DZATR.setRow(i);
+                for(int j=0; j<; j++){
+
+                }
+            }
+            int con=1;
+            for(int i=0; i<T_DZATR.getNumRows(); i++){
+                T_DZATR.setRow(i);
+
+                String[] registros=new String[CamposRolTripulacion.length+1];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+                    if(j==0){
+                        registros[j]=String.valueOf(con);
+
+                    }else {
+
+                        if(campos==2){
+
+                            try {
+                                String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                                registros[j] = fecha;
+                            }catch (Exception e){
+                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                            }
+                        }else if(campos==3){
+                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
+                        }else {
+                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
+                        }
+                        String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
+                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                            dto.setNombreCapitanPatron(registros[1]);
+                            dto.setDni(dni);
+
+                        }
+
+                        campos++;
+                    }
+                }
+
+                RolTripulacion[con]=registros;
+                con++;
+            }
+            logger.error("Certificados");
+
+            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
+                    PDFZarpeConstantes.FECCF};
+
+            String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
+            Certificados[0]= PDFTrimestralConstantes.certificadosCabecera;
+            logger.error("Certificados_1");
+            con=1;
+            String guion="-     ";
+            for(int i=0; i<T_VGCER.getNumRows(); i++){
+                T_VGCER.setRow(i);
+
+                String[] registros=new String[CamposCertificados.length];
+                int campos=0;
+                for(int j=0; j<registros.length; j++){
+
+                     if(j==0) {
+
+                        registros[j] =guion+ T_VGCER.getString(PDFZarpeConstantes.DSCER);
+                        campos++;
+
+
+                    }else if(j==1){
+                        if(registros[0].trim().compareTo("ARQUEO")==0){
+
+                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
+
+                        }else if(registros[0].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
+                                || registros[0].trim().compareTo("MATRICULA DE NAVES")==0
+                                || registros[0].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+
+                            registros[j] =T_VGCER.getString(PDFZarpeConstantes.DSETP);
+                        }else{
+                            String fecha=ConvertirFecha(T_VGCER,PDFZarpeConstantes.FECCF);
+                            registros[j] = fecha;
+                        }
+                        campos++;
+                    }
+                }
+
+                Certificados[con]=registros;
+                con++;
+            }
+
+
+            PlantillaPDFTrimestral(path, dto,  Certificados);
+
+            Metodos exec = new Metodos();
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
+
+
+        }catch (Exception e){
+            pdf.setMensaje(e.getMessage());
+        }
+        return pdf;
+    }
+
+    public void PlantillaPDFTrimestral(String path, PDFZarpeTravesiaDto dto, String[][] certificados)throws Exception{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 10);
+        contentStream.moveTextPositionByAmount(40, 760);
+        contentStream.drawString(PDFTrimestralConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 735);
+        contentStream.drawString(PDFTrimestralConstantes.capitania );
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(250, 735);
+        contentStream.drawString(dto.getCapitaniaGuardacostas());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(250, 734);
+        contentStream.drawString("____________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 710);
+        contentStream.drawString(PDFTrimestralConstantes.uno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 710);
+        contentStream.drawString(dto.getNombreNave());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(155, 709);
+        contentStream.drawString("__________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 690);
+        contentStream.drawString(PDFTrimestralConstantes.dos);
+        contentStream.endText();
+
+        //insertando numero de matrícula
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 690);
+        contentStream.drawString(dto.getMatricula());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 689);
+        contentStream.drawString("_________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(300, 690);
+        contentStream.drawString(PDFTrimestralConstantes.tres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(334, 690);
+        contentStream.drawString(dto.getArqueoBruto());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(334, 689);
+        contentStream.drawString("_________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 670);
+        contentStream.drawString(PDFTrimestralConstantes.cuatro);
+        contentStream.endText();
+
+        //insertando zona de pesca
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 670);
+        contentStream.drawString(dto.getColorCasco());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 669);
+        contentStream.drawString("_________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(300, 670);
+        contentStream.drawString(PDFTrimestralConstantes.cuatroB);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 670);
+        contentStream.drawString(dto.getSuperEstructura());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(400, 669);
+        contentStream.drawString("__________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 650);
+        contentStream.drawString(PDFTrimestralConstantes.cinco);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 650);
+        contentStream.drawString(dto.getPropietario());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 649);
+        contentStream.drawString("____________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 630);
+        contentStream.drawString(PDFTrimestralConstantes.seis);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 630);
+        contentStream.drawString(dto.getDomicilioFiscal());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 629);
+        contentStream.drawString("____________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 610);
+        contentStream.drawString(PDFTrimestralConstantes.siete);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(190, 610);
+        contentStream.drawString(dto.getRepresentanteAcreditado());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(190, 609);
+        contentStream.drawString("__________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 590);
+        contentStream.drawString(PDFTrimestralConstantes.ocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 590);
+        contentStream.drawString(dto.getDomicilioFiscal());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(145, 589);
+        contentStream.drawString("____________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 570);
+        contentStream.drawString(PDFTrimestralConstantes.nueve);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(120, 570);
+        contentStream.drawString(dto.getTelefono());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(120, 569);
+        contentStream.drawString("__________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(220, 570);
+        contentStream.drawString(PDFTrimestralConstantes.diez);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(270, 570);
+        contentStream.drawString("________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(390, 570);
+        contentStream.drawString(PDFTrimestralConstantes.once);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(430, 570);
+        contentStream.drawString("___________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 13);
+        contentStream.moveTextPositionByAmount(250, 545);
+        contentStream.drawString(PDFTrimestralConstantes.certificados);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 13);
+        contentStream.moveTextPositionByAmount(230, 340);
+        contentStream.drawString(PDFTrimestralConstantes.declaracionJurada);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(40, 325);
+        contentStream.drawString(PDFTrimestralConstantes.declaracionJuradaTexto);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(40, 315);
+        contentStream.drawString(PDFTrimestralConstantes.declaracionJuradaTextoUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 295);
+        contentStream.drawString(PDFTrimestralConstantes.trece);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(60, 250);
+        contentStream.drawString(dto.getNombreCapitanPatron());
+        contentStream.endText();
+        contentStream.beginText();
+
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 249);
+        contentStream.drawString("________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 295);
+        contentStream.drawString(PDFTrimestralConstantes.catorce);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(350, 285);
+        contentStream.drawString(PDFTrimestralConstantes.catorceA);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(410, 285);
+        contentStream.drawString(dto.getCapitaniaGuardacostas());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 249);
+        contentStream.drawString("____________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 230);
+        contentStream.drawString(PDFTrimestralConstantes.quince);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(50, 215);
+        contentStream.drawString(PDFTrimestralConstantes.dni);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(80, 215);
+        contentStream.drawString(dto.getDni());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(340, 145);
+        contentStream.drawString("________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 230);
+        contentStream.drawString(PDFTrimestralConstantes.dieciseis);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(350, 215);
+        contentStream.drawString(PDFTrimestralConstantes.firma);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(50, 145);
+        contentStream.drawString("___________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 120);
+        contentStream.drawString(PDFTrimestralConstantes.diecisiete);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(100, 120);
+        contentStream.drawString(dto.getFecha());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(100, 120);
+        contentStream.drawString("_____________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(340, 120);
+        contentStream.drawString(PDFTrimestralConstantes.dieciocho);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(420, 120);
+        contentStream.drawString("_________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 90);
+        contentStream.drawString(PDFTrimestralConstantes.nota);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(40, 80);
+        contentStream.drawString(PDFTrimestralConstantes.notaUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(40, 73);
+        contentStream.drawString(PDFTrimestralConstantes.notaDos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(40, 66);
+        contentStream.drawString(PDFTrimestralConstantes.notaTres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(40, 59);
+        contentStream.drawString(PDFTrimestralConstantes.notaTres1);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(40, 49);
+        contentStream.drawString(PDFTrimestralConstantes.nota4);
+        contentStream.endText();
+
+
+        drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
+        logger.error("PlantillaPDF_3");
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+
+    }
+
+    public  void drawTableCertificadosTrimestral(PDPage page, PDPageContentStream contentStream,
+                                                float y, float margin, String[][] content) throws IOException {
+
+        logger.error("drawTableCertificados");
+        final int rows = content.length;
+        final int cols = content[0].length;
+        final float rowHeight = 15.0f;
+        final float tableWidth = page.getMediaBox().getWidth() - 2.0f * margin;
+        final float tableHeight = rowHeight * (float) rows;
+        //final float colWidth = tableWidth / (float) cols;
+        final float colWidth = 170f;
+
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+            if(i==1){
+                nextx=margin+245;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }else if(i==2){
+                nextx+=250f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }else {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth;
+            }
+        }
+
+        //data -  coordenadas data
+        float texty=y-10;
+        for(int i=0; i<content.length;i++) {
+
+            String[]fields=content[i];
+            float textx=margin+10;
+
+            for (int j = 0; j < fields.length; j++) {
+
+                switch (j) {
+                    case 0:
+                        if(i==0){
+                            textx = 60;
+                        }else {
+                            textx = 90;
+                        }
+                        break;
+                    case 1:
+                        if(i==0){
+                            textx = 390;
+                        }else {
+                            textx = 370;
+                        }
+                        break;
+
+                }
+                int font=7;
+
+                if(i==0){
+                    font=8;
+                }
+
+                contentStream.beginText();
+                contentStream.setFont(PDType1Font.HELVETICA, font);
+                contentStream.newLineAtOffset(textx, texty);
+                contentStream.showText(fields[j]);
+                contentStream.endText();
+
+
+            }
+            texty-=15;
+        }
+
+
+    }
 
 }

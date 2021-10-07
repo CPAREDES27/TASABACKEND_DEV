@@ -12,4 +12,6 @@ public interface JCOPDFsService {
     PDFExports GenerarPDFProtestos(ProtestosImports imports)throws Exception;
     PDFExports GenerarPDFZarpeTravesia(PDFZarpeImports imports)throws Exception;
     PDFExports GenerarPDFRolTripulacion(RolTripulacionImports imports)throws Exception;
+    PDFExports GenerarPDFTrimestral(PDFZarpeImports imports)throws Exception;
+
 }
