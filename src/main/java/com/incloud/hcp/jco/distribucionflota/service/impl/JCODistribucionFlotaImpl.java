@@ -608,17 +608,19 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
         int ultimaFilaRec = listaEmbarcaciones.size() - Integer.parseInt(nroFilas);
         logger.error("ENTRO EmbarcacionesFiltradas : " + ultimaFilaRec + " - " +  listaEmbarcaciones.size());
 
-        for(int indice = listaEmbarcaciones.size() - 1;indice>=ultimaFilaRec;indice--)
-        {
-            logger.error("ENTRO EmbarcacionesFiltradas");
-            EmbarcacionesDto embarcacion_item =  new EmbarcacionesDto();
-            //embarcacion_item.setDescEmba(listaEmbarcaciones.get(indice).getDescEmba());
-            embarcacion_item = listaEmbarcaciones.get(indice);
-            //logger.error("Embarcacion : " + listaEmbarcaciones.get(indice).getDescEmba());
-            embarcacion_Filtrada.add(embarcacion_item);
+        if(ultimaFilaRec < 0){
+            embarcacion_Filtrada = listaEmbarcaciones;
+        }else{
+            for(int indice = listaEmbarcaciones.size() - 1;indice>=ultimaFilaRec;indice--)
+            {
+                logger.error("ENTRO EmbarcacionesFiltradas");
+                EmbarcacionesDto embarcacion_item =  new EmbarcacionesDto();
+                embarcacion_item = listaEmbarcaciones.get(indice);
+                embarcacion_Filtrada.add(embarcacion_item);
+            }
         }
 
-        logger.error("Embarcacion cantidad : " + embarcacion_Filtrada.size());
+        //logger.error("Embarcacion cantidad : " + embarcacion_Filtrada.size());
 
         return embarcacion_Filtrada;
     }
