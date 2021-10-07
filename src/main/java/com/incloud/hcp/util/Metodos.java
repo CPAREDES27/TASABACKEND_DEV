@@ -60,7 +60,9 @@ public class Metodos {
                         value = fecha;
                     }
                 }catch (Exception e){
-                    value=String.valueOf(value);
+                   // value=String.valueOf(value);
+                    value="-";
+
                 }
                 newRecord.put(key, value);
             }
