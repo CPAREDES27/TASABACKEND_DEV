@@ -1,9 +1,6 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.maestro.dto.ConfiguracionEventoPescaExports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaEditImports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaExports;
-import com.incloud.hcp.jco.maestro.dto.EventosPescaImports;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEventosPescaService;
 import com.incloud.hcp.util.Mensaje;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +58,17 @@ public class EventosPescaRest {
         }
 
     }
+    @PostMapping(value = "/obtenerHoroEvento/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<HorometrosExport> obtenerHoroEvento(String evento){
+
+        try {
+            return Optional.ofNullable(this.jcoEventosPescaService.obtenerHorometros(evento))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
 }

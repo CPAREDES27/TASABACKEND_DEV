@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class JCOEventosPescaImpl implements JCOEventosPescaService {
@@ -186,28 +183,105 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
 
 
         //tercero
-        JCoDestination destinations3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        ;
-        JCoRepository repos3 = destinations3.getRepository();
-        ;
-        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-        JCoParameterList importxs3 = stfcConnections3.getImportParameterList();
 
-        importxs3.setValue("DELIMITER","|");
-        importxs3.setValue("QUERY_TABLE",Tablas.ZFLCCE);
+        String tabla="";
+        String[] optionsEspe={"CDUMD = '"+data[8]+"'"};
+        String[] optionsCHI={"CDSPC = '"+data[9]+"'"};
+        String[] optionsoptionsCalaMax={"CDUMD = '"+data[16]+"'"};
+        String[] optionsoptionsCalaMin={"CDUMD = '"+data[5]+"'"};
+        String fields="";
+        String EspeUniMedTiempExt = me.getFieldData(Tablas.ZFLUMD,optionsEspe,"MEINS");
+        String CalaDescEspecieCHI = me.getFieldData(Tablas.ZFLSPC,optionsCHI,"DSSPC");
+        String CalaUMTiemMaximoExt = me.getFieldData(Tablas.ZFLUMD,optionsoptionsCalaMax,"MEINS");
+        String CalaUMTiemMinEntreExt = me.getFieldData(Tablas.ZFLUMD,optionsoptionsCalaMin,"MEINS");
 
-        JCoParameterList tabless3 = stfcConnections.getTableParameterList();
-        JCoTable tableImports3 = tabless.getTable("OPTIONS");
-        String fieldz3 = "DSSPC";
-        stfcConnections3.execute(destination);
+        logger.error("ERROR 1");
+        //8,9,16,5
+        logger.error("CADENA CALA: "+EspeUniMedTiempExt);
+        list.setEspeUniMedTiempExt(EspeUniMedTiempExt);
+        list.setCalaDescEspecieCHI(CalaDescEspecieCHI);
+        list.setCalaUMTiemMaximoExt(CalaUMTiemMaximoExt);
+        list.setCalaUMTiemMinEntreExt(CalaUMTiemMinEntreExt);
+        list.setEspeUMExtValido(true);
+        list.setCalaUMTiemMaxValido(true);
+        list.setCalaUMTMinEntreValido(true);
+        list.setCalaTiemMaximo(Double.parseDouble(data[18]));
+        double espeLimMin = Double.parseDouble(data[0]);
+        double espeLimMax = Double.parseDouble(data[13]);
+        logger.error("ERROR 2");
+        if(!list.getEspeUniMedTiempExt().equals(null)){
+            if (!list.getEspeUniMedTiempExt().equalsIgnoreCase("MIN")) {
+                if (list.getEspeUniMedTiempExt().equalsIgnoreCase("H")) {
+                    espeLimMin *= 60;
+                    espeLimMax *= 60;
+                } else {
+                    list.setEspeUMExtValido(false);
+                }
+            }
+        }
+        logger.error("ERROR 3");
+        list.setEspeMiliLimMinimo(espeLimMin*60*1000);
+        list.setEspeMiliLimMaximo(espeLimMax*60*1000);
+        list.setCalaTiemMinEntre(Double.parseDouble(data[7]));
+        double calaTiemMax = list.getCalaTiemMaximo();
+        logger.error("ERROR 4");
 
+        if (!list.getCalaUMTiemMaximoExt().equalsIgnoreCase("MIN")) {
+            if (list.getCalaUMTiemMaximoExt().equalsIgnoreCase("H")) {
+                calaTiemMax *= 60;
+            } else {
+                list.setCalaUMTiemMaxValido(false);
+            }
+        }
+        list.setCalaMiliTiemMaximo(calaTiemMax*60*1000);
+        logger.error("ERROR 5");
+        double calaTMinEntre = list.getCalaTiemMinEntre();
+        if (!list.getCalaUMTiemMinEntreExt().equalsIgnoreCase("MIN")) {
+            if (list.getCalaUMTiemMinEntreExt().equalsIgnoreCase("H")) {
+                calaTMinEntre *= 60;
+            } else {
+                list.setCalaUMTMinEntreValido(false);
+            }
+        }
+        logger.error("ERROR 6");
 
-        JCoTable tableExports3 = tabless.getTable("DATA");
-        JCoTable FIELDSs3 = tabless.getTable("FIELDS");
-
-        String CalaDescEspecieCHI = me.obtenerDataEventosPescaCadena(tableExports3,FIELDSs3,fieldz3);
-
+        list.setCalaMiliTiemMinEntre(calaTMinEntre*60*1000);
         return list;
+    }
+    @Override
+    public HorometrosExport obtenerHorometros(String evento) throws Exception{
+
+       HorometrosExport obj = new HorometrosExport();
+       Metodos me =new Metodos();
+       String[] horometros= me.obtenerHoroEvento(evento);
+
+       String centro= "TCO";
+       String table="ZFLHOR";
+       String fields ="CDTHR";
+       String[] options = {"WERKS = '" + centro + "'","AND POINT NE ''", "AND ESREG ='S'",""};
+       String horoEve = "";
+       if(horometros != null && horometros.length>0){
+           horoEve += "AND (";
+
+           for (int i = 0; i < horometros.length; i++) {
+               horoEve += "CDTHR = '" + horometros[i] +  "'";
+
+               if (i < horometros.length - 1) {
+                   horoEve += " OR ";
+               }
+           }
+
+           horoEve += ")";
+       }
+       options[3] = horoEve;
+
+       String[] dataAdvance = me.getFieldDataArray(table,options,fields);
+
+       for(int i=0;i<dataAdvance.length;i++){
+           logger.error("DATA ADVANCE: "+ dataAdvance[i]);
+       }
+
+       return obj;
     }
 
 }

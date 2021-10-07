@@ -494,6 +494,54 @@ public class Metodos {
 
     }
 
+    public String getFieldData(String tabla,String[] option,String field) throws  Exception{
+        JCoDestination destinations3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repos3 = destinations3.getRepository();
+        ;
+        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importxs3 = stfcConnections3.getImportParameterList();
+        importxs3.setValue("DELIMITER","|");
+        importxs3.setValue("QUERY_TABLE",tabla);
+
+        JCoParameterList tabless3 = stfcConnections3.getTableParameterList();
+        JCoTable tableImports3 = tabless3.getTable("OPTIONS");
+        tableImports3.appendRow();
+        for(int i=0;i<option.length;i++) {
+            tableImports3.setValue("WA", option[i]);
+        }
+        stfcConnections3.execute(destinations3);
+
+        JCoTable tableExports = tabless3.getTable("DATA");
+        JCoTable FIELDS = tabless3.getTable("FIELDS");
+        String valor = obtenerDataEventosPescaCadena(tableExports,FIELDS,field);
+
+        return valor;
+    }
+    public String[] getFieldDataArray(String tabla,String[] option,String field) throws  Exception{
+        JCoDestination destinations3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repos3 = destinations3.getRepository();
+        ;
+        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importxs3 = stfcConnections3.getImportParameterList();
+        importxs3.setValue("DELIMITER","|");
+        importxs3.setValue("QUERY_TABLE",tabla);
+
+        JCoParameterList tabless3 = stfcConnections3.getTableParameterList();
+        JCoTable tableImports3 = tabless3.getTable("OPTIONS");
+        tableImports3.appendRow();
+        for(int i=0;i<option.length;i++){
+            tableImports3.setValue("WA", option[i]);
+        }
+        stfcConnections3.execute(destinations3);
+
+        JCoTable tableExports = tabless3.getTable("DATA");
+        JCoTable FIELDS = tabless3.getTable("FIELDS");
+        String[] valor = obtenerDataArrayEventosPescaCadena(tableExports,FIELDS,field);
+
+        return valor;
+    }
     public List<HashMap<String, Object>> ObtenerListObjetosSinField(JCoTable jcoTable)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
@@ -617,6 +665,44 @@ public class Metodos {
         return data;
     }
 
+    public String[] obtenerDataArrayEventosPescaCadena(JCoTable tableExport, JCoTable FIELDS,String validador){
+        String[] campo=new String[tableExport.getNumRows()];
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                logger.error("KEYS2021: "+key);
+                if(key.equals(validador)){
+                    value=ArrayResponse[j].trim();
+                    campo[i]=value.toString();
+                }
+
+
+
+            }
+
+        }
+
+        return campo;
+    }
+    public String[] obtenerHoroEvento(String evento) throws Exception{
+
+        HorometrosExport obj = new HorometrosExport();
+        String centro = "TCO";
+        String table = "ZFLTHE";
+        String fields = "CDTHR";
+        String[] options = {"CDTEV = '"+evento+"'"};
+        Metodos me = new Metodos();
+        List<HashMap<String, Object>> datas= new ArrayList<HashMap<String, Object>>();
+        String data[]= me.getFieldDataArray(table,options,fields);
+
+
+        return data;
+    }
     public String obtenerDataEventosPescaCadena(JCoTable tableExport, JCoTable FIELDS,String validador){
         String campo="";
         for(int i=0;i<tableExport.getNumRows();i++){
@@ -627,14 +713,18 @@ public class Metodos {
                 FIELDS.setRow(j);
                 Object value="";
                 String key=(String) FIELDS.getValue("FIELDNAME");
-                if(key.equals(validador)){
-                    value=ArrayResponse[j].trim();
-                    campo=value.toString();
+                logger.error("KEYS2021: "+key);
+                    if(key.equals(validador)){
+                        value=ArrayResponse[j].trim();
+                        campo=value.toString();
+                    }
 
-                }
+
+
             }
 
         }
+
         return campo;
     }
     public String ConvertirABase64(String fileName)throws IOException {
@@ -642,6 +732,7 @@ public class Metodos {
         byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
         return new String(encoded, StandardCharsets.UTF_8);
     }
+
 
     public List<MaestroOptions> convertMaestroOptions(List<MaestroOptionsDescarga> options){
         return options.stream().map(o->{

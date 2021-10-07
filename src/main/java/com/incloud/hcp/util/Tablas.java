@@ -5,6 +5,8 @@ public class Tablas {
     public static String ZFLPTA="ZFLPTA";
     public static String ZFLCEP="ZFLCEP";
     public static String ZFLCCE="ZFLCCE";
+    public static String ZFLUMD="ZFLUMD";
+    public static String ZFLSPC="ZFLSPC";
     public static String ZFLEMB="ZFLEMB";
     public static String STR_SET="STR_SET";
     public static String STR_EMB="STR_EMB";
