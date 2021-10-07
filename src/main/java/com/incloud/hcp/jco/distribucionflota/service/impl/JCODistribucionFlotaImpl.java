@@ -131,6 +131,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                     vi_totdesc_est++;
                                 }
 
+                                n_embarcacion.setCodPlanta(s_str_di.getString("CDPTA"));
+                                n_embarcacion.setNomPlanta(s_str_di.getString("DESCR"));
                                 n_embarcacion.setCodEmba(s_str_di.getString("CDEMB"));
                                 n_embarcacion.setDescEmba(s_str_di.getString("NMEMB"));
                                 n_embarcacion.setCbodEmba(s_str_di.getString("CPPMS"));
@@ -184,6 +186,12 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                             }
 
                         }
+                        //--------------------Validacion de campo de columnas ---------------------------
+                        logger.error("Validacion de campo de columnas : "+  importsParam.getP_codPlanta() + " - " + s_str_pta.getString("CDPTA"));
+                        if(importsParam.getP_codPlanta().equalsIgnoreCase(s_str_pta.getString("CDPTA"))){
+                            embarcaciones = this.EmbarcacionesFiltradas(embarcaciones, importsParam.getP_numFilas());
+                        }
+                        //-------------------------------------------------------------------------------
                         n_planta.setTot_emb(String.valueOf(vi_contadorEmb));
                         n_planta.setTot_bod(String.valueOf(vi_contadorBod));
                         n_planta.setTot_decl(String.valueOf(vi_contadorDecl));
@@ -594,5 +602,26 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
     }
 
     }
+
+    public List<EmbarcacionesDto> EmbarcacionesFiltradas(List<EmbarcacionesDto> listaEmbarcaciones, String nroFilas){
+        List<EmbarcacionesDto> embarcacion_Filtrada = new ArrayList<EmbarcacionesDto>();
+        int ultimaFilaRec = listaEmbarcaciones.size() - Integer.parseInt(nroFilas);
+        logger.error("ENTRO EmbarcacionesFiltradas : " + ultimaFilaRec + " - " +  listaEmbarcaciones.size());
+
+        for(int indice = listaEmbarcaciones.size() - 1;indice>=ultimaFilaRec;indice--)
+        {
+            logger.error("ENTRO EmbarcacionesFiltradas");
+            EmbarcacionesDto embarcacion_item =  new EmbarcacionesDto();
+            //embarcacion_item.setDescEmba(listaEmbarcaciones.get(indice).getDescEmba());
+            embarcacion_item = listaEmbarcaciones.get(indice);
+            //logger.error("Embarcacion : " + listaEmbarcaciones.get(indice).getDescEmba());
+            embarcacion_Filtrada.add(embarcacion_item);
+        }
+
+        logger.error("Embarcacion cantidad : " + embarcacion_Filtrada.size());
+
+        return embarcacion_Filtrada;
+    }
+
 
 }

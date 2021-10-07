@@ -18,6 +18,24 @@ public class EmbarcacionesDto {
     private String NumMarea;
     private String Indicador;
     private String SemaforoColor;
+    private String CodPlanta;
+    private String NomPlanta;
+
+    public String getCodPlanta() {
+        return CodPlanta;
+    }
+
+    public void setCodPlanta(String codPlanta) {
+        CodPlanta = codPlanta;
+    }
+
+    public String getNomPlanta() {
+        return NomPlanta;
+    }
+
+    public void setNomPlanta(String nomPlanta) {
+        NomPlanta = nomPlanta;
+    }
 
     public String getCodEmba() {
         return CodEmba;

@@ -5,6 +5,24 @@ public class DistribucionFlotaImports {
     private String p_inprp;
     private String p_inubc;
     private String p_cdtem;
+    private String p_codPlanta;
+    private String p_numFilas;
+
+    public String getP_codPlanta() {
+        return p_codPlanta;
+    }
+
+    public void setP_codPlanta(String p_codPlanta) {
+        this.p_codPlanta = p_codPlanta;
+    }
+
+    public String getP_numFilas() {
+        return p_numFilas;
+    }
+
+    public void setP_numFilas(String p_numFilas) {
+        this.p_numFilas = p_numFilas;
+    }
 
     public String getP_user() {
         return p_user;
