@@ -3040,50 +3040,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             for(int i=0; i<T_DZATR.getNumRows(); i++){
                 T_DZATR.setRow(i);
-                for(int j=0; j<; j++){
+                String cargo=T_DZATR.getString(PDFZarpeConstantes.STEXT);
 
+                if(cargo.trim().compareTo("PATRON E/P") == 0){
+                    dto.setNombreCapitanPatron(T_DZATR.getString(PDFZarpeConstantes.NOMBR));
+                    dto.setDni(T_DZATR.getString(PDFZarpeConstantes.NRDNI));
                 }
             }
-            int con=1;
-            for(int i=0; i<T_DZATR.getNumRows(); i++){
-                T_DZATR.setRow(i);
-
-                String[] registros=new String[CamposRolTripulacion.length+1];
-                int campos=0;
-                for(int j=0; j<registros.length; j++){
-                    if(j==0){
-                        registros[j]=String.valueOf(con);
-
-                    }else {
-
-                        if(campos==2){
-
-                            try {
-                                String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
-                                registros[j] = fecha;
-                            }catch (Exception e){
-                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                            }
-                        }else if(campos==3){
-                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
-                        }else {
-                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                        }
-                        String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
-                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
-                            dto.setNombreCapitanPatron(registros[1]);
-                            dto.setDni(dni);
-
-                        }
-
-                        campos++;
-                    }
-                }
-
-                RolTripulacion[con]=registros;
-                con++;
-            }
-            logger.error("Certificados");
 
             String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
                     PDFZarpeConstantes.FECCF};
@@ -3091,7 +3054,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFTrimestralConstantes.certificadosCabecera;
             logger.error("Certificados_1");
-            con=1;
+            int con=1;
             String guion="-     ";
             for(int i=0; i<T_VGCER.getNumRows(); i++){
                 T_VGCER.setRow(i);
