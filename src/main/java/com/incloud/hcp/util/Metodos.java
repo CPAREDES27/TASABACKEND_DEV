@@ -530,8 +530,8 @@ public class Metodos {
 
         JCoParameterList tabless3 = stfcConnections3.getTableParameterList();
         JCoTable tableImports3 = tabless3.getTable("OPTIONS");
-        tableImports3.appendRow();
         for(int i=0;i<option.length;i++){
+            tableImports3.appendRow();
             tableImports3.setValue("WA", option[i]);
         }
         stfcConnections3.execute(destinations3);
