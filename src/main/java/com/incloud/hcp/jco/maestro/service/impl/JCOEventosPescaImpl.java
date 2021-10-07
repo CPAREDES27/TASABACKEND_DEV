@@ -262,15 +262,12 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        String horoEve = "";
        if(horometros != null && horometros.length>0){
            horoEve += "AND (";
-
            for (int i = 0; i < horometros.length; i++) {
                horoEve += "CDTHR = '" + horometros[i] +  "'";
-
                if (i < horometros.length - 1) {
                    horoEve += " OR ";
                }
            }
-
            horoEve += ")";
        }
        options[3] = horoEve;
