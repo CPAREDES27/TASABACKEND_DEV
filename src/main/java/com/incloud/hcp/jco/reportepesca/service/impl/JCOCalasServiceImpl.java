@@ -67,7 +67,7 @@ public class JCOCalasServiceImpl implements JCOCalasService {
         /**
          * Enlace de los detqlles de los campos
          * */
-        List<HashMap<String, Object>> listS_CALA_details = listS_CALA.stream().map(m -> {
+        listS_CALA.stream().map(m -> {
             String inprp = m.get("INPRP").toString();
             String cdmma = m.get("CDMMA").toString();
 

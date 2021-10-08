@@ -67,7 +67,7 @@ public class JCOMareasServiceImpl implements JCOMareasService {
         /**
          * Enlace de los detqlles de los campos
          * */
-        List<HashMap<String, Object>> listS_MAREA_details = listS_MAREA.stream().map(m -> {
+        listS_MAREA.stream().map(m -> {
             String inprp = m.get("INPRP").toString();
             String cdmma = m.get("CDMMA").toString();
 
@@ -93,7 +93,7 @@ public class JCOMareasServiceImpl implements JCOMareasService {
 
 
         MareaExports dto = new MareaExports();
-        dto.setS_marea(listS_MAREA_details);
+        dto.setS_marea(listS_MAREA);
         dto.setMensaje("Ok");
 
         return dto;

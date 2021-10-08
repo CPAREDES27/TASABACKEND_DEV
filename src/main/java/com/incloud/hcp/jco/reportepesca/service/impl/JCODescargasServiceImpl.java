@@ -71,7 +71,7 @@ public class JCODescargasServiceImpl implements JCODescargasService {
         /**
          * Enlace de los detqlles de los campos
          * */
-        List<HashMap<String, Object>> listSTR_DES_details = listSTR_DES.stream().map(m -> {
+        listSTR_DES.stream().map(m -> {
             String inprp = m.get("INPRP").toString();
             String cdmma = m.get("CDMMA").toString();
 
