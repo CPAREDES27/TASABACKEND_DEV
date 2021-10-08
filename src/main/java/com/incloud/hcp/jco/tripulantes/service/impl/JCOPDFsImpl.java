@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -3625,4 +3626,144 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
     }
 
+    public PDFExports GenerarPDFTrabajoFF()throws Exception{
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        PDFTrabajoFFDto dto= new PDFTrabajoFFDto();
+
+
+        dto.setNumeroTrabajo("prueba");
+        dto.setTipoTrabajo("prueba");
+        dto.setSemana("prueba");
+        dto.setFechaInicio("prueba");
+        dto.setFechaFin("prueba");
+        dto.setDescripcionTrabajo("prueba");
+        dto.setObservacion("prueba");
+
+        PlantillaPDFTrabajoFF(path, dto);
+        Metodos exec = new Metodos();
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return pdf;
+    }
+    public void PlantillaPDFTrabajoFF(String path, PDFTrabajoFFDto dto)throws IOException{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+        page.setRotation(90);
+        document.addPage(page);
+
+        PDFont font = PDType1Font.HELVETICA;
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+
+        PDRectangle pageSize = page.getMediaBox();
+        float pageWidth = pageSize.getWidth();
+        PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+// add the rotation using the current transformation matrix
+// including a translation of pageWidth to use the lower left corner as 0,0 reference
+        contentStream.transform(new Matrix(0, 1, -1, 0, pageWidth, 0));
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 13);
+        contentStream.moveTextPositionByAmount(300, 520);
+        contentStream.drawString(PDFTrabajoFFConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 13);
+        contentStream.moveTextPositionByAmount(300, 520);
+        contentStream.drawString("___________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 450);
+        contentStream.drawString(PDFTrabajoFFConstantes.numeroTrabajo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 450);
+        contentStream.drawString(dto.getNumeroTrabajo());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 435);
+        contentStream.drawString(PDFTrabajoFFConstantes.tipoTrabajo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 435);
+        contentStream.drawString(dto.getTipoTrabajo());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 420);
+        contentStream.drawString(PDFTrabajoFFConstantes.semana);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 420);
+        contentStream.drawString(dto.getSemana());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 405);
+        contentStream.drawString(PDFTrabajoFFConstantes.fechaInicio);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 405);
+        contentStream.drawString(dto.getFechaInicio());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(210, 405);
+        contentStream.drawString(PDFTrabajoFFConstantes.fechaFin);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(260, 405);
+        contentStream.drawString(dto.getFechaFin());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 390);
+        contentStream.drawString(PDFTrabajoFFConstantes.descripcionTrabajo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 390);
+        contentStream.drawString(dto.getDescripcionTrabajo());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(60, 375);
+        contentStream.drawString(PDFTrabajoFFConstantes.observacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 375);
+        contentStream.drawString(dto.getObservacion());
+        contentStream.endText();
+
+       // drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+    }
 }
