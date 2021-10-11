@@ -59,7 +59,7 @@ public class EventosPescaRest {
 
     }
     @PostMapping(value = "/obtenerHoroEvento/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<HorometrosExport> obtenerHoroEvento(String evento){
+    public ResponseEntity<HorometrosExport> obtenerHoroEvento(@RequestBody HorometrosImportDto evento){
 
         try {
             return Optional.ofNullable(this.jcoEventosPescaService.obtenerHorometros(evento))

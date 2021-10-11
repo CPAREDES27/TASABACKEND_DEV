@@ -520,7 +520,7 @@ public class Metodos {
 
         return valor;
     }
-    public String[] getFieldDataArray(String tabla,String[] option,String field) throws  Exception{
+    public String[] getFieldDataArray(String tabla,String[] option,String[] field) throws  Exception{
         JCoDestination destinations3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;
         JCoRepository repos3 = destinations3.getRepository();
@@ -667,7 +667,7 @@ public class Metodos {
         return data;
     }
 
-    public String[] obtenerDataArrayEventosPescaCadena(JCoTable tableExport, JCoTable FIELDS,String validador){
+    public String[] obtenerDataArrayEventosPescaCadena(JCoTable tableExport, JCoTable FIELDS,String[] validador){
         String[] campo=new String[tableExport.getNumRows()];
         for(int i=0;i<tableExport.getNumRows();i++){
             tableExport.setRow(i);
@@ -678,11 +678,12 @@ public class Metodos {
                 Object value="";
                 String key=(String) FIELDS.getValue("FIELDNAME");
                 logger.error("KEYS2021: "+key);
-                if(key.equals(validador)){
-                    value=ArrayResponse[j].trim();
-                    campo[i]=value.toString();
+                for(int k=0;k<validador.length;k++){
+                    if(key.equals(validador[k])){
+                        value=ArrayResponse[j].trim();
+                        campo[i]=value.toString();
+                    }
                 }
-
 
 
             }
@@ -696,7 +697,7 @@ public class Metodos {
         HorometrosExport obj = new HorometrosExport();
         String centro = "TCO";
         String table = "ZFLTHE";
-        String fields = "CDTHR";
+        String[] fields = {"CDTHR"};
         String[] options = {"CDTEV = '"+evento+"'"};
         Metodos me = new Metodos();
         List<HashMap<String, Object>> datas= new ArrayList<HashMap<String, Object>>();

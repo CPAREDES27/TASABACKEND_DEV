@@ -253,19 +253,19 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         return list;
     }
     @Override
-    public HorometrosExport obtenerHorometros(String evento) throws Exception{
+    public HorometrosExport obtenerHorometros(HorometrosImportDto evento) throws Exception{
 
        HorometrosExport obj = new HorometrosExport();
        Metodos me =new Metodos();
-       String[] horometros= me.obtenerHoroEvento(evento);
+       String[] horometros= me.obtenerHoroEvento(evento.getEvento());
        for(int i=0;i<horometros.length;i++){
            logger.error("HOROMETROS : "+horometros[i]);
 
        }
        String centro= "T059";
        String table="ZFLHOR";
-       String fields ="CDTHR";
-       String[] options = {"WERKS = 'T059'"," AND ESREG = 'S'"," AND POINT NE ''"," "};
+       String[] fields ={"CDTHR"};
+       String[] options = {"WERKS = '"+evento.getCentro()+"'"," AND ESREG = 'S'"," AND POINT NE ''"," "};
        String horoEve = "";
        if(horometros != null && horometros.length>0){
            horoEve += "AND (";
@@ -289,27 +289,49 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         DominiosImports dom = new DominiosImports();
         dom.setDominios(lsita);
 
-       HorometrosDto horo = new HorometrosDto();
+
         DominioDto domDto = new DominioDto();
         JCODominiosImpl objs = new JCODominiosImpl();
         domDto=objs.Listar(dom);
-        logger.error("DOMIDOMI:"+ domDto.getData());
+        logger.error("DOMIDOMI:"+ domDto.getData().size());
+        List<DominioHorometro> objHoro = new ArrayList<DominioHorometro>();
         for(int i=0;i<domDto.getData().size();i++){
             for(int j=0;j<domDto.getData().get(i).getData().size();j++){
-                logger.error("DOMIDOMI:"+ domDto.getData().get(j).getData().get(j).getId());
-                logger.error("DOMIDOMI:"+ domDto.getData().get(j).getData().get(j).getDescripcion());
+                DominioHorometro objDomi = new DominioHorometro();
+                objDomi.setId(domDto.getData().get(i).getData().get(j).getId());
+                objDomi.setDescripcion(domDto.getData().get(i).getData().get(j).getDescripcion());
+                objHoro.add(objDomi);
             }
-
         }
-        logger.error("DOMIDOMI:"+ domDto.getMensaje());
+        for(int k=0;k<objHoro.size();k++){
+            logger.error("DATA HOROMETRO:" + objHoro.get(k).getDescripcion());
+        }
 
+        List<HorometrosDto> listaHoro = new ArrayList<HorometrosDto>();
+        logger.error("tamanioAdvance : "+dataAdvance.length);
        for(int i=0;i<dataAdvance.length;i++){
+           HorometrosDto horo = new HorometrosDto();
+           int data= Integer.parseInt(dataAdvance[i]);
+           logger.error("entró next");
            horo.setIndicador(Constant.CARACTERNUEVO);
+           logger.error("itertor: "+data);
            horo.setTipoHorometro(dataAdvance[i]);
-
+           horo.setDescTipoHorom(objHoro.get(data-1).getDescripcion());
+           listaHoro.add(horo);
        }
 
+       //3er read table
 
+        String table3="ZFLLHO";
+        String[] fields3 ={"CDTHR", "LCHOR", "NORAV"};
+        String[] options3 = {"NRMAR = "+evento.getMarea(), "AND NREVN = "+evento.getNroEvento()};
+        String[] dataArray3 = me.getFieldDataArray(table3,options3,fields3);
+        for(int i=0;i<dataArray3.length;i++){
+            logger.error("DATARRAY 3: "+ dataArray3[i]);
+        }
+
+
+       obj.setLista(listaHoro);
        return obj;
     }
 
