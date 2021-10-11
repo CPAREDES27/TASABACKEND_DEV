@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.reportepesca.dto.*;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCODescargasServiceImpl implements JCODescargasService {
@@ -51,6 +54,46 @@ public class JCODescargasServiceImpl implements JCODescargasService {
 
         Metodos metodos = new Metodos();
         List<HashMap<String, Object>> listSTR_DES = metodos.ListarObjetos(tblSTR_DES);
+
+        /**
+         * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea
+         * */
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add("ZINPRP");
+        listDomNames.add("ZCDMMA");
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports detalleIndPropiedad = listDescipciones.stream().filter(d -> d.getDominio().equals("ZINPRP")).findFirst().orElse(null);
+        DominiosExports detalleMotMarea = listDescipciones.stream().filter(d -> d.getDominio().equals("ZCDMMA")).findFirst().orElse(null);
+
+        /**
+         * Enlace de los detqlles de los campos
+         * */
+        listSTR_DES.stream().map(m -> {
+            String inprp = m.get("INPRP").toString();
+            String cdmma = m.get("CDMMA").toString();
+
+            // Buscar los detalles
+            DominioExportsData dataINPRP = detalleIndPropiedad.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+            DominioExportsData dataCDMMA = detalleMotMarea.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+            if (dataINPRP != null) {
+                String descInprp = dataINPRP.getDescripcion();
+                m.put("DESC_INPRP", descInprp);
+            } else {
+                m.put("DESC_INPRP", "");
+            }
+
+            if (dataCDMMA != null) {
+                String descCdmma = dataCDMMA.getDescripcion();
+                m.put("DESC_CDMMA", descCdmma);
+            } else {
+                m.put("DESC_CDMMA", "");
+            }
+
+            return m;
+        }).collect(Collectors.toList());
 
         DescargasExports dto = new DescargasExports();
         dto.setStr_des(listSTR_DES);

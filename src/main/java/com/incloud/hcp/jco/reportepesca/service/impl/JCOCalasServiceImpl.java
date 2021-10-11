@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.reportepesca.dto.*;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOCalasServiceImpl implements JCOCalasService {
@@ -29,7 +32,7 @@ public class JCOCalasServiceImpl implements JCOCalasService {
 
 
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        tmpOptions=metodo.ValidarOptions(option,options2);
+        tmpOptions = metodo.ValidarOptions(option, options2);
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -47,6 +50,46 @@ public class JCOCalasServiceImpl implements JCOCalasService {
 
         Metodos metodos = new Metodos();
         List<HashMap<String, Object>> listS_CALA = metodos.ListarObjetos(tblS_CALA);
+
+        /**
+         * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea
+         * */
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add("ZINPRP");
+        listDomNames.add("ZDO_TIPOMAREA");
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports detalleIndPropiedad = listDescipciones.stream().filter(d -> d.getDominio().equals("ZINPRP")).findFirst().orElse(null);
+        DominiosExports detalleTipoMarea = listDescipciones.stream().filter(d -> d.getDominio().equals("ZDO_TIPOMAREA")).findFirst().orElse(null);
+
+        /**
+         * Enlace de los detqlles de los campos
+         * */
+        listS_CALA.stream().map(m -> {
+            String inprp = m.get("INPRP").toString();
+            String cdmma = m.get("CDMMA").toString();
+
+            // Buscar los detalles
+            DominioExportsData dataINPRP = detalleIndPropiedad.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+            DominioExportsData dataTipoMarea = detalleTipoMarea.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+            if (dataINPRP != null) {
+                String descInprp = dataINPRP.getDescripcion();
+                m.put("DESC_INPRP", descInprp);
+            } else {
+                m.put("DESC_INPRP", "");
+            }
+
+            if (dataTipoMarea != null) {
+                String descCdmma = dataTipoMarea.getDescripcion();
+                m.put("DESC_TIPOMAREA", descCdmma);
+            } else {
+                m.put("DESC_TIPOMAREA", "");
+            }
+
+            return m;
+        }).collect(Collectors.toList());
 
         CalaExports dto = new CalaExports();
         dto.setS_cala(listS_CALA);

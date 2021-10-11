@@ -1,7 +1,10 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.*;
+import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsMarea;
 import com.incloud.hcp.jco.reportepesca.dto.MareaExports;
 import com.incloud.hcp.jco.reportepesca.dto.MareaImports;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOMareasServiceImpl implements JCOMareasService {
@@ -46,6 +50,47 @@ public class JCOMareasServiceImpl implements JCOMareasService {
         JCoTable tblS_MAREA = tables.getTable(Tablas.S_MAREA);
 
         List<HashMap<String, Object>> listS_MAREA = metodo.ListarObjetos(tblS_MAREA);
+
+        /**
+         * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea
+         * */
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add("ZINPRP");
+        listDomNames.add("ZCDMMA");
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports detalleIndPropiedad = listDescipciones.stream().filter(d -> d.getDominio().equals("ZINPRP")).findFirst().orElse(null);
+        DominiosExports detalleMotMarea = listDescipciones.stream().filter(d -> d.getDominio().equals("ZCDMMA")).findFirst().orElse(null);
+
+        /**
+         * Enlace de los detqlles de los campos
+         * */
+        listS_MAREA.stream().map(m -> {
+            String inprp = m.get("INPRP").toString();
+            String cdmma = m.get("CDMMA").toString();
+
+            // Buscar los detalles
+            DominioExportsData dataINPRP = detalleIndPropiedad.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+            DominioExportsData dataCDMMA = detalleMotMarea.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+            if (dataINPRP != null) {
+                String descInprp = dataINPRP.getDescripcion();
+                m.put("DESC_INPRP", descInprp);
+            } else {
+                m.put("DESC_INPRP", "");
+            }
+
+            if (dataCDMMA != null) {
+                String descCdmma = dataCDMMA.getDescripcion();
+                m.put("DESC_CDMMA", descCdmma);
+            } else {
+                m.put("DESC_CDMMA", "");
+            }
+
+            return m;
+        }).collect(Collectors.toList());
+
 
         MareaExports dto = new MareaExports();
         dto.setS_marea(listS_MAREA);
