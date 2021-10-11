@@ -1,5 +1,9 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioDto;
+import com.incloud.hcp.jco.dominios.dto.DominioParams;
+import com.incloud.hcp.jco.dominios.dto.DominiosImports;
+import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEventosPescaService;
 import com.incloud.hcp.util.*;
@@ -261,7 +265,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        String centro= "T059";
        String table="ZFLHOR";
        String fields ="CDTHR";
-       String[] options = {"WERKS = 'T059'"," AND ESREG = 'S'"};
+       String[] options = {"WERKS = 'T059'"," AND ESREG = 'S'"," AND POINT NE ''"," "};
        String horoEve = "";
        if(horometros != null && horometros.length>0){
            horoEve += "AND (";
@@ -273,14 +277,38 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
            }
            horoEve += ")";
        }
-
+        options[3]=horoEve;
 
         logger.error("OPTIONS : "+horoEve);
        String[] dataAdvance = me.getFieldDataArray(table,options,fields);
+        DominioParams domi = new DominioParams();
+        domi.setDomname("ZCDTHR");
+        domi.setStatus("A");
+        List<DominioParams> lsita= new ArrayList<DominioParams>();
+        lsita.add(domi);
+        DominiosImports dom = new DominiosImports();
+        dom.setDominios(lsita);
+
+       HorometrosDto horo = new HorometrosDto();
+        DominioDto domDto = new DominioDto();
+        JCODominiosImpl objs = new JCODominiosImpl();
+        domDto=objs.Listar(dom);
+        logger.error("DOMIDOMI:"+ domDto.getData());
+        for(int i=0;i<domDto.getData().size();i++){
+            for(int j=0;j<domDto.getData().get(i).getData().size();j++){
+                logger.error("DOMIDOMI:"+ domDto.getData().get(j).getData().get(j).getId());
+                logger.error("DOMIDOMI:"+ domDto.getData().get(j).getData().get(j).getDescripcion());
+            }
+
+        }
+        logger.error("DOMIDOMI:"+ domDto.getMensaje());
 
        for(int i=0;i<dataAdvance.length;i++){
-           logger.error("DATA ADVANCE: "+ dataAdvance[i]);
+           horo.setIndicador(Constant.CARACTERNUEVO);
+           horo.setTipoHorometro(dataAdvance[i]);
+
        }
+
 
        return obj;
     }

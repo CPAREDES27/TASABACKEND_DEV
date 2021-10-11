@@ -15,6 +15,8 @@ public class Constant {
     public static final String DOS = "2";
     public static final String UNO = "1";
     public static final String CERO = "0";
+    public static  final String CARACTERNUEVO="N";
+    public static final String CARACTEREDITAR="E";
     public static final String UNDEFINED = "undefined";
 
     public static final String S = "S";
