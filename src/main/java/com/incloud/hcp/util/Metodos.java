@@ -643,6 +643,43 @@ public class Metodos {
         }
         return data;
     }
+    public List<HashMap<String, Object>> obtenerLectHormoetros(JCoTable tableExport, JCoTable FIELDS,String fields[]){
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        Constantes c = new Constantes();
+        String campo="";
+        for(int i=0;i<tableExport.getNumRows();i++){
+            tableExport.setRow(i);
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            logger.error("array response: "+ArrayResponse.length);
+
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                FIELDS.setRow(j);
+                Object value="";
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                logger.error("Entré");
+
+                for(int k=0;k<fields.length;k++) {
+                    logger.error("key+"+ key + "field "+ fields[k]);
+                    if (key.equals(fields[k])) {
+                        try{
+                            value = ArrayResponse[j].trim();
+                        }catch (Exception e){
+                            value="";
+                        }
+
+
+                        logger.error("J"+ j);
+                        logger.error("value"+ value);
+                        campo = value.toString();
+                        newRecord.put(key, campo);
+                    }
+                }
+            }
+            data.add(newRecord);
+        }
+        return data;
+    }
     public List<HashMap<String, Object>> obtenerDataEventosPesca(JCoTable tableExport, JCoTable FIELDS,String fields[]){
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         String campo="";

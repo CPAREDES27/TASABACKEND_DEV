@@ -4,6 +4,24 @@ public class HorometrosDto {
     private String indicador;
     private String tipoHorometro;
     private String descTipoHorom;
+    private String lectura;
+    private String Averiado;
+
+    public String getLectura() {
+        return lectura;
+    }
+
+    public void setLectura(String lectura) {
+        this.lectura = lectura;
+    }
+
+    public String getAveriado() {
+        return Averiado;
+    }
+
+    public void setAveriado(String Averiado) {
+        this.Averiado = Averiado;
+    }
 
     public String getTipoHorometro() {
         return tipoHorometro;

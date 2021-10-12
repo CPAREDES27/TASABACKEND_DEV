@@ -4,6 +4,7 @@ import com.incloud.hcp.jco.dominios.dto.DominioDto;
 import com.incloud.hcp.jco.dominios.dto.DominioParams;
 import com.incloud.hcp.jco.dominios.dto.DominiosImports;
 import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
+import com.incloud.hcp.jco.gestionpesca.dto.HorometroExport;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEventosPescaService;
 import com.incloud.hcp.util.*;
@@ -321,15 +322,75 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        }
 
        //3er read table
-
-        String table3="ZFLLHO";
-        String[] fields3 ={"CDTHR", "LCHOR", "NORAV"};
-        String[] options3 = {"NRMAR = "+evento.getMarea(), "AND NREVN = "+evento.getNroEvento()};
-        String[] dataArray3 = me.getFieldDataArray(table3,options3,fields3);
-        for(int i=0;i<dataArray3.length;i++){
-            logger.error("DATARRAY 3: "+ dataArray3[i]);
+        logger.error("PASO 01");
+        String[] opcions={"NRMAR = 149534","AND NREVN = 1"};
+        JCoDestination destinations = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;logger.error("PASO 02");
+        JCoRepository repos = destinations.getRepository();
+        ;logger.error("PASO 03");
+        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importxs = stfcConnections.getImportParameterList();
+        logger.error("PASO 04");
+        importxs.setValue("DELIMITER","|");
+        importxs.setValue("QUERY_TABLE","ZFLLHO");
+        logger.error("PASO 05");
+        JCoParameterList tabless = stfcConnections.getTableParameterList();
+        JCoTable tableImports = tabless.getTable("OPTIONS");
+        for(int i=0;i<opcions.length;i++){
+            tableImports.appendRow();
+            tableImports.setValue("WA",opcions[i]);
         }
 
+        stfcConnections.execute(destinations);
+        String[] fieldz = {"CDTHR","LCHOR", "NORAV"};
+        logger.error("PASO 00");
+        JCoTable tableExports = tabless.getTable("DATA");
+        JCoTable FIELDSs = tabless.getTable("FIELDS");
+        List<HashMap<String, Object>> Listar_ConsCombEve =me.obtenerLectHormoetros(tableExports,FIELDSs,fieldz);
+        List<HorometroExportDto> listHoro = new ArrayList<HorometroExportDto>();
+        logger.error("PASO 0");
+        int contador=0;
+        for(Map<String,Object> datas: Listar_ConsCombEve){
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+                contador++;
+            }
+        }
+        logger.error("PASO1");
+        String[] data=new String[contador];
+        int contador2=0;
+        logger.error("tamanio lista inicio:" +listaHoro.size());
+
+        for(Map<String,Object> datas: Listar_ConsCombEve){
+            HorometroExportDto objHorom = new HorometroExportDto();
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+                String key= entry.getKey();
+                Object value= entry.getValue();
+                logger.error("KEYCITO:" + key + " " + value);
+                if(key.equals("LCHOR")){
+                    objHorom.setLCHOR(value.toString());
+                }
+                if(key.equals("NORAV")){
+                    objHorom.setNORAV(value.toString());
+                }
+                if(key.equals("CDTHR")){
+                    objHorom.setCDTHR(value.toString());
+                }
+            }
+            listHoro.add(objHorom);
+            logger.error("tamanio lista add:" +listaHoro.size());
+        }
+
+        logger.error("tamanio lista final:" +listaHoro.size());
+        logger.error("PASO2");
+        for(int i=0;i<listHoro.size();i++){
+            for(int k=0;k<listaHoro.size();k++){
+                if(listaHoro.get(k).getTipoHorometro().equals(listHoro.get(i).getCDTHR())){
+                    listaHoro.get(k).setLectura(listHoro.get(i).getLCHOR());
+                    listaHoro.get(k).setAveriado(listHoro.get(i).getNORAV());
+                    break;
+                }
+            }
+        }
 
        obj.setLista(listaHoro);
        return obj;
