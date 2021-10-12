@@ -50,7 +50,7 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/calculoderechopesca_Guardar", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/calculoderechopesca", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CalcuDerechoPescaExports> Guardar(@RequestBody CalcuDerechoPescaImports imports) {
 
         try {
