@@ -392,7 +392,7 @@ public class Metodos {
                         break;
                     case "INPUT":
                         for (int k = 0; k < i; k++) {
-                            if (sorted.get(i).getKey().equals(sorted.get(k))) {
+                            if (sorted.get(i).getKey().equals(sorted.get(k).getKey())) {
                                 objeto.setClave(optionName);
                                 objeto.setValor("OR " + sorted.get(i).getKey() + " " + "LIKE " + "'%" + sorted.get(i).getValueLow() + "%'");
                             } else {
@@ -424,7 +424,7 @@ public class Metodos {
                         break;
                     case "MULTIINPUT":
                         for(int k=0;k<i;k++){
-                            if(sorted.get(i).getKey().equals(sorted.get(k))){
+                            if(sorted.get(i).getKey().equals(sorted.get(k).getKey())){
                                 objeto.setClave(optionName);
                                 objeto.setValor("OR "+sorted.get(i).getKey()+" "+"EQ "+"'"+sorted.get(i).getValueLow()+"'");
                             }else{
@@ -435,7 +435,7 @@ public class Metodos {
                         break;
                     case "MULTICOMBOBOX":
                         for(int k=0;k<i;k++){
-                            if(sorted.get(i).getKey().equals(sorted.get(k))){
+                            if(sorted.get(i).getKey().equals(sorted.get(k).getKey())){
                                 objeto.setClave(optionName);
                                 objeto.setValor("OR "+sorted.get(i).getKey()+" "+"EQ "+"'"+sorted.get(i).getValueLow()+"'");
                             }else{
@@ -448,6 +448,7 @@ public class Metodos {
                 }
 
             }
+            tmpOptions.add(objeto);
         }
 
 
