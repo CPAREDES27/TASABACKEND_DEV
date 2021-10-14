@@ -91,9 +91,10 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             vve.setP_vale(export.getValue("P_VALE").toString());
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+            JCoTable ST_VVI = tables.getTable(Tablas.ST_VVI);
 
             Metodos metodo = new Metodos();
-            //List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>> st_vvi = metodo.ListarObjetos(ST_VVI);
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldsT_mensaje());
 
             vve.setT_mensaje(t_mensaje);
@@ -103,6 +104,85 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
         vve .setMensaje(e.getMessage());
         }
         return vve;
+    }
+    public CostoRacionValevExports CostoRacionValev(CostoRacionValevImports imports)throws Exception{
+
+        CostoRacionValevExports dto= new CostoRacionValevExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_COST_RACI_VALEV);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user());
+            importx.setValue("P_CENTRO", imports.getP_centro());
+            importx.setValue("P_PROVEEDOR", imports.getP_proveedor());
+            importx.setValue("P_CODE", imports.getP_code());
+
+            List<Options> options = imports.getOptions();
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            for (int i = 0; i < options.size(); i++) {
+                Options o = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+
+                record.put("TEXT", o.getText());
+                tmpOptions.add(record);
+            }
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            EjecutarRFC exec= new EjecutarRFC();
+            exec.setTable(tables, Tablas.OPTIONS,tmpOptions);
+
+            stfcConnection.execute(destination);
+
+            JCoTable S_DATA = tables.getTable(Tablas.S_DATA);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> s_data = metodo.ObtenerListObjetos(S_DATA, imports.getFieldS_data());
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+
+            dto.setT_mensaje(t_mensaje);
+            dto.setS_data(s_data);
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto .setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+    public AnularValevExports AnularValev(AnularValevImports imports) throws Exception {
+
+        AnularValevExports dto= new AnularValevExports();
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_DELETE_PO);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user());
+            importx.setValue("P_VALE", imports.getP_vale());
+            importx.setValue("P_ANULA", imports.getP_anula());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            stfcConnection.execute(destination);
+
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+
+            dto.setT_mensaje(t_mensaje);
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto .setMensaje(e.getMessage());
+        }
+        return null;
     }
 
 

@@ -60,6 +60,29 @@ public class ValeViveresRest {
             throw new RuntimeException(e.toString());
         }
 
+    }
+
+    @PostMapping(value = "/AnularValev", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnularValevExports> AnularValev(@RequestBody AnularValevImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoValeVivereService.AnularValev(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/CostoRacionValev", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CostoRacionValevExports> CostoRacionValev(@RequestBody CostoRacionValevImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoValeVivereService.CostoRacionValev(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
 
     }
 }
