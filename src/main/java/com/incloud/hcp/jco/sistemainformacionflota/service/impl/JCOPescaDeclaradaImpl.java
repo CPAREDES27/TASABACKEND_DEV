@@ -46,6 +46,53 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             List<HashMap<String, Object>>  str_te = metodo.ObtenerListObjetos(STR_TE, imports.getFieldstr_te());
             List<HashMap<String, Object>>  t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldstr_te());
 
+            /**
+             * Cálculo de porcentajes
+             */
+            float totalCbod=0.00000f;
+            float totalCbodOper=0.00000f;
+            float totalGenPescDecl=0.00000f;
+            for (HashMap<String,Object> str_tpItem: str_tp) {
+                totalCbod+=Float.parseFloat(str_tpItem.get("CPPMS").toString());
+                totalCbodOper+=Float.parseFloat(str_tpItem.get("CPBOP").toString());
+                totalGenPescDecl+=Float.parseFloat(str_tpItem.get("CNPEP").toString())+Float.parseFloat(str_tpItem.get("CNPET").toString());
+            }
+            float finalTotalCbod = totalCbod;
+            float finalTotalCbodOper = totalCbodOper;
+            float finalTotalGenPescDecl = totalGenPescDecl;
+
+            str_tp.forEach(s->{
+                float porcCbod=Float.parseFloat(s.get("CPPMS").toString())*100/ finalTotalCbod;
+                float porcCbodOper=Float.parseFloat(s.get("CPBOP").toString())*100/ finalTotalCbodOper;
+                float totalPescDecl=Float.parseFloat(s.get("CNPEP").toString())+Float.parseFloat(s.get("CNPET").toString());
+                float porcPescDecl=totalPescDecl/ finalTotalGenPescDecl;
+                int totalNumEmba=Integer.parseInt(s.get("NEMBP").toString())+Integer.parseInt(s.get("NEMBT").toString());
+
+                int nembp=Integer.parseInt(s.get("NEMBP").toString());
+                int nembt=Integer.parseInt(s.get("NEMBT").toString());
+
+                if(nembp>0){
+                    float promPescProp=Float.parseFloat(s.get("CNPEP").toString())/nembp;
+                    s.put("PROM_PESC_PROP",promPescProp);
+                }else {
+                    s.put("PROM_PESC_PROP",0.00f);
+                }
+
+                if(nembt>0){
+                    float promPescTerc=Float.parseFloat(s.get("CNPET").toString())/nembt;
+                    s.put("PROM_PESC_TERC",promPescTerc);
+                }else {
+                    s.put("PROM_PESC_TERC",0.00f);
+                }
+
+                s.put("PORC_CBOD",porcCbod);
+                s.put("PORC_CBOD_OPER",porcCbodOper);
+                s.put("TOT_PESC_DECL",totalPescDecl);
+                s.put("PORC_PESC_DECL",porcPescDecl);
+                s.put("TOT_NUM_EMBA",totalNumEmba);
+
+            });
+
             pd.setT_mensaje(t_mensaje);
             pd.setStr_tp(str_tp);
             pd.setStr_te(str_te);
