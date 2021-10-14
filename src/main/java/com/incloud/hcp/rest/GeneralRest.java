@@ -31,18 +31,18 @@ public class GeneralRest {
     @Autowired
     private JCOCampoTablaService jcoCampoTablaService;
 
-    /*@PostMapping(value = "/Read_Table/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> ConsultarMaestro(@RequestBody MaestroImports imports){
+    @PostMapping(value = "/Read_Table2/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ConsultarMaestro(@RequestBody MaestroImportsKey imports){
 
         try {
-            return Optional.ofNullable(this.MaestroService.obtenerMaestro(imports))
+            return Optional.ofNullable(this.MaestroService.obtenerMaestro3(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
 
-    }*/
+    }
 
 
     @PostMapping(value = "/Read_Table/", produces = APPLICATION_JSON_VALUE)

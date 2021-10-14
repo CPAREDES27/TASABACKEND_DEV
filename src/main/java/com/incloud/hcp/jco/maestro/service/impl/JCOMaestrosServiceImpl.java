@@ -60,7 +60,38 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
 
+    public MaestroExport obtenerMaestro3 (MaestroImportsKey imports) throws Exception {
 
+        Metodos metodo= new Metodos();
+        MaestroExport me=new MaestroExport();
+        MaestroOptionsKey me2 = new MaestroOptionsKey();
+
+        List<MaestroOptions> option = imports.getOption();
+        logger.error("TAMAÑO import: "+option.size());
+        List<MaestroOptionsKey> options = imports.getOptions();
+        logger.error("TAMAÑO import: "+options.size());
+            /*for(int j =0;j<option.size();j++){
+                MaestroOptions mop= option.get(j);
+                logger.error("GET IMPORT: "+mop.getWa());
+            }*/
+        HashMap<String, Object> importz = new HashMap<String, Object>();
+        importz.put("QUERY_TABLE", imports.getTabla());
+        importz.put("DELIMITER", imports.getDelimitador());
+        importz.put("NO_DATA", imports.getNo_data());
+        importz.put("ROWSKIPS", imports.getRowskips());
+        importz.put("ROWCOUNT", imports.getRowcount());
+        importz.put("P_USER", imports.getP_user());
+        importz.put("P_ORDER", imports.getOrder());
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        logger.error("CASI ENTRO METODO GENERAR");
+        String tmpOption=metodo.GeneraCadena(option,options,"WA");
+        logger.error("TERMINE DE ENTRAR METODO GENERAR");
+        logger.error("FIN");
+        String []fields=imports.getFields();
+        EjecutarRFC exec = new EjecutarRFC();
+        me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
+        return me;
+    }
     public MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception {
 
         Metodos metodo= new Metodos();

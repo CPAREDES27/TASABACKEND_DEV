@@ -323,7 +323,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
 
        //3er read table
         logger.error("PASO 01");
-        String[] opcions={"NRMAR = 149534","AND NREVN = 1"};
+        String[] opcions={"NRMAR = "+evento.getMarea(),"AND NREVN = "+evento.getNroEvento()};
         JCoDestination destinations = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;logger.error("PASO 02");
         JCoRepository repos = destinations.getRepository();

@@ -7,7 +7,7 @@ import java.util.List;
 public interface JCOMaestrosService {
 
     MaestroExport obtenerMaestro (MaestroImports imports) throws Exception;
-
+    MaestroExport obtenerMaestro3 (MaestroImportsKey imports) throws Exception;
     MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception;
 
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;

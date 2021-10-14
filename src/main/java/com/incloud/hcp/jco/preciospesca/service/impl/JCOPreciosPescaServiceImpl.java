@@ -143,15 +143,10 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
 
         JCoTable tblT_Mensaje = tables.getTable(Tablas.T_MENSAJE);
-        String data = tblT_Mensaje.getString();
-        logger.error("CADENA: " + data);
-
 
         Metodos metodos = new Metodos();
 
-
-
-        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);
+       List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_Mensaje);
         PrecioPescaMantExports dto = new PrecioPescaMantExports();
         dto.setT_mensaje(listT_MENSAJE);
         dto.setMensaje("OK");
