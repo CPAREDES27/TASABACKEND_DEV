@@ -50,12 +50,12 @@ public class EjecutarRFC {
         return me;
     }
 
-    public MaestroExport Execute_ZFL_RFC_READ_TABLE2(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
+    public MaestroExport Execute_ZFL_RFC_READ_TABLE2(HashMap<String, Object> imports, List<ListaWA> optionsParam, String[] fields) throws Exception{
         JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();
-        setTable(jcoTables, "OPTIONS", optionsParam);
+        setTable2(jcoTables, "OPTIONS", optionsParam);
         function.execute(destination);
         logger.error("Execute_ZFL_RFC_READ_TABLE_2");;
 
@@ -94,7 +94,18 @@ public class EjecutarRFC {
         }
         logger.error("setImports_2");
     }
+    public void setTable2(JCoParameterList listTables, String tableName, List<ListaWA> optionsParam){
 
+        logger.error("Lista de parametros: " +listTables);
+        JCoTable tableImport = listTables.getTable(tableName);
+        logger.error("setTable_1");
+        for (int i = 0; i < optionsParam.size(); i++){
+            tableImport.appendRow();
+            tableImport.setValue(optionsParam.get(i).getClave(),optionsParam.get(i).getValor());
+        }
+        logger.error("setTable_2");
+
+    }
     public void setTable(JCoParameterList listTables, String tableName, List<HashMap<String, Object>> data){
 
         logger.error("Lista de parametros: " +listTables);

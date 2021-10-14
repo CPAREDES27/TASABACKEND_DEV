@@ -83,13 +83,13 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importz.put("P_USER", imports.getP_user());
         importz.put("P_ORDER", imports.getOrder());
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        logger.error("CASI ENTRO METODO GENERAR");
-        String tmpOption=metodo.GeneraCadena(option,options,"WA");
-        logger.error("TERMINE DE ENTRAR METODO GENERAR");
+        logger.error("cas METODO GENERAR");
+        List<ListaWA> tmpOption=metodo.GeneraCadena(option,options,"WA");
+        logger.error("ENTRE METODO GENERAR");
         logger.error("FIN");
         String []fields=imports.getFields();
         EjecutarRFC exec = new EjecutarRFC();
-        me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
+        me = exec.Execute_ZFL_RFC_READ_TABLE2(importz, tmpOption, fields);
         return me;
     }
     public MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception {

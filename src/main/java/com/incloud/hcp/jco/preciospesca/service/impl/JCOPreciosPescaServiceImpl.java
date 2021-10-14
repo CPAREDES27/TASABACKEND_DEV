@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
 import com.incloud.hcp.CallBAPI;
+import com.incloud.hcp.jco.maestro.dto.ListaWA;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
@@ -66,8 +67,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         List<MaestroOptionsKey> options2 = imports.getOptions();
 
 
-        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-        tmpOptions=metodo.ValidarOptions(option,options2);
+        List<ListaWA> tmpOptions =metodo.GeneraCadena(option,options2,"WA");
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -77,7 +77,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
+        executeRFC.setTable2(paramsTable, "P_OPTIONS", tmpOptions);
 
         //Exports
         JCoParameterList tables = function.getTableParameterList();

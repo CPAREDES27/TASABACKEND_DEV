@@ -332,7 +332,7 @@ public class Metodos {
         return ValidateOptions(option,options,optionMane);
     }
 
-    public String GeneraCadena(List<MaestroOptions> option ,List<MaestroOptionsKey> options, String optionName) {
+    public List<ListaWA> GeneraCadena(List<MaestroOptions> option ,List<MaestroOptionsKey> options, String optionName) {
 
     logger.error("ENTRE METODO GENERAR");
         String control = "";
@@ -457,7 +457,7 @@ public class Metodos {
             logger.error("CADENOTA "+obje.getClave());
             logger.error("CADENOTA "+obje.getValor());
         }
-        return "";
+        return tmpOptions;
     }
     public List<HashMap<String, Object>> ValidateOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options, String optionName){
 
