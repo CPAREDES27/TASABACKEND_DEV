@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
@@ -61,7 +62,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             float finalTotalCbodOper = totalCbodOper;
             float finalTotalGenPescDecl = totalGenPescDecl;
 
-            str_tp.forEach(s->{
+            str_tp.stream().map(s->{
                 float porcCbod=Float.parseFloat(s.get("CPPMS").toString())*100/ finalTotalCbod;
                 float porcCbodOper=Float.parseFloat(s.get("CPBOP").toString())*100/ finalTotalCbodOper;
                 float totalPescDecl=Float.parseFloat(s.get("CNPEP").toString())+Float.parseFloat(s.get("CNPET").toString());
@@ -70,6 +71,24 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
                 int nembp=Integer.parseInt(s.get("NEMBP").toString());
                 int nembt=Integer.parseInt(s.get("NEMBT").toString());
+
+                if(Float.isNaN(porcCbod)){
+                    s.put("PORC_CBOD",0);
+                }else {
+                    s.put("PORC_CBOD",porcCbod);
+                }
+
+                if(Float.isNaN(porcCbodOper)){
+                    s.put("PORC_CBOD_OPER",0);
+                }else {
+                    s.put("PORC_CBOD_OPER",porcCbodOper);
+                }
+
+                if(Float.isNaN(porcPescDecl)){
+                    s.put("PORC_PESC_DECL",0);
+                }else {
+                    s.put("PORC_PESC_DECL",porcPescDecl);
+                }
 
                 if(nembp>0){
                     float promPescProp=Float.parseFloat(s.get("CNPEP").toString())/nembp;
@@ -85,13 +104,11 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                     s.put("PROM_PESC_TERC",0.00f);
                 }
 
-                s.put("PORC_CBOD",porcCbod);
-                s.put("PORC_CBOD_OPER",porcCbodOper);
                 s.put("TOT_PESC_DECL",totalPescDecl);
-                s.put("PORC_PESC_DECL",porcPescDecl);
                 s.put("TOT_NUM_EMBA",totalNumEmba);
 
-            });
+                return s;
+            }).collect(Collectors.toList());
 
             pd.setT_mensaje(t_mensaje);
             pd.setStr_tp(str_tp);
