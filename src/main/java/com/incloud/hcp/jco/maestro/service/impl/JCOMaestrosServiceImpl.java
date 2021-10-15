@@ -144,37 +144,31 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
-        FIELDS.appendRow();
-        FIELDS.setValue("FIELDNAME","LIFNR");
-        FIELDS.setValue("FIELDNAME","NAME1");
-        FIELDS.setValue("FIELDNAME","STCD1");
+
 
         stfcConnection.execute(destination);
-
         String hola = tableExport.getString();
-
+        String[] fields= {"LIFNR","NAME1","STCD1"};
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         String campo="";
 
         for(int i=0;i<tableExport.getNumRows();i++){
-
             tableExport.setRow(i);
-
             String ArrayResponse[] = tableExport.getString().split("\\|");
             logger.error("LLEGUE 4");
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             logger.error("LLEGUE 5");
             for(int j=0;j<FIELDS.getNumRows();j++){
-                logger.error("LLEGUE 6");
                 FIELDS.setRow(j);
-                logger.error("LLEGUE 7");
                 Object value="";
-                logger.error("LLEGUE 8");
                 String key=(String) FIELDS.getValue("FIELDNAME");
-                logger.error("LLEGUE 9");
-                        value = ArrayResponse[j].trim();
+                for(int k=0;k<fields.length;k++){
+                    if(key.equals(fields[k])){
+                        value = ArrayResponse[i].trim();
                         campo = value.toString();
                         newRecord.put(key, campo);
+                    }
+                }
                 logger.error("LLEGUE 10");
             }
             data.add(newRecord);
@@ -186,7 +180,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         MaestroExport obj = new MaestroExport();
         obj.setData(data);
-        obj.setMensaje(hola);
+        obj.setMensaje("OK");
         return obj;
     }
 
