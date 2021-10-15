@@ -420,7 +420,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("DELIMITER", "|");
             imports.put("NO_DATA", "");
             imports.put("ROWSKIPS", "");
-            imports.put("ROWCOUNT", "");
+            imports.put("ROWCOUNT", "200");
             imports.put("P_USER", importsParam.getP_user());
             imports.put("P_ORDER", "");
             logger.error("AyudasBusqueda_2");
@@ -617,6 +617,137 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 case "BSQCLSDOC":
                     opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
                     break;
+            }
+            options.add(opt);
+        }
+
+
+
+
+        return options;
+    }
+
+    public ConsultaGeneralExports ConsultaGeneral(ConsultaGeneralImports importsParam)throws Exception{
+
+        ConsultaGeneralExports dto=new ConsultaGeneralExports();
+
+        MaestroExport me;
+
+        try {
+            String tabla=(CGBuscartabla(importsParam.getNombreConsulta()));
+
+            logger.error("AyudasBusqueda TABLA= "+tabla);
+            //setear mapeo de parametros import
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("QUERY_TABLE", tabla);
+            imports.put("DELIMITER", "|");
+            imports.put("NO_DATA", "");
+            imports.put("ROWSKIPS", "");
+            imports.put("ROWCOUNT", "200");
+            imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_ORDER", "");
+            logger.error("AyudasBusqueda_2");
+            //setear mapeo de tabla options
+
+            List<MaestroOptions> options =
+                    CGBuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+            logger.error("AyudasBusqueda_3");
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptions mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+                logger.error("AyudasBusqueda options= "+mo.getWa());
+                record.put("WA", mo.getWa());
+                tmpOptions.add(record);
+            }
+            logger.error("AyudasBusqueda_4");
+
+            String []fields=CGBuscarFields(importsParam.getNombreConsulta());
+            logger.error("AyudasBusqueda_5");
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            EjecutarRFC exec = new EjecutarRFC();
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+            logger.error("AyudasBusqueda_6");
+
+            dto.setData(me.getData());
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
+    public String CGBuscartabla(String nombreConsultaG){
+
+        String tabla="";
+
+        switch (nombreConsultaG){
+            case "CONSGENCODTIPRE":
+                tabla=CGEventosPescaTablas.CONSGENCODTIPRE;
+                break;
+            case "CONSGENLISTEQUIP":
+                tabla=CGEventosPescaTablas.CONSGENLISTEQUIP;
+                break;
+            case "CONSGENCOOZONPES":
+                tabla=CGEventosPescaTablas.CONSGENCOOZONPES;
+                break;
+
+        }
+
+        return tabla;
+    }
+
+    public String[] CGBuscarFields(String nombreConsultaG){
+
+        String[]fields={};
+
+        switch (nombreConsultaG){
+            case "CONSGENCODTIPRE":
+                fields=CGEventosPescaFields.CONSGENCODTIPRE;
+                break;
+            case "CONSGENLISTEQUIP":
+                fields=CGEventosPescaFields.CONSGENLISTEQUIP;
+                break;
+            case "CONSGENCOOZONPES":
+                fields=CGEventosPescaFields.CONSGENCOOZONPES;
+                break;
+
+        }
+
+
+        logger.error("AyudasBusqueda fields= "+fields[0]);
+        return fields;
+    }
+
+    public List<MaestroOptions> CGBuscarOptions(String nombreAyuda, String parametro1, String parametro2,
+                                                String parametro3, String parametro4, String parametro5){
+
+        List<MaestroOptions> options= new ArrayList<>();
+
+        MaestroOptions opt= new MaestroOptions();
+
+
+        if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES") ){
+            logger.error("ENTRO AL IF QUE EVALUA 1");
+
+            String condicion="";
+
+            switch (nombreAyuda){
+                case "CONSGENCODTIPRE":
+                    condicion=CGEventosPescaOptions.CONSGENCODTIPRE + parametro1+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENLISTEQUIP":
+                    condicion=CGEventosPescaOptions.CONSGENLISTEQUIP + parametro1+ CGEventosPescaOptions.CONSGENLISTEQUIP_ +parametro2+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENCOOZONPES":
+                    condicion=CGEventosPescaOptions.CONSGENCOOZONPES + parametro1+"'";
+                    opt.setWa(condicion);
+                    break;
+
             }
             options.add(opt);
         }

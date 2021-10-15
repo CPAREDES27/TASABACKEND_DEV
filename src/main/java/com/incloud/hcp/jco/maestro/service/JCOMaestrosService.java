@@ -16,5 +16,6 @@ public interface JCOMaestrosService {
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
     AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception;
 
+    ConsultaGeneralExports ConsultaGeneral(ConsultaGeneralImports importsParam)throws Exception;
 
 }
