@@ -409,5 +409,227 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
 
+    public AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception{
+
+        AyudaBusquedaExports dto=new AyudaBusquedaExports();
+        MaestroExport me;
+
+        try {
+            String tabla=(Buscartabla(importsParam.getNombreAyuda()));
+
+            logger.error("AyudasBusqueda TABLA= "+tabla);
+            //setear mapeo de parametros import
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("QUERY_TABLE", tabla);
+            imports.put("DELIMITER", "|");
+            imports.put("NO_DATA", "");
+            imports.put("ROWSKIPS", "");
+            imports.put("ROWCOUNT", "");
+            imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_ORDER", "");
+            logger.error("AyudasBusqueda_2");
+            //setear mapeo de tabla options
+
+            List<MaestroOptions> options = BuscarOptions(importsParam.getNombreAyuda());
+            logger.error("AyudasBusqueda_3");
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            for (int i = 0; i < options.size(); i++) {
+                MaestroOptions mo = options.get(i);
+                HashMap<String, Object> record = new HashMap<String, Object>();
+                logger.error("AyudasBusqueda options= "+mo.getWa());
+                record.put("WA", mo.getWa());
+                tmpOptions.add(record);
+            }
+            logger.error("AyudasBusqueda_4");
+
+            String []fields=BuscarFields(importsParam.getNombreAyuda());
+            logger.error("AyudasBusqueda_5");
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            EjecutarRFC exec = new EjecutarRFC();
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+            logger.error("AyudasBusqueda_6");
+
+            dto.setData(me.getData());
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+        return dto;
+    }
+
+    public String Buscartabla(String nombreAyuda){
+
+        String tabla="";
+
+        switch (nombreAyuda){
+            case "BSQPLANTAS":
+                tabla=AyudaBusquedaTablas.BSQPLANTAS;
+                break;
+            case "BSQALMACENES":
+                tabla=AyudaBusquedaTablas.BSQALMACENES;
+                break;
+            case "BSQEMPRESA":
+                tabla=AyudaBusquedaTablas.BSQEMPRESA;
+                break;
+            case "BSQCENTRO":
+                tabla=AyudaBusquedaTablas.BSQCENTRO;
+                break;
+            case "BSQUBICTNC":
+                tabla=AyudaBusquedaTablas.BSQUBICTNC;
+                break;
+            case "BSQEQPMT":
+                tabla=AyudaBusquedaTablas.BSQEQPMT;
+                break;
+            case "BSQPROV":
+                tabla=AyudaBusquedaTablas.BSQPROV;
+                break;
+            case "BSQCLTE":
+                tabla=AyudaBusquedaTablas.BSQCLTE;
+                break;
+            case "BSQMAT":
+                tabla=AyudaBusquedaTablas.BSQMAT;
+                break;
+            case "BSQESPEC":
+                tabla=AyudaBusquedaTablas.BSQESPEC;
+                break;
+            case "BSQCIRCTCN":
+                tabla=AyudaBusquedaTablas.BSQCIRCTCN;
+                break;
+            case "BSQPUERTO":
+                tabla=AyudaBusquedaTablas.BSQPUERTO;
+                break;
+            case "BSQUNDEXT":
+                tabla=AyudaBusquedaTablas.BSQUNDEXT;
+                break;
+            case "BSQUSR":
+                tabla=AyudaBusquedaTablas.BSQUSR;
+                break;
+            case "BSQPEDCOMP":
+                tabla=AyudaBusquedaTablas.BSQPEDCOMP;
+                break;
+            case "BSQCLSDOC":
+                tabla=AyudaBusquedaTablas.BSQCLSDOC;
+                break;
+            case "BSQGPOCOMP":
+                tabla=AyudaBusquedaTablas.BSQGPOCOMP;
+                break;
+            case "BSQARMCOM":
+                tabla=AyudaBusquedaTablas.BSQARMCOM;
+                break;
+        }
+
+        return tabla;
+    }
+
+    public String[] BuscarFields(String nombreAyuda){
+
+        String[]fields={};
+
+        switch (nombreAyuda) {
+            case "BSQPLANTAS":
+                fields = AyudaBusquedaFields.BSQPLANTAS;
+                break;
+            case "BSQALMACENES":
+                fields = AyudaBusquedaFields.BSQALMACENES;
+                break;
+            case "BSQEMPRESA":
+                fields = AyudaBusquedaFields.BSQEMPRESA;
+                break;
+            case "BSQCENTRO":
+                fields = AyudaBusquedaFields.BSQCENTRO;
+                break;
+            case "BSQUBICTNC":
+                fields = AyudaBusquedaFields.BSQUBICTNC;
+                break;
+            case "BSQEQPMT":
+                fields = AyudaBusquedaFields.BSQEQPMT;
+                break;
+            case "BSQPROV":
+                fields = AyudaBusquedaFields.BSQPROV;
+                break;
+            case "BSQCLTE":
+                fields = AyudaBusquedaFields.BSQCLTE;
+                break;
+            case "BSQMAT":
+                fields = AyudaBusquedaFields.BSQMAT;
+                break;
+            case "BSQESPEC":
+                fields = AyudaBusquedaFields.BSQESPEC;
+                break;
+            case "BSQCIRCTCN":
+                fields = AyudaBusquedaFields.BSQCIRCTCN;
+                break;
+            case "BSQPUERTO":
+                fields = AyudaBusquedaFields.BSQPUERTO;
+                break;
+            case "BSQUNDEXT":
+                fields = AyudaBusquedaFields.BSQUNDEXT;
+                break;
+            case "BSQUSR":
+                fields = AyudaBusquedaFields.BSQUSR;
+                break;
+            case "BSQPEDCOMP":
+                fields = AyudaBusquedaFields.BSQPEDCOMP;
+                break;
+            case "BSQCLSDOC":
+                fields = AyudaBusquedaFields.BSQCLSDOC;
+                break;
+            case "BSQGPOCOMP":
+                fields = AyudaBusquedaFields.BSQGPOCOMP;
+                break;
+            case "BSQARMCOM":
+                fields = AyudaBusquedaFields.BSQARMCOM;
+                break;
+        }
+        logger.error("AyudasBusqueda fields= "+fields[0]);
+        return fields;
+    }
+
+    public List<MaestroOptions> BuscarOptions(String nombreAyuda){
+
+        List<MaestroOptions> options= new ArrayList<>();
+
+        MaestroOptions opt= new MaestroOptions();
+
+
+        if(nombreAyuda.equals("BSQPLANTAS") || nombreAyuda.equals("BSQMAT") || nombreAyuda.equals("BSQESPEC") || nombreAyuda.equals("BSQPUERTO") ||
+                nombreAyuda.equals("BSQUNDEXT") ||nombreAyuda.equals("BSQUSR") ||nombreAyuda.equals("BSQPEDCOMP") ||nombreAyuda.equals("BSQCLSDOC") ){
+            logger.error("ENTRO AL IF QUE EVALUA 1");
+
+            switch (nombreAyuda){
+                case "BSQPLANTAS":
+                    opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
+                    break;
+                case "BSQMAT":
+                    opt.setWa(AyudaBusquedaOptions.BSQMAT);
+                    break;
+                case "BSQESPEC":
+                    opt.setWa(AyudaBusquedaOptions.BSQESPEC);
+                    break;
+                case "BSQPUERTO":
+                    opt.setWa(AyudaBusquedaOptions.BSQPUERTO);
+                    break;
+                case "BSQUNDEXT":
+                    opt.setWa(AyudaBusquedaOptions.BSQUNDEXT);
+                    break;
+                case "BSQUSR":
+                    opt.setWa(AyudaBusquedaOptions.BSQUSR);
+                    break;
+                case "BSQPEDCOMP":
+                    opt.setWa(AyudaBusquedaOptions.BSQPEDCOMP);
+                    break;
+                case "BSQCLSDOC":
+                    opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
+                    break;
+            }
+            options.add(opt);
+        }
+
+
+
+
+        return options;
+    }
+
 
 }

@@ -123,4 +123,17 @@ public class GeneralRest {
         }
 
     }
+
+    @PostMapping(value = "/AyudasBusqueda/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AyudaBusquedaExports> AyudasBusqueda(@RequestBody AyudaBusquedaImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.AyudasBusqueda(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 }
