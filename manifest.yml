@@ -5,7 +5,8 @@ applications:
   path: target/flotabackend-0.0.1-SNAPSHOT.war
   buildpacks:
     - sap_java_buildpack
-  memory: 768M
+  memory: 3000M
+  timeout: 100
   disk-quota: 1G
   routes:
   - route: flotabackendqas.cfapps.us10.hana.ondemand.com
@@ -23,4 +24,20 @@ applications:
     - destination-service
     - jco-xsuaa
 
- 
+  processes:
+    - type: web
+      command: start-web.sh
+      disk_quota: 512M
+      health-check-http-endpoint: /healthcheck
+      health-check-type: http
+      health-check-invocation-timeout: 80
+      instances: 3
+      memory: 3000M
+      timeout: 80
+    - type: worker
+      command: start-worker.sh
+      disk_quota: 1G
+      health-check-type: process
+      instances: 2
+      memory: 3000M
+      timeout: 80

@@ -9,7 +9,7 @@ public interface JCOMaestrosService {
     MaestroExport obtenerMaestro (MaestroImports imports) throws Exception;
     MaestroExport obtenerMaestro3 (MaestroImportsKey imports) throws Exception;
     MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception;
-
+    MaestroExport obtenerArmador(String dato) throws Exception;
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
 
     MensajeDto editarMaestro2 (MaestroEditImport imports) throws Exception;

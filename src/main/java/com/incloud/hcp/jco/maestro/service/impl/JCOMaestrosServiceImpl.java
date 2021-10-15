@@ -93,11 +93,11 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
     public MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception {
-
+        logger.error("ARMADOR 1");
         Metodos metodo= new Metodos();
         MaestroExport me=new MaestroExport();
         MaestroOptionsKey me2 = new MaestroOptionsKey();
-
+        logger.error("ARMADOR 2");
         List<MaestroOptions> option = imports.getOption();
         logger.error("TAMAÑO import: "+option.size());
         List<MaestroOptionsKey> options = imports.getOptions();
@@ -106,7 +106,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 MaestroOptions mop= option.get(j);
                 logger.error("GET IMPORT: "+mop.getWa());
             }*/
+        logger.error("ARMADOR 3");
         HashMap<String, Object> importz = new HashMap<String, Object>();
+        logger.error("ARMADOR 4");
         importz.put("QUERY_TABLE", imports.getTabla());
         importz.put("DELIMITER", imports.getDelimitador());
         importz.put("NO_DATA", imports.getNo_data());
@@ -114,12 +116,75 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importz.put("ROWCOUNT", imports.getRowcount());
         importz.put("P_USER", imports.getP_user());
         importz.put("P_ORDER", imports.getOrder());
+        logger.error("ARMADOR 5");
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
         tmpOptions=metodo.ValidarOptions(option,options);
+        logger.error("ARMADOR 6");
         String []fields=imports.getFields();
         EjecutarRFC exec = new EjecutarRFC();
         me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
         return me;
+    }
+
+    @Override
+    public MaestroExport obtenerArmador(String dato) throws Exception {
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repo = destination.getRepository();
+        ;
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+
+        importx.setValue("DELIMITER","|");
+        importx.setValue("QUERY_TABLE","LFA1");
+
+
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+
+        JCoTable tableExport = tables.getTable("DATA");
+        JCoTable FIELDS = tables.getTable("FIELDS");
+        FIELDS.appendRow();
+        FIELDS.setValue("FIELDNAME","LIFNR");
+        logger.error("LLEGUE 00");
+        stfcConnection.execute(destination);
+        logger.error("LLEGUE 01");
+        String hola = tableExport.getString();
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        String campo="";
+        logger.error("LLEGUE 1");
+        for(int i=0;i<tableExport.getNumRows();i++){
+            logger.error("LLEGUE 2");
+            tableExport.setRow(i);
+            logger.error("LLEGUE 3");
+            String ArrayResponse[] = tableExport.getString().split("\\|");
+            logger.error("LLEGUE 4");
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            logger.error("LLEGUE 5");
+            for(int j=0;j<FIELDS.getNumRows();j++){
+                logger.error("LLEGUE 6");
+                FIELDS.setRow(j);
+                logger.error("LLEGUE 7");
+                Object value="";
+                logger.error("LLEGUE 8");
+                String key=(String) FIELDS.getValue("FIELDNAME");
+                logger.error("LLEGUE 9");
+                        value = ArrayResponse[j].trim();
+                        campo = value.toString();
+                        newRecord.put(key, campo);
+                logger.error("LLEGUE 10");
+            }
+            data.add(newRecord);
+            logger.error("LLEGUE 11");
+        }
+        logger.error("LLEGUE 12");
+
+
+
+        MaestroExport obj = new MaestroExport();
+        obj.setData(data);
+        obj.setMensaje(hola);
+        return obj;
     }
 
     public MensajeDto editarMaestro (MaestroEditImports importsParam) throws Exception{

@@ -184,6 +184,14 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
 
         List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
+        for(Map<String,Object> datas: listT_PREPES){
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+                String key = entry.getKey();
+                Object value= entry.getValue();
+                logger.error("ENTRY KEY"+ key);
+                logger.error("ENTRY value"+ value.toString());
+            }
+        }
 
         ConsPrecioPescaExports dto = new ConsPrecioPescaExports();
         dto.setT_prepes(listT_PREPES);

@@ -59,6 +59,18 @@ public class GeneralRest {
     }
 
 
+    @PostMapping(value = "/Armador/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ConsultarMaestro2(@RequestBody String estado){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.obtenerArmador(estado))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
     @PostMapping(value = "/Update_Table/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
