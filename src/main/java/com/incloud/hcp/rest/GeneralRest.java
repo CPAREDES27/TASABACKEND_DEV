@@ -60,10 +60,10 @@ public class GeneralRest {
 
 
     @PostMapping(value = "/Armador/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> ConsultarMaestro2(@RequestBody String estado){
+    public ResponseEntity<MaestroExport> ConsultarMaestro2(@RequestBody BusquedaArmadorDTO codigo){
 
         try {
-            return Optional.ofNullable(this.MaestroService.obtenerArmador(estado))
+            return Optional.ofNullable(this.MaestroService.obtenerArmador(codigo))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

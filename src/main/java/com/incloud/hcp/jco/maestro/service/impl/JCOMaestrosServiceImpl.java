@@ -127,7 +127,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
     @Override
-    public MaestroExport obtenerArmador(String dato) throws Exception {
+    public MaestroExport obtenerArmador(BusquedaArmadorDTO codigo) throws Exception {
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;
         JCoRepository repo = destination.getRepository();
@@ -137,6 +137,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         importx.setValue("DELIMITER","|");
         importx.setValue("QUERY_TABLE","LFA1");
+        importx.setValue("ROWCOUNT",codigo.getCodigo());
 
 
         JCoParameterList tables = stfcConnection.getTableParameterList();
@@ -145,6 +146,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         JCoTable FIELDS = tables.getTable("FIELDS");
         FIELDS.appendRow();
         FIELDS.setValue("FIELDNAME","LIFNR");
+        FIELDS.setValue("FIELDNAME","NAME1");
+        FIELDS.setValue("FIELDNAME","STCD1");
         logger.error("LLEGUE 00");
         stfcConnection.execute(destination);
         logger.error("LLEGUE 01");
