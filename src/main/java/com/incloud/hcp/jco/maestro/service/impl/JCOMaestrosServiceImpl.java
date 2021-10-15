@@ -160,13 +160,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             logger.error("LLEGUE 5");
             for(int j=0;j<FIELDS.getNumRows();j++){
                 FIELDS.setRow(j);
-                Object value="";
                 String key=(String) FIELDS.getValue("FIELDNAME");
                 for(int k=0;k<fields.length;k++){
                     if(key.equals(fields[k])){
-                        value = ArrayResponse[i].trim();
-                        campo = value.toString();
-                        newRecord.put(key, campo);
+                        Object value = ArrayResponse[j].trim();
+
+                        newRecord.put(key, value.toString());
                     }
                 }
                 logger.error("LLEGUE 10");
