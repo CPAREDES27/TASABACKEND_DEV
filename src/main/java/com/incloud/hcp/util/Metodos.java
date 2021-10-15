@@ -491,18 +491,18 @@ public class Metodos {
                 if (mo.getControl().equals("COMBOBOX")) {
                     control="=";
                 }
-                if(mo.getControl().equals("RANGEINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals("") )){
+                if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals("") )){
                     control="BETWEEN";
-                }else if(mo.getControl().equals("RANGEINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     control="=";
                 }
                 if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
                 }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
-                }else if(mo.getControl().equals("RANGEINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
+                }else if(mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))){
                     record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" +" AND "+ "'"+mo.getValueHigh()+"'");
-                }else if(mo.getControl().equals("RANGEINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
                 }
                 tmpOptions.add(record);
@@ -521,9 +521,9 @@ public class Metodos {
                 if (mo.getControl().equals("COMBOBOX")) {
                     control = "=";
                 }
-                if (mo.getControl().equals("RANGEINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                     control = "BETWEEN";
-                } else if (mo.getControl().equals("RANGEINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     control = "=";
                 }
                 else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
@@ -536,9 +536,9 @@ public class Metodos {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))){
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
-                }else if (mo.getControl().equals("RANGEINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
-                } else if (mo.getControl().equals("RANGEINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
@@ -552,7 +552,7 @@ public class Metodos {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
                     }else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
-                    }else if (mo.getControl().equals("RANGEINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
+                    }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                     } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");

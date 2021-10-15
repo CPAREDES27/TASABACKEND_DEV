@@ -12,7 +12,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQCLTE={"KUNNR", "NAME1", "STCD1"};
     public static String[] BSQMAT={"MATNR", "MAKTX"};
     public static String[] BSQESPEC={"CDSPC", "DSSPC"};
-    public static String[] BSQCIRCTCN={"CODEGRUPPE", "ESTRELLER"};
+    public static String[] BSQCIRCTCN={"CODEGRUPPE", "ERSTELLER"};
     public static String[] BSQPUERTO={"CDPTO", "DSPTO", "CDZLT", "DSZLT"};
     public static String[] BSQUNDEXT={"MSEHI", "MSEH6", "MSEHL"};
     public static String[] BSQUSR={"PERNR", "VORNA", "MACHN", "NACH2", "STELL", "STEXT", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "ICNUM", "E_MAIL", "MANDT"};
