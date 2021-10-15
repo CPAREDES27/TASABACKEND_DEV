@@ -148,18 +148,18 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         FIELDS.setValue("FIELDNAME","LIFNR");
         FIELDS.setValue("FIELDNAME","NAME1");
         FIELDS.setValue("FIELDNAME","STCD1");
-        logger.error("LLEGUE 00");
+
         stfcConnection.execute(destination);
-        logger.error("LLEGUE 01");
+
         String hola = tableExport.getString();
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         String campo="";
-        logger.error("LLEGUE 1");
+
         for(int i=0;i<tableExport.getNumRows();i++){
-            logger.error("LLEGUE 2");
+
             tableExport.setRow(i);
-            logger.error("LLEGUE 3");
+
             String ArrayResponse[] = tableExport.getString().split("\\|");
             logger.error("LLEGUE 4");
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
