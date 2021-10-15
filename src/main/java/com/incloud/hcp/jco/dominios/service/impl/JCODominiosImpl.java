@@ -68,7 +68,7 @@ public class JCODominiosImpl implements JCODominiosService {
 
                     List<DominioExportsData> listDatas = new ArrayList<>();
 
-                    if (domParams.getDomname().equals("MOT_MAREA_RPDC")) {
+                    if (domParams.getDomname().equals("MOTIVOMAREA_RPDC")) {
                         DominioExportsData data1 = new DominioExportsData();
                         DominioExportsData data2 = new DominioExportsData();
                         data1.setId("A");
