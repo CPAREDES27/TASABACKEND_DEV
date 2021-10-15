@@ -693,6 +693,24 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "CONSGENCOOZONPES":
                 tabla=CGEventosPescaTablas.CONSGENCOOZONPES;
                 break;
+            case "CONSGENPESDECLA":
+                tabla=CGEventosPescaTablas.CONSGENPESDECLA;
+                break;
+            case "CONSGENLISTBODE":
+                tabla=CGEventosPescaTablas.CONSGENLISTBODE;
+                break;
+            case "CONSGENPESBODE":
+                tabla=CGEventosPescaTablas.CONSGENPESBODE;
+                break;
+            case "CONSGENPUNTDES":
+                tabla=CGEventosPescaTablas.CONSGENPUNTDES;
+                break;
+            case "CONSGENPESDESC":
+                tabla=CGEventosPescaTablas.CONSGENPESDESC;
+                break;
+            case "CONSGENLISTSINI":
+                tabla=CGEventosPescaTablas.CONSGENLISTSINI;
+                break;
 
         }
 
@@ -713,11 +731,28 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "CONSGENCOOZONPES":
                 fields=CGEventosPescaFields.CONSGENCOOZONPES;
                 break;
+            case "CONSGENPESDECLA":
+                fields=CGEventosPescaFields.CONSGENPESDECLA;
+                break;
+            case "CONSGENLISTBODE":
+                fields=CGEventosPescaFields.CONSGENLISTBODE;
+                break;
+            case "CONSGENPESBODE":
+                fields=CGEventosPescaFields.CONSGENPESBODE;
+                break;
+            case "CONSGENPUNTDES":
+                fields=CGEventosPescaFields.CONSGENPUNTDES;
+                break;
+            case "CONSGENPESDESC":
+                fields=CGEventosPescaFields.CONSGENPESDESC;
+                break;
+            case "CONSGENLISTSINI":
+                fields=CGEventosPescaFields.CONSGENLISTSINI;
+                break;
 
         }
 
 
-        logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
     }
 
@@ -729,7 +764,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         MaestroOptions opt= new MaestroOptions();
 
 
-        if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES") ){
+        if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES")
+        ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE ")
+        || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC") || nombreAyuda.equals("CONSGENLISTSINI")){
             logger.error("ENTRO AL IF QUE EVALUA 1");
 
             String condicion="";
@@ -740,13 +777,38 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                     opt.setWa(condicion);
                     break;
                 case "CONSGENLISTEQUIP":
-                    condicion=CGEventosPescaOptions.CONSGENLISTEQUIP + parametro1+ CGEventosPescaOptions.CONSGENLISTEQUIP_ +parametro2+"'";
+                    condicion=CGEventosPescaOptions.CONSGENLISTEQUIP + parametro1+ CGEventosPescaOptions.CONSGENLISTEQUIP_ ;
                     opt.setWa(condicion);
                     break;
                 case "CONSGENCOOZONPES":
                     condicion=CGEventosPescaOptions.CONSGENCOOZONPES + parametro1+"'";
                     opt.setWa(condicion);
                     break;
+                case "CONSGENPESDECLA":
+                    condicion=CGEventosPescaOptions.CONSGENPESDECLA + parametro1+CGEventosPescaOptions.CONSGENPESDECLA_+ parametro2+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENLISTBODE":
+                    condicion=CGEventosPescaOptions.CONSGENLISTBODE + parametro1+CGEventosPescaOptions.CONSGENLISTBODE_;
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENPESBODE":
+                    condicion=CGEventosPescaOptions.CONSGENPESBODE + parametro1+CGEventosPescaOptions.CONSGENPESBODE_+ parametro2+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENPUNTDES":
+                    condicion=CGEventosPescaOptions.CONSGENPUNTDES +parametro1+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENPESDESC":
+                    condicion=CGEventosPescaOptions.CONSGENPESDESC +parametro1+"'";
+                    opt.setWa(condicion);
+                    break;
+                case "CONSGENLISTSINI":
+                    condicion=CGEventosPescaOptions.CONSGENLISTSINI +parametro1+CGEventosPescaOptions.CONSGENLISTSINI_+parametro2+CGEventosPescaOptions.CONSGENLISTSINI__ ;
+                    opt.setWa(condicion);
+                    break;
+
 
             }
             options.add(opt);
