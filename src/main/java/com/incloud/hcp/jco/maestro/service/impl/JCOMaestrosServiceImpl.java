@@ -144,37 +144,30 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
-        FIELDS.appendRow();
-        FIELDS.setValue("FIELDNAME","LIFNR");
-        FIELDS.setValue("FIELDNAME","NAME1");
-        FIELDS.setValue("FIELDNAME","STCD1");
-        logger.error("LLEGUE 00");
-        stfcConnection.execute(destination);
-        logger.error("LLEGUE 01");
-        String hola = tableExport.getString();
 
+
+        stfcConnection.execute(destination);
+        String hola = tableExport.getString();
+        String[] fields= {"LIFNR","NAME1","STCD1"};
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         String campo="";
-        logger.error("LLEGUE 1");
+
         for(int i=0;i<tableExport.getNumRows();i++){
-            logger.error("LLEGUE 2");
             tableExport.setRow(i);
-            logger.error("LLEGUE 3");
             String ArrayResponse[] = tableExport.getString().split("\\|");
             logger.error("LLEGUE 4");
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             logger.error("LLEGUE 5");
             for(int j=0;j<FIELDS.getNumRows();j++){
-                logger.error("LLEGUE 6");
                 FIELDS.setRow(j);
-                logger.error("LLEGUE 7");
-                Object value="";
-                logger.error("LLEGUE 8");
                 String key=(String) FIELDS.getValue("FIELDNAME");
-                logger.error("LLEGUE 9");
-                        value = ArrayResponse[j].trim();
-                        campo = value.toString();
-                        newRecord.put(key, campo);
+                for(int k=0;k<fields.length;k++){
+                    if(key.equals(fields[k])){
+                        Object value = ArrayResponse[j].trim();
+
+                        newRecord.put(key, value.toString());
+                    }
+                }
                 logger.error("LLEGUE 10");
             }
             data.add(newRecord);
@@ -186,7 +179,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         MaestroExport obj = new MaestroExport();
         obj.setData(data);
-        obj.setMensaje(hola);
+        obj.setMensaje("OK");
         return obj;
     }
 

@@ -345,7 +345,7 @@ public class Metodos {
                 switch (sorted.get(i).getControl()){
                     case "COMBOBOX":
                         control = "=";
-                        objeto.setClave( optionName);
+                        objeto.setClave(optionName);
                         objeto.setValor(sorted.get(i).getKey() + " " + control + " '" + sorted.get(i).getValueLow());
                         break;
                     case "INPUT":

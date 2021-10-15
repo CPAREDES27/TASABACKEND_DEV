@@ -67,7 +67,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         List<MaestroOptionsKey> options2 = imports.getOptions();
 
 
-        List<ListaWA> tmpOptions =metodo.GeneraCadena(option,options2,"WA");
+        List<HashMap<String, Object>> tmpOptions =metodo.ValidarOptions(option,options2,"WA");
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
@@ -77,7 +77,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         EjecutarRFC executeRFC = new EjecutarRFC();
         executeRFC.setImports(function, importParams);
-        executeRFC.setTable2(paramsTable, "P_OPTIONS", tmpOptions);
+        executeRFC.setTable(paramsTable, "P_OPTIONS", tmpOptions);
 
         //Exports
         JCoParameterList tables = function.getTableParameterList();
