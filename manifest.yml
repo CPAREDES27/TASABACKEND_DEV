@@ -1,5 +1,5 @@
----
 applications:
+<<<<<<< .mine
  
 - name: flotabackend
   path: target/flotabackend-0.0.1-SNAPSHOT.war
@@ -18,12 +18,37 @@ applications:
     # Accept any OAuth client of any identity zone
     SAP_JWT_TRUST_ACL: '[{"clientid":"*","identityzone":"*"}]'
     xsuaa_connectivity_instance_name: "jco-xsuaa"
+=======
 
-  services:
-    - connectivity-service
-    - destination-service
-    - jco-xsuaa
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
+
+  - name: flotabackend
+    path: target/flotabackend-0.0.1-SNAPSHOT.war
+    buildpacks:
+      - sap_java_buildpack
+    memory: 768M
+    disk-quota: 1G
+    routes:
+      - route: flotabackendqas.cfapps.us10.hana.ondemand.com
+
+<<<<<<< .mine
   processes:
     - type: web
       command: start-web.sh
@@ -41,3 +66,22 @@ applications:
       instances: 2
       memory: 3000M
       timeout: 15
+=======
+    env:
+      USE_JCO: true
+      # # Accept any OAuth client of any identity zone
+      JAVA_OPTS: '-Djava.security.egd=file:///dev/./urandom -Xss349k -agentlib:jdwp=transport=dt_socket,address=8686,server=y,suspend=n'
+      # Accept any OAuth client of any identity zone
+      SAP_JWT_TRUST_ACL: '[{"clientid":"*","identityzone":"*"}]'
+      xsuaa_connectivity_instance_name: "jco-xsuaa"
+
+    services:
+      - connectivity-service
+      - destination-service
+      - jco-xsuaa
+
+
+
+
+
+>>>>>>> .theirs
