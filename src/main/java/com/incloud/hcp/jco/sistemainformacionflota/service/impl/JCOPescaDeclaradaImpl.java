@@ -73,26 +73,26 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 int nembt = Integer.parseInt(s.get("NEMBT").toString());
 
                 if (Float.isNaN(porcCbod)) {
-                    s.put("PORC_CBOD", 0);
+                    s.put("PORC_CBOD", 0.00f);
                 } else {
-                    s.put("PORC_CBOD", porcCbod);
+                    s.put("PORC_CBOD", Math.round(porcCbod * 100.00) / 100.00);
                 }
 
                 if (Float.isNaN(porcCbodOper)) {
-                    s.put("PORC_CBOD_OPER", 0);
+                    s.put("PORC_CBOD_OPER", 0.00f);
                 } else {
-                    s.put("PORC_CBOD_OPER", porcCbodOper);
+                    s.put("PORC_CBOD_OPER", Math.round(porcCbodOper * 100.00) / 100.00);
                 }
 
                 if (Float.isNaN(porcPescDecl)) {
-                    s.put("PORC_PESC_DECL", 0);
+                    s.put("PORC_PESC_DECL", 0.00f);
                 } else {
-                    s.put("PORC_PESC_DECL", porcPescDecl);
+                    s.put("PORC_PESC_DECL", Math.round(porcPescDecl * 100.00) / 100.00);
                 }
 
                 if (nembp > 0) {
                     float promPescProp = Float.parseFloat(s.get("CNPEP").toString()) / nembp;
-                    s.put("PROM_PESC_PROP", promPescProp);
+                    s.put("PROM_PESC_PROP", Math.round(promPescProp * 100.00) / 100.00);
                 } else {
                     s.put("PROM_PESC_PROP", 0.00f);
                 }
