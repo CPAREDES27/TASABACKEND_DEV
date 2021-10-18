@@ -32,14 +32,7 @@ public class Metodos {
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
 
-                if(key.equals("ESPMR")){
-                    if(value.equals("L")){
-                        value="LIBERADO";
-                    }else{
-                        value="NO LIBERADO";
-                    }
 
-                }
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
