@@ -7,6 +7,8 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class JCOValeViveresImpl implements JCOValeVivereService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public ValeViveresExports ListarValeViveres(ValeViveresImports imports)throws Exception{
 
@@ -158,10 +162,10 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
         AnularValevExports dto= new AnularValevExports();
         try {
-
+            logger.error("ANULAR VALE VIVERES");
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
+            logger.error("ANULAR VALE VIVERES_1");
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_DELETE_PO);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
@@ -169,20 +173,23 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             importx.setValue("P_ANULA", imports.getP_anula());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
-
+            logger.error("ANULAR VALE VIVERES_2");
             stfcConnection.execute(destination);
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
+            logger.error("ANULAR VALE VIVERES_3");
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
-
+            logger.error("ANULAR VALE VIVERES_4");
             dto.setT_mensaje(t_mensaje);
             dto.setMensaje("Ok");
+            logger.error("ANULAR VALE VIVERES_5");
         }catch (Exception e){
+            logger.error("catch ");
             dto .setMensaje(e.getMessage());
+
         }
-        return null;
+        return dto;
     }
 
 

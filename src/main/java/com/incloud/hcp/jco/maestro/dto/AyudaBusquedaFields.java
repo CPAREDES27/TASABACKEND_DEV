@@ -2,7 +2,7 @@ package com.incloud.hcp.jco.maestro.dto;
 
 public class AyudaBusquedaFields {
 
-    public static String[] BSQPLANTAS={"WERKS", "NAME1"};
+    public static String[] BSQPLANTAS={"CDPTA", "DESCR", "STCD1", "NAME1", "CDPTO", "DSPTO","WERKS", "CDEMP", "CDZLT", "DSZLT","INPRP", "NAME1"};
     public static String[] BSQALMACENES={"WERKS","LGORT","LGOBE"};
     public static String[] BSQEMPRESA={"LIFNR","NAME1","STCD1"};
     public static String[] BSQCENTRO={"WERKS", "NAME1"};
