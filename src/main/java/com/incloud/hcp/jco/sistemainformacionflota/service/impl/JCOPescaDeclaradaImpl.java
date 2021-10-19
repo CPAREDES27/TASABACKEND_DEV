@@ -19,7 +19,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
     @Override
     public PescaDeclaradaExports PescaDeclarada(PescaDeclaradaImports imports) throws Exception {
 
-        PescaDeclaradaExports pd=new PescaDeclaradaExports();
+        PescaDeclaradaExports pd = new PescaDeclaradaExports();
 
         try {
 
@@ -28,7 +28,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_DECLA);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("P_USER", imports.getP_user ());
+            importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FECON", imports.getP_fecon());
             importx.setValue("P_CDMMA", imports.getP_cdmma());
 
@@ -44,68 +44,68 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_tp = metodo.ObtenerListObjetos(STR_TP, imports.getFieldstr_tp());
-            List<HashMap<String, Object>>  str_te = metodo.ObtenerListObjetos(STR_TE, imports.getFieldstr_te());
-            List<HashMap<String, Object>>  t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldstr_te());
+            List<HashMap<String, Object>> str_te = metodo.ObtenerListObjetos(STR_TE, imports.getFieldstr_te());
+            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldstr_te());
 
             /**
              * Cálculo de porcentajes
              */
-            float totalCbod=0.00000f;
-            float totalCbodOper=0.00000f;
-            float totalGenPescDecl=0.00000f;
-            for (HashMap<String,Object> str_tpItem: str_tp) {
-                totalCbod+=Float.parseFloat(str_tpItem.get("CPPMS").toString());
-                totalCbodOper+=Float.parseFloat(str_tpItem.get("CPBOP").toString());
-                totalGenPescDecl+=Float.parseFloat(str_tpItem.get("CNPEP").toString())+Float.parseFloat(str_tpItem.get("CNPET").toString());
+            float totalCbod = 0.00f;
+            float totalCbodOper = 0.00f;
+            float totalGenPescDecl = 0.00f;
+            for (HashMap<String, Object> str_tpItem : str_tp) {
+                totalCbod += Float.parseFloat(str_tpItem.get("CPPMS").toString());
+                totalCbodOper += Float.parseFloat(str_tpItem.get("CPBOP").toString());
+                totalGenPescDecl += Float.parseFloat(str_tpItem.get("CNPEP").toString()) + Float.parseFloat(str_tpItem.get("CNPET").toString());
             }
             float finalTotalCbod = totalCbod;
             float finalTotalCbodOper = totalCbodOper;
             float finalTotalGenPescDecl = totalGenPescDecl;
 
-            str_tp.stream().map(s->{
-                float porcCbod=Float.parseFloat(s.get("CPPMS").toString())*100/ finalTotalCbod;
-                float porcCbodOper=Float.parseFloat(s.get("CPBOP").toString())*100/ finalTotalCbodOper;
-                float totalPescDecl=Float.parseFloat(s.get("CNPEP").toString())+Float.parseFloat(s.get("CNPET").toString());
-                float porcPescDecl=totalPescDecl/ finalTotalGenPescDecl;
-                int totalNumEmba=Integer.parseInt(s.get("NEMBP").toString())+Integer.parseInt(s.get("NEMBT").toString());
+            str_tp.stream().map(s -> {
+                float porcCbod = Float.parseFloat(s.get("CPPMS").toString()) * 100 / finalTotalCbod;
+                float porcCbodOper = Float.parseFloat(s.get("CPBOP").toString()) * 100 / finalTotalCbodOper;
+                float totalPescDecl = Float.parseFloat(s.get("CNPEP").toString()) + Float.parseFloat(s.get("CNPET").toString());
+                float porcPescDecl = totalPescDecl * 100 / finalTotalGenPescDecl;
+                int totalNumEmba = Integer.parseInt(s.get("NEMBP").toString()) + Integer.parseInt(s.get("NEMBT").toString());
 
-                int nembp=Integer.parseInt(s.get("NEMBP").toString());
-                int nembt=Integer.parseInt(s.get("NEMBT").toString());
+                int nembp = Integer.parseInt(s.get("NEMBP").toString());
+                int nembt = Integer.parseInt(s.get("NEMBT").toString());
 
-                if(Float.isNaN(porcCbod)){
-                    s.put("PORC_CBOD",0);
-                }else {
-                    s.put("PORC_CBOD",porcCbod);
+                if (Float.isNaN(porcCbod)) {
+                    s.put("PORC_CBOD", 0.00f);
+                } else {
+                    s.put("PORC_CBOD", Math.round(porcCbod * 100.00) / 100.00);
                 }
 
-                if(Float.isNaN(porcCbodOper)){
-                    s.put("PORC_CBOD_OPER",0);
-                }else {
-                    s.put("PORC_CBOD_OPER",porcCbodOper);
+                if (Float.isNaN(porcCbodOper)) {
+                    s.put("PORC_CBOD_OPER", 0.00f);
+                } else {
+                    s.put("PORC_CBOD_OPER", Math.round(porcCbodOper * 100.00) / 100.00);
                 }
 
-                if(Float.isNaN(porcPescDecl)){
-                    s.put("PORC_PESC_DECL",0);
-                }else {
-                    s.put("PORC_PESC_DECL",porcPescDecl);
+                if (Float.isNaN(porcPescDecl)) {
+                    s.put("PORC_PESC_DECL", 0.00f);
+                } else {
+                    s.put("PORC_PESC_DECL", Math.round(porcPescDecl * 100.00) / 100.00);
                 }
 
-                if(nembp>0){
-                    float promPescProp=Float.parseFloat(s.get("CNPEP").toString())/nembp;
-                    s.put("PROM_PESC_PROP",promPescProp);
-                }else {
-                    s.put("PROM_PESC_PROP",0.00f);
+                if (nembp > 0) {
+                    float promPescProp = Float.parseFloat(s.get("CNPEP").toString()) / nembp;
+                    s.put("PROM_PESC_PROP", Math.round(promPescProp * 100.00) / 100.00);
+                } else {
+                    s.put("PROM_PESC_PROP", 0.00f);
                 }
 
-                if(nembt>0){
-                    float promPescTerc=Float.parseFloat(s.get("CNPET").toString())/nembt;
-                    s.put("PROM_PESC_TERC",promPescTerc);
-                }else {
-                    s.put("PROM_PESC_TERC",0.00f);
+                if (nembt > 0) {
+                    float promPescTerc = Float.parseFloat(s.get("CNPET").toString()) / nembt;
+                    s.put("PROM_PESC_TERC", promPescTerc);
+                } else {
+                    s.put("PROM_PESC_TERC", 0.00f);
                 }
 
-                s.put("TOT_PESC_DECL",totalPescDecl);
-                s.put("TOT_NUM_EMBA",totalNumEmba);
+                s.put("TOT_PESC_DECL", totalPescDecl);
+                s.put("TOT_NUM_EMBA", totalNumEmba);
 
                 return s;
             }).collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             pd.setStr_te(str_te);
             pd.setMensaje("Ok");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             pd.setMensaje(e.getMessage());
         }
 
@@ -125,7 +125,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
     @Override
     public PescaDeclaradaDiariaExports PescaDeclaradaDiaria(PescaDeclaradaDiariaImports imports) throws Exception {
 
-       PescaDeclaradaDiariaExports pdd=new PescaDeclaradaDiariaExports();
+        PescaDeclaradaDiariaExports pdd = new PescaDeclaradaDiariaExports();
 
         try {
 
@@ -134,7 +134,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_DECLARADA);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("P_USER", imports.getP_user ());
+            importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FEINI", imports.getP_feini());
             importx.setValue("P_FEFIN", imports.getP_fefin());
 
@@ -152,7 +152,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             pdd.setStr_dl(str_dl);
             pdd.setMensaje("Ok");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             pdd.setMensaje(e.getMessage());
         }
 
@@ -162,7 +162,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
     @Override
     public PescaDeclaradaDifeExports PescaDeclaradaDife(PescaDeclaradaDifeImports imports) throws Exception {
 
-        PescaDeclaradaDifeExports pdd= new PescaDeclaradaDifeExports();
+        PescaDeclaradaDifeExports pdd = new PescaDeclaradaDifeExports();
 
         try {
 
@@ -171,7 +171,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_DECLA_DIFE2);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("P_USER", imports.getP_user ());
+            importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FECHA", imports.getP_fecha());
             importx.setValue("P_FIDES", imports.getP_fides());
             importx.setValue("P_FFDES", imports.getP_ffdes());
@@ -199,7 +199,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             pdd.setStr_emr(str_emr);
             pdd.setMensaje("Ok");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             pdd.setMensaje(e.getMessage());
         }
 
