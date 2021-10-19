@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.tripulantes.service.impl;
 
 import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.dto.PDFTrimestralConstantes;
+import com.incloud.hcp.jco.tripulantes.dto.PDFValeViveresConstantes;
 import com.incloud.hcp.util.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOPDFsService;
 import com.sap.conn.jco.*;
@@ -16,9 +17,12 @@ import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.awt.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @Service
 public class JCOPDFsImpl implements JCOPDFsService {
@@ -3766,4 +3770,391 @@ public class JCOPDFsImpl implements JCOPDFsService {
         document.save(path);
         document.close();
     }
+    public PDFExports GenerarPDFValeViveres()throws Exception{
+
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+
+        PantillaPDFValeViveres(path);
+
+        Metodos exec = new Metodos();
+
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return pdf;
+    }
+    public void PantillaPDFValeViveres(String path)throws IOException{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+        PDFont timesBold = PDType1Font.TIMES_BOLD;
+        PDFont times = PDType1Font.TIMES_ROMAN;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 80);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(180, 640);
+        contentStream.showText(PDFValeViveresConstantes.copia);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(timesBold, 14);
+        contentStream.setNonStrokingColor(Color.BLACK);
+        contentStream.moveTextPositionByAmount(180, 760);
+        contentStream.showText(PDFValeViveresConstantes.titulo);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(40, 760);
+        contentStream.showText(PDFValeViveresConstantes.gerenciaPesca);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 803);
+        contentStream.showText(PDFValeViveresConstantes.nroPedido);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 790);
+        contentStream.showText(PDFValeViveresConstantes.centro);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 777);
+        contentStream.showText(PDFValeViveresConstantes.almacen);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 764);
+        contentStream.showText(PDFValeViveresConstantes.nroVale);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 751);
+        contentStream.showText(PDFValeViveresConstantes.fecha);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(430, 738);
+        contentStream.showText(PDFValeViveresConstantes.temporada);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8   );
+        contentStream.moveTextPositionByAmount(430, 715);
+        contentStream.showText(PDFValeViveresConstantes.ruc);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 715);
+        contentStream.showText(PDFValeViveresConstantes.codigoArmador);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 700);
+        contentStream.showText(PDFValeViveresConstantes.razonSocial);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 685);
+        contentStream.showText(PDFValeViveresConstantes.direccion);
+        contentStream.endText();
+
+        //incio
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 685);
+        contentStream.showText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        contentStream.endText();
+        //fin
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 670);
+        contentStream.showText(PDFValeViveresConstantes.nombreEmbarcacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(430, 670);
+        contentStream.showText(PDFValeViveresConstantes.matricula);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 655);
+        contentStream.showText(PDFValeViveresConstantes.codigoProveeduria);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(430, 655);
+        contentStream.showText(PDFValeViveresConstantes.indPropiedad);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 640);
+        contentStream.showText(PDFValeViveresConstantes.razonSocial);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 625);
+        contentStream.showText(PDFValeViveresConstantes.importeViveresConIgv);
+        contentStream.endText();
+
+        drawTableCabeceraValeViveres(page, contentStream,590, 20, PDFValeViveresConstantes.cabecerasTabla);
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(30, 520);
+        contentStream.showText(PDFValeViveresConstantes.totalRaciones);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(220, 520);
+        contentStream.showText(PDFValeViveresConstantes.totalCosto);
+        contentStream.endText();
+
+        drawCuadroValeViveres(contentStream, 280,30);
+
+        int cant=3;
+        int nx=60;
+
+        for(int i=0; i<cant; i++){
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(nx, 260);
+            contentStream.showText(PDFValeViveresConstantes.firma);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(nx+35, 260);
+            contentStream.showText(PDFValeViveresConstantes.guion);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(nx, 230);
+            contentStream.showText(PDFValeViveresConstantes.nombreMayus);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.newLineAtOffset(nx+40, 230);
+            contentStream.showText(PDFValeViveresConstantes.guion);
+            contentStream.endText();
+
+            nx+=170;
+        }
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(120, 220);
+        contentStream.showText(PDFValeViveresConstantes.radioOperador);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(290, 220);
+        contentStream.showText(PDFValeViveresConstantes.cocinero);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(470, 220);
+        contentStream.showText(PDFValeViveresConstantes.proveeduria);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11.5f);
+        contentStream.moveTextPositionByAmount(30, 170);
+        contentStream.showText(PDFValeViveresConstantes.textoUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11.5f);
+        contentStream.moveTextPositionByAmount(30, 160);
+        contentStream.showText(PDFValeViveresConstantes.textoDos);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11.5f);
+        contentStream.moveTextPositionByAmount(30, 150);
+        contentStream.showText(PDFValeViveresConstantes.textoTres);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(270, 101);
+        contentStream.showText("_____________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(270, 90);
+        contentStream.showText(PDFValeViveresConstantes.bahiaTasa);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(270, 80);
+        contentStream.showText(PDFValeViveresConstantes.nombreMinus);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11);
+        contentStream.moveTextPositionByAmount(270, 70);
+        contentStream.showText(PDFValeViveresConstantes.dni);
+        contentStream.endText();
+
+
+
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+    }
+    public void drawTableCabeceraValeViveres(PDPage page, PDPageContentStream contentStream,
+                                             float y, float margin, String[]content)throws IOException{
+        logger.error("drawTableCertificados");
+        final int rows = 1;
+        final int cols = content.length;
+        final float rowHeight = 15.0f;
+        final float tableWidth = page.getMediaBox().getWidth() - 2.0f * margin;
+        final float tableHeight = rowHeight * (float) rows;
+        //final float colWidth = tableWidth / (float) cols;
+        final float colWidth = 170f;
+
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+
+            if(i==3) {
+                nextx += 175;
+            }  else if(i==5){
+                nextx+=180;
+            }else{
+                nextx+=50;
+            }
+
+        }
+
+
+        //data -  coordenadas data
+        float texty=y-10;
+        for(int i=0; i<content.length;i++) {
+
+            //String[]fields=content[i];
+            float textx=0;
+
+            switch (i) {
+                case 0:
+                    textx = 35;
+                    break;
+                case 1:
+                    textx = 75;
+                    break;
+                case 2:
+                    textx = 120;
+                    break;
+                case 3:
+                    textx = 230;
+                    break;
+                case 4:
+                    textx =350;
+                    break;
+                case 5:
+                    textx = 460;
+                    break;
+
+            }
+
+
+            contentStream.beginText();
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 7);
+            contentStream.newLineAtOffset(textx, texty);
+            contentStream.showText(content[i]);
+            contentStream.endText();
+
+
+
+
+        }
+
+
+    }
+
+    public void drawCuadroValeViveres( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 530f;
+        final float tableHeight = 80;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+
 }
