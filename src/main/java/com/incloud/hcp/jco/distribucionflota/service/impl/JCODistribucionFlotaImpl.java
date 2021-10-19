@@ -266,6 +266,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     /*-----------------------------------------------------------*/
                     PropiosDto resumenProp = new PropiosDto();
 
+                    resumenProp.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenProp.setDescPlanta(s_str_dp.getString("DESCR"));
                     resumenProp.setPescDeclProp(s_str_dp.getString("CNPCM"));
                     resumenProp.setEmbaPescProp(s_str_dp.getString("CNEMB"));
@@ -319,6 +320,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
 
                     TercerosDto resumenTerc = new TercerosDto();
 
+                    resumenTerc.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenTerc.setDescPlanta(s_str_dp.getString("DESCR"));
                     resumenTerc.setPescDeclProp(s_str_dp.getString("CNPDT"));
                     resumenTerc.setEmbaPescProp(s_str_dp.getString("CNEMT"));
