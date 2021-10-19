@@ -12,12 +12,12 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import com.sun.xml.internal.ws.commons.xmlutil.Converter;
+import org.apache.poi.hpsf.Decimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -183,29 +183,114 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblT_PREPES = tables.getTable(Tablas.T_PREPES);
-        String[] ArrayResponse=null;
-        for (int i = 0; i < tblT_PREPES.getNumRows(); i++) {
-            tblT_PREPES.setRow(i);
-             ArrayResponse = tblT_PREPES.getString().split("\\|");
-        }
-        for(int j=0;j<ArrayResponse.length;j++){
-            logger.error("ArrayResponse" + ArrayResponse[j]);
-        }
-        /*List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
 
-        for(Map<String,Object> datas: listT_PREPES){
+
+        List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
+        List<EstadosPrecioDto> arrayLista = new ArrayList<EstadosPrecioDto>();
+            for(Map<String,Object> datas: listT_PREPES){
+                EstadosPrecioDto obj = new EstadosPrecioDto();
             for(Map.Entry<String,Object> entry: datas.entrySet()){
-                listaEstado
+
+
                 String key = entry.getKey();
                 Object value= entry.getValue();
+                if(key.equals("WERKS")){
+                    obj.setWERKS(value);
+                }
+                if(key.equals("MREMB")){
+                    obj.setMREMB(value);
+                }
+                if(key.equals("NMEMB")){
+                    obj.setNMEMB(value);
+                }
+                if(key.equals("NAME1")){
+                    obj.setNAME1(value);
+                }
+                if(key.equals("FECCONMOV")){
+                    obj.setFECCONMOV(value);
+                }
+                if(key.equals("CNPDS")){
+                    obj.setCNPDS(value);
+                }
+                if(key.equals("PRCOM")){
+                    obj.setPRCOM(new BigDecimal(value.toString()));
+                }
+                if(key.equals("EBELN")){
+                    obj.setEBELN(value);
+                }
+                if(key.equals("BELNR")){
+                    obj.setBELNR(value);
+                }
+                if(key.equals("XBLNR")){
+                    obj.setXBLNR(value);
+                }
+                if(key.equals("PRCTP")){
+                    obj.setPRCTP(new BigDecimal(value.toString()));
+                }
+                if(key.equals("PRCMX")){
+                    obj.setPRCMX(new BigDecimal(value.toString()));
+                }
+                if(key.equals("ESPRC")){
+                    obj.setESPRC(value.toString());
+                }
+                if(key.equals("PCSPP")){
+                    obj.setPCSPP(new BigDecimal(value.toString()));
+                }
+                if(key.equals("ESCSG")){
+                    obj.setESCSG(value.toString());
+                }
                 logger.error("ENTRY KEY"+ key);
                 logger.error("ENTRY value"+ value.toString());
             }
+            arrayLista.add(obj);
         }
-        */
-        int tamanio = ArrayResponse.length;
-        ConsPrecioPescaExports dto = new ConsPrecioPescaExports();
+            for(int k=0;k<arrayLista.size();k++){
+                if((arrayLista.get(k).getPRCOM().compareTo(new BigDecimal("0"))==0) && arrayLista.get(k).getPRCTP().compareTo(new BigDecimal("0"))==0){
+                    arrayLista.get(k).setIconoSemana("sap-icon://circle-task-2");
+                    arrayLista.get(k).setColorSemana("Error");
+                    arrayLista.get(k).setIconoPactado("sap-icon://circle-task-2");
+                    arrayLista.get(k).setColorPactado("Error");
+                    arrayLista.get(k).setIconoAprobado("sap-icon://circle-task-2");
+                    arrayLista.get(k).setColorAprobado("Error");
+                }else{
+                    arrayLista.get(k).setIconoSemana("sap-icon://circle-task-2");
+                    arrayLista.get(k).setColorSemana("Success");
+                    if(arrayLista.get(k).getPRCOM().equals("") || arrayLista.get(k).getPRCOM().compareTo(new BigDecimal("0"))==0){
+                        arrayLista.get(k).setIconoPactado("sap-icon://circle-task-2");
+                        arrayLista.get(k).setColorPactado("Error");
+                        arrayLista.get(k).setIconoAprobado("sap-icon://circle-task-2");
+                        arrayLista.get(k).setColorAprobado("Error");
+                    }else{
+                        if((arrayLista.get(k).getPRCOM().compareTo(arrayLista.get(k).getPRCMX())==-1) || (arrayLista.get(k).getPRCOM().compareTo(arrayLista.get(k).getPRCMX())==0)){
+                            arrayLista.get(k).setIconoPactado("sap-icon://circle-task-2");
+                            arrayLista.get(k).setColorPactado("Success");
+                            arrayLista.get(k).setIconoAprobado("sap-icon://circle-task-2");
+                            arrayLista.get(k).setColorAprobado("Success");
+                        }else{
+                            if((arrayLista.get(k).getPRCOM().compareTo(arrayLista.get(k).getPRCTP())==-1) ||
+                                arrayLista.get(k).getPRCOM().compareTo(arrayLista.get(k).getPRCTP())==0){
+                                arrayLista.get(k).setIconoPactado("sap-icon://circle-task-2");
+                                arrayLista.get(k).setColorPactado("Warning");
+                                if((arrayLista.get(k).getESPRC().equals("") || arrayLista.get(k).getESPRC().equals(null)) && arrayLista.get(k).getESPRC().equalsIgnoreCase("L")){
+                                    arrayLista.get(k).setIconoAprobado("sap-icon://circle-task-2");
+                                    arrayLista.get(k).setColorAprobado("Success");
+                                }else{
+                                    arrayLista.get(k).setIconoAprobado("sap-icon://circle-task-2");
+                                    arrayLista.get(k).setColorAprobado("Error");
+                                }
+                            }
+                        }
+                    }
+                }
+                /*if((arrayLista.get(k).getPCSPP().compareTo(new BigDecimal("0"))==-1) || (arrayLista.get(k).getPCSPP().compareTo(new BigDecimal("0"))==1)){
+                    if((arrayLista.get(k).getESCSG().equals("") || arrayLista.get(k).getESCSG().equals(null)) && arrayLista.get(k).getESCSG().equalsIgnoreCase("L")){
 
+                    }
+                }*/
+            }
+        ConsPrecioPescaExports dto = new ConsPrecioPescaExports();
+        dto.setT_prepes(arrayLista);
+        dto.setMensaje("OK");
 
         return dto;
     }
