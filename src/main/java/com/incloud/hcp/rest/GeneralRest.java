@@ -1,6 +1,8 @@
 package com.incloud.hcp.rest;
 
 
+import com.incloud.hcp.jco.consultaGeneral.dto.ConsultaGeneralImports;
+import com.incloud.hcp.jco.consultaGeneral.service.JCOConsultaGeneralService;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
@@ -30,6 +32,9 @@ public class GeneralRest {
 
     @Autowired
     private JCOCampoTablaService jcoCampoTablaService;
+
+    @Autowired
+    private JCOConsultaGeneralService jcoConsultaGeneralService;
 
     @PostMapping(value = "/Read_Table2/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> ConsultarMaestro(@RequestBody MaestroImportsKey imports){
@@ -137,10 +142,10 @@ public class GeneralRest {
 
     }
     @PostMapping(value = "/ConsultaGeneral/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ConsultaGeneralExports> ConsultaGeneral(@RequestBody ConsultaGeneralImports imports){
+    public ResponseEntity<com.incloud.hcp.jco.consultaGeneral.dto.ConsultaGeneralExports> ConsultaGeneral(@RequestBody ConsultaGeneralImports imports){
 
         try {
-            return Optional.ofNullable(this.MaestroService.ConsultaGeneral(imports))
+            return Optional.ofNullable(this.jcoConsultaGeneralService.ConsultaGeneral(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

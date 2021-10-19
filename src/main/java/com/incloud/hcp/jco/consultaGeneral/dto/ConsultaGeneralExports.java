@@ -1,4 +1,4 @@
-package com.incloud.hcp.jco.maestro.dto;
+package com.incloud.hcp.jco.consultaGeneral.dto;
 
 import java.util.HashMap;
 import java.util.List;

@@ -304,8 +304,8 @@ public class EjecutarRFC {
 
                     }
                     for (int k = 0; k < fields.length; k++) {
-                        logger.error("key: " + key + " k: " + fields[k]);
-                        ;
+
+
 
                         if (fields[k].trim().equals(key.trim())) {
 
@@ -387,8 +387,8 @@ public class EjecutarRFC {
 
                     }
                     for (int k = 0; k < fields.length; k++) {
-                        logger.error("key: " + key + " k: " + fields[k]);
-                        ;
+
+
 
                         if (fields[k].trim().equals(key.trim())) {
 

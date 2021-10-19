@@ -1,6 +1,6 @@
-package com.incloud.hcp.jco.maestro.dto;
+package com.incloud.hcp.jco.consultaGeneral.dto;
 
-public class CGEventosPescaOptions {
+public class ConsultaGeneralOptions {
     public static String CONSGENCODTIPRE="CDEMB = '";
     public static String CONSGENLISTEQUIP="CDEMB = '";
     public static String CONSGENLISTEQUIP_="' AND ERGEQ = 'S'";
