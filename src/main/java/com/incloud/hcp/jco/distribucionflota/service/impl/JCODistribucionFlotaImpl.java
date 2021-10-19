@@ -327,6 +327,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     resumenTerc.setEmbaPescProp(s_str_dp.getString("CNEMT"));
                     resumenTerc.setCbodProp(s_str_dp.getString("CPPMT"));
 
+                    resumenTotal.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenTotal.setDescPlanta(s_str_dp.getString("DESCR"));
                     resumenTotal.setPescDeclProp(s_str_dp.getString("CNPDT"));
                     resumenTotal.setEmbaPescProp(s_str_dp.getString("CNEMT"));
