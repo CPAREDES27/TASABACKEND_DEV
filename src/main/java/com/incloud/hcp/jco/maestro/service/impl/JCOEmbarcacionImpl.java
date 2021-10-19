@@ -70,11 +70,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             logger.error("Execute_ZFL_RFC_CONS_EMBARCA_4");
             function.execute(destination);
             JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
-
-
             List<HashMap<String, Object>> data = me.ListarObjetos(tableExport);
-
-
 
             dto.setData(data);
             dto.setMensaje("Ok");

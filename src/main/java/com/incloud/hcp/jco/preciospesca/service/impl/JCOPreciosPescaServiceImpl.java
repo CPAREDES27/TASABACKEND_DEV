@@ -12,10 +12,12 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import com.sun.xml.internal.ws.commons.xmlutil.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -181,21 +183,29 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblT_PREPES = tables.getTable(Tablas.T_PREPES);
+        String[] ArrayResponse=null;
+        for (int i = 0; i < tblT_PREPES.getNumRows(); i++) {
+            tblT_PREPES.setRow(i);
+             ArrayResponse = tblT_PREPES.getString().split("\\|");
+        }
+        for(int j=0;j<ArrayResponse.length;j++){
+            logger.error("ArrayResponse" + ArrayResponse[j]);
+        }
+        /*List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
 
-
-        List<HashMap<String, Object>> listT_PREPES = metodos.ListarObjetos(tblT_PREPES);
         for(Map<String,Object> datas: listT_PREPES){
             for(Map.Entry<String,Object> entry: datas.entrySet()){
+                listaEstado
                 String key = entry.getKey();
                 Object value= entry.getValue();
                 logger.error("ENTRY KEY"+ key);
                 logger.error("ENTRY value"+ value.toString());
             }
         }
-
+        */
+        int tamanio = ArrayResponse.length;
         ConsPrecioPescaExports dto = new ConsPrecioPescaExports();
-        dto.setT_prepes(listT_PREPES);
-        dto.setMensaje("OK");
+
 
         return dto;
     }
