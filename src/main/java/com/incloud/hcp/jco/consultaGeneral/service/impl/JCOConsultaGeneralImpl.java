@@ -63,50 +63,13 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             EjecutarRFC exec = new EjecutarRFC();
             me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
 
-            HashMap<String, Object> nombreDominio=BuscarNombreDominio(importsParam.getNombreConsulta());
-            String campo="";
-            String dom="";
-            for (Map.Entry<String, Object> entry :nombreDominio.entrySet()) {
-
-                if(entry.getKey().equals("DOMINIO")){
-                    dom=entry.getValue().toString();
-
-                }else if(entry.getKey().equals("CAMPO")){
-                    campo=entry.getValue().toString();
-
-                }
+            if(importsParam.getNombreConsulta().equals("CONSGENPESDESC")) {
+                List<HashMap<String, Object>> data = ListaDataConDominio(me, importsParam.getNombreConsulta());
+                dto.setData(data);
+            }else{
+                dto.setData(me.getData());
             }
-            logger.error("dom: "+dom);
-            logger.error("campo: "+campo);
 
-            String valor="";
-            List<HashMap<String, Object>> ndata= new ArrayList<>();
-            List<HashMap<String, Object>> data= me.getData();
-
-            for(int i=0; i<data.size();i++){
-                HashMap<String, Object> registro=data.get(i);
-
-                for (Map.Entry<String, Object> entry :registro.entrySet()) {
-
-                    if(entry.getKey().equals(campo)){
-                        valor=entry.getValue().toString();
-
-                    }
-                }
-
-
-                String descripcion=BuscarDominio(dom, valor);
-
-                String field="DESC_"+campo;
-
-                registro.put(field, descripcion);
-
-                ndata.add(registro);
-            }
-            logger.error("valor: "+valor);
-
-
-            dto.setData(data);
             dto.setMensaje("Ok");
         }catch (Exception e){
             dto.setMensaje(e.getMessage());
@@ -145,9 +108,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                tabla= ConsultaGeneralTablas.CONSGENPESDESC;
 
                 break;
-            case "CONSGENLISTSINI":
-                tabla= ConsultaGeneralTablas.CONSGENLISTSINI;
-                break;
+
 
         }
         logger.error("tabla= "+tabla);
@@ -183,9 +144,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENPESDESC":
                 fields= ConsultaGeneralFields.CONSGENPESDESC;
                  break;
-            case "CONSGENLISTSINI":
-                fields= ConsultaGeneralFields.CONSGENLISTSINI;
-                break;
+
 
         }
 
@@ -203,7 +162,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
         if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES")
                 ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE ")
-                || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC") || nombreAyuda.equals("CONSGENLISTSINI")){
+                || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC")){
 
 
             String condicion="";
@@ -241,10 +200,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     condicion= ConsultaGeneralOptions.CONSGENPESDESC +parametro1+"'";
                     opt.setWa(condicion);
                     break;
-                case "CONSGENLISTSINI":
-                    condicion= ConsultaGeneralOptions.CONSGENLISTSINI +parametro1+ ConsultaGeneralOptions.CONSGENLISTSINI_+parametro2+ ConsultaGeneralOptions.CONSGENLISTSINI__ ;
-                    opt.setWa(condicion);
-                    break;
+
 
 
             }
@@ -310,6 +266,53 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         return descripcion;
     }
 
+    public List<HashMap<String, Object>> ListaDataConDominio(MaestroExport me, String nomConsulta)throws Exception{
 
+        List<HashMap<String, Object>> ndata= new ArrayList<>();
+        HashMap<String, Object> nombreDominio=BuscarNombreDominio(nomConsulta);
+        String campo="";
+        String dom="";
+        for (Map.Entry<String, Object> entry :nombreDominio.entrySet()) {
+
+            if(entry.getKey().equals("DOMINIO")){
+                dom=entry.getValue().toString();
+
+            }else if(entry.getKey().equals("CAMPO")){
+                campo=entry.getValue().toString();
+
+            }
+        }
+
+        String valor="";
+
+        List<HashMap<String, Object>> data= me.getData();
+
+        for(int i=0; i<data.size();i++){
+            HashMap<String, Object> registro=data.get(i);
+
+            for (Map.Entry<String, Object> entry :registro.entrySet()) {
+
+                if(entry.getKey().equals(campo)){
+
+                    valor=entry.getValue().toString();
+
+                }
+            }
+
+            String descripcion="";
+            if(!valor.equals("")){
+                 descripcion=BuscarDominio(dom, valor);
+            }
+
+
+            String field="DESC_"+campo;
+
+            registro.put(field, descripcion);
+
+            ndata.add(registro);
+        }
+
+        return ndata;
+    }
 
 }

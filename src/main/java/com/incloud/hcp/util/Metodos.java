@@ -158,7 +158,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("ZONAPESCA")) {
+        } else if (table.equals("1ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
@@ -176,7 +176,7 @@ public class Metodos {
         } else if (table.equals("TIPOEMBARCACION")) {
             tablita = "ZFLTEM";
 
-        } else if (table.equals("ZONALITORAL")) {
+        } else if (table.equals("1ZONALITORAL")) {
             tablita = "ZFLZLT";
 
         } else if (table.equals("PLANTAPROPIA")) {
@@ -194,7 +194,7 @@ public class Metodos {
         } else if (table.equals("CATEGORIA")) {
             tablita = "ZFLCNS";
 
-        } else if (table.equals("ZONAAREA")) {
+        } else if (table.equals("1ZONAAREA")) {
             tablita = "ZFLZAR";
 
         }
@@ -207,7 +207,7 @@ public class Metodos {
 
     public String returnWA(String table) {
         String wa = "";
-        if (table.equals("MONEDA") || table.equals("ESPECIE") || table.equals("UBICPLANTA") || table.equals("MONEDASAP") || table.equals("ZONALITORAL") || table.equals("TIPOEMBARCACION") || table.equals("GRUPCAPACIDAD") || table.equals("BODEGA") || table.equals("TEMPORADA") || table.equals("SUMINISTRO") || table.equals("ZONAPESCA") || table.equals("ORIGENDATOS") || table.equals("SISTPESCA") || table.equals("GRUPFLOTA") || table.equals("UBICPLANTA") || table.equals("LITORAL") || table.equals("INCIDENTE") ||table.equals("UNIDADMEDIDA")) {
+        if (table.equals("MONEDA") || table.equals("ESPECIE") || table.equals("UBICPLANTA") || table.equals("MONEDASAP") || table.equals("1ZONALITORAL") || table.equals("TIPOEMBARCACION") || table.equals("GRUPCAPACIDAD") || table.equals("BODEGA") || table.equals("TEMPORADA") || table.equals("SUMINISTRO") || table.equals("1ZONAPESCA") || table.equals("ORIGENDATOS") || table.equals("SISTPESCA") || table.equals("GRUPFLOTA") || table.equals("UBICPLANTA") || table.equals("LITORAL") || table.equals("INCIDENTE") ||table.equals("UNIDADMEDIDA")) {
             wa = "ESREG = 'S'";
         }else if(table.equals("CLASEAVISOMANT") || table.equals("REPERCUSION") ||table.equals("ORGVENTAS") || table.equals("CANALDISTRIBUCION")){
             wa= "SPRAS EQ 'S'";
@@ -223,7 +223,7 @@ public class Metodos {
             wa= "ESREG = 'S' AND (WERKS <> 'FP09') AND (INPRP = 'P')";
         }else if(table.equals("CATEGORIA")){
             wa= "DESCR = 'CATEGORIA PESCA COMPETENCIA'";
-        }else if(table.equals("ZONAAREA")){
+        }else if(table.equals("1ZONAAREA")){
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
             wa= "(WERKS <> 'FP09') AND (INPRP = 'P')";
@@ -281,7 +281,7 @@ public class Metodos {
             fields = new String[] {"CDTPO", "DSTPO"};
         } else if (table.equals("SUMINISTRO")) {
             fields = new String[] {"CDSUM", "DSSUM"};
-        } else if (table.equals("ZONAPESCA")) {
+        } else if (table.equals("1ZONAPESCA")) {
             fields = new String[] {"CDZPC", "DSZPC"};
         } else if (table.equals("REPERCUSION")) {
             fields = new String[] {"AUSWK", "AUSWKT"};
@@ -293,7 +293,7 @@ public class Metodos {
             fields = new String[] {"CDUBI", "DSUBI"};
         } else if (table.equals("TIPOEMBARCACION")) {
             fields = new String[] {"CDTEM", "DESCR"};
-        } else if (table.equals("ZONALITORAL")) {
+        } else if (table.equals("1ZONALITORAL")) {
             fields = new String[] {"CDZLT", "DSZLT"};
         } else if (table.equals("PLANTAPROPIA")) {
             fields = new String[] {"CDPTA", "DESCR"};
@@ -305,7 +305,7 @@ public class Metodos {
             fields = new String[] {"CDSPC", "DSSPC"};
         } else if (table.equals("CATEGORIA")) {
             fields = new String[] {"VAL01", "VAL02"};
-        } else if (table.equals("ZONAAREA")) {
+        } else if (table.equals("1ZONAAREA")) {
             fields = new String[] {"ZCDZAR", "ZDSZAR"};
         }
         else if (table.equals("SISTVIRADO")) {

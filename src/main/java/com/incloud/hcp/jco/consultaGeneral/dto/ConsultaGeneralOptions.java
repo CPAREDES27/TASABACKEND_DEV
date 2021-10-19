@@ -13,9 +13,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENPESBODE_="' AND NREVN  = '";
     public static String CONSGENPUNTDES="ESREG = 'S' AND CDPTA = '";
     public static String CONSGENPESDESC="NRDES = '";
-    public static String CONSGENLISTSINI="NRMAR = '";
-    public static String CONSGENLISTSINI_="' AND NREVN = '";
-    public static String CONSGENLISTSINI__="' AND SPRAS EQ 'S'";
+
 
 
 
