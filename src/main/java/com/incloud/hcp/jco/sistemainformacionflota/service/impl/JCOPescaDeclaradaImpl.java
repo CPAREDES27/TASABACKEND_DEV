@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -165,20 +166,48 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
                 s.put("PESC_DECL_CHI", pescDeclChi);
                 s.put("PESC_DESC_CHI", pescDescChi);
-                s.put("PORC_DECL_CHI_PROP", porcDeclChiProp);
-                s.put("PORC_DECL_CHI_TERC", porcDeclChiTerc);
-                s.put("EFIC_PROP", eficProp);
-                s.put("EFIC_TERC", eficTerc);
-                s.put("PORC_DIFER", porcDifer);
+
+                if (!Float.isNaN(porcDeclChiProp)) {
+                    s.put("PORC_DECL_CHI_PROP", porcDeclChiProp);
+                } else {
+                    s.put("PORC_DECL_CHI_PROP", 0.00f);
+                }
+
+                if (!Float.isNaN(porcDeclChiTerc)) {
+                    s.put("PORC_DECL_CHI_TERC", porcDeclChiTerc);
+                } else {
+                    s.put("PORC_DECL_CHI_TERC", 0.00f);
+                }
+
+                if (!Float.isNaN(eficProp)) {
+                    s.put("EFIC_PROP", eficProp);
+                } else {
+                    s.put("EFIC_PROP", 0.00f);
+                }
+
+                if (!Float.isNaN(eficTerc)) {
+                    s.put("EFIC_TERC", eficTerc);
+                } else {
+                    s.put("EFIC_TERC", 0.00f);
+                }
+
+                if (!Float.isNaN(porcDifer)) {
+                    s.put("PORC_DIFER", porcDifer);
+                } else {
+                    s.put("PORC_DIFER", 0.00f);
+                }
 
                 return s;
             }).collect(Collectors.toList());
 
             HashMap<String, Object> totales = new HashMap<>();
 
-            //Obtener modelo de una fila
-            totales = str_dl.get(0);
-            totales.replaceAll((k, v) -> v = null); //Limpiar la fila
+            //Obtener modelo de una fila y usarla para generar la fila de totales
+            HashMap<String, Object> firstPescDecl = str_dl.get(0);
+
+            for (Map.Entry<String, Object> mapEntry : firstPescDecl.entrySet()) {
+                totales.put(mapEntry.getKey(), null);
+            }
 
             float totPescDeclChi = 0.00f;
             float totPescDeclChd = 0.00f;
@@ -231,6 +260,8 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             totales.replace("PSDTE", totPescDescPlantTerc);
             totales.replace("PSCHD", totPescDescChd);
             totales.replace("PORC_DIFER", totPorcDifer);
+
+            str_dl.add(totales);
 
             pdd.setStr_dl(str_dl);
             pdd.setMensaje("Ok");
