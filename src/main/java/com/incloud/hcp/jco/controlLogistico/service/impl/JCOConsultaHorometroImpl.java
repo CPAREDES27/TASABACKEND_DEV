@@ -46,10 +46,13 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
 
             Metodos metodo = new Metodos();
 
-            List<HashMap<String, Object>> str_emb = metodo.ObtenerListObjetos(STR_EMB, imports.getFieldStr_emb());
+            //List<HashMap<String, Object>> str_emb = metodo.ObtenerListObjetos(STR_EMB, imports.getFieldStr_emb());
             List<HashMap<String, Object>> str_evn = metodo.ObtenerListObjetos(STR_EVN, imports.getFieldStr_evn());
             List<HashMap<String, Object>> str_lho = metodo.ObtenerListObjetos(STR_LHO, imports.getFieldStr_lho());
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldT_mensaje());
+
+
+
             List<HorometroListDto> lista =new ArrayList<HorometroListDto>();
             for(Map<String,Object> datas: str_evn) {
                 HorometroListDto horo = new HorometroListDto();
@@ -65,6 +68,11 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     if(key.equals("FIEVN")){
                         horo.setFIEVN(value.toString());
                     }
+                    if(key.equals("CDEMB")){
+                        horo.setCDEMB(value.toString());
+                    }
+
+
                 }
                 lista.add(horo);
             }
@@ -109,6 +117,12 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                 HorometroExportDto obj = new HorometroExportDto();
                 for(int j=0;j<lista.get(i).getLista().size();j++){
 
+                    String cdemb=lista.get(i).getCDEMB();
+                    String[]detalleEmbar=BuscarDetalleEmbarcacion(STR_EMB, cdemb);
+                    obj.setMatricula(detalleEmbar[0]);
+                    obj.setNombreEmbarcacion(detalleEmbar[1]);
+                    obj.setFlota(detalleEmbar[2]);
+
                     obj.setFecha(lista.get(i).getFIEVN());
                     if(lista.get(i).getLista().get(j).getCDTHR().equals("1")){
                         obj.setMotorPrincipal(lista.get(i).getLista().get(j).getLCHOR());
@@ -140,6 +154,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
             }
 
 
+            //ch.setStr_emb(str_emb);
             ch.setListaHorometro(listaHorometro);
             ch.setT_mensaje(t_mensaje);
             ch.setMensaje("Ok");
@@ -148,6 +163,27 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
         }
 
         return ch;
+    }
+
+    public String[] BuscarDetalleEmbarcacion(JCoTable str_emb, String codEmbarca){
+
+        String[]stremb=new String[3];
+        for(int i=0; i<str_emb.getNumRows();i++){
+            str_emb.setRow(i);
+
+            String codEmb=str_emb.getString("CDEMB");
+            if(codEmb.equals(codEmbarca)){
+                String matricula=str_emb.getString("MREMB");
+                String nombreEmbarca=str_emb.getString("NMEMB");
+                String flota=str_emb.getString("DSGFL").replace("\\","");
+
+                stremb[0]=matricula;
+                stremb[1]=nombreEmbarca;
+                stremb[2]=flota;
+            }
+
+        }
+        return stremb;
     }
 
 }

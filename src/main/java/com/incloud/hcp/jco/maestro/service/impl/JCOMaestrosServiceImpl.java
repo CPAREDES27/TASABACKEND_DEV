@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.util.Constantes;
@@ -7,6 +8,7 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -411,42 +413,47 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         MaestroExport me;
 
         try {
-            String tabla=(Buscartabla(importsParam.getNombreAyuda()));
+            if(importsParam.getNombreAyuda().equals("BSQEMBHORO")){
+                dto=BuscarEmbaHorometro();
+            }else {
+                String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
-            logger.error("AyudasBusqueda TABLA= "+tabla);
-            //setear mapeo de parametros import
-            HashMap<String, Object> imports = new HashMap<String, Object>();
-            imports.put("QUERY_TABLE", tabla);
-            imports.put("DELIMITER", "|");
-            imports.put("NO_DATA", "");
-            imports.put("ROWSKIPS", "");
-            imports.put("ROWCOUNT", "200");
-            imports.put("P_USER", importsParam.getP_user());
-            imports.put("P_ORDER", "");
-            logger.error("AyudasBusqueda_2");
-            //setear mapeo de tabla options
+                logger.error("AyudasBusqueda TABLA= " + tabla);
+                //setear mapeo de parametros import
+                HashMap<String, Object> imports = new HashMap<String, Object>();
+                imports.put("QUERY_TABLE", tabla);
+                imports.put("DELIMITER", "|");
+                imports.put("NO_DATA", "");
+                imports.put("ROWSKIPS", "");
+                imports.put("ROWCOUNT", "200");
+                imports.put("P_USER", importsParam.getP_user());
+                imports.put("P_ORDER", "");
+                logger.error("AyudasBusqueda_2");
+                //setear mapeo de tabla options
 
-            List<MaestroOptions> options = BuscarOptions(importsParam.getNombreAyuda());
-            logger.error("AyudasBusqueda_3");
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                logger.error("AyudasBusqueda options= "+mo.getWa());
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
+                List<MaestroOptions> options = BuscarOptions(importsParam.getNombreAyuda());
+                logger.error("AyudasBusqueda_3");
+                List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+                for (int i = 0; i < options.size(); i++) {
+                    MaestroOptions mo = options.get(i);
+                    HashMap<String, Object> record = new HashMap<String, Object>();
+                    logger.error("AyudasBusqueda options= " + mo.getWa());
+                    record.put("WA", mo.getWa());
+                    tmpOptions.add(record);
+                }
+                logger.error("AyudasBusqueda_4");
+
+                String[] fields = BuscarFields(importsParam.getNombreAyuda());
+                logger.error("AyudasBusqueda_5");
+                //ejecutar RFC ZFL_RFC_READ_TABLE
+                EjecutarRFC exec = new EjecutarRFC();
+                me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+                logger.error("AyudasBusqueda_6");
+
+                dto.setData(me.getData());
+                dto.setMensaje("Ok");
             }
-            logger.error("AyudasBusqueda_4");
 
-            String []fields=BuscarFields(importsParam.getNombreAyuda());
-            logger.error("AyudasBusqueda_5");
-            //ejecutar RFC ZFL_RFC_READ_TABLE
-            EjecutarRFC exec = new EjecutarRFC();
-            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
-            logger.error("AyudasBusqueda_6");
-
-            dto.setData(me.getData());
-            dto.setMensaje("Ok");
         }catch (Exception e){
             dto.setMensaje(e.getMessage());
         }
@@ -627,5 +634,41 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return options;
     }
 
+    public AyudaBusquedaExports BuscarEmbaHorometro(){
+
+        AyudaBusquedaExports dto= new AyudaBusquedaExports();
+        try{
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+
+            importx.setValue("P_USER", "FGARCIA");
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable tableImport = tables.getTable(Tablas.P_OPTIONS);
+            tableImport.appendRow();
+            tableImport.setValue("WA", AyudaBusquedaOptions.BSQEMBHORO);
+            tableImport.appendRow();
+            tableImport.setValue("WA", AyudaBusquedaOptions.BSQEMBHORO1);
+
+            stfcConnection.execute(destination);
+
+            JCoTable STR_EMB = tables.getTable(Tablas.STR_EMB);
+
+            Metodos exec= new Metodos();
+            List<HashMap<String, Object>> data=exec.ObtenerListObjetos(STR_EMB,AyudaBusquedaFields.BSQEMBHORO) ;
+
+            dto.setData(data);
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
 
 }

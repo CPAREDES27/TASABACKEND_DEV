@@ -20,6 +20,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQCLSDOC={"BLART", "LTEXT"};
     public static String[] BSQGPOCOMP={"EKGRP", "EKNAM"};
     public static String[] BSQARMCOM={"LIFNR", "NAME1", "STCD1"};
+    public static String[] BSQEMBHORO={"CDEMB","MREMB","NMEMB","LIFNR","NAME1"};
 
 
 }

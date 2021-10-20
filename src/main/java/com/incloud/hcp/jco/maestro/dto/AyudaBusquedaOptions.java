@@ -10,4 +10,6 @@ public class AyudaBusquedaOptions {
     public static String BSQUSR="ABKRS IN ('TT', 'TS')";
     public static String BSQPEDCOMP="SPRAS EQ 'S'";
     public static String BSQCLSDOC="SPRAS EQ 'S'";
+    public static String BSQEMBHORO="ESEMB = 'O'";
+    public static String BSQEMBHORO1="AND INPRP LIKE 'P'";
 }
