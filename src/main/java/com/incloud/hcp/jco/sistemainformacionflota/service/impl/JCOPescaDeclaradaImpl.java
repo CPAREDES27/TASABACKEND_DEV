@@ -111,6 +111,63 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 return s;
             }).collect(Collectors.toList());
 
+            /*
+            HashMap<String, Object> totales = new HashMap<>();
+
+            //Obtener modelo de una fila y usarla para generar la fila de totales
+            HashMap<String, Object> firstEntry = str_tp.get(0);
+            for (Map.Entry<String, Object> mapEntry : firstEntry.entrySet()) {
+                totales.put(mapEntry.getKey(), null);
+            }
+
+            int totGenEmbaAsig = 0;
+            int totGenEmbaPesc = 0;
+            int totGenEmbaInop = 0;
+            int totGenEmbaOtro = 0;
+            float totGenPescDesc = 0.00f;
+            float totGenPescDecl = 0.00f;
+            int totGenNumEmba = 0;
+            int totGenPescDeclProp = 0;
+            int totGenNumEmbaProp = 0;
+            int totGenPescDeclTerc = 0;
+            int totGenNumEmbaTerc = 0;
+            float totGenPromProp = 0.00f;
+            float totGenPromTerc = 0.00f;
+
+            for (HashMap<String, Object> item : str_tp) {
+                totGenEmbaAsig += Integer.parseInt(item.get("CEMBA").toString());
+                totGenEmbaPesc += Integer.parseInt(item.get("CEMBP").toString());
+                totGenEmbaInop += Integer.parseInt(item.get("CEMBI").toString());
+                totGenEmbaOtro += Integer.parseInt(item.get("CEMBO").toString());
+                totGenPescDesc += Float.parseFloat(item.get("CNPDS").toString());
+                totGenPescDecl += Float.parseFloat(item.get("TOT_PESC_DECL").toString());
+                totGenNumEmba += Integer.parseInt(item.get("TOT_NUM_EMBA").toString());
+                totGenPescDeclProp += Integer.parseInt(item.get("CNPEP").toString());
+                totGenNumEmbaProp += Integer.parseInt(item.get("NEMBP").toString());
+                totGenPescDeclTerc += Integer.parseInt(item.get("CNPET").toString());
+                totGenNumEmbaTerc += Integer.parseInt(item.get("NEMBT").toString());
+                totGenPromProp += Float.parseFloat(item.get("PROM_PESC_PROP").toString());
+                totGenPromTerc += Float.parseFloat(item.get("PROM_PESC_TERC").toString());
+            }
+
+            totales.replace("CEMBA",totGenEmbaAsig);
+            totales.replace("CEMBP",totGenEmbaPesc);
+            totales.replace("CEMBI",totGenEmbaInop);
+            totales.replace("CEMBO",totGenEmbaOtro);
+            totales.replace("CNPDS",totGenPescDesc);
+            totales.replace("TOT_PESC_DECL",totGenPescDecl);
+            totales.replace("TOT_NUM_EMBA",totGenNumEmba);
+            totales.replace("CNPEP",totGenPescDeclProp);
+            totales.replace("NEMBP",totGenNumEmbaProp);
+            totales.replace("CNPET",totGenPescDeclTerc);
+            totales.replace("NEMBT",totGenNumEmbaTerc);
+            totales.replace("PROM_PESC_PROP",totGenPromProp);
+            totales.replace("PROM_PESC_TERC",totGenPromTerc);
+
+            str_tp.add(totales);
+
+             */
+
             pd.setT_mensaje(t_mensaje);
             pd.setStr_tp(str_tp);
             pd.setStr_te(str_te);
@@ -164,35 +221,35 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
                 float porcDifer = (pescDeclChi - pescDescChi) * 100 / (pescDeclChi);
 
-                s.put("PESC_DECL_CHI", pescDeclChi);
-                s.put("PESC_DESC_CHI", pescDescChi);
+                s.put("PESC_DECL_CHI", Math.round(pescDeclChi * 100.00) / 100.00);
+                s.put("PESC_DESC_CHI", Math.round(pescDescChi * 100.00) / 100.00);
 
                 if (!Float.isNaN(porcDeclChiProp)) {
-                    s.put("PORC_DECL_CHI_PROP", porcDeclChiProp);
+                    s.put("PORC_DECL_CHI_PROP", Math.round(porcDeclChiProp * 100.00) / 100.00);
                 } else {
                     s.put("PORC_DECL_CHI_PROP", 0.00f);
                 }
 
                 if (!Float.isNaN(porcDeclChiTerc)) {
-                    s.put("PORC_DECL_CHI_TERC", porcDeclChiTerc);
+                    s.put("PORC_DECL_CHI_TERC", Math.round(porcDeclChiTerc * 100.00) / 100.00);
                 } else {
                     s.put("PORC_DECL_CHI_TERC", 0.00f);
                 }
 
                 if (!Float.isNaN(eficProp)) {
-                    s.put("EFIC_PROP", eficProp);
+                    s.put("EFIC_PROP", Math.round(eficProp * 100.00) / 100.00);
                 } else {
                     s.put("EFIC_PROP", 0.00f);
                 }
 
                 if (!Float.isNaN(eficTerc)) {
-                    s.put("EFIC_TERC", eficTerc);
+                    s.put("EFIC_TERC", Math.round(eficTerc * 100.00) / 100.00);
                 } else {
                     s.put("EFIC_TERC", 0.00f);
                 }
 
                 if (!Float.isNaN(porcDifer)) {
-                    s.put("PORC_DIFER", porcDifer);
+                    s.put("PORC_DIFER", Math.round(porcDifer * 100.00) / 100.00);
                 } else {
                     s.put("PORC_DIFER", 0.00f);
                 }
