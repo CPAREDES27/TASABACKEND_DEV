@@ -227,7 +227,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             float totPorcDifer = 0.00f;
 
             for (HashMap<String, Object> item : str_dl) {
-                totPescDeclChi += Float.parseFloat(item.get("PPCHI").toString());
+                totPescDeclChi += Float.parseFloat(item.get("PESC_DECL_CHI").toString());
                 totPescDeclChd += Float.parseFloat(item.get("PDECH").toString());
                 totPescDeclChiProp += Float.parseFloat(item.get("PPCHI").toString());
                 totPorcDeclChiProp += Float.parseFloat(item.get("PORC_DECL_CHI_PROP").toString());
@@ -244,7 +244,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 totPescDescChd += Float.parseFloat(item.get("PSCHD").toString());
                 totPorcDifer += Float.parseFloat(item.get("PORC_DIFER").toString());
             }
-            totales.replace("PPCHI", totPescDeclChi);
+            totales.replace("PESC_DECL_CHI", totPescDeclChi);
             totales.replace("PDECH", totPescDeclChd);
             totales.replace("PPCHI", totPescDeclChiProp);
             totales.replace("PORC_DECL_CHI_PROP", totPorcDeclChiProp);
