@@ -1,16 +1,19 @@
 package com.incloud.hcp.jco.controlLogistico.service.impl;
 
-import com.incloud.hcp.jco.controlLogistico.dto.ConsultaHorometroExports;
-import com.incloud.hcp.jco.controlLogistico.dto.ConsultaHorometroImports;
+import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOConsultaHorometroService;
+import com.incloud.hcp.jco.gestionpesca.dto.HorometroExport;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
@@ -47,10 +50,62 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
             List<HashMap<String, Object>> str_evn = metodo.ObtenerListObjetos(STR_EVN, imports.getFieldStr_evn());
             List<HashMap<String, Object>> str_lho = metodo.ObtenerListObjetos(STR_LHO, imports.getFieldStr_lho());
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldT_mensaje());
+            List<HorometroListDto> lista =new ArrayList<HorometroListDto>();
+            for(Map<String,Object> datas: str_evn) {
+                HorometroListDto horo = new HorometroListDto();
+                for (Map.Entry<String, Object> entry : datas.entrySet()) {
+                    String key= entry.getKey();
+                    Object value= entry.getValue();
+                    if(key.equals("NRMAR")){
+                        horo.setNRMAR(value.toString());
+                    }
+                    if(key.equals("NREVN")){
+                        horo.setNREVN(value.toString());
+                    }
+                    if(key.equals("FIEVN")){
+                        horo.setFIEVN(value.toString());
+                    }
+                }
+                lista.add(horo);
+            }
 
-            ch.setStr_emb(str_emb);
-            ch.setStr_evn(str_evn);
-            ch.setStr_lho(str_lho);
+            List<HorometroStrDto> listaStr = new ArrayList<HorometroStrDto>();
+            for(Map<String,Object> datas: str_lho) {
+                HorometroStrDto horoStr = new HorometroStrDto();
+                for (Map.Entry<String, Object> entry : datas.entrySet()) {
+                    String key= entry.getKey();
+                    Object value= entry.getValue();
+                    if(key.equals("NRMAR")){
+                        horoStr.setNRMAR(value.toString());
+                    }
+                    if(key.equals("NREVN")){
+                        horoStr.setNREVN(value.toString());
+                    }
+                    if(key.equals("CDTHR")){
+                        horoStr.setCDTHR(value.toString());
+                    }
+                    if(key.equals("LCHOR")){
+                        horoStr.setLCHOR(value.toString());
+                    }
+                }
+                listaStr.add(horoStr);
+            }
+
+            for(int i=0;i<lista.size();i++){
+                List<MotorDto> motorobj = new ArrayList<MotorDto>();
+                for(int j=0;j<listaStr.size();j++){
+                    MotorDto obj = new MotorDto();
+                    if(lista.get(i).getNRMAR().equals(listaStr.get(j).getNRMAR()) && lista.get(i).getNREVN().equals(listaStr.get(j).getNREVN())){
+                        obj.setLCHOR(listaStr.get(j).getLCHOR());
+                        obj.setCDTHR(listaStr.get(j).getCDTHR());
+                        motorobj.add(obj);
+                    }
+                }
+                lista.get(i).setLista(motorobj);
+            }
+
+
+            ch.setListaHorometro(lista);
             ch.setT_mensaje(t_mensaje);
             ch.setMensaje("Ok");
         }catch (Exception e){
