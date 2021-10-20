@@ -104,8 +104,43 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                 lista.get(i).setLista(motorobj);
             }
 
+            List<HorometroExportDto> listaHorometro = new ArrayList<HorometroExportDto>();
+            for(int i=0;i<lista.size();i++){
+                HorometroExportDto obj = new HorometroExportDto();
+                for(int j=0;j<lista.get(i).getLista().size();j++){
 
-            ch.setListaHorometro(lista);
+                    obj.setFecha(lista.get(i).getFIEVN());
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("1")){
+                        obj.setMotorPrincipal(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("2")){
+                        obj.setMotorAuxiliar(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("3")){
+                        obj.setMotorAuxiliar2(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("4")){
+                        obj.setMotorAuxiliar3(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("5")){
+                        obj.setMotorAuxiliar4(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("6")){
+                        obj.setMotorAuxiliar5(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("7")){
+                        obj.setPanga(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+                    if(lista.get(i).getLista().get(j).getCDTHR().equals("8")){
+                        obj.setFlujometro(lista.get(i).getLista().get(j).getLCHOR());
+                    }
+
+                }
+                listaHorometro.add(obj);
+            }
+
+
+            ch.setListaHorometro(listaHorometro);
             ch.setT_mensaje(t_mensaje);
             ch.setMensaje("Ok");
         }catch (Exception e){

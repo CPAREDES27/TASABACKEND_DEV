@@ -10,7 +10,7 @@ public class ConsultaHorometroExports {
     private List<HashMap<String, Object>> str_evn;
     private List<HashMap<String, Object>> str_lho;
     private List<HashMap<String, Object>> t_mensaje;
-    private List<HorometroListDto> listaHorometro;
+    private List<HorometroExportDto> listaHorometro;
     private List<HorometroStrDto> listaHoroStr;
 
     public List<HorometroStrDto> getListaHoroStr() {
@@ -21,11 +21,11 @@ public class ConsultaHorometroExports {
         this.listaHoroStr = listaHoroStr;
     }
 
-    public List<HorometroListDto> getListaHorometro() {
+    public List<HorometroExportDto> getListaHorometro() {
         return listaHorometro;
     }
 
-    public void setListaHorometro(List<HorometroListDto> listaHorometro) {
+    public void setListaHorometro(List<HorometroExportDto> listaHorometro) {
         this.listaHorometro = listaHorometro;
     }
 
