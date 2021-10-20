@@ -83,6 +83,7 @@ public class Constantes {
     public static String ZFL_RFC_IMPR_FORM_PRODUCE="ZFL_RFC_IMPR_FORM_PRODUCE";
     public static String ZFL_RFC_REG_SALUD_TRIP="ZFL_RFC_REG_SALUD_TRIP";
 
+
     //Sistema Informacion Flota
     public static String ZFL_RFC_PESCA_DECLA="ZFL_RFC_PESCA_DECLA";
     public static String ZFL_RFC_PESCA_EMBARCA="ZFL_RFC_PESCA_EMBARCA";
