@@ -149,6 +149,89 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_dl = metodo.ObtenerListObjetos(STR_DL, imports.getFieldstr_dl());
 
+            /**
+             * Cálculos de porcentajes y totales
+             */
+            str_dl.stream().map(s -> {
+                float pescDeclChi = Float.parseFloat(s.get("PPCHI").toString()) + Float.parseFloat(s.get("PTCHI").toString());
+                float pescDescChi = Float.parseFloat(s.get("PSPRO").toString()) + Float.parseFloat(s.get("PSTER").toString());
+                float porcDeclChiProp = Float.parseFloat(s.get("PPCHI").toString()) * 100 / pescDeclChi;
+                float porcDeclChiTerc = Float.parseFloat(s.get("PTCHI").toString()) * 100 / pescDeclChi;
+
+                float eficProp = pescDeclChi / Float.parseFloat(s.get("CNEMP").toString());
+                float eficTerc = pescDeclChi / Float.parseFloat(s.get("CNEMT").toString());
+
+                float porcDifer = (pescDeclChi - pescDescChi) * 100 / (pescDeclChi);
+
+                s.put("PESC_DECL_CHI", pescDeclChi);
+                s.put("PESC_DESC_CHI", pescDescChi);
+                s.put("PORC_DECL_CHI_PROP", porcDeclChiProp);
+                s.put("PORC_DECL_CHI_TERC", porcDeclChiTerc);
+                s.put("EFIC_PROP", eficProp);
+                s.put("EFIC_TERC", eficTerc);
+                s.put("PORC_DIFER", porcDifer);
+
+                return s;
+            }).collect(Collectors.toList());
+
+            HashMap<String, Object> totales = new HashMap<>();
+
+            //Obtener modelo de una fila
+            totales = str_dl.get(0);
+            totales.replaceAll((k, v) -> v = null); //Limpiar la fila
+
+            float totPescDeclChi = 0.00f;
+            float totPescDeclChd = 0.00f;
+            float totPescDeclChiProp = 0.00f;
+            float totPorcDeclChiProp = 0.00f;
+            float totPescDeclChiTerc = 0.00f;
+            float totPorcDeclChiTerc = 0.00f;
+            float totEficProp = 0.00f;
+            float totEficTerc = 0.00f;
+            float totNumEmbaProp = 0;
+            float totNumEmbaTerc = 0;
+            float totPescDescChiProp = 0.00f;
+            float totPescDescChiTerc = 0.00f;
+            float totPescDescChi = 0.00f;
+            float totPescDescPlantTerc = 0.00f;
+            float totPescDescChd = 0.00f;
+            float totPorcDifer = 0.00f;
+
+            for (HashMap<String, Object> item : str_dl) {
+                totPescDeclChi += Float.parseFloat(item.get("PPCHI").toString());
+                totPescDeclChd += Float.parseFloat(item.get("PDECH").toString());
+                totPescDeclChiProp += Float.parseFloat(item.get("PPCHI").toString());
+                totPorcDeclChiProp += Float.parseFloat(item.get("PORC_DECL_CHI_PROP").toString());
+                totPescDeclChiTerc += Float.parseFloat(item.get("PTCHI").toString());
+                totPorcDeclChiTerc += Float.parseFloat(item.get("PORC_DECL_CHI_TERC").toString());
+                totEficProp += Float.parseFloat(item.get("EFIC_PROP").toString());
+                totEficTerc += Float.parseFloat(item.get("EFIC_TERC").toString());
+                totNumEmbaProp += Integer.parseInt(item.get("CNEMP").toString());
+                totNumEmbaTerc += Integer.parseInt(item.get("CNEMT").toString());
+                totPescDescChiProp += Float.parseFloat(item.get("PSPRO").toString());
+                totPescDescChiTerc += Float.parseFloat(item.get("PSTER").toString());
+                totPescDescChi += Float.parseFloat(item.get("PESC_DESC_CHI").toString());
+                totPescDescPlantTerc += Float.parseFloat(item.get("PSDTE").toString());
+                totPescDescChd += Float.parseFloat(item.get("PSCHD").toString());
+                totPorcDifer += Float.parseFloat(item.get("PORC_DIFER").toString());
+            }
+            totales.replace("PPCHI", totPescDeclChi);
+            totales.replace("PDECH", totPescDeclChd);
+            totales.replace("PPCHI", totPescDeclChiProp);
+            totales.replace("PORC_DECL_CHI_PROP", totPorcDeclChiProp);
+            totales.replace("PTCHI", totPescDeclChiTerc);
+            totales.replace("PORC_DECL_CHI_TERC", totPorcDeclChiTerc);
+            totales.replace("EFIC_PROP", totEficProp);
+            totales.replace("EFIC_TERC", totEficTerc);
+            totales.replace("CNEMP", totNumEmbaProp);
+            totales.replace("CNEMT", totNumEmbaTerc);
+            totales.replace("PSPRO", totPescDescChiProp);
+            totales.replace("PSTER", totPescDescChiTerc);
+            totales.replace("PESC_DESC_CHI", totPescDescChi);
+            totales.replace("PSDTE", totPescDescPlantTerc);
+            totales.replace("PSCHD", totPescDescChd);
+            totales.replace("PORC_DIFER", totPorcDifer);
+
             pdd.setStr_dl(str_dl);
             pdd.setMensaje("Ok");
 
