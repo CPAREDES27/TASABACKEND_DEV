@@ -122,6 +122,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     obj.setMatricula(detalleEmbar[0]);
                     obj.setNombreEmbarcacion(detalleEmbar[1]);
                     obj.setFlota(detalleEmbar[2]);
+                    obj.setMarea(lista.get(i).getNRMAR());
 
                     obj.setFecha(lista.get(i).getFIEVN());
                     if(lista.get(i).getLista().get(j).getCDTHR().equals("1")){

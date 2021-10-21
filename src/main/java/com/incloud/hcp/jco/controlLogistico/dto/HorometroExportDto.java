@@ -5,6 +5,7 @@ public class HorometroExportDto {
     private String matricula;
     private String nombreEmbarcacion;
     private String flota;
+    private String marea;
     private String fecha;
     private String motorPrincipal;
     private String motorAuxiliar;
@@ -14,6 +15,14 @@ public class HorometroExportDto {
     private String MotorAuxiliar5;
     private String panga;
     private String flujometro;
+
+    public String getMarea() {
+        return marea;
+    }
+
+    public void setMarea(String marea) {
+        this.marea = marea;
+    }
 
     public String getFlota() {
         return flota;
