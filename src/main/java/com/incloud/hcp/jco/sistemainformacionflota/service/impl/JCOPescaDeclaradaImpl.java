@@ -251,31 +251,31 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 if (!Double.isNaN(porcDeclChiProp)) {
                     s.put("PORC_DECL_CHI_PROP", Math.round(porcDeclChiProp * 100.00) / 100.00);
                 } else {
-                    s.put("PORC_DECL_CHI_PROP", 0.00f);
+                    s.put("PORC_DECL_CHI_PROP", 0);
                 }
 
                 if (!Double.isNaN(porcDeclChiTerc)) {
                     s.put("PORC_DECL_CHI_TERC", Math.round(porcDeclChiTerc * 100.00) / 100.00);
                 } else {
-                    s.put("PORC_DECL_CHI_TERC", 0.00f);
+                    s.put("PORC_DECL_CHI_TERC", 0);
                 }
 
                 if (!Double.isNaN(eficProp)) {
                     s.put("EFIC_PROP", Math.round(eficProp * 100.00) / 100.00);
                 } else {
-                    s.put("EFIC_PROP", 0.00f);
+                    s.put("EFIC_PROP", 0);
                 }
 
                 if (!Double.isNaN(eficTerc)) {
                     s.put("EFIC_TERC", Math.round(eficTerc * 100.00) / 100.00);
                 } else {
-                    s.put("EFIC_TERC", 0.00f);
+                    s.put("EFIC_TERC", 0);
                 }
 
                 if (!Double.isNaN(porcDifer)) {
                     s.put("PORC_DIFER", Math.round(porcDifer * 100.00) / 100.00);
                 } else {
-                    s.put("PORC_DIFER", 0.00f);
+                    s.put("PORC_DIFER", 0);
                 }
 
                 return s;
@@ -290,40 +290,40 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 totales.put(mapEntry.getKey(), null);
             }
 
-            float totPescDeclChi = 0.00f;
-            float totPescDeclChd = 0.00f;
-            float totPescDeclChiProp = 0.00f;
-            float totPorcDeclChiProp = 0.00f;
-            float totPescDeclChiTerc = 0.00f;
-            float totPorcDeclChiTerc = 0.00f;
-            float totEficProp = 0.00f;
-            float totEficTerc = 0.00f;
-            float totNumEmbaProp = 0;
-            float totNumEmbaTerc = 0;
-            float totPescDescChiProp = 0.00f;
-            float totPescDescChiTerc = 0.00f;
-            float totPescDescChi = 0.00f;
-            float totPescDescPlantTerc = 0.00f;
-            float totPescDescChd = 0.00f;
-            float totPorcDifer = 0.00f;
+            double totPescDeclChi = 0;
+            double totPescDeclChd = 0;
+            double totPescDeclChiProp = 0;
+            double totPorcDeclChiProp = 0;
+            double totPescDeclChiTerc = 0;
+            double totPorcDeclChiTerc = 0;
+            double totEficProp = 0;
+            double totEficTerc = 0;
+            int totNumEmbaProp = 0;
+            int totNumEmbaTerc = 0;
+            double totPescDescChiProp = 0;
+            double totPescDescChiTerc = 0;
+            double totPescDescChi = 0;
+            double totPescDescPlantTerc = 0;
+            double totPescDescChd = 0;
+            double totPorcDifer = 0;
 
             for (HashMap<String, Object> item : str_dl) {
-                totPescDeclChi += Float.parseFloat(item.get("PESC_DECL_CHI").toString());
-                totPescDeclChd += Float.parseFloat(item.get("PDECH").toString());
-                totPescDeclChiProp += Float.parseFloat(item.get("PPCHI").toString());
-                totPorcDeclChiProp += Float.parseFloat(item.get("PORC_DECL_CHI_PROP").toString());
-                totPescDeclChiTerc += Float.parseFloat(item.get("PTCHI").toString());
-                totPorcDeclChiTerc += Float.parseFloat(item.get("PORC_DECL_CHI_TERC").toString());
-                totEficProp += Float.parseFloat(item.get("EFIC_PROP").toString());
-                totEficTerc += Float.parseFloat(item.get("EFIC_TERC").toString());
+                totPescDeclChi += Double.parseDouble(item.get("PESC_DECL_CHI").toString());
+                totPescDeclChd += Double.parseDouble(item.get("PDECH").toString());
+                totPescDeclChiProp += Double.parseDouble(item.get("PPCHI").toString());
+                totPorcDeclChiProp += Double.parseDouble(item.get("PORC_DECL_CHI_PROP").toString());
+                totPescDeclChiTerc += Double.parseDouble(item.get("PTCHI").toString());
+                totPorcDeclChiTerc += Double.parseDouble(item.get("PORC_DECL_CHI_TERC").toString());
+                totEficProp += Double.parseDouble(item.get("EFIC_PROP").toString());
+                totEficTerc += Double.parseDouble(item.get("EFIC_TERC").toString());
                 totNumEmbaProp += Integer.parseInt(item.get("CNEMP").toString());
                 totNumEmbaTerc += Integer.parseInt(item.get("CNEMT").toString());
-                totPescDescChiProp += Float.parseFloat(item.get("PSPRO").toString());
-                totPescDescChiTerc += Float.parseFloat(item.get("PSTER").toString());
-                totPescDescChi += Float.parseFloat(item.get("PESC_DESC_CHI").toString());
-                totPescDescPlantTerc += Float.parseFloat(item.get("PSDTE").toString());
-                totPescDescChd += Float.parseFloat(item.get("PSCHD").toString());
-                totPorcDifer += Float.parseFloat(item.get("PORC_DIFER").toString());
+                totPescDescChiProp += Double.parseDouble(item.get("PSPRO").toString());
+                totPescDescChiTerc += Double.parseDouble(item.get("PSTER").toString());
+                totPescDescChi += Double.parseDouble(item.get("PESC_DESC_CHI").toString());
+                totPescDescPlantTerc += Double.parseDouble(item.get("PSDTE").toString());
+                totPescDescChd += Double.parseDouble(item.get("PSCHD").toString());
+                totPorcDifer += Double.parseDouble(item.get("PORC_DIFER").toString());
             }
             totales.replace("PESC_DECL_CHI", Math.round(totPescDeclChi * 100.00) / 100.00);
             totales.replace("PDECH", Math.round(totPescDeclChd * 100.00) / 100.00);
@@ -333,8 +333,8 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             totales.replace("PORC_DECL_CHI_TERC", Math.round(totPorcDeclChiTerc * 100.00) / 100.00);
             totales.replace("EFIC_PROP", Math.round(totEficProp * 100.00) / 100.00);
             totales.replace("EFIC_TERC", Math.round(totEficTerc * 100.00) / 100.00);
-            totales.replace("CNEMP", Math.round(totNumEmbaProp * 100.00) / 100.00);
-            totales.replace("CNEMT", Math.round(totNumEmbaTerc * 100.00) / 100.00);
+            totales.replace("CNEMP", totNumEmbaProp);
+            totales.replace("CNEMT", totNumEmbaTerc);
             totales.replace("PSPRO", Math.round(totPescDescChiProp * 100.00) / 100.00);
             totales.replace("PSTER", Math.round(totPescDescChiTerc * 100.00) / 100.00);
             totales.replace("PESC_DESC_CHI", Math.round(totPescDescChi * 100.00) / 100.00);
