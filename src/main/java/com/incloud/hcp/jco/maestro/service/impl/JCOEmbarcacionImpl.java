@@ -1,8 +1,5 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.gestionpesca.dto.BodegaImport;
-import com.incloud.hcp.jco.gestionpesca.dto.Options;
-import com.incloud.hcp.jco.gestionpesca.dto.TipoEmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.service.RFCCompartidos.ZFL_RFC_READ_TEABLEImplement;
@@ -144,14 +141,19 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoTable s_ps = jcoTables.getTable(Tablas.S_PS);
             JCoTable s_ee = jcoTables.getTable(Tablas.S_EE);
             JCoTable s_be = jcoTables.getTable(Tablas.S_BE);
-
+            JCoTable str_hor = jcoTables.getTable(Tablas.STR_HOR);
+            JCoTable t_mensaje = jcoTables.getTable(Tablas.T_MENSAJE);
 
             Metodos m = new Metodos();
             List<HashMap<String, Object>> S_PE = m.ListarObjetos(s_pe);
             List<HashMap<String, Object>> S_PS = m.ListarObjetos(s_ps);
             List<HashMap<String, Object>> S_EE = m.ListarObjetos(s_ee);
             List<HashMap<String, Object>> S_BE = m.ListarObjetos(s_be);
+            List<HashMap<String, Object>> STR_HOR = m.ListarObjetos(str_hor);
+            List<HashMap<String, Object>> T_MENSAJE = m.ListarObjetos(t_mensaje);
 
+            dto.setT_mensaje(T_MENSAJE);
+            dto.setStr_hor(STR_HOR);
             dto.setS_pe(S_PE);
             dto.setS_ps(S_PS);
             dto.setS_ee(S_EE);
