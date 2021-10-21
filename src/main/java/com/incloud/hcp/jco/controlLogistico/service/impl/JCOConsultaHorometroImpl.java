@@ -46,7 +46,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
 
             Metodos metodo = new Metodos();
 
-            //List<HashMap<String, Object>> str_emb = metodo.ObtenerListObjetos(STR_EMB, imports.getFieldStr_emb());
+            List<HashMap<String, Object>> str_emb = metodo.ObtenerListObjetos(STR_EMB, imports.getFieldStr_emb());
             List<HashMap<String, Object>> str_evn = metodo.ObtenerListObjetos(STR_EVN, imports.getFieldStr_evn());
             List<HashMap<String, Object>> str_lho = metodo.ObtenerListObjetos(STR_LHO, imports.getFieldStr_lho());
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldT_mensaje());
@@ -151,11 +151,18 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     }
 
                 }
-                listaHorometro.add(obj);
+                if(i > 0) {
+                    HorometroExportDto objfinal=listaHorometro.get(listaHorometro.size()-1);
+                    if (obj.getFecha().equals(objfinal.getFecha())) {
+                        listaHorometro.remove(objfinal);
+                    }
+                }
+                    listaHorometro.add(obj);
+
             }
 
 
-            //ch.setStr_emb(str_emb);
+
             ch.setListaHorometro(listaHorometro);
             ch.setT_mensaje(t_mensaje);
             ch.setMensaje("Ok");
@@ -187,4 +194,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
         return stremb;
     }
 
+    public void ValidarFecha(){
+
+    }
 }
