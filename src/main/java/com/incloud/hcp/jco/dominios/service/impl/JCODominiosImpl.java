@@ -7,6 +7,8 @@ import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,9 +17,11 @@ import java.util.List;
 
 @Service
 public class JCODominiosImpl implements JCODominiosService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public DominioDto Listar(DominiosImports imports) throws Exception {
 
+        logger.error("ListarDominios_");
         DominioDto domDto = new DominioDto();
         List<DominiosExports> listExports = new ArrayList<>();
         Metodos metodo = new Metodos();
@@ -28,6 +32,7 @@ public class JCODominiosImpl implements JCODominiosService {
             JCoRepository repo = destination.getRepository();
 
             for (DominioParams domParams : imports.getDominios()) {
+
 
                 if (domParams.getDomname().startsWith("Z")) {
                     DominiosExports exports = new DominiosExports();
@@ -46,6 +51,7 @@ public class JCODominiosImpl implements JCODominiosService {
 
                     exports.setDominio(domParams.getDomname());
                     for (int i = 0; i < lis_out.getNumRows(); i++) {
+
                         lis_out.setRow(i);
                         DominioExportsData data = new DominioExportsData();
                         HashMap<String, Object> newRecord = new HashMap<String, Object>();

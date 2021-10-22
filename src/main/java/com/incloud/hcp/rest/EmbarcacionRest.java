@@ -161,7 +161,7 @@ public class EmbarcacionRest {
         }
 
     }
-    @PostMapping(value = "/Crear/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/Editar_Crear/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionNuevImports imports){
 
         try {
@@ -185,7 +185,7 @@ public class EmbarcacionRest {
         }
 
     }
-    @PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
+    /*@PostMapping(value = "/Editar/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> Nuevo(@RequestBody EmbarcacionEditImports imports){
 
         try {
@@ -196,7 +196,8 @@ public class EmbarcacionRest {
             throw new RuntimeException(e.toString());
         }
 
-    }
+    }*/
+
     @PostMapping(value = "/MoverEmbarcacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MensajeDto> MoverEmbarcacion(@RequestBody MoverEmbarcaImports imports){
 

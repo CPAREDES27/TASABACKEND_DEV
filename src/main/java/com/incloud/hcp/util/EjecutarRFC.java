@@ -2,7 +2,6 @@ package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.sap.conn.jco.*;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -286,7 +285,7 @@ public class EjecutarRFC {
     public List<HashMap<String, Object>>   ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-
+        Metodos exec= new Metodos();
 
         if(fields.length>=1) {
             for (int i = 0; i < jcoTable.getNumRows(); i++) {
@@ -324,7 +323,18 @@ public class EjecutarRFC {
                            }catch (Exception e){
                                value=String.valueOf(value);
                            }
+
                             newRecord.put(key, value);
+                           Metodos me=new Metodos();
+                            if(key.equals("INPRP") || key.equals("ESREG")){
+                                HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
+                                for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                                    String campo=entry.getKey();
+                                    Object valor=entry.getValue();
+                                    newRecord.put(campo, valor);
+                                }
+                            }
+
 
                         }
                     }
@@ -353,10 +363,18 @@ public class EjecutarRFC {
                     }
 
                     newRecord.put(key, value);
-
+                    Metodos me=new Metodos();
+                    if(key.equals("INPRP") || key.equals("ESREG")){
+                        HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
+                        for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                            String campo=entry.getKey();
+                            Object valor=entry.getValue();
+                            newRecord.put(campo, valor);
+                        }
+                    }
 
                 }
-                ;
+
                 data.add(newRecord);
             }
         }
