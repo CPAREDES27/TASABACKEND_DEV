@@ -80,6 +80,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     logger.error("cz1 : " + cz1 + " - cz2 : " + cz2);
                     if(s_str_pta.getString("CDZLT").equalsIgnoreCase(s_str_zlt.getString("CDZLT"))){
                         logger.error("cz12 : " + cz1 + " - cz22 : " + cz2);
+                        n_planta.setCodPlanta(s_str_pta.getString("CDPTA"));
                         n_planta.setPlantaName(s_str_pta.getString("DESCR"));
                         n_planta.setTot_PescaReq(s_str_pta.getString("CNPRQ"));
                         List<EmbarcacionesDto> embarcaciones = new ArrayList<EmbarcacionesDto>();
