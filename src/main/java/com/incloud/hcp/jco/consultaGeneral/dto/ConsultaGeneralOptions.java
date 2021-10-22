@@ -13,6 +13,12 @@ public class ConsultaGeneralOptions {
     public static String CONSGENPESBODE_="' AND NREVN  = '";
     public static String CONSGENPUNTDES="ESREG = 'S' AND CDPTA = '";
     public static String CONSGENPESDESC="NRDES = '";
+    public static String CONSGENCALENTEMP="FHCAL LIKE '";
+    public static String CONSGENCLDRTEMPFECHA="FHCAL LIKE '";
+    public static String CONSGENCONSTLAT="CDCNS = 4";
+    public static String CONSGENCONSTLAT2="OR CDCNS = 5";
+    public static String CONSGENCONSTLAT3="OR CDCNS = 6";
+    public static String CONSGENCONSTLAT4="OR CDCNS = 7";
 
 
 

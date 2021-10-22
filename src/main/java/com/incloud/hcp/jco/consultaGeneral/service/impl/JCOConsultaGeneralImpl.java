@@ -106,7 +106,15 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENPESDESC":
                tabla= ConsultaGeneralTablas.CONSGENPESDESC;
-
+                break;
+            case "CONSGENCALENTEMP":
+                tabla= ConsultaGeneralTablas.CONSGENCALENTEMP;
+                break;
+            case "CONSGENCLDRTEMPFECHA":
+                tabla= ConsultaGeneralTablas.CONSGENCLDRTEMPFECHA;
+                break;
+            case "CONSGENCONSTLAT":
+                tabla= ConsultaGeneralTablas.CONSGENCONSTLAT;
                 break;
 
 
@@ -144,7 +152,15 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENPESDESC":
                 fields= ConsultaGeneralFields.CONSGENPESDESC;
                  break;
-
+            case "CONSGENCALENTEMP":
+                fields= ConsultaGeneralFields.CONSGENCALENTEMP;
+                break;
+            case "CONSGENCLDRTEMPFECHA":
+                fields= ConsultaGeneralFields.CONSGENCLDRTEMPFECHA;
+                break;
+            case "CONSGENCONSTLAT":
+                fields= ConsultaGeneralFields.CONSGENCONSTLAT;
+                break;
 
         }
 
@@ -171,41 +187,73 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 case "CONSGENCODTIPRE":
                     condicion= ConsultaGeneralOptions.CONSGENCODTIPRE + parametro1+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENLISTEQUIP":
                     condicion= ConsultaGeneralOptions.CONSGENLISTEQUIP + parametro1+ ConsultaGeneralOptions.CONSGENLISTEQUIP_ ;
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENCOOZONPES":
                     condicion= ConsultaGeneralOptions.CONSGENCOOZONPES + parametro1+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENPESDECLA":
                     condicion= ConsultaGeneralOptions.CONSGENPESDECLA + parametro1+ ConsultaGeneralOptions.CONSGENPESDECLA_+ parametro2+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENLISTBODE":
                     condicion= ConsultaGeneralOptions.CONSGENLISTBODE + parametro1+ ConsultaGeneralOptions.CONSGENLISTBODE_;
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENPESBODE":
                     condicion= ConsultaGeneralOptions.CONSGENPESBODE + parametro1+ ConsultaGeneralOptions.CONSGENPESBODE_+ parametro2+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENPUNTDES":
                     condicion= ConsultaGeneralOptions.CONSGENPUNTDES +parametro1+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
                     break;
                 case "CONSGENPESDESC":
                     condicion= ConsultaGeneralOptions.CONSGENPESDESC +parametro1+"'";
                     opt.setWa(condicion);
+                    options.add(opt);
+                    break;
+                case "CONSGENCALENTEMP":
+                    condicion= ConsultaGeneralOptions.CONSGENCALENTEMP +parametro2+parametro1+"%'";
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    break;
+                case "CONSGENCLDRTEMPFECHA":
+                    condicion= ConsultaGeneralOptions.CONSGENCLDRTEMPFECHA +parametro1+"'";
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    break;
+                case "CONSGENCONSTLAT":
+                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT ;
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT2 ;
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT3 ;
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT4 ;
+                    opt.setWa(condicion);
+                    options.add(opt);
                     break;
 
 
 
             }
             logger.error("option= "+opt.getWa());
-            options.add(opt);
+
         }
 
 
@@ -314,5 +362,6 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
         return ndata;
     }
+
 
 }

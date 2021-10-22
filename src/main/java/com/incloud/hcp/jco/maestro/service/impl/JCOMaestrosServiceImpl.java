@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.*;
+import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
@@ -11,6 +13,7 @@ import com.sap.conn.jco.*;
 import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -22,7 +25,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
+    @Autowired
+    private JCODominiosService jcoDominiosService;
     @Override
     public MaestroExport obtenerMaestro (MaestroImports importsParam) throws Exception {
 
@@ -56,6 +60,15 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             EjecutarRFC exec = new EjecutarRFC();
             me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
 
+            HashMap<String, Object> d=me.getData().get(0);
+            for (Map.Entry<String, Object> entry : d.entrySet()) {
+                String key=entry.getKey();
+                logger.error("NOMBRE CAMPO: "+key);
+                if(key.equals("INPRP")||key.equals("ESREG")){
+                    List<HashMap<String, Object >>dataConDominio=ListaDataConDominio(me,key);
+                    me.setData(dataConDominio);
+                }
+            }
         }catch (Exception e){
             me.setMensaje(e.getMessage());
         }
@@ -125,6 +138,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         String []fields=imports.getFields();
         EjecutarRFC exec = new EjecutarRFC();
         me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
+
+
+
+
         return me;
     }
 
@@ -669,6 +686,111 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }
 
         return dto;
+    }
+
+    public HashMap<String, Object> BuscarNombreDominio(String nomCampo){
+        logger.error("BuscarNombreDominio");
+        HashMap<String, Object>data= new HashMap<>();
+
+        switch (nomCampo){
+            case "INPRP":
+                data.put("DOMINIO", "ZINPRP");
+                data.put("CAMPO", nomCampo);
+                break;
+            case "ESREG":
+                data.put("DOMINIO", "ZESREG");
+                data.put("CAMPO", nomCampo);
+                break;
+        }
+        //  logger.error("data1: "+data.get(0).toString());
+
+        return data;
+    }
+
+    public String BuscarDominio(String nomDomino, String valor)throws Exception{
+        logger.error("BuscarDominio");
+
+        String descripcion="";
+
+        DominioParams dominioParams= new DominioParams();
+        dominioParams.setDomname(nomDomino);
+        dominioParams.setStatus("A");
+
+        List<DominioParams> ListDominioParams= new ArrayList<>();
+        ListDominioParams.add(dominioParams);
+
+        DominiosImports dominiosImports=new DominiosImports();
+        dominiosImports.setDominios(ListDominioParams);
+
+        DominioDto dominioDto=jcoDominiosService.Listar(dominiosImports);
+
+        List<DominiosExports>ListaDomExports=dominioDto.getData();
+
+        for(int i=0; i<ListaDomExports.size();i++){
+            DominiosExports dominiosExports=ListaDomExports.get(i);
+            List<DominioExportsData> ListaDomExportData=dominiosExports.getData();
+
+            for(int j=0; j<ListaDomExportData.size();j++){
+                DominioExportsData dominioExportsData=ListaDomExportData.get(j);
+
+                if(valor.equals(dominioExportsData.getId())){
+                    descripcion=dominioExportsData.getDescripcion();
+
+                }
+            }
+
+        }
+        logger.error("descripcion: "+descripcion);
+        return descripcion;
+    }
+
+    public List<HashMap<String, Object>> ListaDataConDominio(MaestroExport me, String nomTabla)throws Exception{
+
+        List<HashMap<String, Object>> ndata= new ArrayList<>();
+        HashMap<String, Object> nombreDominio=BuscarNombreDominio(nomTabla);
+        String campo="";
+        String dom="";
+        for (Map.Entry<String, Object> entry :nombreDominio.entrySet()) {
+
+            if(entry.getKey().equals("DOMINIO")){
+                dom=entry.getValue().toString();
+
+            }else if(entry.getKey().equals("CAMPO")){
+                campo=entry.getValue().toString();
+
+            }
+        }
+
+        String valor="";
+
+        List<HashMap<String, Object>> data= me.getData();
+
+        for(int i=0; i<data.size();i++){
+            HashMap<String, Object> registro=data.get(i);
+
+            for (Map.Entry<String, Object> entry :registro.entrySet()) {
+
+                if(entry.getKey().equals(campo)){
+
+                    valor=entry.getValue().toString();
+
+                }
+            }
+
+            String descripcion="";
+            if(!valor.equals("")){
+                descripcion=BuscarDominio(dom, valor);
+            }
+
+
+            String field="DESC_"+campo;
+
+            registro.put(field, descripcion);
+
+            ndata.add(registro);
+        }
+
+        return ndata;
     }
 
 }
