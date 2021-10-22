@@ -55,7 +55,7 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             ArrayList<HashMap<String, Object>> listDescSum = new ArrayList<>();
             str_dsd.stream().forEach(dsd -> {
                 totalGenPescDesc.updateAndGet(v -> new Double((double) (v + Double.parseDouble(dsd.get("CNPDS").toString()))));
-                HashMap<String, Object> descDiaSum = listDescSum.stream().filter(descSum -> descSum.get("FIDES").toString().equals(dsd.get("FIDES").toString())).findFirst().orElse(null);
+                HashMap<String, Object> descDiaSum = listDescSum.stream().filter(descSum -> descSum.get("FIDES").toString().equals(dsd.get("FIDES").toString())).findFirst().get();
                 if (descDiaSum != null) {
                     descDiaSum = str_dsd.stream().filter(dsdFilter -> dsdFilter.get("FIDES").toString().equals(dsd.get("FIDES").toString())).reduce((dsdPrev, dsdCurr) -> {
                         double cndpsSum = Double.parseDouble(dsdPrev.get("CNPDS").toString()) + Double.parseDouble(dsdCurr.get("CNPDS").toString());
@@ -67,9 +67,7 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
                         return desc;
                     }).orElse(null);
 
-                    if (descDiaSum != null) {
-                        listDescSum.add(descDiaSum);
-                    }
+                    listDescSum.add(descDiaSum);
 
                 }
             });
@@ -98,7 +96,7 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             }).collect(Collectors.toList());
 
             pd.setStr_pta(str_pta);
-            pd.setStr_dsd(listPescaDescargadaSum);
+            pd.setStr_dsd(listDescSum);
             pd.setT_mensaje(t_mensaje);
             pd.setMensaje("Ok");
 
