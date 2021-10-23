@@ -67,7 +67,8 @@ public class Metodos {
                 }
                 newRecord.put(key, value);
 
-                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")){
+                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                        || key.equals("CALIDA")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -615,7 +616,8 @@ public class Metodos {
                             }
 
                             newRecord.put(key, value);
-                            if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")){
+                            if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                                    || key.equals("CALIDA")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -715,6 +717,15 @@ public class Metodos {
                 }
 
                 newRecord.put(key, value);
+                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                        || key.equals("CALIDA")){
+                    HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
+                    for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                        String campo=entry.getKey();
+                        Object valor=entry.getValue();
+                        newRecord.put(campo, valor);
+                    }
+                }
             }
             data.add(newRecord);
         }
@@ -929,36 +940,46 @@ public class Metodos {
         String dom="";
 
         HashMap<String, Object> dominio= new HashMap<>();
-        if(campo.equals("INPRP") ){
-            dom="ZINPRP";
-            campo="DESC_"+campo;
-        }else
-        if(campo.equals("ESREG") ){
-            dom="ZESREG";
-            campo="DESC_"+campo;
-        }
-        if(campo.equals("WAERS") ){
-            dom="MONEDA";
-            campo="DESC_"+campo;
-            if(valor.equals("PEN")){
-                valor="00001";
-            }else if(valor.equals("USD")){
-                valor="00002";
-            }else if(valor.equals("EUR")){
-                valor="00003";
-            }
-        }
-        if(campo.equals("ESCSG")){
-            dom="ZESCSG";
-            campo="DESC_"+campo;
-        }
-        if(campo.equals("ESPRC")){
-            dom="ZESPRC";
-            campo="DESC_"+campo;
-        }
 
-        //descripcion= jcoConsultaGeneralService.BuscarDominio(dom,valor);
-        descripcion=ObtenerDominio(dom,valor);
+        if(campo.equals("CALIDA")){
+            campo="DESC_"+campo;
+            descripcion=ObtenerCalidad(valor);
+
+        }else{
+            if(campo.equals("INPRP") ){
+                dom="ZINPRP";
+                campo="DESC_"+campo;
+            }else
+            if(campo.equals("ESREG") ){
+                dom="ZESREG";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("WAERS") ){
+                dom="MONEDA";
+                campo="DESC_"+campo;
+                if(valor.equals("PEN")){
+                    valor="00001";
+                }else if(valor.equals("USD")){
+                    valor="00002";
+                }else if(valor.equals("EUR")){
+                    valor="00003";
+                }
+            }
+            if(campo.equals("ESCSG")){
+                dom="ZESCSG";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESPRC")){
+                dom="ZESPRC";
+                campo="DESC_"+campo;
+            }if(campo.equals("ESPRC")){
+                dom="ZESPRC";
+                campo="DESC_"+campo;
+            }
+            descripcion=ObtenerDominio(dom,valor);
+       }
+
+
 
         dominio.put(campo, descripcion);
 
@@ -1145,5 +1166,77 @@ public class Metodos {
         }
 
         return domDto;
+    }
+
+    public String ObtenerCalidad(String valor)throws Exception{
+
+        String calidad="";
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("QUERY_TABLE", "ZFLCNS");
+        imports.put("DELIMITER", "|");
+        imports.put("P_USER", "FGARCIA");
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        MaestroOptions mo = new MaestroOptions();
+        HashMap<String, Object> record = new HashMap<String, Object>();
+        record.put("WA", "CDCNS = '39' OR CDCNS = '40' OR CDCNS = '41'");
+        tmpOptions.add(record);
+
+        String[]fields={"VAL01", "VAL02"};
+
+        EjecutarRFC exec= new EjecutarRFC();
+        MaestroExport me=exec.Execute_ZFL_RFC_READ_TABLE(imports,tmpOptions,fields);
+
+        List<HashMap<String, Object>> data=me.getData();
+        boolean b=false;
+        for (int i=0; i<data.size();i++){
+            HashMap<String, Object> d=data.get(i);
+
+
+            for (Map.Entry<String, Object> entry :d.entrySet()) {
+                String key=entry.getKey();
+                String value=entry.getValue().toString();
+                if(key.equals("VAL01") && value.equals(valor)){
+                    b=true;
+                }
+                if(b==true && key.equals("VAL02")){
+                    calidad=value;
+                }
+            }
+        }
+
+        return calidad;
+    }
+
+    public String ConvertirFecha(JCoTable jCoTable, String tabla){
+
+        String fecha="";
+
+        try {
+            JCoField fieldF = jCoTable.getField(tabla);
+            Date date=fieldF.getDate();
+            SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+            fecha = dia.format(date);
+        }catch (Exception e){
+            fecha="";
+        }
+
+
+        return fecha;
+    }
+    public String ConvertirHora(JCoTable jCoTable, String tabla){
+
+        String hora="";
+        try {
+            JCoField fieldH = jCoTable.getField(tabla);
+            Date time = fieldH.getTime();
+            SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
+            hora = hour.format(time);
+        }catch (Exception e){
+            hora="";
+        }
+
+        return hora;
     }
 }
