@@ -308,11 +308,9 @@ public class EjecutarRFC {
 
                         if (fields[k].trim().equals(key.trim())) {
 
-                           /* if (field.getTypeAsString().equals("TIME")) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-                                value = dateFormat.format(value);
-                            }*/
+
                            try {
+
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
 
                                    String date = String.valueOf(value);
@@ -357,7 +355,25 @@ public class EjecutarRFC {
                     Object value = "";
                     try{
                         value = ArrayResponse[j].trim();
+
+                        if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
+                            SimpleDateFormat parseador= new SimpleDateFormat("hhmmss");
+                            SimpleDateFormat formateador = new SimpleDateFormat("hh:mm:ss");
+                            Date hora = parseador.parse(value.toString());
+                            value = formateador.format(hora);
+                        }
+                        if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
+                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")) {
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date fecha = parseador.parse(value.toString());
+                            value=formateador.format(fecha);
+
+
+                        }
                     }catch (Exception e){
+
                         value="";
 
                     }
