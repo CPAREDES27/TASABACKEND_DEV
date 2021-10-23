@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -134,6 +135,11 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             }).orElse(new HashMap<>());
 
             totales.put("CNPDS", totalGenPescDesc.get());
+
+            for (Map.Entry<String, Object> entry : totales.entrySet()) {
+                double data = Double.parseDouble(totales.get(entry.getKey()).toString());
+                totales.replace(entry.getKey(), Math.round(data * 100.00) / 100.00);
+            }
 
             listPescaDescargadaSum.add(totales);
 
