@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -50,16 +51,17 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             /**
              * Agrupar items por fecha y suma de cantidades de pesca descargadas por fecha (2 decimales) y total general
              */
+
             AtomicReference<Double> totalGenPescDesc = new AtomicReference<>((double) 0);
-            int numDays = 1;
+            AtomicInteger numDays = new AtomicInteger(1);
             ArrayList<HashMap<String, Object>> listDescSum = new ArrayList<>();
             str_dsd.stream().forEach(dsd -> {
                 totalGenPescDesc.updateAndGet(v -> new Double((double) (v + Double.parseDouble(dsd.get("CNPDS").toString()))));
-                HashMap<String, Object> descDiaSum = listDescSum.stream().filter(descSum -> descSum.get("FIDES").toString().equals(dsd.get("FIDES").toString())).findFirst().get();
-                if (descDiaSum != null) {
+                HashMap<String, Object> descDiaSum = listDescSum.stream().filter(descSum -> descSum.get("FIDES").toString().equals(dsd.get("FIDES").toString())).findFirst().orElse(null);
+                if (descDiaSum == null) {
                     descDiaSum = str_dsd.stream().filter(dsdFilter -> dsdFilter.get("FIDES").toString().equals(dsd.get("FIDES").toString())).reduce((dsdPrev, dsdCurr) -> {
                         double cndpsSum = Double.parseDouble(dsdPrev.get("CNPDS").toString()) + Double.parseDouble(dsdCurr.get("CNPDS").toString());
-                        double cndpsSumRound = Math.round(cndpsSum * 100) / 100;
+                        double cndpsSumRound = Math.round(cndpsSum * 100.00) / 100.00;
                         HashMap<String, Object> desc = new HashMap<>();
                         desc.put("CNPDS", cndpsSumRound);
                         desc.put("FIDES", dsdCurr.get("FIDES").toString());
@@ -68,7 +70,6 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
                     }).orElse(null);
 
                     listDescSum.add(descDiaSum);
-
                 }
             });
 
@@ -80,23 +81,64 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
                     HashMap<String, Object> planta = str_pta.stream().filter(pta -> pta.get("CDPTA").toString().equals(d.get("CDPTA").toString())).findFirst().orElse(null);
                     if (planta != null) {
                         double cndps = Double.parseDouble(d.get("CNPDS").toString());
-                        double cndpsRound = Math.round(cndps * 100) / 100;
+                        double cndpsRound = Math.round(cndps * 100.00) / 100.00;
                         String plantaDesc = "Planta" + planta.get("CDPTA");
                         desc.put(plantaDesc, cndpsRound);
                     }
                 });
 
-                double promedio = totalGenPescDesc.get() / numDays;
-                double promedioRound = Math.round(promedio * 100) / 100;
+                double promedio = totalGenPescDesc.get() / numDays.get();
+                double promedioRound = Math.round(promedio * 100.00) / 100.00;
 
                 desc.put("DAYS", numDays);
                 desc.put("PROM", promedioRound);
 
+                numDays.getAndIncrement();
+
                 return desc;
             }).collect(Collectors.toList());
 
+            /**
+             * Calcular los totales de las pescas descargadas y plantas
+             */
+            HashMap<String, Object> totales = listPescaDescargadaSum.stream().reduce((descAcum, desc) -> {
+                double malabSur = desc.get("Planta0005") != null ? Double.parseDouble(desc.get("Planta0005").toString()) : 0;
+                double chimb = desc.get("Planta0119") != null ? Double.parseDouble(desc.get("Planta0119").toString()) : 0;
+                double samanco = desc.get("Planta0009") != null ? Double.parseDouble(desc.get("Planta0009").toString()) : 0;
+                double supe = desc.get("Planta0010") != null ? Double.parseDouble(desc.get("Planta0010").toString()) : 0;
+                double vegueta = desc.get("Planta0011") != null ? Double.parseDouble(desc.get("Planta0011").toString()) : 0;
+                double callaoNor = desc.get("Planta0012") != null ? Double.parseDouble(desc.get("Planta0012").toString()) : 0;
+                double piscoSur = desc.get("Planta0015") != null ? Double.parseDouble(desc.get("Planta0015").toString()) : 0;
+                double matarani = desc.get("Planta0018") != null ? Double.parseDouble(desc.get("Planta0018").toString()) : 0;
+
+                double totalMalabSur = descAcum.get("Planta0005") != null ? Double.parseDouble(descAcum.get("Planta0005").toString()) : 0;
+                double totalChimb = descAcum.get("Planta0119") != null ? Double.parseDouble(descAcum.get("Planta0119").toString()) : 0;
+                double totalSamanco = descAcum.get("Planta0009") != null ? Double.parseDouble(descAcum.get("Planta0009").toString()) : 0;
+                double totalSupe = descAcum.get("Planta0010") != null ? Double.parseDouble(descAcum.get("Planta0010").toString()) : 0;
+                double totalVegueta = descAcum.get("Planta0011") != null ? Double.parseDouble(descAcum.get("Planta0011").toString()) : 0;
+                double totalCallaoNor = descAcum.get("Planta0012") != null ? Double.parseDouble(descAcum.get("Planta0012").toString()) : 0;
+                double totalPiscoSur = descAcum.get("Planta0015") != null ? Double.parseDouble(descAcum.get("Planta0015").toString()) : 0;
+                double totalMatarani = descAcum.get("Planta0018") != null ? Double.parseDouble(descAcum.get("Planta0018").toString()) : 0;
+
+                HashMap<String, Object> total = new HashMap<>();
+                total.put("Planta0005", totalMalabSur + malabSur);
+                total.put("Planta0119", totalChimb + chimb);
+                total.put("Planta0009", totalSamanco + samanco);
+                total.put("Planta0010", totalSupe + supe);
+                total.put("Planta0011", totalVegueta + vegueta);
+                total.put("Planta0012", totalCallaoNor + callaoNor);
+                total.put("Planta0015", totalPiscoSur + piscoSur);
+                total.put("Planta0018", totalMatarani + matarani);
+
+                return total;
+            }).orElse(new HashMap<>());
+
+            totales.put("CNPDS", totalGenPescDesc.get());
+
+            listPescaDescargadaSum.add(totales);
+
             pd.setStr_pta(str_pta);
-            pd.setStr_dsd(listDescSum);
+            pd.setStr_dsd(listPescaDescargadaSum);
             pd.setT_mensaje(t_mensaje);
             pd.setMensaje("Ok");
 
