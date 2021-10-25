@@ -153,7 +153,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         ;
         JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
         JCoParameterList importx = stfcConnection.getImportParameterList();
-
         importx.setValue("DELIMITER","|");
         importx.setValue("QUERY_TABLE","LFA1");
         importx.setValue("ROWCOUNT",codigo.getCodigo());

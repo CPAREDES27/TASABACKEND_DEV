@@ -38,8 +38,8 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
 
             logger.error("ObtenerEmbarcaciones_2");
-            List<MaestroOptions> option2 = importsParam.getOption();
-            List<MaestroOptionsKey> options2 = importsParam.getOptions();
+            List<MaestroOptions> option2 = importsParam.getOption2();
+            List<MaestroOptionsKey> options2 = importsParam.getOptions2();
 
 
             List<HashMap<String, Object>> tmpOptions2 = new ArrayList<HashMap<String, Object>>();
