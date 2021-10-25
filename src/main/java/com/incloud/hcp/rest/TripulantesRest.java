@@ -209,4 +209,15 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+    @PostMapping(value = "/PDFProduce", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> GenerarPDFProduce() {
+
+        try {
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFProduce())
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

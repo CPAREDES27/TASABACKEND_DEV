@@ -12,6 +12,6 @@ public interface JCOPDFsService {
     PDFExports GenerarPDFTrimestral(PDFZarpeImports imports)throws Exception;
     PDFExports GenerarPDFTrabajoFF()throws Exception;
     PDFExports GenerarPDFValeViveres(PDFValeViveresImports imports)throws Exception;
-
+    PDFExports GenerarPDFProduce()throws Exception;
 
 }

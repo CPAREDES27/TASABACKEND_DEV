@@ -37,8 +37,10 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
 
             JCoParameterList imports = function.getImportParameterList();
             imports.setValue("IP_TPOPE", importsParam.getIp_tpope());
-            imports.setValue("IP_FINIT", formato.parse(importsParam.getIp_finit()));
-            imports.setValue("IP_FFINT", formato.parse(importsParam.getIp_ffint()));
+           // imports.setValue("IP_FINIT", formato.parse(importsParam.getIp_finit()));
+           // imports.setValue("IP_FFINT", formato.parse(importsParam.getIp_ffint()));
+            imports.setValue("IP_FINIT", importsParam.getIp_finit());
+            imports.setValue("IP_FFINT", importsParam.getIp_ffint());
             imports.setValue("IP_ZONA", importsParam.getIp_zona());
 
             //JCoParameterList jcoTables = function.getTableParameterList();
@@ -76,42 +78,25 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
     public ReqPescaDto RegistrarRequerimientoPesca(ReqPescaOptions importsParam) throws Exception {
 
         ReqPescaDto req_p = new ReqPescaDto();
-        List<RequerimientoPesca> listaReqPesca = new ArrayList<RequerimientoPesca>();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
         try {
-            List<RequerimientoPesca> options = importsParam.getReqList();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                RequerimientoPesca mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("NRREQ", mo.getNrreq());
-                record.put("CDPTA", mo.getCdpta());
-                record.put("ZDSZAR", mo.getZdszar());
-                if(mo.getFhreq() != null && !mo.getFhreq().isEmpty()){record.put("FHREQ", formato.parse(mo.getFhreq()));}else{record.put("FHREQ", null);}
-                //record.put("FHREQ", formato.parse(mo.getFhreq()));
-                record.put("HRREQ", mo.getHrreq());
-                record.put("CNPRQ", mo.getCnprq());
-                record.put("CNPCM", mo.getCnpcm());
-                record.put("AUFNR", mo.getAufnr());
-                tmpOptions.add(record);
-            }
 
-
-            HashMap<String, Object> imports = new HashMap<String, Object>();
-            imports.put("IP_TPOPE", importsParam.getIp_tpope());
-            imports.put("IP_FINIT", formato.parse(importsParam.getIp_finit()));
-            imports.put("IP_FFINT", formato.parse(importsParam.getIp_ffint()));
-            imports.put("IP_ZONA", importsParam.getIp_zona());
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-
             JCoRepository repo = destination.getRepository();
             JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CARGA_REQ_PESCA);
             JCoParameterList jcoTables = function.getImportParameterList();
 
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("IP_TPOPE", importsParam.getIp_tpope());
+            imports.put("IP_FINIT", importsParam.getIp_finit());
+            imports.put("IP_FFINT", importsParam.getIp_ffint());
+            imports.put("IP_ZONA", importsParam.getIp_zona());
+
+
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, imports);
-            exec.setTable(jcoTables, "IT_ZFLRPS", tmpOptions);
+            exec.setTable(jcoTables, Tablas.IT_ZFLRPS, importsParam.getIt_zflrps());
 
             function.execute(destination);
 
