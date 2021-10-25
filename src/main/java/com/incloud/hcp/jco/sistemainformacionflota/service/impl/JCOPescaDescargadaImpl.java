@@ -7,6 +7,8 @@ import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public PescaDescargadaExports PescaDescargada(PescaDescargadaImports imports) throws Exception {
 
@@ -56,6 +59,20 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             AtomicReference<Double> totalGenPescDesc = new AtomicReference<>((double) 0);
             AtomicInteger numDays = new AtomicInteger(1);
             ArrayList<HashMap<String, Object>> listDescSum = new ArrayList<>();
+
+
+            ArrayList<HashMap<String, Object>> listDescargasDia = str_dsd.stream().map(desc -> {
+                double cnpds = Math.round(Double.parseDouble(desc.get("CNPDS").toString()) * 100.00) / 100.00;
+                HashMap<String, Object> descargaDia = new HashMap<>();
+                descargaDia.put("CNPDS", cnpds);
+                descargaDia.put("FIDES", desc.get("FIDES"));
+
+                return descargaDia;
+            }).collect(Collectors.groupingBy(dsd -> dsd.get("FIDES").toString(), Collectors.summingDouble(descargaDia -> Double.parseDouble(descargaDia.get("CNPDS")))));
+
+            logger.debug("----> Descargas agrupadas: {}", listDescargasDia);
+
+            /*
             str_dsd.stream().forEach(dsd -> {
                 totalGenPescDesc.updateAndGet(v -> new Double((double) (v + Double.parseDouble(dsd.get("CNPDS").toString()))));
                 HashMap<String, Object> descDiaSum = listDescSum.stream().filter(descSum -> descSum.get("FIDES").toString().equals(dsd.get("FIDES").toString())).findFirst().orElse(null);
@@ -72,7 +89,7 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
 
                     listDescSum.add(descDiaSum);
                 }
-            });
+            });*/
 
             /**
              * Adicionar días, promedios y asignar las cantidades de pesca descargada por planta, redondearlas a 2 decimales
