@@ -6,6 +6,18 @@ public class HorometroListDto {
     private String NRMAR;
     private String NREVN;
     private String FIEVN;
+    private String CDEMB;
+
+
+    public String getCDEMB() {
+        return CDEMB;
+    }
+
+    public void setCDEMB(String CDEMB) {
+        this.CDEMB = CDEMB;
+    }
+
+
 
     public String getFIEVN() {
         return FIEVN;

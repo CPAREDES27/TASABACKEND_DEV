@@ -1,9 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.service;
 
-import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
-import com.incloud.hcp.jco.tripulantes.dto.PDFZarpeImports;
-import com.incloud.hcp.jco.tripulantes.dto.ProtestosImports;
-import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionImports;
+import com.incloud.hcp.jco.tripulantes.dto.*;
 
 public interface JCOPDFsService {
 
@@ -14,7 +11,7 @@ public interface JCOPDFsService {
     PDFExports GenerarPDFRolTripulacion(RolTripulacionImports imports)throws Exception;
     PDFExports GenerarPDFTrimestral(PDFZarpeImports imports)throws Exception;
     PDFExports GenerarPDFTrabajoFF()throws Exception;
-    PDFExports GenerarPDFValeViveres()throws Exception;
+    PDFExports GenerarPDFValeViveres(PDFValeViveresImports imports)throws Exception;
 
 
 }

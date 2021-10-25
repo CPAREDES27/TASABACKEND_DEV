@@ -2,7 +2,6 @@ package com.incloud.hcp.util;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.sap.conn.jco.*;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -286,7 +285,7 @@ public class EjecutarRFC {
     public List<HashMap<String, Object>>   ObtenerListObj(JCoTable jcoTable, JCoTable jcoFields, String[] fields)throws Exception{
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-
+        Metodos exec= new Metodos();
 
         if(fields.length>=1) {
             for (int i = 0; i < jcoTable.getNumRows(); i++) {
@@ -309,11 +308,9 @@ public class EjecutarRFC {
 
                         if (fields[k].trim().equals(key.trim())) {
 
-                           /* if (field.getTypeAsString().equals("TIME")) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-                                value = dateFormat.format(value);
-                            }*/
+
                            try {
+
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
 
                                    String date = String.valueOf(value);
@@ -324,7 +321,18 @@ public class EjecutarRFC {
                            }catch (Exception e){
                                value=String.valueOf(value);
                            }
+
                             newRecord.put(key, value);
+                           Metodos me=new Metodos();
+                            if(key.equals("INPRP") || key.equals("ESREG")){
+                                HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
+                                for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                                    String campo=entry.getKey();
+                                    Object valor=entry.getValue();
+                                    newRecord.put(campo, valor);
+                                }
+                            }
+
 
                         }
                     }
@@ -347,16 +355,42 @@ public class EjecutarRFC {
                     Object value = "";
                     try{
                         value = ArrayResponse[j].trim();
+
+                        if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
+                            SimpleDateFormat parseador= new SimpleDateFormat("hhmmss");
+                            SimpleDateFormat formateador = new SimpleDateFormat("hh:mm:ss");
+                            Date hora = parseador.parse(value.toString());
+                            value = formateador.format(hora);
+                        }
+                        if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
+                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")) {
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date fecha = parseador.parse(value.toString());
+                            value=formateador.format(fecha);
+
+
+                        }
                     }catch (Exception e){
+
                         value="";
 
                     }
 
                     newRecord.put(key, value);
-
+                    Metodos me=new Metodos();
+                    if(key.equals("INPRP") || key.equals("ESREG")){
+                        HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
+                        for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                            String campo=entry.getKey();
+                            Object valor=entry.getValue();
+                            newRecord.put(campo, valor);
+                        }
+                    }
 
                 }
-                ;
+
                 data.add(newRecord);
             }
         }

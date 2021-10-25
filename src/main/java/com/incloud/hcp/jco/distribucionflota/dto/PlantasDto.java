@@ -3,12 +3,21 @@ package com.incloud.hcp.jco.distribucionflota.dto;
 import java.util.List;
 
 public class PlantasDto {
+    private String CodPlanta;
     private String PlantaName;
     private String Tot_emb;
     private String Tot_bod;
     private String Tot_decl;
     private String Tot_Est;
     private String Tot_PescaReq;
+
+    public String getCodPlanta() {
+        return CodPlanta;
+    }
+
+    public void setCodPlanta(String codPlanta) {
+        CodPlanta = codPlanta;
+    }
 
     public String getTot_PescaReq() {
         return Tot_PescaReq;

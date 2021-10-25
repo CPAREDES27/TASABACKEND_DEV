@@ -33,7 +33,7 @@ public class Constantes {
     public static String ZFL_RFC_VAL_MAREA_PRODUCE="ZFL_RFC_VAL_MAREA_PRODUCE";
     public static String ZFL_RFC_COST_RACI_VALEV="ZFL_RFC_COST_RACI_VALEV";
     public static String ZFL_RFC_DELETE_PO ="ZFL_RFC_DELETE_PO";
-
+    public static String ZFL_RFC_DELETE_RECORDS ="ZFL_RFC_DELETE_RECORDS";
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";
     public static String CODTIPOEVENTODESCARGA="6";
@@ -75,13 +75,14 @@ public class Constantes {
     //Tripulantes
     public static String ZFL_RFC_REGZAR_ADM_REGZAR ="ZFL_RFC_REGZAR_ADM_REGZAR";
     public static String ZFL_RFC_REGROL_ADM_REGROL ="ZFL_RFC_REGROL_ADM_REGROL";
-    public static String ZPM_RFC_ADMIN_AVISO_AVERIA="ZPM_RFC_ADMIN_AVISO_AVERIA";
+   // public static String ZPM_RFC_ADMIN_AVISO_AVERIA="ZPM_RFC_ADMIN_AVISO_AVERIA";
     public static String ZHR_RFC_FLOTA_REPORT_DES_TRIPU="ZHR_RFC_FLOTA_REPORT_DES_TRIPU";
     public static String ZFL_RFC_REGPRT_ADM_REGPRT="ZFL_RFC_REGPRT_ADM_REGPRT";
     public static String ZFL_RFC_TFF_CON_TRA_FUE_FAE="ZFL_RFC_TFF_CON_TRA_FUE_FAE";
     public static String ZFL_RFC_TFF_ACT_TRA_FUE_FAE="ZFL_RFC_TFF_ACT_TRA_FUE_FAE";
     public static String ZFL_RFC_IMPR_FORM_PRODUCE="ZFL_RFC_IMPR_FORM_PRODUCE";
     public static String ZFL_RFC_REG_SALUD_TRIP="ZFL_RFC_REG_SALUD_TRIP";
+
 
     //Sistema Informacion Flota
     public static String ZFL_RFC_PESCA_DECLA="ZFL_RFC_PESCA_DECLA";

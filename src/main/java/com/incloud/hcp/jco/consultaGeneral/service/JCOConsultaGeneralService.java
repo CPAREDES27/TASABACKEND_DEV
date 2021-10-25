@@ -6,4 +6,5 @@ import com.incloud.hcp.jco.consultaGeneral.dto.ConsultaGeneralImports;
 public interface JCOConsultaGeneralService {
 
     ConsultaGeneralExports ConsultaGeneral(ConsultaGeneralImports importsParam)throws Exception;
+    String BuscarDominio(String nomDomino, String valor)throws Exception;
 }

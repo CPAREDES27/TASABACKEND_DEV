@@ -8,7 +8,25 @@ public class BusqAdicEmbarExports {
     private List<HashMap<String, Object>> s_ps;
     private List<HashMap<String, Object>> s_ee;
     private List<HashMap<String, Object>> s_be;
+    private List<HashMap<String, Object>> str_hor;
+    private List<HashMap<String, Object>> t_mensaje;
     private String mensaje;
+
+    public List<HashMap<String, Object>> getStr_hor() {
+        return str_hor;
+    }
+
+    public void setStr_hor(List<HashMap<String, Object>> str_hor) {
+        this.str_hor = str_hor;
+    }
+
+    public List<HashMap<String, Object>> getT_mensaje() {
+        return t_mensaje;
+    }
+
+    public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
+        this.t_mensaje = t_mensaje;
+    }
 
     public String getMensaje() {
         return mensaje;

@@ -35,4 +35,31 @@ public class PDFValeViveresConstantes {
     public static String copia="COPIA";
     public static String guion="_____________________";
     public static String[] cabecerasTabla={"Fecha", "N° Raciones", "Costo Unit(S/.)", "Descripcion", "Total(S/.)", "Comentario"};
+
+
+    //Tabla S_DATA RFC Zfl_Rfc_Lect_Maes_Viver
+    public static String WERKS="WERKS";	//NOMBRE CENTRO
+    public static String LGORT="LGORT";	//NOMBRE ALMACEN
+    public static String NRVVI="NRVVI";	//numero de vale de vivere
+    public static String FCVVI="FCVVI";	//FECHA CREACION VALE
+    public static String STCD1="STCD1";  //RUC
+    public static String MREMB="MREMB";	// MATRICULA
+    public static String DSTPO="DSTPO";	//DESCRIPCION TEMPORADA
+    public static String INPRP="INPRP";	//INDICADOR DE PROPIEDAD
+    public static String ARCMC="ARCMC";	//CODIGO ARMADOR
+    public static String NAME1="NAME1";	//RAZON SOCIAL 1
+    public static String DIREC="DIREC"; //DIRECCION
+    public static String NMEMB ="NMEMB"; //NOMBRE EMBARCACION
+    public static String CDPVE="CDPVE";	//CODIGO PROVEEDURIA poner 0 adelantes total 10 cifras
+    public static String NAME2="NAME2";	//RAZON SOCIAL 2
+    public static String FITVS="FITVS";	//FECHA PRIMER VALE
+    public static String FFTVS="FFTVS";	//FECHA SEGUNDO VALE
+
+
+    //Tablas S_POSICION RFC Zfl_Rfc_Lect_Posi_Viver
+    public static String DSSUM="DSSUM";	//DESCRIPCION VALE
+    public static String CNRAC="CNRAC";	//TOTAL RACIONES
+    public static String CUSUM="CUSUM";	//COSTO UNITARIO
+    public static String QTSUM="QTSUM";	//COSTO TOTAL
+
 }

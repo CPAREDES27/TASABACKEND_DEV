@@ -1,5 +1,8 @@
 package com.incloud.hcp.util;
 
+import com.incloud.hcp.jco.consultaGeneral.service.JCOConsultaGeneralService;
+import com.incloud.hcp.jco.dominios.dto.*;
+import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
 import com.sap.conn.jco.*;
@@ -7,6 +10,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +20,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class Metodos {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private JCODominiosService jcoDominiosService;
+
+    @Autowired
+    private JCOConsultaGeneralService jcoConsultaGeneralService;
 
     public List<HashMap<String, Object>> ListarObjetos(JCoTable tableExport) throws Exception {
 
@@ -55,6 +66,16 @@ public class Metodos {
 
                 }
                 newRecord.put(key, value);
+
+                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                        || key.equals("CALIDA")){
+                    HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
+                    for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                        String campo=entry.getKey();
+                        Object valor=entry.getValue();
+                        newRecord.put(campo, valor);
+                    }
+                }
             }
             data.add(newRecord);
         }
@@ -595,7 +616,15 @@ public class Metodos {
                             }
 
                             newRecord.put(key, value);
-
+                            if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                                    || key.equals("CALIDA")){
+                                HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
+                                for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                                    String campo=entry.getKey();
+                                    Object valor=entry.getValue();
+                                    newRecord.put(campo, valor);
+                                }
+                            }
                         }
                     }
 
@@ -688,6 +717,15 @@ public class Metodos {
                 }
 
                 newRecord.put(key, value);
+                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                        || key.equals("CALIDA")){
+                    HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
+                    for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                        String campo=entry.getKey();
+                        Object valor=entry.getValue();
+                        newRecord.put(campo, valor);
+                    }
+                }
             }
             data.add(newRecord);
         }
@@ -895,5 +933,310 @@ public class Metodos {
 
             return maestroOptions;
         }).collect(Collectors.toList());
+    }
+
+    public HashMap<String, Object> BuscarNombreDominio(String campo, String valor)throws Exception{
+        String descripcion="";
+        String dom="";
+
+        HashMap<String, Object> dominio= new HashMap<>();
+
+        if(campo.equals("CALIDA")){
+            campo="DESC_"+campo;
+            descripcion=ObtenerCalidad(valor);
+
+        }else{
+            if(campo.equals("INPRP") ){
+                dom="ZINPRP";
+                campo="DESC_"+campo;
+            }else
+            if(campo.equals("ESREG") ){
+                dom="ZESREG";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("WAERS") ){
+                dom="MONEDA";
+                campo="DESC_"+campo;
+                if(valor.equals("PEN")){
+                    valor="00001";
+                }else if(valor.equals("USD")){
+                    valor="00002";
+                }else if(valor.equals("EUR")){
+                    valor="00003";
+                }
+            }
+            if(campo.equals("ESCSG")){
+                dom="ZESCSG";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESPRC")){
+                dom="ZESPRC";
+                campo="DESC_"+campo;
+            }if(campo.equals("ESPRC")){
+                dom="ZESPRC";
+                campo="DESC_"+campo;
+            }
+            descripcion=ObtenerDominio(dom,valor);
+       }
+
+
+
+        dominio.put(campo, descripcion);
+
+        return dominio;
+    }
+    public String ObtenerDominio(String nomDominio, String valor)throws Exception{
+
+        String descripcion="";
+        try {
+            logger.error("BuscarDominio");
+
+
+            DominioParams dominioParams = new DominioParams();
+            dominioParams.setDomname(nomDominio);
+            dominioParams.setStatus("A");
+
+
+            List<DominioParams> ListDominioParams = new ArrayList<>();
+            ListDominioParams.add(dominioParams);
+
+
+
+            DominiosImports dominiosImports = new DominiosImports();
+            dominiosImports.setDominios(ListDominioParams);
+
+            DominioDto dominioDto= new DominioDto();
+            dominioDto = ListarDominio(dominiosImports);
+
+
+            List<DominiosExports> ListaDomExports = dominioDto.getData();
+
+            for (int i = 0; i < ListaDomExports.size(); i++) {
+
+                DominiosExports dominiosExports = ListaDomExports.get(i);
+                List<DominioExportsData> ListaDomExportData = dominiosExports.getData();
+
+                for (int j = 0; j < ListaDomExportData.size(); j++) {
+                    DominioExportsData dominioExportsData = ListaDomExportData.get(j);
+
+                    if (valor.equals(dominioExportsData.getId())) {
+                        descripcion = dominioExportsData.getDescripcion();
+
+                    }
+                }
+
+            }
+        }catch (Exception e){
+            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
+
+        }
+        return descripcion;
+    }
+
+    public DominioDto ListarDominio(DominiosImports imports) throws Exception {
+
+        logger.error("ListarDominios_");
+        DominioDto domDto = new DominioDto();
+        List<DominiosExports> listExports = new ArrayList<>();
+        Metodos metodo = new Metodos();
+        try {
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            logger.error("domParams="+imports.getDominios().get(0).toString());
+            for (DominioParams domParams : imports.getDominios()) {
+                logger.error("domParams="+domParams.getDomname());
+
+                if (domParams.getDomname().startsWith("Z")) {
+                    DominiosExports exports = new DominiosExports();
+
+                    List<DominioExportsData> listDatas = new ArrayList<>();
+                    JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GET_LISTAED);
+                    JCoParameterList importx = stfcConnection.getImportParameterList();
+                    importx.setValue("STATUS", domParams.getStatus());
+
+                    JCoParameterList tables = stfcConnection.getTableParameterList();
+                    JCoTable domtab = tables.getTable(Tablas.DOMTAB);
+                    domtab.appendRow();
+                    domtab.setValue("DOMNAME", domParams.getDomname());
+                    stfcConnection.execute(destination);
+                    JCoTable lis_out = tables.getTable(Tablas.LIST_OUT);
+
+                    exports.setDominio(domParams.getDomname());
+                    for (int i = 0; i < lis_out.getNumRows(); i++) {
+
+                        lis_out.setRow(i);
+                        DominioExportsData data = new DominioExportsData();
+                        HashMap<String, Object> newRecord = new HashMap<String, Object>();
+
+                        data.setDescripcion(lis_out.getString("DDTEXT"));
+                        data.setId(lis_out.getString("DOMVALUE_L"));
+                        listDatas.add(data);
+                    }
+                    exports.setData(listDatas);
+                    listExports.add(exports);
+                    domDto.setData(listExports);
+                    domDto.setMensaje("Ok");
+
+                } else {
+                    /**
+                     * Objetos especiales
+                     */
+                    DominiosExports exports = new DominiosExports();
+                    exports.setDominio(domParams.getDomname());
+
+                    List<DominioExportsData> listDatas = new ArrayList<>();
+
+                    if (domParams.getDomname().equals("MOTIVOMAREA_RPDC")) {
+                        DominioExportsData data1 = new DominioExportsData();
+                        DominioExportsData data2 = new DominioExportsData();
+                        data1.setId("A");
+                        data1.setDescripcion("Todos");
+
+                        data2.setId("1");
+                        data2.setDescripcion("CHD");
+
+                        listDatas.add(data1);
+                        listDatas.add(data2);
+                    }
+                    /**
+                     * Leer tablas en base al dominio
+                     */
+                    else {
+                        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+                        JCoParameterList importx = stfcConnection.getImportParameterList();
+                        String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
+                        String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
+                        String[] fieldname = metodo.returnField(domParams.getDomname());
+                        importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
+                        importx.setValue("DELIMITER", "|");
+                        importx.setValue("P_USER", "FGARCIA");
+
+
+                        JCoParameterList tables = stfcConnection.getTableParameterList();
+                        JCoTable tableImport = tables.getTable("OPTIONS");
+                        tableImport.appendRow();
+
+                        tableImport.setValue("WA", WA_READ_TABLE);
+                        stfcConnection.execute(destination);
+                        JCoTable lis_out = tables.getTable("DATA");
+                        JCoTable FIELDS = tables.getTable("FIELDS");
+
+
+                        for (int i = 0; i < lis_out.getNumRows(); i++) {
+                            lis_out.setRow(i);
+                            DominioExportsData data = new DominioExportsData();
+                            String ArrayResponse[] = lis_out.getString().split("\\|");
+                            for (int j = 0; j < FIELDS.getNumRows(); j++) {
+                                FIELDS.setRow(j);
+                                String key = (String) FIELDS.getValue("FIELDNAME");
+
+                                if (key.equals(fieldname[0])) {
+
+                                    Object value = ArrayResponse[j];
+                                    data.setId(value.toString().trim());
+
+
+                                }
+                                if (key.equals(fieldname[1])) {
+                                    Object values = ArrayResponse[j];
+                                    data.setDescripcion(values.toString().trim());
+                                }
+
+
+                            }
+                            listDatas.add(data);
+                        }
+                    }
+
+                    exports.setData(listDatas);
+                    listExports.add(exports);
+                    domDto.setData(listExports);
+                    domDto.setMensaje("Ok");
+
+
+                }
+            }
+
+
+        } catch (Exception e) {
+            domDto.setMensaje(e.getMessage());
+        }
+
+        return domDto;
+    }
+
+    public String ObtenerCalidad(String valor)throws Exception{
+
+        String calidad="";
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("QUERY_TABLE", "ZFLCNS");
+        imports.put("DELIMITER", "|");
+        imports.put("P_USER", "FGARCIA");
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        MaestroOptions mo = new MaestroOptions();
+        HashMap<String, Object> record = new HashMap<String, Object>();
+        record.put("WA", "CDCNS = '39' OR CDCNS = '40' OR CDCNS = '41'");
+        tmpOptions.add(record);
+
+        String[]fields={"VAL01", "VAL02"};
+
+        EjecutarRFC exec= new EjecutarRFC();
+        MaestroExport me=exec.Execute_ZFL_RFC_READ_TABLE(imports,tmpOptions,fields);
+
+        List<HashMap<String, Object>> data=me.getData();
+        boolean b=false;
+        for (int i=0; i<data.size();i++){
+            HashMap<String, Object> d=data.get(i);
+
+
+            for (Map.Entry<String, Object> entry :d.entrySet()) {
+                String key=entry.getKey();
+                String value=entry.getValue().toString();
+                if(key.equals("VAL01") && value.equals(valor)){
+                    b=true;
+                }
+                if(b==true && key.equals("VAL02")){
+                    calidad=value;
+                }
+            }
+        }
+
+        return calidad;
+    }
+
+    public String ConvertirFecha(JCoTable jCoTable, String tabla){
+
+        String fecha="";
+
+        try {
+            JCoField fieldF = jCoTable.getField(tabla);
+            Date date=fieldF.getDate();
+            SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+            fecha = dia.format(date);
+        }catch (Exception e){
+            fecha="";
+        }
+
+
+        return fecha;
+    }
+    public String ConvertirHora(JCoTable jCoTable, String tabla){
+
+        String hora="";
+        try {
+            JCoField fieldH = jCoTable.getField(tabla);
+            Date time = fieldH.getTime();
+            SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
+            hora = hour.format(time);
+        }catch (Exception e){
+            hora="";
+        }
+
+        return hora;
     }
 }

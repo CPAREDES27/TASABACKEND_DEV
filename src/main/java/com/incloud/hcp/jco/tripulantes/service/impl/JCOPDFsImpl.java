@@ -3770,21 +3770,47 @@ public class JCOPDFsImpl implements JCOPDFsService {
         document.save(path);
         document.close();
     }
-    public PDFExports GenerarPDFValeViveres()throws Exception{
+
+    public PDFExports GenerarPDFValeViveres(PDFValeViveresImports imports)throws Exception{
 
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
 
-        PantillaPDFValeViveres(path);
+        try {
+            PDFValeViveresDto dto=LectMaesViveres(imports.getNumValeVivere(), imports.getP_user());
 
-        Metodos exec = new Metodos();
+            List<PDFValeVivereDetalleDto>detalle=PosiViveres(imports.getNumValeVivere(), imports.getP_user());
 
-        pdf.setBase64(exec.ConvertirABase64(path));
-        pdf.setMensaje("Ok");
+            int totalRaciones=0;
+            float totalCosto=0;
+
+            for(int i=0; i<detalle.size();i++){
+
+                totalRaciones+= detalle.get(i).getRaciones();
+                totalCosto+=detalle.get(i).getTotal();
+
+            }
+
+             dto.setTotalRaciones(totalRaciones);
+             dto.setTotalCosto(totalCosto);
+
+
+            PantillaPDFValeViveres(path, dto, detalle);
+
+            Metodos exec = new Metodos();
+
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
+
+        }catch (Exception e){
+            pdf.setMensaje(e.getMessage());
+        }
+
+
 
         return pdf;
     }
-    public void PantillaPDFValeViveres(String path)throws IOException{
+    public void PantillaPDFValeViveres(String path, PDFValeViveresDto dto, List<PDFValeVivereDetalleDto> detalle)throws IOException{
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -3833,8 +3859,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(490, 790);
+        contentStream.showText(dto.getCentro());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
         contentStream.moveTextPositionByAmount(430, 777);
         contentStream.showText(PDFValeViveresConstantes.almacen);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(490, 777);
+        contentStream.showText(dto.getAlmacen());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3845,8 +3883,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(490, 764);
+        contentStream.showText(dto.getNroVale());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
         contentStream.moveTextPositionByAmount(430, 751);
         contentStream.showText(PDFValeViveresConstantes.fecha);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(490, 751);
+        contentStream.showText(dto.getFecha());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3856,9 +3906,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         contentStream.beginText();
+        contentStream.setFont(times, 8);
+        contentStream.moveTextPositionByAmount(490, 738);
+        contentStream.showText(dto.getTemporada());
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(font, 8   );
         contentStream.moveTextPositionByAmount(430, 715);
         contentStream.showText(PDFValeViveresConstantes.ruc);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8   );
+        contentStream.moveTextPositionByAmount(490, 715);
+        contentStream.showText(dto.getRuc());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3869,8 +3931,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(130, 715);
+        contentStream.showText(dto.getCodigoArmador());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(30, 700);
         contentStream.showText(PDFValeViveresConstantes.razonSocial);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(130, 700);
+        contentStream.showText(dto.getRazonSocialUno());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3879,18 +3953,22 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.showText(PDFValeViveresConstantes.direccion);
         contentStream.endText();
 
-        //incio
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(150, 685);
-        contentStream.showText("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        contentStream.moveTextPositionByAmount(130, 685);
+        contentStream.showText(dto.getDireccion());
         contentStream.endText();
-        //fin
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(30, 670);
         contentStream.showText(PDFValeViveresConstantes.nombreEmbarcacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(130, 670);
+        contentStream.showText(dto.getNombreEmbarcacion());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3901,14 +3979,35 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(490, 670);
+        contentStream.showText(dto.getMatricula());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(30, 655);
         contentStream.showText(PDFValeViveresConstantes.codigoProveeduria);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(130, 655);
+        contentStream.showText(dto.getCodigoProveeduria());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(430, 655);
         contentStream.showText(PDFValeViveresConstantes.indPropiedad);
+        contentStream.endText();
+
+        if(dto.getIndPropiedad().equals("P")){
+            dto.setIndPropiedad("PROPIA");
+        }
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(490, 655);
+        contentStream.showText(dto.getIndPropiedad());
         contentStream.endText();
 
         contentStream.beginText();
@@ -3919,11 +4018,73 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(130, 640);
+        contentStream.showText(dto.getRazonSocialDos());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(30, 625);
         contentStream.showText(PDFValeViveresConstantes.importeViveresConIgv);
         contentStream.endText();
 
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(170, 625);
+        contentStream.showText(String.valueOf(dto.getTotalCosto()));
+        contentStream.endText();
+
         drawTableCabeceraValeViveres(page, contentStream,590, 20, PDFValeViveresConstantes.cabecerasTabla);
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 7.5f);
+        contentStream.moveTextPositionByAmount(25, 560);
+        contentStream.showText(dto.getFechaValeUno());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 7.5f);
+        contentStream.moveTextPositionByAmount(25, 540);
+        contentStream.showText(dto.getFechaValeDos());
+        contentStream.endText();
+
+
+        int y=560;
+        for(int i=0; i<detalle.size(); i++){
+
+
+
+            PDFValeVivereDetalleDto detalleDto=detalle.get(i);
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(95, y);
+            contentStream.showText(String.valueOf(detalleDto.getRaciones()));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(120, y);
+            contentStream.showText(String.valueOf(detalleDto.getCostoUnitario()));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 7.5f);
+            contentStream.moveTextPositionByAmount(175, y);
+            contentStream.showText(String.valueOf(detalleDto.getDescripcion()));
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(360, y);
+            contentStream.showText(String.valueOf(detalleDto.getTotal()));
+            contentStream.endText();
+
+            y-=20;
+        }
+
+
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
@@ -3933,8 +4094,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(220, 520);
+        contentStream.moveTextPositionByAmount(100, 520);
+        contentStream.showText(String.valueOf(dto.getTotalRaciones()));
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(310, 520);
         contentStream.showText(PDFValeViveresConstantes.totalCosto);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(360, 520);
+        contentStream.showText(String.valueOf(dto.getTotalCosto()));
         contentStream.endText();
 
         drawCuadroValeViveres(contentStream, 280,30);
@@ -4155,6 +4328,93 @@ public class JCOPDFsImpl implements JCOPDFsService {
         }
 
 
+    }
+
+    public PDFValeViveresDto LectMaesViveres(String numVivere, String p_user)throws Exception{
+
+        PDFValeViveresDto dto=new PDFValeViveresDto();
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_LECT_MAES_VIVER);
+
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("P_USER", p_user);
+
+
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        JCoTable OPTIONS = tables.getTable(Tablas.OPTIONS);
+        OPTIONS.appendRow();
+        OPTIONS.setValue("TEXT", "NRVVI LIKE '"+numVivere+"'");
+
+        stfcConnection.execute(destination);
+
+        JCoTable S_DATA = tables.getTable(Tablas.S_DATA);
+
+
+
+        S_DATA.setRow(0);
+        dto.setCentro(S_DATA.getString(PDFValeViveresConstantes.WERKS));
+        dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.LGORT));
+        dto.setNroVale(S_DATA.getString(PDFValeViveresConstantes.NRVVI));
+        dto.setFecha(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FCVVI ));
+        dto.setRuc(S_DATA.getString(PDFValeViveresConstantes.STCD1));
+        dto.setMatricula(S_DATA.getString(PDFValeViveresConstantes.MREMB));
+        dto.setTemporada(S_DATA.getString(PDFValeViveresConstantes.DSTPO));
+        dto.setIndPropiedad(S_DATA.getString(PDFValeViveresConstantes.INPRP));
+        dto.setCodigoArmador(S_DATA.getString(PDFValeViveresConstantes.ARCMC));
+        dto.setRazonSocialUno(S_DATA.getString(PDFValeViveresConstantes.NAME1));
+        dto.setDireccion(S_DATA.getString(PDFValeViveresConstantes.DIREC));
+        dto.setNombreEmbarcacion(S_DATA.getString(PDFValeViveresConstantes.NMEMB));
+        dto.setCodigoProveeduria(S_DATA.getString(PDFValeViveresConstantes.CDPVE));
+        dto.setRazonSocialDos(S_DATA.getString(PDFValeViveresConstantes.NAME2));
+        dto.setFechaValeUno(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
+        dto.setFechaValeDos(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
+
+
+
+        return dto;
+    }
+
+    public List<PDFValeVivereDetalleDto> PosiViveres(String numVivere, String p_user)throws Exception{
+
+        List<PDFValeVivereDetalleDto> detalle=new ArrayList<>();
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_LECT_POSI_VIVER);
+
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("P_USER", p_user);
+        importx.setValue("P_CODE", numVivere);
+
+
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+
+
+        stfcConnection.execute(destination);
+
+        JCoTable S_POSICION = tables.getTable(Tablas.S_POSICION);
+
+        for(int i=0; i<S_POSICION.getNumRows(); i++){
+
+            S_POSICION.setRow(0);
+
+            PDFValeVivereDetalleDto dto=new PDFValeVivereDetalleDto();
+
+            float costoUnit=Float.parseFloat(S_POSICION.getString(PDFValeViveresConstantes.CUSUM));
+            float total=Float.parseFloat(S_POSICION.getString(PDFValeViveresConstantes.QTSUM));
+            int raciones=Integer.parseInt(S_POSICION.getString(PDFValeViveresConstantes.CNRAC));
+
+            dto.setDescripcion(S_POSICION.getString(PDFValeViveresConstantes.DSSUM));
+            dto.setCostoUnitario(costoUnit);
+            dto.setTotal(total);
+            dto.setRaciones(raciones);
+
+            detalle.add(dto);
+        }
+
+          return detalle;
     }
 
 }

@@ -1,6 +1,11 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
 public class HorometroExportDto {
+
+    private String matricula;
+    private String nombreEmbarcacion;
+    private String flota;
+    private String marea;
     private String fecha;
     private String motorPrincipal;
     private String motorAuxiliar;
@@ -10,6 +15,38 @@ public class HorometroExportDto {
     private String MotorAuxiliar5;
     private String panga;
     private String flujometro;
+
+    public String getMarea() {
+        return marea;
+    }
+
+    public void setMarea(String marea) {
+        this.marea = marea;
+    }
+
+    public String getFlota() {
+        return flota;
+    }
+
+    public void setFlota(String flota) {
+        this.flota = flota;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getNombreEmbarcacion() {
+        return nombreEmbarcacion;
+    }
+
+    public void setNombreEmbarcacion(String nombreEmbarcacion) {
+        this.nombreEmbarcacion = nombreEmbarcacion;
+    }
 
     public String getFecha() {
         return fecha;

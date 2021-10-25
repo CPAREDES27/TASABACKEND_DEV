@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.*;
+import com.incloud.hcp.jco.dominios.service.JCODominiosService;
+import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.util.Constantes;
@@ -7,8 +10,10 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -20,7 +25,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
+    @Autowired
+    private JCODominiosService jcoDominiosService;
     @Override
     public MaestroExport obtenerMaestro (MaestroImports importsParam) throws Exception {
 
@@ -54,6 +60,15 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             EjecutarRFC exec = new EjecutarRFC();
             me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
 
+            HashMap<String, Object> d=me.getData().get(0);
+            for (Map.Entry<String, Object> entry : d.entrySet()) {
+                String key=entry.getKey();
+                logger.error("NOMBRE CAMPO: "+key);
+                if(key.equals("INPRP")||key.equals("ESREG")){
+                    List<HashMap<String, Object >>dataConDominio=ListaDataConDominio(me,key);
+                    me.setData(dataConDominio);
+                }
+            }
         }catch (Exception e){
             me.setMensaje(e.getMessage());
         }
@@ -123,6 +138,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         String []fields=imports.getFields();
         EjecutarRFC exec = new EjecutarRFC();
         me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
+
+
+
+
         return me;
     }
 
@@ -410,42 +429,47 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         MaestroExport me;
 
         try {
-            String tabla=(Buscartabla(importsParam.getNombreAyuda()));
+            if(importsParam.getNombreAyuda().equals("BSQEMBHORO")){
+                dto=BuscarEmbaHorometro();
+            }else {
+                String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
-            logger.error("AyudasBusqueda TABLA= "+tabla);
-            //setear mapeo de parametros import
-            HashMap<String, Object> imports = new HashMap<String, Object>();
-            imports.put("QUERY_TABLE", tabla);
-            imports.put("DELIMITER", "|");
-            imports.put("NO_DATA", "");
-            imports.put("ROWSKIPS", "");
-            imports.put("ROWCOUNT", "200");
-            imports.put("P_USER", importsParam.getP_user());
-            imports.put("P_ORDER", "");
-            logger.error("AyudasBusqueda_2");
-            //setear mapeo de tabla options
+                logger.error("AyudasBusqueda TABLA= " + tabla);
+                //setear mapeo de parametros import
+                HashMap<String, Object> imports = new HashMap<String, Object>();
+                imports.put("QUERY_TABLE", tabla);
+                imports.put("DELIMITER", "|");
+                imports.put("NO_DATA", "");
+                imports.put("ROWSKIPS", "");
+                imports.put("ROWCOUNT", "200");
+                imports.put("P_USER", importsParam.getP_user());
+                imports.put("P_ORDER", "");
+                logger.error("AyudasBusqueda_2");
+                //setear mapeo de tabla options
 
-            List<MaestroOptions> options = BuscarOptions(importsParam.getNombreAyuda());
-            logger.error("AyudasBusqueda_3");
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                logger.error("AyudasBusqueda options= "+mo.getWa());
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
+                List<MaestroOptions> options = BuscarOptions(importsParam.getNombreAyuda());
+                logger.error("AyudasBusqueda_3");
+                List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+                for (int i = 0; i < options.size(); i++) {
+                    MaestroOptions mo = options.get(i);
+                    HashMap<String, Object> record = new HashMap<String, Object>();
+                    logger.error("AyudasBusqueda options= " + mo.getWa());
+                    record.put("WA", mo.getWa());
+                    tmpOptions.add(record);
+                }
+                logger.error("AyudasBusqueda_4");
+
+                String[] fields = BuscarFields(importsParam.getNombreAyuda());
+                logger.error("AyudasBusqueda_5");
+                //ejecutar RFC ZFL_RFC_READ_TABLE
+                EjecutarRFC exec = new EjecutarRFC();
+                me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+                logger.error("AyudasBusqueda_6");
+
+                dto.setData(me.getData());
+                dto.setMensaje("Ok");
             }
-            logger.error("AyudasBusqueda_4");
 
-            String []fields=BuscarFields(importsParam.getNombreAyuda());
-            logger.error("AyudasBusqueda_5");
-            //ejecutar RFC ZFL_RFC_READ_TABLE
-            EjecutarRFC exec = new EjecutarRFC();
-            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
-            logger.error("AyudasBusqueda_6");
-
-            dto.setData(me.getData());
-            dto.setMensaje("Ok");
         }catch (Exception e){
             dto.setMensaje(e.getMessage());
         }
@@ -626,5 +650,146 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return options;
     }
 
+    public AyudaBusquedaExports BuscarEmbaHorometro(){
+
+        AyudaBusquedaExports dto= new AyudaBusquedaExports();
+        try{
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+
+            importx.setValue("P_USER", "FGARCIA");
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable tableImport = tables.getTable(Tablas.P_OPTIONS);
+            tableImport.appendRow();
+            tableImport.setValue("WA", AyudaBusquedaOptions.BSQEMBHORO);
+            tableImport.appendRow();
+            tableImport.setValue("WA", AyudaBusquedaOptions.BSQEMBHORO1);
+
+            stfcConnection.execute(destination);
+
+            JCoTable STR_EMB = tables.getTable(Tablas.STR_EMB);
+
+            Metodos exec= new Metodos();
+            List<HashMap<String, Object>> data=exec.ObtenerListObjetos(STR_EMB,AyudaBusquedaFields.BSQEMBHORO) ;
+
+            dto.setData(data);
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
+    public HashMap<String, Object> BuscarNombreDominio(String nomCampo){
+        logger.error("BuscarNombreDominio");
+        HashMap<String, Object>data= new HashMap<>();
+
+        switch (nomCampo){
+            case "INPRP":
+                data.put("DOMINIO", "ZINPRP");
+                data.put("CAMPO", nomCampo);
+                break;
+            case "ESREG":
+                data.put("DOMINIO", "ZESREG");
+                data.put("CAMPO", nomCampo);
+                break;
+        }
+        //  logger.error("data1: "+data.get(0).toString());
+
+        return data;
+    }
+
+    public String BuscarDominio(String nomDomino, String valor)throws Exception{
+        logger.error("BuscarDominio");
+
+        String descripcion="";
+
+        DominioParams dominioParams= new DominioParams();
+        dominioParams.setDomname(nomDomino);
+        dominioParams.setStatus("A");
+
+        List<DominioParams> ListDominioParams= new ArrayList<>();
+        ListDominioParams.add(dominioParams);
+
+        DominiosImports dominiosImports=new DominiosImports();
+        dominiosImports.setDominios(ListDominioParams);
+
+        DominioDto dominioDto=jcoDominiosService.Listar(dominiosImports);
+
+        List<DominiosExports>ListaDomExports=dominioDto.getData();
+
+        for(int i=0; i<ListaDomExports.size();i++){
+            DominiosExports dominiosExports=ListaDomExports.get(i);
+            List<DominioExportsData> ListaDomExportData=dominiosExports.getData();
+
+            for(int j=0; j<ListaDomExportData.size();j++){
+                DominioExportsData dominioExportsData=ListaDomExportData.get(j);
+
+                if(valor.equals(dominioExportsData.getId())){
+                    descripcion=dominioExportsData.getDescripcion();
+
+                }
+            }
+
+        }
+        logger.error("descripcion: "+descripcion);
+        return descripcion;
+    }
+
+    public List<HashMap<String, Object>> ListaDataConDominio(MaestroExport me, String nomTabla)throws Exception{
+
+        List<HashMap<String, Object>> ndata= new ArrayList<>();
+        HashMap<String, Object> nombreDominio=BuscarNombreDominio(nomTabla);
+        String campo="";
+        String dom="";
+        for (Map.Entry<String, Object> entry :nombreDominio.entrySet()) {
+
+            if(entry.getKey().equals("DOMINIO")){
+                dom=entry.getValue().toString();
+
+            }else if(entry.getKey().equals("CAMPO")){
+                campo=entry.getValue().toString();
+
+            }
+        }
+
+        String valor="";
+
+        List<HashMap<String, Object>> data= me.getData();
+
+        for(int i=0; i<data.size();i++){
+            HashMap<String, Object> registro=data.get(i);
+
+            for (Map.Entry<String, Object> entry :registro.entrySet()) {
+
+                if(entry.getKey().equals(campo)){
+
+                    valor=entry.getValue().toString();
+
+                }
+            }
+
+            String descripcion="";
+            if(!valor.equals("")){
+                descripcion=BuscarDominio(dom, valor);
+            }
+
+
+            String field="DESC_"+campo;
+
+            registro.put(field, descripcion);
+
+            ndata.add(registro);
+        }
+
+        return ndata;
+    }
 
 }

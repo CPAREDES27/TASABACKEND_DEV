@@ -200,10 +200,10 @@ public class TripulantesRest {
         }
     }
     @PostMapping(value = "/PDFValeViveres", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFExports> GenerarPDFValeViveres() {
+    public ResponseEntity<PDFExports> GenerarPDFValeViveres(@RequestBody PDFValeViveresImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFValeViveres())
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFValeViveres(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
