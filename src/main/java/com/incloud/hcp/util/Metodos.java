@@ -135,7 +135,7 @@ public class Metodos {
         if (table.equals("UBICPLANTA")) {
             tablita = "ZFLUPT";
         }
-        if (table.equals("LITORAL")) {ConsultarPrecioMar
+        if (table.equals("LITORAL")) {
             tablita = "ZFLZLT";
         }else if (table.equals("GRUPOEMPRESA")) {
             tablita = "ZFLGRE";
