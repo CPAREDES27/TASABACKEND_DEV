@@ -55,22 +55,25 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             /**
              * Agrupar items por fecha y suma de cantidades de pesca descargadas por fecha (2 decimales) y total general
              */
-
+            /*
             AtomicReference<Double> totalGenPescDesc = new AtomicReference<>((double) 0);
             AtomicInteger numDays = new AtomicInteger(1);
-            ArrayList<HashMap<String, Object>> listDescSum = new ArrayList<>();
+            ArrayList<HashMap<String, Object>> listDescSum = new ArrayList<>();*/
 
-
-            ArrayList<HashMap<String, Object>> listDescargasDia = str_dsd.stream().map(desc -> {
+            /*
+            str_dsd.stream().map(desc -> {
                 double cnpds = Math.round(Double.parseDouble(desc.get("CNPDS").toString()) * 100.00) / 100.00;
                 HashMap<String, Object> descargaDia = new HashMap<>();
                 descargaDia.put("CNPDS", cnpds);
-                descargaDia.put("FIDES", desc.get("FIDES"));
+                descargaDia.put("FIDES", desc.get("FIDES").toString());
 
                 return descargaDia;
-            }).collect(Collectors.groupingBy(dsd -> dsd.get("FIDES").toString(), Collectors.summingDouble(descargaDia -> Double.parseDouble(descargaDia.get("CNPDS")))));
-
-            logger.debug("----> Descargas agrupadas: {}", listDescargasDia);
+            }).collect(Collectors.groupingBy(desc->desc.get("FIDES").toString(),Collectors.summarizingDouble(desc->Double.parseDouble(desc.get("CNPDS").toString())))).entrySet().forEach(desc->{
+                logger.debug("----> Descarga: {}", desc.getKey());
+                HashMap<String,Object> descargaDia=new HashMap<>();
+                descargaDia.put("CNPDS",desc.getKey());
+                descargaDia.put("FIDES",desc.getValue());
+            });*/
 
             /*
             str_dsd.stream().forEach(dsd -> {
@@ -94,6 +97,7 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             /**
              * Adicionar días, promedios y asignar las cantidades de pesca descargada por planta, redondearlas a 2 decimales
              */
+            /*
             List<HashMap<String, Object>> listPescaDescargadaSum = listDescSum.stream().map((desc) -> {
                 str_dsd.stream().filter(d -> d.get("FIDES").toString().equals(desc.get("FIDES").toString())).forEach(d -> {
                     HashMap<String, Object> planta = str_pta.stream().filter(pta -> pta.get("CDPTA").toString().equals(d.get("CDPTA").toString())).findFirst().orElse(null);
@@ -114,11 +118,12 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
                 numDays.getAndIncrement();
 
                 return desc;
-            }).collect(Collectors.toList());
+            }).collect(Collectors.toList());*/
 
             /**
              * Calcular los totales de las pescas descargadas y plantas
              */
+            /*
             HashMap<String, Object> totales = listPescaDescargadaSum.stream().reduce((descAcum, desc) -> {
                 double malabSur = desc.get("Planta0005") != null ? Double.parseDouble(desc.get("Planta0005").toString()) : 0;
                 double chimb = desc.get("Planta0119") != null ? Double.parseDouble(desc.get("Planta0119").toString()) : 0;
@@ -158,10 +163,10 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
                 totales.replace(entry.getKey(), Math.round(data * 100.00) / 100.00);
             }
 
-            listPescaDescargadaSum.add(totales);
+            listPescaDescargadaSum.add(totales);*/
 
             pd.setStr_pta(str_pta);
-            pd.setStr_dsd(listPescaDescargadaSum);
+            pd.setStr_dsd(str_dsd);
             pd.setT_mensaje(t_mensaje);
             pd.setMensaje("Ok");
 
