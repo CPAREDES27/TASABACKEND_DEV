@@ -102,6 +102,7 @@ public class Tablas {
 
     /*REQUERIMIENTO DE PESCA*/
     public static String ET_ZFLRPS="ET_ZFLRPS";
+    public static String IT_ZFLRPS="IT_ZFLRPS";
 
     public static String T_MENSAJE="T_MENSAJE";
     public static String T_MENSAJES="T_MENSAJES";

@@ -4417,4 +4417,388 @@ public class JCOPDFsImpl implements JCOPDFsService {
           return detalle;
     }
 
+    public PDFExports GenerarPDFProduce()throws Exception{
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+
+
+        PlantillaPDFProduce(path);
+        Metodos exec = new Metodos();
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return pdf;
+    }
+    public void PlantillaPDFProduce (String path)throws Exception{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 12);
+        contentStream.moveTextPositionByAmount(100, 730);
+        contentStream.showText(PDFProduceConstantes.titulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(280, 720);
+        contentStream.showText(PDFProduceConstantes.titulo2);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 10);
+        contentStream.moveTextPositionByAmount(70, 680);
+        contentStream.showText(PDFProduceConstantes.subtitulo);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 670);
+        contentStream.showText(PDFProduceConstantes.armadorORespresentante);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(210, 650);
+        contentStream.showText("__________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 630);
+        contentStream.showText(PDFProduceConstantes.documentoIdentidad);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(190, 630);
+        contentStream.showText("__________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 600);
+        contentStream.showText(PDFProduceConstantes.aCotinuacion);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 570);
+        contentStream.showText(PDFProduceConstantes.tipoEP);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(130, 570);
+        contentStream.showText(PDFProduceConstantes.mayorEscala);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(190, 570);
+        contentStream.showText(PDFProduceConstantes.menorEscala);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 540);
+        contentStream.showText(PDFProduceConstantes.informacionEmbPesq);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 510);
+        contentStream.showText(PDFProduceConstantes.nombreEP);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(150, 510);
+        contentStream.showText("_____________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(310, 510);
+        contentStream.showText(PDFProduceConstantes.matriculaEP);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(380, 510);
+        contentStream.showText("__________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 490);
+        contentStream.drawString(PDFProduceConstantes.permisoPesca);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(185, 490);
+        contentStream.drawString("______________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 470);
+        contentStream.drawString(PDFProduceConstantes.capacidadBodegaM3);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(215, 470);
+        contentStream.drawString("________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(280, 470);
+        contentStream.drawString(PDFProduceConstantes.capacidadBodegaTM);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(310, 470);
+        contentStream.drawString("__________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(370, 470);
+        contentStream.drawString(PDFProduceConstantes.nroTripulantes);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(440, 470);
+        contentStream.drawString("______");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 430);
+        contentStream.drawString(PDFProduceConstantes.informacionDesembarque);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 400);
+        contentStream.drawString(PDFProduceConstantes.Muelle);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(150, 400);
+        contentStream.drawString(PDFProduceConstantes.DPA);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(230, 400);
+        contentStream.drawString(PDFProduceConstantes.fecha);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(270, 400);
+        contentStream.drawString("____________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(370, 400);
+        contentStream.drawString(PDFProduceConstantes.hora);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(410, 400);
+        contentStream.drawString("____________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 370);
+        contentStream.drawString(PDFProduceConstantes.nombre);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(130, 370);
+        contentStream.drawString("______________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 340);
+        contentStream.drawString(PDFProduceConstantes.inicioDescarga);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(180, 340);
+        contentStream.drawString("_______________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(330, 340);
+        contentStream.drawString(PDFProduceConstantes.finDescarga);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(410, 340);
+        contentStream.drawString("________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 320);
+        contentStream.drawString(PDFProduceConstantes.TMDescargadas);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(180, 320);
+        contentStream.drawString("_______________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 300);
+        contentStream.drawString(PDFProduceConstantes.comercianteRecibeProd);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(290, 300);
+        contentStream.drawString("___________________________________");
+        contentStream.endText();
+
+        int y=280;
+
+        for(int i=0; i<2; i++){
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(80, y);
+            contentStream.drawString(PDFProduceConstantes.guiaRemision);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(180, y);
+            contentStream.drawString("_____________________");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(320, y);
+            contentStream.drawString(PDFProduceConstantes.vehiculoPlaca);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(400, y);
+            contentStream.drawString("________________");
+            contentStream.endText();
+
+            y-=20;
+        }
+
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 230);
+        contentStream.drawString(PDFProduceConstantes.TMDescarte);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(170, 230);
+        contentStream.drawString("_______________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(80, 210);
+        contentStream.drawString(PDFProduceConstantes.comercianteRecibeDescarte);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(300, 210);
+        contentStream.drawString("_________________________________");
+        contentStream.endText();
+
+        y=190;
+
+        for(int i=0; i<2; i++){
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(80, y);
+            contentStream.drawString(PDFProduceConstantes.guiaRemision);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(180, y);
+            contentStream.drawString("_____________________");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(320, y);
+            contentStream.drawString(PDFProduceConstantes.vehiculoPlaca);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(400, y);
+            contentStream.drawString("________________");
+            contentStream.endText();
+
+            y-=20;
+        }
+
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 140);
+        contentStream.drawString(PDFProduceConstantes.Nota);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(70, 80);
+        contentStream.drawString("______________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(75, 70);
+        contentStream.drawString(PDFProduceConstantes.firma);
+        contentStream.endText();
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+
+
+
+    }
 }

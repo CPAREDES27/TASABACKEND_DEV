@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.requerimientopesca.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ReqPescaOptions {
@@ -9,15 +10,15 @@ public class ReqPescaOptions {
     private String ip_finit;
     private String ip_ffint;
     private String ip_zona;
-    private List<RequerimientoPesca> reqList;
     private String[] fieldReqPesca;
+    private List<HashMap<String, Object>> it_zflrps;
 
-    public List<RequerimientoPesca> getReqList() {
-        return reqList;
+    public List<HashMap<String, Object>> getIt_zflrps() {
+        return it_zflrps;
     }
 
-    public void setReqList(List<RequerimientoPesca> reqList) {
-        this.reqList = reqList;
+    public void setIt_zflrps(List<HashMap<String, Object>> it_zflrps) {
+        this.it_zflrps = it_zflrps;
     }
 
     public String getIp_tpope() {
