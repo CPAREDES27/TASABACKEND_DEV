@@ -7,7 +7,7 @@ public class LogRegCombusExports {
 
     private List<HashMap<String, Object>> str_csmar;
     private List<HashMap<String, Object>> str_csmaj;
-    private List<HashMap<String, Object>> str_lgcco;
+    private List<LogRegistroCombusDto> str_lgcco;
     private List<HashMap<String, Object>> t_mensaje;
     private String mensaje;
 
@@ -28,11 +28,11 @@ public class LogRegCombusExports {
         this.str_csmaj = str_csmaj;
     }
 
-    public List<HashMap<String, Object>> getStr_lgcco() {
+    public List<LogRegistroCombusDto> getStr_lgcco() {
         return str_lgcco;
     }
 
-    public void setStr_lgcco(List<HashMap<String, Object>> str_lgcco) {
+    public void setStr_lgcco(List<LogRegistroCombusDto> str_lgcco) {
         this.str_lgcco = str_lgcco;
     }
 

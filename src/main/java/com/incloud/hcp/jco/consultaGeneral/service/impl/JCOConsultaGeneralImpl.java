@@ -5,8 +5,11 @@ import com.incloud.hcp.jco.consultaGeneral.service.JCOConsultaGeneralService;
 import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MaestroImportsKey;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.util.EjecutarRFC;
+import com.incloud.hcp.util.Metodos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +49,27 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             imports.put("P_ORDER", "");
             //setear mapeo de tabla options
 
-            List<MaestroOptions> options =
-                    BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+            List<MaestroOptions> option =
+                    BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
+            for (int i = 0; i < option.size(); i++) {
+                MaestroOptions mo = option.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
                 record.put("WA", mo.getWa());
                 tmpOptions.add(record);
             }
 
-            String []fields= BuscarFields(importsParam.getNombreConsulta());
+            List<MaestroOptionsKey>optionsKeys=
+                    BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                    , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
 
+             Metodos metodo=new Metodos();
+
+            tmpOptions=metodo.ValidarOptions(option, optionsKeys);
+
+            String []fields= BuscarFields(importsParam.getNombreConsulta());
             //ejecutar RFC ZFL_RFC_READ_TABLE
             EjecutarRFC exec = new EjecutarRFC();
             me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
@@ -116,6 +127,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENCONSTLAT":
                 tabla= ConsultaGeneralTablas.CONSGENCONSTLAT;
                 break;
+            case "CONSGENLISTDESCPP":
+                tabla= ConsultaGeneralTablas.CONSGENLISTDESCPP;
+                break;
 
 
         }
@@ -161,15 +175,17 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENCONSTLAT":
                 fields= ConsultaGeneralFields.CONSGENCONSTLAT;
                 break;
-
+            case "CONSGENLISTDESCPP":
+                fields= ConsultaGeneralFields.CONSGENLISTDESCPP;
+                break;
         }
 
 
         return fields;
     }
 
-    public List<MaestroOptions> BuscarOptions(String nombreAyuda, String parametro1, String parametro2,
-                                              String parametro3, String parametro4, String parametro5){
+    public List<MaestroOptions> BuscarOption(String nombreAyuda, String parametro1, String parametro2,
+                                             String parametro3, String parametro4, String parametro5){
 
         List<MaestroOptions> options= new ArrayList<>();
 
@@ -355,5 +371,57 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         return ndata;
     }
 
+    public List<MaestroOptionsKey> BuscarOptions(String nombreConsultaG, String parametro1, String parametro2,
+                                                String parametro3, String parametro4, String parametro5){
+
+        List<MaestroOptionsKey>ListOptions= new ArrayList<>();
+
+
+        if(nombreConsultaG.equals("CONSGENLISTDESCPP")){
+            MaestroOptionsKey matricula=new MaestroOptionsKey();
+            matricula.setCantidad("12");
+            matricula.setControl("INPUT");
+            matricula.setKey("MREMB");
+            matricula.setValueHigh("");
+            matricula.setValueLow(parametro1);
+            ListOptions.add(matricula);
+
+            MaestroOptionsKey nomEmbarcacion=new MaestroOptionsKey();
+            nomEmbarcacion.setCantidad("60");
+            nomEmbarcacion.setControl("INPUT");
+            nomEmbarcacion.setKey("NMEMB");
+            nomEmbarcacion.setValueHigh("");
+            nomEmbarcacion.setValueLow(parametro2);
+            ListOptions.add(nomEmbarcacion);
+
+            MaestroOptionsKey codPlanta=new MaestroOptionsKey();
+            codPlanta.setCantidad("4");
+            codPlanta.setControl("INPUT");
+            codPlanta.setKey("CDPTA");
+            codPlanta.setValueHigh("");
+            codPlanta.setValueLow(parametro3);
+            ListOptions.add(codPlanta);
+
+            MaestroOptionsKey nomPlanta=new MaestroOptionsKey();
+            nomPlanta.setCantidad("60");
+            nomPlanta.setControl("INPUT");
+            nomPlanta.setKey("DSPTA");
+            nomPlanta.setValueHigh("");
+            nomPlanta.setValueLow(parametro4);
+            ListOptions.add(nomPlanta);
+
+            MaestroOptionsKey fechaInicio=new MaestroOptionsKey();
+            fechaInicio.setCantidad("8");
+            fechaInicio.setControl("INPUT");
+            fechaInicio.setKey("FIDES");
+            fechaInicio.setValueHigh("");
+            fechaInicio.setValueLow(parametro5);
+            ListOptions.add(fechaInicio);
+
+        }
+
+
+        return ListOptions;
+    }
 
 }
