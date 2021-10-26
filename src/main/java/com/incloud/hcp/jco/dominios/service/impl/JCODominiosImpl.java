@@ -74,66 +74,81 @@ public class JCODominiosImpl implements JCODominiosService {
 
                     List<DominioExportsData> listDatas = new ArrayList<>();
 
-                    if (domParams.getDomname().equals("MOTIVOMAREA_RPDC")) {
-                        DominioExportsData data1 = new DominioExportsData();
-                        DominioExportsData data2 = new DominioExportsData();
-                        data1.setId("A");
-                        data1.setDescripcion("Todos");
+                    switch (domParams.getDomname()) {
+                        case "MOTIVOMAREA_RPDC":
+                            DominioExportsData dataMotivoMareaRpdc1 = new DominioExportsData();
+                            DominioExportsData dataMotivoMareaRpdc2 = new DominioExportsData();
+                            dataMotivoMareaRpdc1.setId("A");
+                            dataMotivoMareaRpdc1.setDescripcion("Todos");
 
-                        data2.setId("1");
-                        data2.setDescripcion("CHD");
+                            dataMotivoMareaRpdc2.setId("1");
+                            dataMotivoMareaRpdc2.setDescripcion("CHD");
 
-                        listDatas.add(data1);
-                        listDatas.add(data2);
-                    }
-                    /**
-                     * Leer tablas en base al dominio
-                     */
-                    else {
-                        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-                        JCoParameterList importx = stfcConnection.getImportParameterList();
-                        String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
-                        String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
-                        String[] fieldname = metodo.returnField(domParams.getDomname());
-                        importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
-                        importx.setValue("DELIMITER", "|");
-                        importx.setValue("P_USER", "FGARCIA");
+                            listDatas.add(dataMotivoMareaRpdc1);
+                            listDatas.add(dataMotivoMareaRpdc2);
+                            break;
+                        case "OPCIONFECHA_RPEB":
+                            DominioExportsData dataOpcionFechaRfeb1 = new DominioExportsData();
+                            DominioExportsData dataOpcionFechaRfeb2 = new DominioExportsData();
+
+                            dataOpcionFechaRfeb1.setId("T");
+                            dataOpcionFechaRfeb1.setDescripcion("Temporadas");
+
+                            dataOpcionFechaRfeb2.setId("F");
+                            dataOpcionFechaRfeb2.setDescripcion("Fechas");
+
+                            listDatas.add(dataOpcionFechaRfeb1);
+                            listDatas.add(dataOpcionFechaRfeb2);
+                            break;
+                        default:
+                            /**
+                             * Leer tablas en base al dominio
+                             */
+                            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+                            JCoParameterList importx = stfcConnection.getImportParameterList();
+                            String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
+                            String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
+                            String[] fieldname = metodo.returnField(domParams.getDomname());
+                            importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
+                            importx.setValue("DELIMITER", "|");
+                            importx.setValue("P_USER", "FGARCIA");
 
 
-                        JCoParameterList tables = stfcConnection.getTableParameterList();
-                        JCoTable tableImport = tables.getTable("OPTIONS");
-                        tableImport.appendRow();
+                            JCoParameterList tables = stfcConnection.getTableParameterList();
+                            JCoTable tableImport = tables.getTable("OPTIONS");
+                            tableImport.appendRow();
 
-                        tableImport.setValue("WA", WA_READ_TABLE);
-                        stfcConnection.execute(destination);
-                        JCoTable lis_out = tables.getTable("DATA");
-                        JCoTable FIELDS = tables.getTable("FIELDS");
+                            tableImport.setValue("WA", WA_READ_TABLE);
+                            stfcConnection.execute(destination);
+                            JCoTable lis_out = tables.getTable("DATA");
+                            JCoTable FIELDS = tables.getTable("FIELDS");
 
 
-                        for (int i = 0; i < lis_out.getNumRows(); i++) {
-                            lis_out.setRow(i);
-                            DominioExportsData data = new DominioExportsData();
-                            String ArrayResponse[] = lis_out.getString().split("\\|");
-                            for (int j = 0; j < FIELDS.getNumRows(); j++) {
-                                FIELDS.setRow(j);
-                                String key = (String) FIELDS.getValue("FIELDNAME");
+                            for (int i = 0; i < lis_out.getNumRows(); i++) {
+                                lis_out.setRow(i);
+                                DominioExportsData data = new DominioExportsData();
+                                String ArrayResponse[] = lis_out.getString().split("\\|");
+                                for (int j = 0; j < FIELDS.getNumRows(); j++) {
+                                    FIELDS.setRow(j);
+                                    String key = (String) FIELDS.getValue("FIELDNAME");
 
-                                if (key.equals(fieldname[0])) {
+                                    if (key.equals(fieldname[0])) {
 
-                                    Object value = ArrayResponse[j];
-                                    data.setId(value.toString().trim());
+                                        Object value = ArrayResponse[j];
+                                        data.setId(value.toString().trim());
+
+
+                                    }
+                                    if (key.equals(fieldname[1])) {
+                                        Object values = ArrayResponse[j];
+                                        data.setDescripcion(values.toString().trim());
+                                    }
 
 
                                 }
-                                if (key.equals(fieldname[1])) {
-                                    Object values = ArrayResponse[j];
-                                    data.setDescripcion(values.toString().trim());
-                                }
-
-
+                                listDatas.add(data);
                             }
-                            listDatas.add(data);
-                        }
+                            break;
                     }
 
                     exports.setData(listDatas);
