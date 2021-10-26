@@ -68,7 +68,8 @@ public class Metodos {
                 newRecord.put(key, value);
 
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
+                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")||
+                        key.equals("CDFAS")||key.equals("CDMMA")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -179,7 +180,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("ZONAPESCA")) {
+        } else if (table.equals("1ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
@@ -627,7 +628,8 @@ public class Metodos {
 
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                                    || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
+                                    || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
+                                    || key.equals("CDFAS")||key.equals("CDMMA")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -728,7 +730,8 @@ public class Metodos {
 
                 newRecord.put(key, value);
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
+                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
+                        || key.equals("CDFAS")||key.equals("CDMMA")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -996,6 +999,14 @@ public class Metodos {
             }
             if(campo.equals("CDTPC")){
                 dom="ZCDTPC";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("CDFAS")){
+                dom="FASE";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("CDMMA")){
+                dom="ZCDMMA";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);

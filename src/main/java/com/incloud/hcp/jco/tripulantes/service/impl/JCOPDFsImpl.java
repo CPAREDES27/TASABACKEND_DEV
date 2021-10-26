@@ -4715,7 +4715,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             contentStream.beginText();
             contentStream.setFont(font, 10);
-            contentStream.moveTextPositionByAmount(180, y);
+            contentStream.moveTextPositionByAmount(215, y);
+            contentStream.drawString("------");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(180, y-1);
             contentStream.drawString("_____________________");
             contentStream.endText();
 
@@ -4727,7 +4733,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             contentStream.beginText();
             contentStream.setFont(font, 10);
-            contentStream.moveTextPositionByAmount(400, y);
+            contentStream.moveTextPositionByAmount(430, y);
+            contentStream.drawString("------");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(400, y-1);
             contentStream.drawString("_______________");
             contentStream.endText();
 
@@ -4744,7 +4756,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(170, 230);
+        contentStream.moveTextPositionByAmount(220, 230);
+        contentStream.drawString("------");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(170, 229);
         contentStream.drawString("_______________________");
         contentStream.endText();
 
@@ -4756,7 +4774,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(300, 210);
+        contentStream.moveTextPositionByAmount(390, 210);
+        contentStream.drawString("------");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(300, 209);
         contentStream.drawString("_________________________________");
         contentStream.endText();
 
@@ -4772,7 +4796,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             contentStream.beginText();
             contentStream.setFont(font, 10);
-            contentStream.moveTextPositionByAmount(180, y);
+            contentStream.moveTextPositionByAmount(215, y);
+            contentStream.drawString("------");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(180, y-1);
             contentStream.drawString("_____________________");
             contentStream.endText();
 
@@ -4784,7 +4814,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             contentStream.beginText();
             contentStream.setFont(font, 10);
-            contentStream.moveTextPositionByAmount(400, y);
+            contentStream.moveTextPositionByAmount(430, y);
+            contentStream.drawString("------");
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 10);
+            contentStream.moveTextPositionByAmount(400, y-1);
             contentStream.drawString("_______________");
             contentStream.endText();
 
@@ -5036,6 +5072,129 @@ public class JCOPDFsImpl implements JCOPDFsService {
         }
 
 
+    }
+
+
+    public PDFExports GenerarPDFProduceResumen()throws Exception{
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+
+
+        PlantillaPDFProduceResumen(path);
+        Metodos exec = new Metodos();
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return pdf;
+    }
+
+    public void PlantillaPDFProduceResumen(String path)throws Exception{
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage(PDRectangle.A4);
+
+        document.addPage(page);
+
+        PDFont bold = PDType1Font.HELVETICA_BOLD;
+        PDFont font = PDType1Font.HELVETICA;
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 12);
+        contentStream.moveTextPositionByAmount(180, 780);
+        contentStream.showText("Resumen de Impresión Formatos PRODUCE");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 11);
+        contentStream.moveTextPositionByAmount(240, 760);
+        contentStream.showText("Del");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 11);
+        contentStream.moveTextPositionByAmount(310, 760);
+        contentStream.showText("Al");
+        contentStream.endText();
+
+        drawCuadroProduceResumen(contentStream, 740,85);
+
+        contentStream.close();
+        document.save(path);
+        document.close();
+    }
+
+    public void drawCuadroProduceResumen( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 4;
+        final int cols = 6;
+
+        final float tableWidth = 420f;
+        final float tableHeight = 45;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i < rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= 15;
+
+        }
+
+
+        //draw the columns
+        float x = margin;
+        for (int i = 0; i < cols; i++) {
+
+            if(i==1){
+                x+=30;
+            }else if(i==2){
+                x+=140;
+            }
+            else if(i==3){
+                x+=90;
+            }
+            else if(i==4){
+                x+=90;
+            }
+            else if(i==5){
+                x+=70;
+            }
+
+            contentStream.moveTo(x, y);
+            contentStream.lineTo(x, y - tableHeight);
+            contentStream.stroke();
+
+
+
+        }
+
+        String[] fields={"Embarcación","Matrícula","Pesc. Descargada","Can. Descargada"};
+        PDFont font = PDType1Font.HELVETICA;
+
+         x=80;
+        for(int i=0; i<fields.length; i++){
+
+            if(i==0){
+                x+=80;
+            }
+            else if(i==1){
+                x+=120;
+            }
+            else if(i==2){
+                x+=80;
+            }
+            else if(i==3){
+                x+=75;
+            }
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(x, y-10);
+            contentStream.showText(fields[i]);
+            contentStream.endText();
+        }
     }
 
 }

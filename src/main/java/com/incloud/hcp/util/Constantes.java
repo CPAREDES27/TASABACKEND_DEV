@@ -34,6 +34,8 @@ public class Constantes {
     public static String ZFL_RFC_COST_RACI_VALEV="ZFL_RFC_COST_RACI_VALEV";
     public static String ZFL_RFC_DELETE_PO ="ZFL_RFC_DELETE_PO";
     public static String ZFL_RFC_DELETE_RECORDS ="ZFL_RFC_DELETE_RECORDS";
+    public static String ZFL_RFC_IMPO_PRODUCE ="ZFL_RFC_IMPO_PRODUCE";
+
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";
     public static String CODTIPOEVENTODESCARGA="6";
