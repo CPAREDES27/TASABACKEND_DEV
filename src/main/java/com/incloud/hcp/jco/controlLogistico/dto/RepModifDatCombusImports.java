@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
 import java.util.List;
 
@@ -9,8 +10,17 @@ public class RepModifDatCombusImports {
     private String p_fase;
     private String p_cant;
     private String[] fieldsT_flocc;
-    private String[] fieldsT_opciones;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
     private String[] fieldsT_mensaje;
+
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
 
     public String[] getFieldsT_flocc() {
         return fieldsT_flocc;
@@ -20,12 +30,12 @@ public class RepModifDatCombusImports {
         this.fieldsT_flocc = fieldsT_flocc;
     }
 
-    public String[] getFieldsT_opciones() {
-        return fieldsT_opciones;
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
     }
 
-    public void setFieldsT_opciones(String[] fieldsT_opciones) {
-        this.fieldsT_opciones = fieldsT_opciones;
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
     }
 
     public String[] getFieldsT_mensaje() {
