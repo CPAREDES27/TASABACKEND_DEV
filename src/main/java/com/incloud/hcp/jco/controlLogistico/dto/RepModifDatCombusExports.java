@@ -8,6 +8,16 @@ public class RepModifDatCombusExports {
     private String mensaje;
     private String p_nmob;
     private String p_nmar;
+    private double indicadorPorc;
+
+    public double getIndicadorPorc() {
+        return indicadorPorc;
+    }
+
+    public void setIndicadorPorc(double indicadorPorc) {
+        this.indicadorPorc = indicadorPorc;
+    }
+
     private List<HashMap<String, Object>> t_flocc;
     private List<HashMap<String, Object>> t_mensaje;
     private List<HashMap<String, Object>> t_opciones;

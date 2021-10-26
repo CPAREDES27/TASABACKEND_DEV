@@ -53,6 +53,9 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             double p_nmob= Double.parseDouble(rmdc.getP_nmob());
             double p_mar= Double.parseDouble(rmdc.getP_nmar());
+            double total = Math.round((p_nmob/p_mar)*100.0)/100.0;
+            total = total*100;
+            logger.error("TOTAL"+ total);
             logger.error("P_NMOB"+p_nmob);
             logger.error("p_mar"+p_mar);
             logger.error("P_NMOB", rmdc.getP_nmob());
@@ -72,6 +75,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             List<HashMap<String, Object>> t_flocc = metodo.ObtenerListObjetos(T_FLOCC, fieldsT_flocc);
             List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_OPCIONES, fieldsT_mensaje);
             rmdc.setT_mensaje(t_mensaje);
+            rmdc.setIndicadorPorc(total);
             rmdc.setT_flocc(t_flocc);
             rmdc.setMensaje("Ok");
         }catch (Exception e){
