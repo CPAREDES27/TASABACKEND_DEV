@@ -4448,20 +4448,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 10);
+        contentStream.setFont(bold, 10);
         contentStream.moveTextPositionByAmount(280, 720);
         contentStream.showText(PDFProduceConstantes.titulo2);
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(bold, 10);
+        contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(70, 680);
         contentStream.showText(PDFProduceConstantes.subtitulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(70, 670);
+        contentStream.moveTextPositionByAmount(70, 650);
         contentStream.showText(PDFProduceConstantes.armadorORespresentante);
         contentStream.endText();
 
@@ -4497,13 +4497,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(130, 570);
+        contentStream.moveTextPositionByAmount(160, 570);
         contentStream.showText(PDFProduceConstantes.mayorEscala);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(190, 570);
+        contentStream.moveTextPositionByAmount(250, 570);
         contentStream.showText(PDFProduceConstantes.menorEscala);
         contentStream.endText();
 

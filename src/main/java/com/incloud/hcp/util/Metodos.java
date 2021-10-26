@@ -989,7 +989,7 @@ public class Metodos {
 
         String descripcion="";
         try {
-            logger.error("BuscarDominio");
+
 
 
             DominioParams dominioParams = new DominioParams();
@@ -1036,7 +1036,7 @@ public class Metodos {
 
     public DominioDto ListarDominio(DominiosImports imports) throws Exception {
 
-        logger.error("ListarDominios_");
+
         DominioDto domDto = new DominioDto();
         List<DominiosExports> listExports = new ArrayList<>();
         Metodos metodo = new Metodos();
@@ -1045,9 +1045,7 @@ public class Metodos {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            logger.error("domParams="+imports.getDominios().get(0).toString());
             for (DominioParams domParams : imports.getDominios()) {
-                logger.error("domParams="+domParams.getDomname());
 
                 if (domParams.getDomname().startsWith("Z")) {
                     DominiosExports exports = new DominiosExports();

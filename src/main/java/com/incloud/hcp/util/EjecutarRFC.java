@@ -146,6 +146,7 @@ public class EjecutarRFC {
         JCoParameterList jcoTables = function.getTableParameterList();
         JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
         tableImport.appendRow();
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE DATA: "+data);
         tableImport.setValue("DATA", data);
         logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
         function.execute(destination);

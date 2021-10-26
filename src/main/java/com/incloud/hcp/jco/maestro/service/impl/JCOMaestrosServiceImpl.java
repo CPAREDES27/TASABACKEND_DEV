@@ -286,6 +286,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                     contador++;
                 }
             }
+            logger.error("VERIFICAR DATA PASO_ cadena"+cadena);
 
             /*for(Map.Entry<String,Object> entry:newRecord.entrySet()){
 
@@ -707,7 +708,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
     public String BuscarDominio(String nomDomino, String valor)throws Exception{
-        logger.error("BuscarDominio");
+
 
         String descripcion="";
 
@@ -739,7 +740,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }
 
         }
-        logger.error("descripcion: "+descripcion);
+
         return descripcion;
     }
 

@@ -21,7 +21,7 @@ public class JCODominiosImpl implements JCODominiosService {
 
     public DominioDto Listar(DominiosImports imports) throws Exception {
 
-        logger.error("ListarDominios_");
+
         DominioDto domDto = new DominioDto();
         List<DominiosExports> listExports = new ArrayList<>();
         Metodos metodo = new Metodos();

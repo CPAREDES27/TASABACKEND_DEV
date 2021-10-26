@@ -28,7 +28,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         Metodos metodos = new Metodos();
         HashMap<String, Object> importParams = new HashMap<>();
         importParams.put("P_USER", imports.getP_user());
-
+        logger.error("PRECIOS PESCA PROB");
         List<MaestroOptions> option = imports.getOption();
         List<MaestroOptionsKey> options2 = imports.getOptions();
 
@@ -49,11 +49,15 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         JCoParameterList tables = function.getTableParameterList();
         function.execute(destination);
         JCoTable tblSTR_APP = tables.getTable(Tablas.STR_APP);
+        logger.error("PRECIOS PESCA PROB2");
+
 
         List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
 
+        List<HashMap<String, Object>>listaConPromedio=CalcularPromedio(listSTR_APP);
+        logger.error("PRECIOS PESCA PROB_3");
         PrecioProbPescaExports dto = new PrecioProbPescaExports();
-        dto.setStr_app(listSTR_APP);
+        dto.setStr_app(listaConPromedio);
         dto.setMensaje("OK");
 
         return dto;
@@ -347,4 +351,93 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         dto.setMensaje("OK");
         return dto;
     }
+
+    public List<HashMap<String, Object>>  CalcularPromedio(List<HashMap<String, Object>> str_app){
+
+        logger.error("CALCULAR PROMEDIO");
+        List<HashMap<String, Object>> newList= str_app;
+        double sum=0;
+        for(HashMap<String,Object> datas: newList){
+
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+                String key= entry.getKey();
+                Object value= entry.getValue();
+
+                if(key.equals("PRCOM")){
+                    sum=sum+Double.parseDouble(value.toString());
+                    logger.error("PRCOM SUMA=  "+sum);
+                }
+
+            }
+
+        }
+
+
+        double promedio=sum/str_app.size();
+       promedio= Math.round(promedio*100.0)/100.0;
+
+        HashMap<String, Object> data= new HashMap<>();
+        data.put("AUGBL","");
+        data.put("AUGBL2","");
+        data.put("AUGBL3","");
+        data.put("BELNR","");
+        data.put("BELNR2","");
+        data.put("BELNR3","");
+        data.put("BONIF","");
+        data.put("CALIDAD","");
+        data.put("CDEMB","");
+        data.put("CDPTA","");
+        data.put("CHARG","");
+        data.put("CNPDS","");
+        data.put("DESC_ESCSG","");
+        data.put("DESC_ESPRC","");
+        data.put("DESC_WAERS","");
+        data.put("DOCFI","");
+        data.put("DOCFI2","");
+        data.put("DOCFI3","");
+        data.put("EBELN","");
+        data.put("ESCSG","");
+        data.put("ESPRC","");
+        data.put("FECCONMOV","");
+        data.put("FHAPR","");
+        data.put("FHCDF","");
+        data.put("FHCPP","");
+        data.put("FHRPR","");
+        data.put("HRAPR","");
+        data.put("HRCDF","");
+        data.put("HRCPP","");
+        data.put("HRRPR","");
+        data.put("JUVEN","");
+        data.put("LIFNR","");
+        data.put("MREMB","");
+        data.put("NAME1","PONDERADO");
+        data.put("NMEMB","");
+        data.put("NRDES","");
+        data.put("OBCDF","");
+        data.put("OBCPP","");
+        data.put("PCCSG","");
+        data.put("PCSPP","");
+        data.put("PRCOM",String.valueOf(promedio));
+        data.put("PRUEFBEMKT","");
+        data.put("PRUEFLOS","");
+        data.put("PRVEN","");
+        data.put("STBLG","");
+        data.put("TDC","");
+        data.put("TVN","");
+        data.put("USAPR","");
+        data.put("USCDF","");
+        data.put("USCPP","");
+        data.put("USRPR","");
+        data.put("WAERS","");
+        data.put("WERKS","");
+        data.put("XBLNR","");
+        data.put("XBLNR2","");
+        data.put("XBLNR3","");
+
+        newList.add(data);
+
+        return str_app;
+    }
+
+
 }

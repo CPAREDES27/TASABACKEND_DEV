@@ -278,7 +278,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     }
 
     public String BuscarDominio(String nomDomino, String valor)throws Exception{
-        logger.error("BuscarDominio");
+
 
         String descripcion="";
 
@@ -310,7 +310,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             }
 
         }
-        logger.error("descripcion: "+descripcion);
+
         return descripcion;
     }
 
