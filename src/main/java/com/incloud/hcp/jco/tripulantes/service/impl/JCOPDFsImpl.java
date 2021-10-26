@@ -4429,6 +4429,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         return pdf;
     }
+
     public void PlantillaPDFProduce (String path)throws Exception{
 
         PDDocument document = new PDDocument();
@@ -4448,7 +4449,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(bold, 10);
+        contentStream.setFont(bold, 12);
         contentStream.moveTextPositionByAmount(280, 720);
         contentStream.showText(PDFProduceConstantes.titulo2);
         contentStream.endText();
@@ -4513,6 +4514,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.showText(PDFProduceConstantes.informacionEmbPesq);
         contentStream.endText();
 
+        drawCuadroProduceEmbPesquera(contentStream, 525, 70);
+
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(80, 510);
@@ -4534,7 +4537,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(380, 510);
-        contentStream.showText("__________________");
+        contentStream.showText("___________________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -4581,7 +4584,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(440, 470);
+        contentStream.moveTextPositionByAmount(450, 470);
         contentStream.drawString("______");
         contentStream.endText();
 
@@ -4591,15 +4594,17 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.drawString(PDFProduceConstantes.informacionDesembarque);
         contentStream.endText();
 
+        drawCuadroProduceDesembarque(contentStream, 420,70);
+
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(80, 400);
+        contentStream.moveTextPositionByAmount(100, 400);
         contentStream.drawString(PDFProduceConstantes.Muelle);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(150, 400);
+        contentStream.moveTextPositionByAmount(170, 400);
         contentStream.drawString(PDFProduceConstantes.DPA);
         contentStream.endText();
 
@@ -4624,7 +4629,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(410, 400);
-        contentStream.drawString("____________");
+        contentStream.drawString("_____________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -4636,8 +4641,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(130, 370);
-        contentStream.drawString("______________________________________________________________");
+        contentStream.drawString("________________________________________________________________");
         contentStream.endText();
+
+        drawCuadroProduceDesembarque2(contentStream,355,70);
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
@@ -4660,7 +4667,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(410, 340);
-        contentStream.drawString("________________");
+        contentStream.drawString("_____________");
         contentStream.endText();
 
         contentStream.beginText();
@@ -4712,13 +4719,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.beginText();
             contentStream.setFont(font, 10);
             contentStream.moveTextPositionByAmount(400, y);
-            contentStream.drawString("________________");
+            contentStream.drawString("_______________");
             contentStream.endText();
 
             y-=20;
         }
 
-
+        drawCuadroProduceDesembarque2(contentStream,245,70);
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
@@ -4769,7 +4776,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.beginText();
             contentStream.setFont(font, 10);
             contentStream.moveTextPositionByAmount(400, y);
-            contentStream.drawString("________________");
+            contentStream.drawString("_______________");
             contentStream.endText();
 
             y-=20;
@@ -4801,4 +4808,101 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
     }
+    public void drawCuadroProduceEmbPesquera( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 440f;
+        final float tableHeight = 65;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceDesembarque( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 440f;
+        final float tableHeight = 60;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceDesembarque2( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 440f;
+        final float tableHeight = 90;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+
 }

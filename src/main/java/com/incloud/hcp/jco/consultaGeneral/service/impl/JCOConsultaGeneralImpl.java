@@ -178,7 +178,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
         if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES")
                 ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE ")
-                || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC")){
+                || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC") || nombreAyuda.equals("CONSGENCALENTEMP")
+        ||nombreAyuda.equals("CONSGENCLDRTEMPFECHA") || nombreAyuda.equals("CONSGENCONSTLAT")){
 
 
             String condicion="";
@@ -230,21 +231,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     options.add(opt);
                     break;
                 case "CONSGENCLDRTEMPFECHA":
-                    condicion= ConsultaGeneralOptions.CONSGENCLDRTEMPFECHA +parametro1+"'";
+                    condicion= ConsultaGeneralOptions.CONSGENCLDRTEMPFECHA +parametro1+"' AND '"+parametro2+"'";
                     opt.setWa(condicion);
                     options.add(opt);
                     break;
                 case "CONSGENCONSTLAT":
-                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT ;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT2 ;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT3 ;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT4 ;
+                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT + ConsultaGeneralOptions.CONSGENCONSTLAT2+ ConsultaGeneralOptions.CONSGENCONSTLAT3+ ConsultaGeneralOptions.CONSGENCONSTLAT4 ;
                     opt.setWa(condicion);
                     options.add(opt);
                     break;
