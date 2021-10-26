@@ -2,7 +2,9 @@ package com.incloud.hcp.jco.controlLogistico.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import org.omg.CORBA.OBJ_ADAPTER;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class LogRegCombusImports {
@@ -13,6 +15,15 @@ public class LogRegCombusImports {
     private String p_canti;
     private List<MaestroOptions> option;
     private List<MaestroOptionsKey> options;
+    private List<LogRegistroCombusDto> str_lgcco;
+
+    public List<LogRegistroCombusDto> getStr_lgcco() {
+        return str_lgcco;
+    }
+
+    public void setStr_lgcco(List<LogRegistroCombusDto> str_lgcco) {
+        this.str_lgcco = str_lgcco;
+    }
 
     public List<MaestroOptions> getOption() {
         return option;

@@ -13,4 +13,7 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENCALENTEMP={"FHCAL"};
     public static String[] CONSGENCLDRTEMPFECHA={"FHCAL","CDTPC","CDSPC","DSSPC","LTINI","LTFIN","LNINI","LGFIN","MILLA"};
     public static String[] CONSGENCONSTLAT={"CDCNS", "VAL01", "VAL02"};
+    public static String[] CONSGENLISTDESCPP={"NRDES", "TICKE", "CDTPC", "CDPTA", "DSPTA", "CDEMB", "NMEMB", "CDLDS", "CDSPC", "DSSPC", "CNPDS",
+            "FIDES", "HIDES", "FFDES", "HFDES", "PESACUMOD","ESDES", "WEPTA", "MREMB"};
+
 }
