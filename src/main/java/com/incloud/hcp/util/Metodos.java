@@ -179,7 +179,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("1ZONAPESCA")) {
+        } else if (table.equals("ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
@@ -197,7 +197,7 @@ public class Metodos {
         } else if (table.equals("TIPOEMBARCACION")) {
             tablita = "ZFLTEM";
 
-        } else if (table.equals("1ZONALITORAL")) {
+        } else if (table.equals("ZONALITORAL")) {
             tablita = "ZFLZLT";
 
         } else if (table.equals("PLANTAPROPIA")) {
@@ -215,12 +215,16 @@ public class Metodos {
         } else if (table.equals("CATEGORIA")) {
             tablita = "ZFLCNS";
 
-        } else if (table.equals("1ZONAAREA")) {
+        } else if (table.equals("ZONAAREA")) {
             tablita = "ZFLZAR";
 
         }
         else if (table.equals("SISTVIRADO")) {
             tablita = "ZTBC_DATA";
+
+        }
+        else if (table.equals("FASE")) {
+            tablita = "ZFLFAS";
 
         }
         return tablita;
@@ -248,6 +252,9 @@ public class Metodos {
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
             wa= "(WERKS <> 'FP09') AND (INPRP = 'P')";
+        }
+        else if(table.equals("FASE")){
+            wa= "ESREG = 'S'";
         }
         return wa;
     }
@@ -333,6 +340,9 @@ public class Metodos {
             fields = new String[] {"ARGUM", "DESCR"};
         }else if (table.equals("ALLPLANTAPROPIA")) {
             fields = new String[] {"CDPTA", "DESCR"};
+        }
+        else if (table.equals("FASE")) {
+            fields = new String[] {"CDFAS", "DSFAS"};
         }
 
         return fields;
