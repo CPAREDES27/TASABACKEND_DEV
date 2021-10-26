@@ -68,7 +68,7 @@ public class Metodos {
                 newRecord.put(key, value);
 
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                        || key.equals("CALIDA")){
+                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -617,7 +617,7 @@ public class Metodos {
 
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                                    || key.equals("CALIDA")){
+                                    || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -718,7 +718,7 @@ public class Metodos {
 
                 newRecord.put(key, value);
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
-                        || key.equals("CALIDA")){
+                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -972,8 +972,20 @@ public class Metodos {
             if(campo.equals("ESPRC")){
                 dom="ZESPRC";
                 campo="DESC_"+campo;
-            }if(campo.equals("ESPRC")){
-                dom="ZESPRC";
+            }if(campo.equals("CDLDS")){
+                dom="ZCDLDS";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESDES")){
+                dom="ZESDES";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESPRO")){
+                dom="ZDO_ESREGC";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("CDTPC")){
+                dom="ZCDTPC";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);

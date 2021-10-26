@@ -4450,7 +4450,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 12);
-        contentStream.moveTextPositionByAmount(280, 720);
+        contentStream.moveTextPositionByAmount(280, 715);
         contentStream.showText(PDFProduceConstantes.titulo2);
         contentStream.endText();
 
@@ -4496,11 +4496,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.showText(PDFProduceConstantes.tipoEP);
         contentStream.endText();
 
+        drawCuadroProduceEscala(contentStream,585,155);
+        drawCuadroProduceEscalaX(contentStream,585,155);
+
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(160, 570);
         contentStream.showText(PDFProduceConstantes.mayorEscala);
         contentStream.endText();
+
+        drawCuadroProduceEscala(contentStream,585,245);
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
@@ -4596,11 +4601,15 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         drawCuadroProduceDesembarque(contentStream, 420,70);
 
+        drawCuadroProduceMuelleDPA(contentStream,415,90);
+
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(100, 400);
         contentStream.drawString(PDFProduceConstantes.Muelle);
         contentStream.endText();
+
+        drawCuadroProduceMuelleDPA(contentStream,415,155);
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
@@ -4725,7 +4734,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             y-=20;
         }
 
-        drawCuadroProduceDesembarque2(contentStream,245,70);
+        drawCuadroProduceDesembarque3(contentStream,245,70);
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
@@ -4878,6 +4887,38 @@ public class JCOPDFsImpl implements JCOPDFsService {
         final int cols = 1;
 
         final float tableWidth = 440f;
+        final float tableHeight =105;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceDesembarque3( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 440f;
         final float tableHeight = 90;
 
         //draw the rows
@@ -4900,6 +4941,98 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.lineTo(nextx, y - tableHeight);
             contentStream.stroke();
             nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceMuelleDPA( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 50f;
+        final float tableHeight = 20;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceEscala( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 75f;
+        final float tableHeight = 25;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(margin, nexty);
+            contentStream.lineTo(margin + tableWidth, nexty);
+            contentStream.stroke();
+            nexty -= tableHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = margin;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - tableHeight);
+            contentStream.stroke();
+            nextx+=tableWidth;
+        }
+
+
+    }
+    public void drawCuadroProduceEscalaX( PDPageContentStream contentStream, float y, float margin)throws IOException{
+
+        final int rows = 1;
+        final int cols = 1;
+
+        final float tableWidth = 75f;
+        final float tableHeight = 25;
+
+        //draw the rows
+
+        for (int i = 0; i < rows; i++) {
+            contentStream.moveTo(margin, y);
+            contentStream.lineTo(margin + tableWidth, y-tableHeight);
+            contentStream.stroke();
+
+
+        }
+
+        for (int i = 0; i < rows; i++) {
+            contentStream.moveTo(margin+tableWidth, y);
+            contentStream.lineTo(margin, y-tableHeight);
+            contentStream.stroke();
+            y -= tableHeight;
+
         }
 
 
