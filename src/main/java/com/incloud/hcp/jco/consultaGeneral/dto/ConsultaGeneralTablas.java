@@ -12,6 +12,6 @@ public class ConsultaGeneralTablas {
     public static String CONSGENPESDESC="ZV_FLDS";  //consulta dominio, campo CDLDS
     public static String CONSGENCALENTEMP="ZFLCLT";
     public static String CONSGENCLDRTEMPFECHA="ZV_FLCP";
-    public static String CONSGENCONSTLAT="ZFLCNS";
-
+    public static String CONSGENCONSTLAT="ZFLCNS";//
+    public static String CONSGENLISTDESCPP="ZV_FLDS";
 }
