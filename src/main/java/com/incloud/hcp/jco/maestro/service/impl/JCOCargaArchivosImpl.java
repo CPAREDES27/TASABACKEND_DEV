@@ -61,6 +61,8 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
 
         try {
+            logger.error("base64INI");
+
 
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("I_TRAMA", importsParam.getI_trama());
@@ -90,7 +92,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             cda.setE_trama(export.getValue(Tablas.E_TRAMA).toString());
             cda.setMensaje("Ok");
 
-
+            logger.error("base64fin");
         }catch (Exception e){
             cda.setMensaje(e.getMessage());
         }
