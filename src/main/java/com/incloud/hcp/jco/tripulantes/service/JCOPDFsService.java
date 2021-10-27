@@ -13,5 +13,6 @@ public interface JCOPDFsService {
     PDFExports GenerarPDFTrabajoFF()throws Exception;
     PDFExports GenerarPDFValeViveres(PDFValeViveresImports imports)throws Exception;
     PDFExports GenerarPDFProduce()throws Exception;
+    PDFExports GenerarPDFProduceResumen()throws Exception;
 
 }

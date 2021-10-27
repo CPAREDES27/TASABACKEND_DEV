@@ -55,6 +55,8 @@ public class Tablas {
     public static String LIST_OUT="LIST_OUT";
     public static String T_DATA="T_DATA";
     public static String S_POSICION="S_POSICION";
+    public static String IT_ZFLEMB="IT_ZFLEMB";
+    public static String ET_ZFLEMB="ET_ZFLEMB";
 
 
 
