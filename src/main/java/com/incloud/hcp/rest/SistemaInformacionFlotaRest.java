@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RequestMapping(value = "/api/sistemainformacionflota")
 public class SistemaInformacionFlotaRest {
 
@@ -59,6 +59,7 @@ public class SistemaInformacionFlotaRest {
             throw new RuntimeException(e.toString());
         }
     }
+
     @PostMapping(value = "/PescaDeclaradaDife", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PescaDeclaradaDifeExports> PescaDeclaradaDife(@RequestBody PescaDeclaradaDifeImports imports) {
 
@@ -75,6 +76,17 @@ public class SistemaInformacionFlotaRest {
 
         try {
             return Optional.ofNullable(this.jcoPescaDescargadaService.PescaDescargada(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/PescaDescargadaDiaResum", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaDescargadaDiaResumExports> PescaDescargadaDiaResum(@RequestBody PescaDescargadaDiaResumImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaDescargadaService.PescaDescargadaDiaResum(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

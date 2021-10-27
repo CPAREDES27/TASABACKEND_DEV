@@ -141,6 +141,8 @@ public class Tablas {
     public static String STR_EMD="STR_EMD";
     public static String STR_EMR="STR_EMR";
     public static String STR_DSD="STR_DSD";
+    public static String STR_DSDDIA="STR_DSDDIA";
+    public static String STR_DSDTOT="STR_DSDTOT";
     public static String STR_GRE="STR_GRE";
     public static String STR_PGE="STR_PGE";
     public static String STR_EPP="STR_EPP";

@@ -90,6 +90,7 @@ public class Constantes {
     public static String ZFL_RFC_PESCA_DECLARADA="ZFL_RFC_PESCA_DECLARADA";
     public static String ZFL_RFC_PESC_DECLA_DIFE2="ZFL_RFC_PESC_DECLA_DIFE2";
     public static String ZFL_RFC_PESCA_DESC_DIA="ZFL_RFC_PESCA_DESC_DIA";
+    public static String ZFL_RFC_PESCA_DESC_DIA_RESUM="ZFL_RFC_PESCA_DESC_DIA_RESUM";
     public static String ZFL_RFC_DECLA_COMPE_RADIO="ZFL_RFC_DECLA_COMPE_RADIO";
     public static String ZFL_RFC_CUOTA_EMB_TER="ZFL_RFC_CUOTA_EMB_TER";
     public static String ZFL_RFC_PESC_COMP_GNRAL="ZFL_RFC_PESC_COMP_GNRAL";
