@@ -13,9 +13,12 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -28,7 +31,8 @@ import java.util.List;
 public class JCOPDFsImpl implements JCOPDFsService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
+    @Autowired
+    private JCOImpresFormatosProduceImpl jcoImpresFormatosProduce;
 
     public PDFExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception{
 
@@ -4417,12 +4421,58 @@ public class JCOPDFsImpl implements JCOPDFsService {
           return detalle;
     }
 
-    public PDFExports GenerarPDFProduce()throws Exception{
+    public PDFExports GenerarPDFProduce(PDFProduceImports imports)throws Exception{
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
 
+        PDFProduceDto dto= new PDFProduceDto();
 
-        PlantillaPDFProduce(path);
+        ImpresFormatosProduceExports ifpe=jcoImpresFormatosProduce.ImpresionFormatosProduce(imports.getImpresFormatosProduceImports());
+
+        List<HashMap<String, Object>>detalle=ifpe.getT_dtprce();
+
+        HashMap<String, Object>data=ifpe.getT_dtprce().get(0);
+
+        for (Map.Entry<String,Object>entry:data.entrySet()) {
+            String key= entry.getKey();
+            Object value=entry.getValue();
+
+            if(key.equals("ARMAD")){
+                dto.setArmadorORespresentante(value.toString());
+            }else if(key.equals("DNIAR")){
+                dto.setDocumentoIdentidad(value.toString());
+            }else if(key.equals("NMEMB")){
+                dto.setNombreEP(value.toString());
+            }else if(key.equals("MREMB")){
+                dto.setMatriculaEP(value.toString());
+            }else if(key.equals("RSPMS")){
+                dto.setPermisoPesca(value.toString());
+            }else if(key.equals("CVPMS")){
+                dto.setCapacidadBodegaM3(value.toString());
+            }else if(key.equals("CPPMS")){
+                dto.setCapacidadBodegaTM(value.toString());
+            }else if(key.equals("NRTRI")){
+                dto.setNroTripulantes(value.toString());
+            }else if(key.equals("FIDES")){
+                dto.setFecha(value.toString());
+            }else if(key.equals("HIDES")){
+                dto.setHora(value.toString());
+                dto.setInicioDescarga(value.toString());
+            }else if(key.equals("DSPDG")){
+                dto.setNombre(value.toString());
+            }else if(key.equals("HFDES")){
+                dto.setFinDescarga(value.toString());
+            }else if(key.equals("CNPDS")){
+                dto.setTMDescargadas(value.toString());
+            }
+
+
+        }
+
+        dto.setComercianteRecibeProd("TECNOLOGICA DE ALIMENTOS S.A.");
+
+
+        PlantillaPDFProduce(path, dto, imports.getFlag());
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -4430,7 +4480,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         return pdf;
     }
 
-    public void PlantillaPDFProduce (String path)throws Exception{
+    public void PlantillaPDFProduce (String path, PDFProduceDto dto, String flag)throws Exception{
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -4441,6 +4491,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDFont font = PDType1Font.HELVETICA;
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        if(flag.equals("X")) {
+            String cab = Constantes.RUTA_ARCHIVO_IMPORTAR + "cabecera.png";
+            PDImageXObject cabecera = PDImageXObject.createFromFile(cab, document);
+            contentStream.drawImage(cabecera, 50, 770);
+        }
 
         contentStream.beginText();
         contentStream.setFont(bold, 12);
@@ -4468,7 +4524,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(210, 650);
+        contentStream.moveTextPositionByAmount(230, 650);
+        contentStream.showText(dto.getArmadorORespresentante());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(210, 649);
         contentStream.showText("__________________________________________________");
         contentStream.endText();
 
@@ -4480,7 +4542,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(190, 630);
+        contentStream.moveTextPositionByAmount(70, 630);
+        contentStream.showText(dto.getDocumentoIdentidad());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(190, 629);
         contentStream.showText("__________________");
         contentStream.endText();
 
@@ -4529,7 +4597,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(150, 510);
+        contentStream.moveTextPositionByAmount(160, 510);
+        contentStream.showText(dto.getNombreEP());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(150, 509);
         contentStream.showText("_____________________");
         contentStream.endText();
 
@@ -4541,7 +4615,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(380, 510);
+        contentStream.moveTextPositionByAmount(390, 510);
+        contentStream.showText(dto.getMatriculaEP());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(380, 509);
         contentStream.showText("___________________");
         contentStream.endText();
 
@@ -4553,7 +4633,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(185, 490);
+        contentStream.moveTextPositionByAmount(195, 490);
+        contentStream.drawString(dto.getPermisoPesca());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(185, 489);
         contentStream.drawString("______________________________________________________");
         contentStream.endText();
 
@@ -4566,6 +4652,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(215, 470);
+        contentStream.drawString(dto.getCapacidadBodegaM3());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(215, 469);
         contentStream.drawString("________");
         contentStream.endText();
 
@@ -4578,6 +4670,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(310, 470);
+        contentStream.drawString(dto.getCapacidadBodegaTM());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(310, 469);
         contentStream.drawString("__________");
         contentStream.endText();
 
@@ -4590,6 +4688,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(450, 470);
+        contentStream.drawString(dto.getNroTripulantes());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(450, 469);
         contentStream.drawString("______");
         contentStream.endText();
 
@@ -4626,6 +4730,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(270, 400);
+        contentStream.drawString(dto.getFecha());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(270, 399);
         contentStream.drawString("____________");
         contentStream.endText();
 
@@ -4638,6 +4748,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(410, 400);
+        contentStream.drawString(dto.getFecha());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(410, 399);
         contentStream.drawString("_____________");
         contentStream.endText();
 
@@ -4649,7 +4765,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(130, 370);
+        contentStream.moveTextPositionByAmount(150, 370);
+        contentStream.drawString(dto.getNombre());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(130, 369);
         contentStream.drawString("________________________________________________________________");
         contentStream.endText();
 
@@ -4663,7 +4785,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.moveTextPositionByAmount(180, 340);
+        contentStream.moveTextPositionByAmount(200, 340);
+        contentStream.drawString(dto.getInicioDescarga());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(180, 339);
         contentStream.drawString("_______________________");
         contentStream.endText();
 
@@ -4676,6 +4804,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(410, 340);
+        contentStream.drawString(dto.getFinDescarga());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(410, 339);
         contentStream.drawString("_____________");
         contentStream.endText();
 
@@ -4688,6 +4822,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(180, 320);
+        contentStream.drawString(dto.getTMDescargadas());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(180, 319);
         contentStream.drawString("_______________________");
         contentStream.endText();
 
@@ -4700,6 +4840,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(290, 300);
+        contentStream.drawString(dto.getComercianteRecibeProd());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(290, 299);
         contentStream.drawString("___________________________________");
         contentStream.endText();
 

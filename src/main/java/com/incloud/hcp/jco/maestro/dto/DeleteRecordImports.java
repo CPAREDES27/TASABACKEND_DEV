@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.maestro.dto;
 
-public class CalenTempPescaImports {
+public class DeleteRecordImports {
     private String  i_table;
     private String  p_user;
     private String  t_data;

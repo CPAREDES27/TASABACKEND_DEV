@@ -396,4 +396,36 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
        return obj;
     }
 
+    public AnularDescargaExports AnularDescarga(AnularDescargaImports imports)throws Exception{
+
+        AnularDescargaExports dto= new AnularDescargaExports();
+
+        try{
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ANULA_DESCA);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_NRDES", imports.getP_nrdes());
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_MENSAJE=tables.getTable(Tablas.T_MENSAJE);
+            Metodos me= new Metodos();
+            List<HashMap<String , Object>>t_mensaje=me.ListarObjetos(T_MENSAJE);
+
+            dto.setT_mensaje(t_mensaje);
+            dto.setMensaje("Ok");
+
+
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+
+    }
+
+
 }

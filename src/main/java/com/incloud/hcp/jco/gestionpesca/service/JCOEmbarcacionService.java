@@ -1,7 +1,8 @@
 package com.incloud.hcp.jco.gestionpesca.service;
 
 import com.incloud.hcp.jco.gestionpesca.dto.*;
-import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.AnularDescargaExports;
+import com.incloud.hcp.jco.maestro.dto.AnularDescargaImports;
 import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 
 import java.util.List;
