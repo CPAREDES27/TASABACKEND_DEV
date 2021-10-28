@@ -1,4 +1,4 @@
-package com.incloud.hcp.util.Mail;
+package com.incloud.hcp.util.Mail.Dto;
 
 import java.util.List;
 
@@ -7,24 +7,7 @@ public class CorreoDto {
     private String subject;
     private String body;
     private List<String> sendTo;
-    private String  planta;
-    private String[]  data;
 
-    public String getPlanta() {
-        return planta;
-    }
-
-    public void setPlanta(String planta) {
-        this.planta = planta;
-    }
-
-    public String[] getData() {
-        return data;
-    }
-
-    public void setData(String[] data) {
-        this.data = data;
-    }
 
     public String getSubject() {
         return subject;

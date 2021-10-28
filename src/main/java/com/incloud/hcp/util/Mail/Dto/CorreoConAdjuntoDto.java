@@ -1,4 +1,4 @@
-package com.incloud.hcp.util.Mail;
+package com.incloud.hcp.util.Mail.Dto;
 
 public class CorreoConAdjuntoDto {
 

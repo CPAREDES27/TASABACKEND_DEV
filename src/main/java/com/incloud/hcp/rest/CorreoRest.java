@@ -1,8 +1,8 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.util.Mail.CorreoConAdjuntoDto;
-import com.incloud.hcp.util.Mail.CorreoDto;
-import com.incloud.hcp.util.Mail.CorreoService;
+import com.incloud.hcp.util.Mail.Dto.CorreoDto;
+import com.incloud.hcp.util.Mail.Service.CorreoService;
+import com.incloud.hcp.util.Mail.Dto.NotifDescTolvasDto;
 import com.incloud.hcp.util.Mensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,12 +23,12 @@ public class CorreoRest {
 
 
 /*
-    @PostMapping(value = "/EnviarCorreo", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/EnviarCorreoConAdjunto", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoConAdjuntoDto imports) {
         //Parametro dto = new Parametro();
 
         try {
-            return Optional.ofNullable(this.correoService.EnviarCorreo(imports))
+            return Optional.ofNullable(this.correoService.EnviarCorreoConAdjunto(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
@@ -40,7 +40,18 @@ public class CorreoRest {
     public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoDto correo) {
 
         try {
-            return Optional.ofNullable(this.correoService.Enviar(correo))
+            return Optional.ofNullable(this.correoService.EnviarCorreo(correo))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/EnviarNotifDescTolvas", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> EnviarNotifDescTolvas(@RequestBody NotifDescTolvasDto imports) {
+
+        try {
+            return Optional.ofNullable(this.correoService.EnviarNotifDescTolvas(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

@@ -1,15 +1,15 @@
-package com.incloud.hcp.util.Mail;
+package com.incloud.hcp.util.Mail.Service.Impl;
 
-import com.fasterxml.jackson.jr.ob.JSON;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroImports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
 import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.Mail.Dto.CorreoConAdjuntoDto;
+import com.incloud.hcp.util.Mail.Dto.CorreoDto;
+import com.incloud.hcp.util.Mail.Dto.NotifDescTolvasDto;
+import com.incloud.hcp.util.Mail.Service.CorreoService;
 import com.incloud.hcp.util.Mensaje;
-import com.sap.cloud.security.json.JsonObject;
-import org.apache.poi.ss.formula.functions.T;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class CorreoImpl implements CorreoService {
 
 
 
-    public Mensaje EnviarCorreo(CorreoConAdjuntoDto imports)throws Exception{
+    public Mensaje EnviarCorreoConAdjunto(CorreoConAdjuntoDto imports)throws Exception{
 
         Mensaje msj= new Mensaje();
 
@@ -92,23 +92,7 @@ public class CorreoImpl implements CorreoService {
     }
 
 
-    public void CrearArchivo(String base64 , String path) throws IOException {
-
-        File file = new File(path);
-
-        try ( FileOutputStream fos = new FileOutputStream(file); ) {
-
-            byte[] decoder = Base64.getDecoder().decode(base64);
-
-            fos.write(decoder);
-            log.error("Archivo Creado = " + path);
-        } catch (Exception e) {
-           log.error(e.getMessage());
-        }
-
-    }
-
-    public Mensaje Enviar(CorreoDto correo)throws Exception{
+    public Mensaje EnviarCorreo(CorreoDto correo)throws Exception{
 
         Mensaje msj= new Mensaje();
         try {
@@ -124,33 +108,9 @@ public class CorreoImpl implements CorreoService {
 
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
 
-            String sendTo="";
-            if(!correo.getPlanta().equals("") && correo.getData().length>0){
-                CorreoDto dto= EnviarNotifDescTolvas(correo.getData(), correo.getPlanta());
-                log.error("correo notificaciones tolvas");
+            String sendTo=ConcatListCorreos(correo.getSendTo());
 
-                sendTo=ConcatListCorreos(dto.getSendTo());
-                osw.write("{\n" +
-                        "\n" +
-                        "    \"sendto\" : \"" + sendTo + "\",\n" +
-                        "\n" +
-                        "    \"emailsubject\" : \"" + dto.getSubject() + "\",\n" +
-                        "\n" +
-                        "    \"bodyhtml\" : \"" + dto.getBody() + "\",\n" +
-                        "\n" +
-                        "    \"from\" : \"notificacionestasa@gmail.com\"\n" +
-                        "\n" +
-                        "}");
-
-                log.error("send: "+ sendTo );
-                log.error("send: "+ dto.getSubject());
-                log.error("send: "+ dto.getBody());
-            }else {
-                log.error("correo notificaciones tasa");
-
-                sendTo=ConcatListCorreos(correo.getSendTo());
-
-                osw.write("{\n" +
+            osw.write("{\n" +
                         "\n" +
                         "    \"sendto\" : \"" + sendTo + "\",\n" +
                         "\n" +
@@ -161,10 +121,7 @@ public class CorreoImpl implements CorreoService {
                         "    \"from\" : \"notificacionestasa@gmail.com\"\n" +
                         "\n" +
                         "}");
-                log.error("send: "+ sendTo);
-                log.error("send: "+ correo.getSubject());
-                log.error("send: "+ correo.getBody());
-            }
+
             osw.flush();
             osw.close();
             os.close();  //don't forget to close the OutputStream
@@ -179,13 +136,15 @@ public class CorreoImpl implements CorreoService {
         return msj;
     }
 
-    public CorreoDto EnviarNotifDescTolvas(String[] data, String planta)throws Exception{
+    public Mensaje EnviarNotifDescTolvas(NotifDescTolvasDto imports)throws Exception{
         String subject = "CORRECCIÓN DESCARGAS";
         String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
         String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
         String[] header = {"Cetro", "NroDesc", "Emba", "Matr", "CBOD", "FechIniDesc", "FechFinDesc", "PescDesc"};
         String[] Fields={"EMAIL"};
-        String option="CDMSO = 7 AND CDPTA = '"+planta+"'";
+        String option="CDMSO = 7 AND CDPTA = '"+imports.getPlanta()+"'";
+
+        Mensaje msj=new Mensaje();
         CorreoDto dto= new CorreoDto();
 
         try {
@@ -226,20 +185,22 @@ public class CorreoImpl implements CorreoService {
             emailPrueba.add("amagno.96@outlook.com");
             emailPrueba.add("ifp23@outlook.com");
 
-            String body = getFormatHtml(titulo, mensaje, header, data);
+            String body = getFormatHtml(titulo, mensaje, header, imports.getData());
 
             dto.setSubject(subject);
            // dto.setSendTo(emails);
             //se está poniendo emails de prueba
             dto.setSendTo(emailPrueba);
             dto.setBody(body);
+
+            msj=EnviarCorreo(dto);
         }
         catch (Exception e){
-            e.getMessage();
+           msj.setMensaje(e.getMessage());
         }
 
 
-        return dto;
+        return msj;
     }
 
     public String getFormatHtml(String titulo, String mensaje, String[]header, String[]data){
@@ -300,4 +261,21 @@ public class CorreoImpl implements CorreoService {
 
         return sendTo;
     }
+
+    public void CrearArchivo(String base64 , String path) throws IOException {
+
+        File file = new File(path);
+
+        try ( FileOutputStream fos = new FileOutputStream(file); ) {
+
+            byte[] decoder = Base64.getDecoder().decode(base64);
+
+            fos.write(decoder);
+            log.error("Archivo Creado = " + path);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+    }
+
 }
