@@ -359,7 +359,7 @@ public class EjecutarRFC {
 
                         if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
                             SimpleDateFormat parseador= new SimpleDateFormat("hhmmss");
-                            SimpleDateFormat formateador = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+                            SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
                             Date hora = parseador.parse(value.toString());
                             value = formateador.format(hora);
                         }
