@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CorreoService {
 
-    Mensaje EnviarCorreo(CorreoDto imports)throws Exception;
-    Mensaje Enviar()throws Exception;
+    Mensaje EnviarCorreo(CorreoConAdjuntoDto imports)throws Exception;
+    Mensaje Enviar(CorreoDto correo)throws Exception;
 
 }

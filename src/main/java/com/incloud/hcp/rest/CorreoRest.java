@@ -1,5 +1,6 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.util.Mail.CorreoConAdjuntoDto;
 import com.incloud.hcp.util.Mail.CorreoDto;
 import com.incloud.hcp.util.Mail.CorreoService;
 import com.incloud.hcp.util.Mensaje;
@@ -21,9 +22,9 @@ public class CorreoRest {
     private CorreoService correoService;
 
 
-
+/*
     @PostMapping(value = "/EnviarCorreo", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoDto imports) {
+    public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoConAdjuntoDto imports) {
         //Parametro dto = new Parametro();
 
         try {
@@ -33,16 +34,15 @@ public class CorreoRest {
             //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
-    }
+    }*/
 
-    @PostMapping(value = "/Correo", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Mensaje> Enviar() {
+    @PostMapping(value = "/EnvioCorreos", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> Enviar(@RequestBody CorreoDto correo) {
 
         try {
-            return Optional.ofNullable(this.correoService.Enviar())
+            return Optional.ofNullable(this.correoService.Enviar(correo))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
     }

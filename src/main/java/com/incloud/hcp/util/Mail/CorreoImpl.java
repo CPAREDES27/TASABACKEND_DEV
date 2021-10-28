@@ -1,42 +1,32 @@
 package com.incloud.hcp.util.Mail;
 
+import com.fasterxml.jackson.jr.ob.JSON;
+import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MaestroImports;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Mensaje;
+import com.sap.cloud.security.json.JsonObject;
+import org.apache.poi.ss.formula.functions.T;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.activation.FileDataSource;
-import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import java.util.Properties;
-
 
 
 @Service
@@ -45,11 +35,14 @@ public class CorreoImpl implements CorreoService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private JCOMaestrosServiceImpl jcoMaestrosService;
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
 
-    public Mensaje EnviarCorreo(CorreoDto imports)throws Exception{
+    public Mensaje EnviarCorreo(CorreoConAdjuntoDto imports)throws Exception{
 
         Mensaje msj= new Mensaje();
 
@@ -115,7 +108,7 @@ public class CorreoImpl implements CorreoService {
 
     }
 
-    public Mensaje Enviar()throws Exception{
+    public Mensaje Enviar(CorreoDto correo)throws Exception{
 
         Mensaje msj= new Mensaje();
         try {
@@ -130,17 +123,48 @@ public class CorreoImpl implements CorreoService {
             OutputStream os = httpCon.getOutputStream();
 
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-            osw.write("{\n" +
-                    "\n" +
-                    "    \"sendto\" : \"israeljfp23@gmail.com\",\n" +
-                    "\n" +
-                    "    \"emailsubject\" : \"Prueba\",\n" +
-                    "\n" +
-                    "    \"bodyhtml\" : \"Prueba correo\",\n" +
-                    "\n" +
-                    "    \"from\" : \"tasa@gmail.com\"\n" +
-                    "\n" +
-                    "}");
+
+            String sendTo="";
+            if(!correo.getPlanta().equals("") && correo.getData().length>0){
+                CorreoDto dto= EnviarNotifDescTolvas(correo.getData(), correo.getPlanta());
+                log.error("correo notificaciones tolvas");
+
+                sendTo=ConcatListCorreos(dto.getSendTo());
+                osw.write("{\n" +
+                        "\n" +
+                        "    \"sendto\" : \"" + sendTo + "\",\n" +
+                        "\n" +
+                        "    \"emailsubject\" : \"" + dto.getSubject() + "\",\n" +
+                        "\n" +
+                        "    \"bodyhtml\" : \"" + dto.getBody() + "\",\n" +
+                        "\n" +
+                        "    \"from\" : \"notificacionestasa@gmail.com\"\n" +
+                        "\n" +
+                        "}");
+
+                log.error("send: "+ sendTo );
+                log.error("send: "+ dto.getSubject());
+                log.error("send: "+ dto.getBody());
+            }else {
+                log.error("correo notificaciones tasa");
+
+                sendTo=ConcatListCorreos(correo.getSendTo());
+
+                osw.write("{\n" +
+                        "\n" +
+                        "    \"sendto\" : \"" + sendTo + "\",\n" +
+                        "\n" +
+                        "    \"emailsubject\" : \"" + correo.getSubject() + "\",\n" +
+                        "\n" +
+                        "    \"bodyhtml\" : \"" + correo.getBody() + "\",\n" +
+                        "\n" +
+                        "    \"from\" : \"notificacionestasa@gmail.com\"\n" +
+                        "\n" +
+                        "}");
+                log.error("send: "+ sendTo);
+                log.error("send: "+ correo.getSubject());
+                log.error("send: "+ correo.getBody());
+            }
             osw.flush();
             osw.close();
             os.close();  //don't forget to close the OutputStream
@@ -153,5 +177,127 @@ public class CorreoImpl implements CorreoService {
         }
 
         return msj;
+    }
+
+    public CorreoDto EnviarNotifDescTolvas(String[] data, String planta)throws Exception{
+        String subject = "CORRECCIÓN DESCARGAS";
+        String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
+        String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
+        String[] header = {"Cetro", "NroDesc", "Emba", "Matr", "CBOD", "FechIniDesc", "FechFinDesc", "PescDesc"};
+        String[] Fields={"EMAIL"};
+        String option="CDMSO = 7 AND CDPTA = '"+planta+"'";
+        CorreoDto dto= new CorreoDto();
+
+        try {
+            List<MaestroOptions> options = new ArrayList<>();
+            MaestroOptions mo = new MaestroOptions();
+            mo.setWa(option);
+            options.add(mo);
+
+            MaestroImports mi = new MaestroImports();
+            mi.setTabla("ZFLMOC");
+            mi.setDelimitador("|");
+            mi.setFields(Fields);
+            mi.setP_user("FGARCIA");
+            mi.setOptions(options);
+
+
+            MaestroExport me = jcoMaestrosService.obtenerMaestro(mi);
+
+            List<String> emails = new ArrayList<>();
+            for (int i = 0; i < me.getData().size(); i++) {
+
+                for (Map.Entry<String, Object> entry : me.getData().get(i).entrySet()) {
+
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+
+                    if (!emails.contains(value.toString())) {
+                        emails.add(value.toString());
+                    }
+                }
+
+            }
+            String emailSAP = ConcatListCorreos(emails);
+            log.error("email SAP: " + emailSAP);
+
+            //emails de prueba
+            List<String>emailPrueba= new ArrayList<>();
+            emailPrueba.add("amagno.96@outlook.com");
+            emailPrueba.add("ifp23@outlook.com");
+
+            String body = getFormatHtml(titulo, mensaje, header, data);
+
+            dto.setSubject(subject);
+           // dto.setSendTo(emails);
+            //se está poniendo emails de prueba
+            dto.setSendTo(emailPrueba);
+            dto.setBody(body);
+        }
+        catch (Exception e){
+            e.getMessage();
+        }
+
+
+        return dto;
+    }
+
+    public String getFormatHtml(String titulo, String mensaje, String[]header, String[]data){
+        String bodyHtml = null;
+
+        bodyHtml  = "<span style='font-family:'Arial'; font-size:12px;'>";
+        bodyHtml += "<strong><span style='font-size:13px;'>" + titulo + "</span></strong>";
+        bodyHtml += "<br><br>";
+        bodyHtml += "</span>";
+        bodyHtml += "<font color =blue>" + mensaje + "</font> <br><hr><br>";
+
+        if (header != null && data != null){
+            bodyHtml += "<table border = 1>" +
+                    "<tr>" +
+                    "<tbody>";
+
+            for (int i = 0; i < header.length; i++ ) {
+                bodyHtml += "<td><font color =blue>" + header[i].toString().trim() + "</font></td>" ;
+            }
+
+            bodyHtml +="</tbody></tr> ";
+
+            for (int i  = 0; i < data.length; i++ ) {
+                String[] vector = data[i].toString().split("%");
+                bodyHtml += "<tr>";
+
+                for (int j = 0; j < vector.length ; j++ ) {
+                    bodyHtml += "<td>" + vector[j].toString().trim() + "</td>";
+                }
+
+                bodyHtml += "</tr>";
+            }
+
+            bodyHtml += "</table>";
+        }
+
+        bodyHtml += "<br><hr><br>";
+
+        return bodyHtml;
+    }
+
+    public String ConcatListCorreos(List<String> listaCorreos){
+
+        String sendTo="";
+        if(listaCorreos.size()==1){
+            sendTo = listaCorreos.get(0);
+        }else {
+            for (int i = 0; i < listaCorreos.size(); i++) {
+
+                if(i==listaCorreos.size()-1){
+                    sendTo += listaCorreos.get(i);
+                }else {
+                    sendTo += listaCorreos.get(i) + ", ";
+                }
+
+            }
+        }
+
+        return sendTo;
     }
 }

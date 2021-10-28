@@ -1,56 +1,29 @@
 package com.incloud.hcp.util.Mail;
 
+import java.util.List;
+
 public class CorreoDto {
 
-
-    private String from;
     private String subject;
-    private String text;
-    private String rutaArchivo;
-    private String nombreArchivo;
-    private String[] to;
-    private String base64;
+    private String body;
+    private List<String> sendTo;
+    private String  planta;
+    private String[]  data;
 
-    public String getBase64() {
-        return base64;
+    public String getPlanta() {
+        return planta;
     }
 
-    public void setBase64(String base64) {
-        this.base64 = base64;
+    public void setPlanta(String planta) {
+        this.planta = planta;
     }
 
-    public String[] getTo() {
-        return to;
+    public String[] getData() {
+        return data;
     }
 
-    public void setTo(String[] to) {
-        this.to = to;
-    }
-
-    public String getNombreArchivo() {
-        return nombreArchivo;
-    }
-
-    public void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
+    public void setData(String[] data) {
+        this.data = data;
     }
 
     public String getSubject() {
@@ -61,12 +34,19 @@ public class CorreoDto {
         this.subject = subject;
     }
 
-    public String getRutaArchivo() {
-        return rutaArchivo;
+    public String getBody() {
+        return body;
     }
 
-    public void setRutaArchivo(String rutaArchivo) {
-        this.rutaArchivo = rutaArchivo;
+    public void setBody(String body) {
+        this.body = body;
     }
 
+    public List<String> getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(List<String> sendTo) {
+        this.sendTo = sendTo;
+    }
 }
