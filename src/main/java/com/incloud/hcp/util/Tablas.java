@@ -57,6 +57,7 @@ public class Tablas {
     public static String S_POSICION="S_POSICION";
     public static String IT_ZFLEMB="IT_ZFLEMB";
     public static String ET_ZFLEMB="ET_ZFLEMB";
+    public static String T_CAL="T_CAL";
 
 
 

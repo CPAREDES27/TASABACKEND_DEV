@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -376,4 +374,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return vm;
     }
+
+
 }

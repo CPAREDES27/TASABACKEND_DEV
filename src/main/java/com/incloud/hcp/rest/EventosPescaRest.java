@@ -71,4 +71,16 @@ public class EventosPescaRest {
 
     }
 
+    @PostMapping(value = "/AnularDescarga/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnularDescargaExports> AnularDescarga(@RequestBody AnularDescargaImports imports){
+
+        try {
+            return Optional.ofNullable(this.jcoEventosPescaService.AnularDescarga(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
 }

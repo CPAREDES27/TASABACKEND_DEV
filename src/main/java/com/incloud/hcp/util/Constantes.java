@@ -35,6 +35,8 @@ public class Constantes {
     public static String ZFL_RFC_DELETE_PO ="ZFL_RFC_DELETE_PO";
     public static String ZFL_RFC_DELETE_RECORDS ="ZFL_RFC_DELETE_RECORDS";
     public static String ZFL_RFC_IMPO_PRODUCE ="ZFL_RFC_IMPO_PRODUCE";
+    public static String ZFL_RFC_ANULA_DESCA="ZFL_RFC_ANULA_DESCA";
+    public static String ZFL_RFC_CALEN_TEMP_PESC="ZFL_RFC_CALEN_TEMP_PESC";
 
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";

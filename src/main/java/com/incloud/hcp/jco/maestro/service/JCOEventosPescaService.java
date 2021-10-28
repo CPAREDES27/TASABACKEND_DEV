@@ -10,4 +10,6 @@ public interface JCOEventosPescaService {
     Mensaje EditarEventosPesca(EventosPescaEditImports imports)throws Exception;
     ConfiguracionEventoPescaExports ObtenerConfEventosPesca()throws Exception;
     HorometrosExport obtenerHorometros(HorometrosImportDto evento) throws Exception;
+    AnularDescargaExports AnularDescarga(AnularDescargaImports imports)throws Exception;
+
 }

@@ -1,10 +1,8 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.CalenTempPescaExports;
-import com.incloud.hcp.jco.maestro.dto.CalenTempPescaImports;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.jco.maestro.service.JCOCalendTempPescaService;
+import com.incloud.hcp.jco.maestro.dto.CalendarioTemporadaExports;
+import com.incloud.hcp.jco.maestro.dto.CalendarioTemporadaImports;
+import com.incloud.hcp.jco.maestro.service.JCOCalendarioTemporadaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -12,31 +10,30 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class JCOCalendTempPescaImpl implements JCOCalendTempPescaService {
+public class JCOCalendarioTemporadaImpl implements JCOCalendarioTemporadaService {
 
-    public CalenTempPescaExports BorrarRegistro(CalenTempPescaImports imports)throws Exception{
+    public CalendarioTemporadaExports Guadar(CalendarioTemporadaImports imports)throws Exception{
 
-        CalenTempPescaExports dto= new CalenTempPescaExports();
+        CalendarioTemporadaExports dto= new CalendarioTemporadaExports();
+
 
         try{
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_DELETE_RECORDS);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CALEN_TEMP_PESC);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("I_TABLE", imports.getI_table());
             importx.setValue("P_USER", imports.getP_user());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
-            JCoTable T_DATA = tables.getTable(Tablas.T_DATA);
-            T_DATA.appendRow();
-            T_DATA.setValue("DATA",imports.getT_data());
+
+            EjecutarRFC exec= new EjecutarRFC();
+            exec.setTable(tables, Tablas.T_CAL,imports.getT_cal());
 
             stfcConnection.execute(destination);
 
@@ -52,8 +49,7 @@ public class JCOCalendTempPescaImpl implements JCOCalendTempPescaService {
 
             dto.setMensaje(e.getMessage());
         }
-
         return dto;
-    }
 
+    }
 }
