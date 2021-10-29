@@ -74,6 +74,11 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                     T_RPN.setValue("DEMAT",dto.getDEMAT());
                     T_RPN.setValue("FHCRN",dto.getFHCRN());
                     T_RPN.setValue("HRCRN",dto.getHRCRN());
+                    T_RPN.setValue("ATCRN",dto.getATCRN());
+                    T_RPN.setValue("FHMFN",dto.getFHMFN());
+                    T_RPN.setValue("HRMFN",dto.getHRMFN());
+                    T_RPN.setValue("ATMFN",dto.getATMFN());
+
                 }
                 T_RNV.appendRow();
                 T_RNV.setValue("MANDT","");
@@ -81,10 +86,10 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                 T_RNV.setValue("FHRNV",imports.getFHRNV());
                 T_RNV.setValue("ESRNV","");
                 T_RNV.setValue("FHCRN","");
-                T_RNV.setValue("HRCRN","00:00:00");
+                T_RNV.setValue("HRCRN","000000");
                 T_RNV.setValue("ATCRN","");
                 T_RNV.setValue("FHMFN","");
-                T_RNV.setValue("HRMFN","00:00:00");
+                T_RNV.setValue("HRMFN","000000");
                 T_RNV.setValue("ATMFN","");
 
             }

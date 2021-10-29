@@ -25,6 +25,42 @@ public class RegistroAceiteDto {
     private String DEMAT;
     private String FHCRN;
     private String HRCRN;
+    private String ATCRN;
+    private String FHMFN;
+    private String HRMFN;
+    private String ATMFN;
+
+    public String getATCRN() {
+        return ATCRN;
+    }
+
+    public void setATCRN(String ATCRN) {
+        this.ATCRN = ATCRN;
+    }
+
+    public String getFHMFN() {
+        return FHMFN;
+    }
+
+    public void setFHMFN(String FHMFN) {
+        this.FHMFN = FHMFN;
+    }
+
+    public String getHRMFN() {
+        return HRMFN;
+    }
+
+    public void setHRMFN(String HRMFN) {
+        this.HRMFN = HRMFN;
+    }
+
+    public String getATMFN() {
+        return ATMFN;
+    }
+
+    public void setATMFN(String ATMFN) {
+        this.ATMFN = ATMFN;
+    }
 
     public String getMANDT() {
         return MANDT;
