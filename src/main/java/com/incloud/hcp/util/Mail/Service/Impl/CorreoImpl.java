@@ -184,6 +184,7 @@ public class CorreoImpl implements CorreoService {
             List<String>emailPrueba= new ArrayList<>();
             emailPrueba.add("amagno.96@outlook.com");
             emailPrueba.add("ifp23@outlook.com");
+            emailPrueba.add("grosales@xternal.biz");
 
             String body = getFormatHtml(titulo, mensaje, header, imports.getData());
 
