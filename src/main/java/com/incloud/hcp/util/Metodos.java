@@ -283,6 +283,12 @@ public class Metodos {
         else if (table.equals("FASE")) {
             tablita = "ZFLFAS";
         }
+        else if (table.equals("MATERIAL")) {
+            tablita = "ZTB_CONSTANTES";
+        }
+        else if (table.equals("TIPOMATERIAL")) {
+            tablita = "ZTB_CONSTANTES";
+        }
         return tablita;
     }
 
@@ -311,8 +317,10 @@ public class Metodos {
         }
         else if(table.equals("FASE")){
             wa= "ESREG = 'S'";
-        }else if(table.equals("ALMACEN")){
-            wa= "ESREG = 'S'";
+        }else if(table.equals("MATERIAL")){
+            wa= "APLICACION EQ 'FL' AND (PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES') AND (CORR EQ '0002')";
+        }else if(table.equals("TIPOMATERIAL")){
+            wa= "APLICACION EQ 'FL' AND (PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES') AND (CORR EQ '0003')";
         }
 
         return wa;
@@ -402,6 +410,12 @@ public class Metodos {
         }
         else if (table.equals("FASE")) {
             fields = new String[] {"CDFAS", "DSFAS"};
+        }
+        else if (table.equals("MATERIAL")) {
+            fields = new String[] {"CAMPO", "LOW"};
+        }
+        else if (table.equals("TIPOMATERIAL")) {
+            fields = new String[] {"LOW", "LOW"};
         }
 
         return fields;
