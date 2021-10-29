@@ -3,10 +3,34 @@ package com.incloud.hcp.jco.distribucionflota.dto;
 public class TotalDto {
     private String CodPlanta;
     private String DescPlanta;
-    private String PescDeclProp;
-    private String EmbaPescProp;
-    private String CbodProp;
+    private double PescDeclProp;
+    private double EmbaPescProp;
+    private double CbodProp;
     private String dif;
+
+    public double getPescDeclProp() {
+        return PescDeclProp;
+    }
+
+    public void setPescDeclProp(double pescDeclProp) {
+        PescDeclProp = pescDeclProp;
+    }
+
+    public double getEmbaPescProp() {
+        return EmbaPescProp;
+    }
+
+    public void setEmbaPescProp(double embaPescProp) {
+        EmbaPescProp = embaPescProp;
+    }
+
+    public double getCbodProp() {
+        return CbodProp;
+    }
+
+    public void setCbodProp(double cbodProp) {
+        CbodProp = cbodProp;
+    }
 
     public String getCodPlanta() {
         return CodPlanta;
@@ -22,30 +46,6 @@ public class TotalDto {
 
     public void setDescPlanta(String descPlanta) {
         DescPlanta = descPlanta;
-    }
-
-    public String getPescDeclProp() {
-        return PescDeclProp;
-    }
-
-    public void setPescDeclProp(String pescDeclProp) {
-        PescDeclProp = pescDeclProp;
-    }
-
-    public String getEmbaPescProp() {
-        return EmbaPescProp;
-    }
-
-    public void setEmbaPescProp(String embaPescProp) {
-        EmbaPescProp = embaPescProp;
-    }
-
-    public String getCbodProp() {
-        return CbodProp;
-    }
-
-    public void setCbodProp(String cbodProp) {
-        CbodProp = cbodProp;
     }
 
     public String getDif() {
