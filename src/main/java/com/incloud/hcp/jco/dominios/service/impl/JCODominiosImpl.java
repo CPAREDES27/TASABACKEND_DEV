@@ -33,7 +33,6 @@ public class JCODominiosImpl implements JCODominiosService {
 
             for (DominioParams domParams : imports.getDominios()) {
 
-
                 if (domParams.getDomname().startsWith("Z")) {
                     DominiosExports exports = new DominiosExports();
 
@@ -99,6 +98,11 @@ public class JCODominiosImpl implements JCODominiosService {
 
                             listDatas.add(dataOpcionFechaRfeb1);
                             listDatas.add(dataOpcionFechaRfeb2);
+                            break;
+                        case "ALMACEN":
+                            Metodos me = new Metodos();
+                            listDatas=me.obtenerAlmacen();
+
                             break;
                         default:
                             /**

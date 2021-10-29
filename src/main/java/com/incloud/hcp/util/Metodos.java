@@ -84,7 +84,60 @@ public class Metodos {
         return data;
     }
 
+    public List<DominioExportsData> obtenerAlmacen() throws Exception{
 
+        String[] optionsCentro={"APLICACION EQ 'FL' AND PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES' AND CAMPO EQ 'WERKS'"};
+        String centro=getFieldData("ZTB_CONSTANTES",optionsCentro,"LOW");
+        String[] optionPlanta={"WERKS EQ '"+centro+"'"};
+        String planta= getFieldData("ZFLPTA",optionPlanta,"CDPTA");
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        String[] fieldname = {"CDALM","DSALM"};
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+
+        importx.setValue("QUERY_TABLE", "ZFLALM");
+        importx.setValue("DELIMITER", "|");
+        importx.setValue("P_USER", "FGARCIA");
+        importx.setValue("P_ORDER", "DSALM ASCENDING");
+
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        JCoTable tableImport = tables.getTable("OPTIONS");
+        tableImport.appendRow();
+
+        tableImport.setValue("WA", "CDPTA EQ '" + planta + "' AND ESREG EQ 'S'");
+        stfcConnection.execute(destination);
+        JCoTable lis_out = tables.getTable("DATA");
+        JCoTable FIELDS = tables.getTable("FIELDS");
+        List<DominioExportsData> listDatas = new ArrayList<>();
+
+        for (int i = 0; i < lis_out.getNumRows(); i++) {
+            lis_out.setRow(i);
+            DominioExportsData data = new DominioExportsData();
+            String ArrayResponse[] = lis_out.getString().split("\\|");
+            for (int j = 0; j < FIELDS.getNumRows(); j++) {
+                FIELDS.setRow(j);
+                String key = (String) FIELDS.getValue("FIELDNAME");
+
+                if (key.equals(fieldname[0])) {
+
+                    Object value = ArrayResponse[j];
+                    data.setId(value.toString().trim());
+
+
+                }
+                if (key.equals(fieldname[1])) {
+                    Object values = ArrayResponse[j];
+                    data.setDescripcion(values.toString().trim());
+                }
+
+
+            }
+            listDatas.add(data);
+        }
+        return listDatas;
+    }
     public List<HashMap<String, Object>> ListarObjetosDIR(JCoTable tableExport) throws Exception {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
@@ -132,6 +185,9 @@ public class Metodos {
         String tablita = "";
         if (table.equals("MONEDA")) {
             tablita = "ZFLMND";
+        }
+        if (table.equals("ALMACEN")) {
+            tablita = "ZFLALM";
         }
         if (table.equals("UBICPLANTA")) {
             tablita = "ZFLUPT";
@@ -226,7 +282,12 @@ public class Metodos {
         }
         else if (table.equals("FASE")) {
             tablita = "ZFLFAS";
-
+        }
+        else if (table.equals("MATERIAL")) {
+            tablita = "ZTB_CONSTANTES";
+        }
+        else if (table.equals("TIPOMATERIAL")) {
+            tablita = "ZTB_CONSTANTES";
         }
         return tablita;
     }
@@ -256,7 +317,12 @@ public class Metodos {
         }
         else if(table.equals("FASE")){
             wa= "ESREG = 'S'";
+        }else if(table.equals("MATERIAL")){
+            wa= "APLICACION EQ 'FL' AND (PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES') AND (CORR EQ '0002')";
+        }else if(table.equals("TIPOMATERIAL")){
+            wa= "APLICACION EQ 'FL' AND (PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES') AND (CORR EQ '0003')";
         }
+
         return wa;
     }
 
@@ -344,6 +410,12 @@ public class Metodos {
         }
         else if (table.equals("FASE")) {
             fields = new String[] {"CDFAS", "DSFAS"};
+        }
+        else if (table.equals("MATERIAL")) {
+            fields = new String[] {"CAMPO", "LOW"};
+        }
+        else if (table.equals("TIPOMATERIAL")) {
+            fields = new String[] {"LOW", "LOW"};
         }
 
         return fields;
