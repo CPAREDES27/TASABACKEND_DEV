@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
+import java.util.List;
+
 public class AceitesUsadosImports {
 
     private String ip_tope;
@@ -9,9 +11,27 @@ public class AceitesUsadosImports {
     private String ip_fhrnvf;
     private String ip_cdalm;
     private String ip_esrnv;
+    private String FHRNV;
     private String[] fieldsT_rnv;
     private String[] fieldsT_rpn;
     private String[] fieldsEt_mensj;
+    private List<RegistroAceiteDto> t_rpn;
+
+    public String getFHRNV() {
+        return FHRNV;
+    }
+
+    public void setFHRNV(String FHRNV) {
+        this.FHRNV = FHRNV;
+    }
+
+    public List<RegistroAceiteDto> getT_rpn() {
+        return t_rpn;
+    }
+
+    public void setT_rpn(List<RegistroAceiteDto> t_rpn) {
+        this.t_rpn = t_rpn;
+    }
 
     public String[] getFieldsEt_mensj() {
         return fieldsEt_mensj;
