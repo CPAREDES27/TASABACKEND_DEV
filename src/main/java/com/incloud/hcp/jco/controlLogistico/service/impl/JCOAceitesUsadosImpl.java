@@ -54,7 +54,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                     T_RPN.setValue("MANDT",dto.getMANDT());
                     T_RPN.setValue("NRRNV",dto.getNRRNV());
                     T_RPN.setValue("NRPOS",dto.getNRPOS());
-                    T_RPN.setValue("FHRNV;",dto.getFHRNV());
+                    T_RPN.setValue("FHRNV",dto.getFHRNV());
                     T_RPN.setValue("ESRNV",dto.getESRNV());
                     T_RPN.setValue("DSEST",dto.getDSEST());
                     T_RPN.setValue("CDSUM",dto.getCDSUM());
