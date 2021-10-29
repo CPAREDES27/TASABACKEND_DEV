@@ -140,6 +140,9 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
                                 n_embarcacion.setEstado(s_str_di.getString("DSEEC"));
                                 n_embarcacion.setHoraArribo(s_str_di.getString("HEARR"));
+                                if(n_embarcacion.getHoraArribo() != null && n_embarcacion.getHoraArribo() != "")
+                                {String[] parts = n_embarcacion.getHoraArribo().split(":");
+                                    n_embarcacion.setHoraArribo(parts[0] + ":" + parts[1]);}
                                 n_embarcacion.setDiaAnt(s_str_di.getString("DA"));
                                 n_embarcacion.setTdc(s_str_di.getString("TDC"));
                                 n_embarcacion.setDescZonaCala(s_str_di.getString("ZONA"));
