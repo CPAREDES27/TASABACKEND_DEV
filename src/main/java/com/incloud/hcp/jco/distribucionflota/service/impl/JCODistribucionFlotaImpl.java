@@ -82,7 +82,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                         logger.error("cz12 : " + cz1 + " - cz22 : " + cz2);
                         n_planta.setCodPlanta(s_str_pta.getString("CDPTA"));
                         n_planta.setPlantaName(s_str_pta.getString("DESCR"));
-                        n_planta.setTot_PescaReq(s_str_pta.getString("CNPRQ"));
+                        n_planta.setTot_PescaReq(Double.parseDouble(s_str_pta.getString("CNPRQ")));
                         List<EmbarcacionesDto> embarcaciones = new ArrayList<EmbarcacionesDto>();
                         //VARIABLES TOTALES
                         int vi_contadorEmb = 0;
@@ -140,6 +140,9 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 n_embarcacion.setPescDecl(s_str_di.getString("CNPCM"));
                                 n_embarcacion.setEstado(s_str_di.getString("DSEEC"));
                                 n_embarcacion.setHoraArribo(s_str_di.getString("HEARR"));
+                                if(n_embarcacion.getHoraArribo() != null && n_embarcacion.getHoraArribo() != "")
+                                {String[] parts = n_embarcacion.getHoraArribo().split(":");
+                                    n_embarcacion.setHoraArribo(parts[0] + ":" + parts[1]);}
                                 n_embarcacion.setDiaAnt(s_str_di.getString("DA"));
                                 n_embarcacion.setTdc(s_str_di.getString("TDC"));
                                 n_embarcacion.setDescZonaCala(s_str_di.getString("ZONA"));
@@ -193,10 +196,10 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                             embarcaciones = this.EmbarcacionesFiltradas(embarcaciones, importsParam.getP_numFilas());
                         }
                         //-------------------------------------------------------------------------------
-                        n_planta.setTot_emb(String.valueOf(vi_contadorEmb));
-                        n_planta.setTot_bod(String.valueOf(vi_contadorBod));
-                        n_planta.setTot_decl(String.valueOf(vi_contadorDecl));
-                        n_planta.setTot_Est(String.valueOf(vi_totdesc_est));
+                        n_planta.setTot_emb(vi_contadorEmb);
+                        n_planta.setTot_bod(vi_contadorBod);
+                        n_planta.setTot_decl(vi_contadorDecl);
+                        n_planta.setTot_Est(vi_totdesc_est);
                         n_planta.setListaEmbarcaciones(embarcaciones);
                         plantas.add(n_planta);
                     }
@@ -211,9 +214,9 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             dto.setListaZonas(zonas);
             /************************************* lOGICA DE SETEO DE RESUMEN *****************************/
             dto.setListaDescargas(Descargas);
-            dto.setTot_desc_cbod(String.valueOf(vd_totdesc_cbod));
-            dto.setTot_desc_desc(String.valueOf(vd_totdesc_desc));
-            dto.setTot_desc_dscl(String.valueOf(vd_totdesc_decl));
+            dto.setTot_desc_cbod(vd_totdesc_cbod);
+            dto.setTot_desc_desc(vd_totdesc_desc);
+            dto.setTot_desc_dscl(vd_totdesc_decl);
 
             List<PropiosDto> lst_propios = new ArrayList<PropiosDto>();
             List<TercerosDto> lst_terceros = new ArrayList<TercerosDto>();
@@ -269,23 +272,23 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
 
                     resumenProp.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenProp.setDescPlanta(s_str_dp.getString("DESCR"));
-                    resumenProp.setPescDeclProp(s_str_dp.getString("CNPCM"));
-                    resumenProp.setEmbaPescProp(s_str_dp.getString("CNEMB"));
-                    resumenProp.setCbodProp(s_str_dp.getString("CPPMP"));
+                    resumenProp.setPescDeclProp(Double.parseDouble(s_str_dp.getString("CNPCM")));
+                    resumenProp.setEmbaPescProp(Double.parseDouble( s_str_dp.getString("CNEMB")));
+                    resumenProp.setCbodProp(Double.parseDouble(s_str_dp.getString("CPPMP")));
 
                     resumenTotal.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenTotal.setDescPlanta(s_str_dp.getString("DESCR"));
-                    resumenTotal.setPescDeclProp(s_str_dp.getString("CNPCM"));
-                    resumenTotal.setEmbaPescProp(s_str_dp.getString("CNEMB"));
-                    resumenTotal.setCbodProp(s_str_dp.getString("CPPMP"));
+                    resumenTotal.setPescDeclProp(Double.parseDouble(s_str_dp.getString("CNPCM")));
+                    resumenTotal.setEmbaPescProp(Double.parseDouble(s_str_dp.getString("CNEMB")));
+                    resumenTotal.setCbodProp(Double.parseDouble(s_str_dp.getString("CPPMP")));
 
-                    vd_totprop_cbod = vd_totprop_cbod + Double.parseDouble(resumenProp.getCbodProp());
-                    vd_totprop_dscl = vd_totprop_dscl + Double.parseDouble(resumenProp.getPescDeclProp());
-                    vd_totprop_ep = vd_totprop_ep + Double.parseDouble(resumenProp.getEmbaPescProp());
+                    vd_totprop_cbod = vd_totprop_cbod + resumenProp.getCbodProp();
+                    vd_totprop_dscl = vd_totprop_dscl + resumenProp.getPescDeclProp();
+                    vd_totprop_ep = vd_totprop_ep + resumenProp.getEmbaPescProp();
 
-                    vd_tottot_cbod = vd_tottot_cbod + Double.parseDouble(resumenProp.getCbodProp());
-                    vd_tottot_dscl = vd_tottot_dscl + Double.parseDouble(resumenProp.getPescDeclProp());
-                    vd_tottot_ep = vd_tottot_ep + Double.parseDouble(resumenProp.getEmbaPescProp());
+                    vd_tottot_cbod = vd_tottot_cbod + resumenProp.getCbodProp();
+                    vd_tottot_dscl = vd_tottot_dscl + resumenProp.getPescDeclProp();
+                    vd_tottot_ep = vd_tottot_ep + resumenProp.getEmbaPescProp();
 
                     lst_propios.add(resumenProp);
                     lst_totales.add(resumenTotal);
@@ -324,23 +327,23 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
 
                     resumenTerc.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenTerc.setDescPlanta(s_str_dp.getString("DESCR"));
-                    resumenTerc.setPescDeclProp(s_str_dp.getString("CNPDT"));
-                    resumenTerc.setEmbaPescProp(s_str_dp.getString("CNEMT"));
-                    resumenTerc.setCbodProp(s_str_dp.getString("CPPMT"));
+                    resumenTerc.setPescDeclProp(Double.parseDouble(s_str_dp.getString("CNPDT")));
+                    resumenTerc.setEmbaPescProp(Double.parseDouble(s_str_dp.getString("CNEMT")));
+                    resumenTerc.setCbodProp(Double.parseDouble(s_str_dp.getString("CPPMT")));
 
                     resumenTotal.setCodPlanta(s_str_dp.getString("CDPTA"));
                     resumenTotal.setDescPlanta(s_str_dp.getString("DESCR"));
-                    resumenTotal.setPescDeclProp(s_str_dp.getString("CNPDT"));
-                    resumenTotal.setEmbaPescProp(s_str_dp.getString("CNEMT"));
-                    resumenTotal.setCbodProp(s_str_dp.getString("CPPMT"));
+                    resumenTotal.setPescDeclProp(Double.parseDouble(s_str_dp.getString("CNPDT")));
+                    resumenTotal.setEmbaPescProp(Double.parseDouble(s_str_dp.getString("CNEMT")));
+                    resumenTotal.setCbodProp(Double.parseDouble(s_str_dp.getString("CPPMT")));
 
-                    vd_totterc_cbod = vd_totterc_cbod + Double.parseDouble(resumenTerc.getCbodProp());
-                    vd_totterc_dscl = vd_totterc_dscl + Double.parseDouble(resumenTerc.getPescDeclProp());
-                    vd_totterc_ep = vd_totterc_ep + Double.parseDouble(resumenTerc.getEmbaPescProp());
+                    vd_totterc_cbod = vd_totterc_cbod + resumenTerc.getCbodProp();
+                    vd_totterc_dscl = vd_totterc_dscl + resumenTerc.getPescDeclProp();
+                    vd_totterc_ep = vd_totterc_ep + resumenTerc.getEmbaPescProp();
 
-                    vd_tottot_cbod = vd_tottot_cbod + Double.parseDouble(resumenTerc.getCbodProp());
-                    vd_tottot_dscl = vd_tottot_dscl + Double.parseDouble(resumenTerc.getPescDeclProp());
-                    vd_tottot_ep = vd_tottot_ep + Double.parseDouble(resumenTerc.getEmbaPescProp());
+                    vd_tottot_cbod = vd_tottot_cbod + resumenTerc.getCbodProp();
+                    vd_tottot_dscl = vd_tottot_dscl + resumenTerc.getPescDeclProp();
+                    vd_tottot_ep = vd_tottot_ep + resumenTerc.getEmbaPescProp();
 
                     lst_terceros.add(resumenTerc);
                     lst_totales.add(resumenTotal);
@@ -350,17 +353,17 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             }
 
             dto.setListaPropios(lst_propios);
-            dto.setTot_prop_cbod(String.valueOf(vd_totprop_cbod));
-            dto.setTot_prop_dscl(String.valueOf(vd_totprop_dscl));
-            dto.setTot_prop_ep(String.valueOf(vd_totprop_ep));
+            dto.setTot_prop_cbod(vd_totprop_cbod);
+            dto.setTot_prop_dscl(vd_totprop_dscl);
+            dto.setTot_prop_ep(vd_totprop_ep);
             dto.setListaTerceros(lst_terceros);
-            dto.setTot_terc_cbod(String.valueOf(vd_totterc_cbod));
-            dto.setTot_terc_dscl(String.valueOf(vd_totterc_dscl));
-            dto.setTot_terc_ep(String.valueOf(vd_totterc_ep));
+            dto.setTot_terc_cbod(vd_totterc_cbod);
+            dto.setTot_terc_dscl(vd_totterc_dscl);
+            dto.setTot_terc_ep(vd_totterc_ep);
             dto.setListaTotal(lst_totales);
-            dto.setTot_tot_cbod(String.valueOf(vd_tottot_cbod));
-            dto.setTot_tot_dscl(String.valueOf(vd_tottot_dscl));
-            dto.setTot_tot_ep(String.valueOf(vd_tottot_ep));
+            dto.setTot_tot_cbod(vd_tottot_cbod);
+            dto.setTot_tot_dscl(vd_tottot_dscl);
+            dto.setTot_tot_ep(vd_tottot_ep);
             /*----------------------------------- Fin de SETEO de resumen----------------------------------*/
 
         }catch (Exception e){
