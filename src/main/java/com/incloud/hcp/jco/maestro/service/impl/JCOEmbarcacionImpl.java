@@ -21,12 +21,13 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
     @Autowired
     private ZFL_RFC_READ_TEABLEImplement zfl_rfc_read_teableImplement;
     @Override
-    public MaestroExport ListarEmbarcaciones(EmbarcacionImports importsParam) throws Exception {
-        MaestroExport dto = new MaestroExport();
+    public EmbarcacionExports ListarEmbarcaciones(EmbarcacionImports importsParam) throws Exception {
+        EmbarcacionExports dto = new EmbarcacionExports();
         Metodos me = new Metodos();
         try {
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_PAG", importsParam.getP_pag());
             logger.error("ObtenerEmbarcaciones_1");
             //setear mapeo de tabla options
             List<MaestroOptions> option = importsParam.getOption();
@@ -61,14 +62,20 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             logger.error("Execute_ZFL_RFC_CONS_EMBARCA_2");
 
             JCoParameterList jcoTables = function.getTableParameterList();
+            JCoParameterList export = function.getExportParameterList();
             logger.error("Execute_ZFL_RFC_CONS_EMBARCA_3");
+
             exec.setTable(jcoTables, "P_OPTIONS", tmpOptions);
             exec.setTable(jcoTables, "P_OPTIONS2", tmpOptions2);
             logger.error("Execute_ZFL_RFC_CONS_EMBARCA_4");
             function.execute(destination);
             JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
+            dto.setP_totalpag(export.getString("P_TOTALPAG"));
+
             List<HashMap<String, Object>> data = me.ListarObjetos(tableExport);
             logger.error("CONSULTA EMBARCA");
+
+
             dto.setData(data);
             dto.setMensaje("Ok");
         }catch (Exception e){

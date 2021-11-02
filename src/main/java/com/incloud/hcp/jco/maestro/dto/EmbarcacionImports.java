@@ -5,10 +5,20 @@ import java.util.List;
 public class EmbarcacionImports {
 
     private String p_user;
+    private String p_pag;
     private List<MaestroOptions> option;
     private List<MaestroOptionsKey> options;
     private List<MaestroOptions> option2;
     private List<MaestroOptionsKey> options2;
+
+    public String getP_pag() {
+        return p_pag;
+    }
+
+    public void setP_pag(String p_pag) {
+        this.p_pag = p_pag;
+    }
+
     public List<MaestroOptions> getOption() {
         return option;
     }

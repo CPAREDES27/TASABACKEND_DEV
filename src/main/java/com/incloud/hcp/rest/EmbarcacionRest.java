@@ -75,7 +75,7 @@ public class EmbarcacionRest {
     }
 
     @PostMapping(value = "/ConsultarEmbarcacion/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> ConsultarEmbarcacionesNew(@RequestBody EmbarcacionImports imports){
+    public ResponseEntity<EmbarcacionExports> ConsultarEmbarcacionesNew(@RequestBody EmbarcacionImports imports){
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.ListarEmbarcaciones(imports))
