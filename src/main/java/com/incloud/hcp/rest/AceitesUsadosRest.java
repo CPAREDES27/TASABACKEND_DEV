@@ -35,7 +35,7 @@ public class AceitesUsadosRest {
     public ResponseEntity<AceitesUsadosExports> Nuevo(@RequestBody AceitesUsadosImports imports) {
 
         try {
-            return Optional.ofNullable(this.jcoAceitesUsadosService.Listar(imports))
+            return Optional.ofNullable(this.jcoAceitesUsadosService.Nuevo(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);
