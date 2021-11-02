@@ -272,9 +272,8 @@ public class Metodos {
         } else if (table.equals("CATEGORIA")) {
             tablita = "ZFLCNS";
 
-        } else if (table.equals("ZONAAREA")) {
+        } else if (table.equals("1ZONAAREA")) {
             tablita = "ZFLZAR";
-
         }
         else if (table.equals("SISTVIRADO")) {
             tablita = "ZTBC_DATA";
@@ -317,8 +316,6 @@ public class Metodos {
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
             wa= "CODIG EQ 'SH' AND STATU EQ '1'";
-        }else if(table.equals("ZONAAREA")){
-            wa = "ZESZAR = 'S'";
         }
         else if(table.equals("FASE")){
             wa= "ESREG = 'S'";
@@ -412,8 +409,6 @@ public class Metodos {
         }
         else if (table.equals("SISTVIRADO")) {
             fields = new String[] {"ARGUM", "DESCR"};
-        }else if(table.equals("ZONAAREA")) {
-            fields = new String[] {"ZCDZAR", "ZDSZAR"};
         }
         else if (table.equals("ALLPLANTAPROPIA")) {
             fields = new String[] {"CDPTA", "DESCR"};
