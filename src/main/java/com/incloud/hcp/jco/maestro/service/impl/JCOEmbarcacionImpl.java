@@ -68,7 +68,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             function.execute(destination);
             JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
             List<HashMap<String, Object>> data = me.ListarObjetos(tableExport);
-
+            logger.error("CONSULTA EMBARCA");
             dto.setData(data);
             dto.setMensaje("Ok");
         }catch (Exception e){

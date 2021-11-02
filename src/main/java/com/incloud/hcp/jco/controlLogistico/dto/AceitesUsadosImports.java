@@ -15,6 +15,7 @@ public class AceitesUsadosImports {
     private String[] fieldsT_rnv;
     private String[] fieldsT_rpn;
     private String[] fieldsEt_mensj;
+
     private List<RegistroAceiteDto> t_rpn;
 
     public String getFHRNV() {

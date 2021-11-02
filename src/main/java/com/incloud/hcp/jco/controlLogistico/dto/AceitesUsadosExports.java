@@ -7,14 +7,14 @@ public class AceitesUsadosExports {
     private String mensaje;
     private List<HashMap<String, Object>> t_rnv;
     private List<HashMap<String, Object>> t_rpn;
-    private List<HashMap<String, Object>> et_mensj;
+    private String et_mensj;
     private String ep_nrrnv;
 
-    public List<HashMap<String, Object>> getEt_mensj() {
+    public String getEt_mensj() {
         return et_mensj;
     }
 
-    public void setEt_mensj(List<HashMap<String, Object>> et_mensj) {
+    public void setEt_mensj(String et_mensj) {
         this.et_mensj = et_mensj;
     }
 
