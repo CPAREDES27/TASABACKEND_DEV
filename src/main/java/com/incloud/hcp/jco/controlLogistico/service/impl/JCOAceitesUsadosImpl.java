@@ -171,7 +171,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             JCoTable T_RPN = tables.getTable(Tablas.T_RPN);
 
             //region
-            if(imports.getIp_tope().equals("NR")){
+
                 for(int i=0; i<imports.getT_rpn().size();i++) {
                     RegistroAceiteDto  dto = imports.getT_rpn().get(i);
                     logger.error("GGG"+imports.getT_rpn().get(i).getNRPOS());
@@ -205,7 +205,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                     T_RPN.setValue("ATMFN",dto.getATMFN());
 
                 }
-            }
+
             //endRegion
             stfcConnection.execute(destination);
 
