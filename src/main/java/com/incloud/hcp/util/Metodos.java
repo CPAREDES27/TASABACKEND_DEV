@@ -316,7 +316,9 @@ public class Metodos {
         }else if(table.equals("1ZONAAREA")){
             wa = "ZESZAR = 'S'";
         }else if(table.equals("SISTVIRADO")){
-            wa= "(WERKS <> 'FP09') AND (INPRP = 'P')";
+            wa= "CODIG EQ 'SH' AND STATU EQ '1'";
+        }else if(table.equals("ZONAAREA")){
+            wa = "ZESZAR = 'S'";
         }
         else if(table.equals("FASE")){
             wa= "ESREG = 'S'";
@@ -410,7 +412,10 @@ public class Metodos {
         }
         else if (table.equals("SISTVIRADO")) {
             fields = new String[] {"ARGUM", "DESCR"};
-        }else if (table.equals("ALLPLANTAPROPIA")) {
+        }else if(table.equals("ZONAAREA")) {
+            fields = new String[] {"ZCDZAR", "ZDSZAR"};
+        }
+        else if (table.equals("ALLPLANTAPROPIA")) {
             fields = new String[] {"CDPTA", "DESCR"};
         }
         else if (table.equals("FASE")) {
