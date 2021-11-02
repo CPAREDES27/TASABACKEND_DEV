@@ -427,7 +427,7 @@ public class Metodos {
         else if (table.equals("TIPOMATERIAL")) {
             fields = new String[] {"LOW", "LOW"};
         }else if(table.equals("CENTRO")){
-            fields= new String[] {"LOW"};
+            fields= new String[] {"LOW","LOW"};
         }
 
         return fields;
