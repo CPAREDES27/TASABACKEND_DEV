@@ -119,7 +119,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                 T_RNV.appendRow();
                 T_RNV.setValue("MANDT","");
                 T_RNV.setValue("NRRNV","0000000000");
-                T_RNV.setValue("FHRNV","20211029");
+                T_RNV.setValue("FHRNV",imports.getFHRNV());
                 T_RNV.setValue("ESRNV","");
                 T_RNV.setValue("FHCRN","");
                 T_RNV.setValue("HRCRN","000000");
