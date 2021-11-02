@@ -82,7 +82,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             JCoTable T_RPN = tables.getTable(Tablas.T_RPN);
 
             //region
-            if(imports.getIp_tope().equals("NR")){
+
                 for(int i=0; i<imports.getT_rpn().size();i++) {
                     RegistroAceiteDto  dto = imports.getT_rpn().get(i);
                     logger.error("GGG"+imports.getT_rpn().get(i).getNRPOS());
@@ -119,7 +119,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                 T_RNV.appendRow();
                 T_RNV.setValue("MANDT","");
                 T_RNV.setValue("NRRNV","0000000000");
-                T_RNV.setValue("FHRNV","20211029");
+                T_RNV.setValue("FHRNV",imports.getFHRNV());
                 T_RNV.setValue("ESRNV","");
                 T_RNV.setValue("FHCRN","");
                 T_RNV.setValue("HRCRN","000000");
@@ -128,7 +128,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                 T_RNV.setValue("HRMFN","000000");
                 T_RNV.setValue("ATMFN","");
 
-            }
+
             //endRegion
             stfcConnection.execute(destination);
 
