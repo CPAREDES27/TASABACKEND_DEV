@@ -5221,12 +5221,53 @@ public class JCOPDFsImpl implements JCOPDFsService {
     }
 
 
-    public PDFExports GenerarPDFProduceResumen()throws Exception{
+    public PDFExports GenerarPDFProduceResumen(PDFProduceImports imports)throws Exception{
+
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        PDFProduceResumenDto dto= new PDFProduceResumenDto();
+
+        ImpresFormatosProduceExports ifpe=jcoImpresFormatosProduce.ImpresionFormatosProduce(imports.getImpresFormatosProduceImports());
+
+        HashMap<String, Object>rsprce=ifpe.getT_rsprce().get(0);
+
+        for (Map.Entry<String,Object>entry:rsprce.entrySet()) {
+            String key= entry.getKey();
+            Object value=entry.getValue();
+
+            if(key.equals("NMEMB")){
+                dto.setEmbarcacion(value.toString());
+                logger.error("NMEMB= "+dto.getEmbarcacion());
+            }else if(key.equals("MREMB")){
+                dto.setMatricula(value.toString());
+                logger.error("MREMB= "+dto.getMatricula());
+            }else if(key.equals("CNPDS")){
+                dto.setPescaDescargada(value.toString());
+                logger.error("CNPDS= "+dto.getPescaDescargada());
+            }else if(key.equals("CNDES")){
+                dto.setCantidadDescargada(value.toString());
+                logger.error("CNDES= "+dto.getCantidadDescargada());
+            }
+
+        }
+
+        HashMap<String, Object>dtprce=ifpe.getT_dtprce().get(0);
+        for (Map.Entry<String,Object>entry:dtprce.entrySet()) {
+            String key= entry.getKey();
+            Object value=entry.getValue();
+
+            if(key.equals("FIDES")){
+                dto.setFechaInicio(value.toString());
+            }else if(key.equals("FFDES")) {
+                dto.setFechaFin(value.toString());
+            }
+        }
 
 
-        PlantillaPDFProduceResumen(path);
+
+        String [][]resumen={{"1",dto.getEmbarcacion(),dto.getMatricula(),dto.getPescaDescargada(),dto.getCantidadDescargada()},
+                {"0", "TOTAL:","",dto.getPescaDescargada(), dto.getCantidadDescargada()}};
+        PlantillaPDFProduceResumen(path, dto);
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -5234,7 +5275,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         return pdf;
     }
 
-    public void PlantillaPDFProduceResumen(String path)throws Exception{
+    public void PlantillaPDFProduceResumen(String path, PDFProduceResumenDto dto)throws Exception{
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -5254,31 +5295,43 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 11);
-        contentStream.moveTextPositionByAmount(240, 760);
+        contentStream.moveTextPositionByAmount(220, 760);
         contentStream.showText("Del");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 11);
-        contentStream.moveTextPositionByAmount(310, 760);
+        contentStream.moveTextPositionByAmount(240, 760);
+        contentStream.showText(dto.getFechaInicio());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 11);
+        contentStream.moveTextPositionByAmount(320, 760);
         contentStream.showText("Al");
         contentStream.endText();
 
-        drawCuadroProduceResumen(contentStream, 740,85);
+        contentStream.beginText();
+        contentStream.setFont(bold, 11);
+        contentStream.moveTextPositionByAmount(350, 760);
+        contentStream.showText(dto.getFechaFin());
+        contentStream.endText();
+
+        drawCuadroProduceResumen(contentStream, 740,85, dto);
 
         contentStream.close();
         document.save(path);
         document.close();
     }
 
-    public void drawCuadroProduceResumen( PDPageContentStream contentStream, float y, float margin)throws IOException{
+    public void drawCuadroProduceResumen( PDPageContentStream contentStream, float y, float margin, PDFProduceResumenDto dto)throws IOException{
 
         final int rows = 4;
         final int cols = 6;
 
         final float tableWidth = 420f;
         final float tableHeight = 45;
-
+        logger.error("drawtable_1");
         //draw the rows
         float nexty = y ;
         for (int i = 0; i < rows; i++) {
@@ -5289,7 +5342,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         }
 
-
+        logger.error("drawtable_2");
         //draw the columns
         float x = margin;
         for (int i = 0; i < cols; i++) {
@@ -5319,27 +5372,69 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         String[] fields={"Embarcación","Matrícula","Pesc. Descargada","Can. Descargada"};
         PDFont font = PDType1Font.HELVETICA;
-
-         x=80;
+        logger.error("drawtable_3");
+        x=80;
         for(int i=0; i<fields.length; i++){
-
+            logger.error("drawtable_2");
             if(i==0){
                 x+=80;
+
             }
             else if(i==1){
                 x+=120;
+
             }
             else if(i==2){
                 x+=80;
+
             }
             else if(i==3){
                 x+=75;
+
             }
             contentStream.beginText();
             contentStream.setFont(font, 8);
             contentStream.moveTextPositionByAmount(x, y-10);
             contentStream.showText(fields[i]);
             contentStream.endText();
+        }
+
+        String[][]resumen={{"1", dto.getEmbarcacion(), dto.getMatricula(), dto.getPescaDescargada(), dto.getCantidadDescargada()},
+                {"0", "TOTAL:", "", dto.getPescaDescargada(), dto.getCantidadDescargada()}};
+
+        for(int i=0;i<resumen.length;i++){
+
+            x=90;
+            String[]data=resumen[i];
+            for (int j=0;j< data.length;j++){
+
+                if(j==0){
+                    x=100;
+
+                }
+                else if(j==1){
+                    x+=30;
+
+                }
+                else if(j==2){
+                    x+=150;
+
+                }
+                else if(j==3){
+                    x+=110;
+
+                }
+                else if(j==4){
+                    x+=90;
+
+                }
+                contentStream.beginText();
+                contentStream.setFont(font, 8);
+                contentStream.moveTextPositionByAmount(x, y-25);
+                contentStream.showText(data[j]);
+                contentStream.endText();
+            }
+            y-=15;
         }
     }
 
