@@ -4493,7 +4493,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         if(flag.equals("X")) {
-            String cab = Constantes.RUTA_ARCHIVO_IMPORTAR + "cabecera.png";
+            String cab = Constantes.RUTA_ARCHIVO_IMPORTAR + "cabecera.PNG";
             PDImageXObject cabecera = PDImageXObject.createFromFile(cab, document);
             contentStream.drawImage(cabecera, 70, 770);
         }
