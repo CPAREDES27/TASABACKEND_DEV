@@ -8,7 +8,7 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import org.omg.CORBA.OBJ_ADAPTER;
+//import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

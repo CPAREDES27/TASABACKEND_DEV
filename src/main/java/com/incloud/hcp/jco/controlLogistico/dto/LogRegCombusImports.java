@@ -2,7 +2,7 @@ package com.incloud.hcp.jco.controlLogistico.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import org.omg.CORBA.OBJ_ADAPTER;
+//import org.omg.CORBA.OBJ_ADAPTER;
 
 import java.util.HashMap;
 import java.util.List;

@@ -5,7 +5,7 @@ public class AyudaBusquedaTablas {
     public static String BSQPLANTAS="ZV_FLPL";
     public static String BSQALMACENES="T001L";
     public static String BSQEMPRESA="LFA1";
-    public static String BSQCENTRO="T001W";
+    public static String BSQCENTRO="ZFLPTA";
     public static String BSQUBICTNC="IFLO";
     public static String BSQEQPMT="ZV_FLEQ";
     public static String BSQPROV="LFA1";

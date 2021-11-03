@@ -5,7 +5,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQPLANTAS={"CDPTA", "DESCR", "STCD1", "NAME1", "CDPTO", "DSPTO","WERKS", "CDEMP", "CDZLT", "DSZLT","INPRP", "NAME1"};
     public static String[] BSQALMACENES={"WERKS","LGORT","LGOBE"};
     public static String[] BSQEMPRESA={"LIFNR","NAME1","STCD1"};
-    public static String[] BSQCENTRO={"WERKS", "NAME1"};
+    public static String[] BSQCENTRO={"WERKS", "DESCR"};
     public static String[] BSQUBICTNC={"TPLMA", "TPLNR", "PLTXT"};
     public static String[] BSQEQPMT={"CDEQP", "DSEQP", "CDUMD", "DSUMD", "MEINS", "MSEH6"};
     public static String[] BSQPROV={"LIFNR", "NAME1", "STCD1"};
