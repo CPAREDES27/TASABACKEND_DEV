@@ -213,7 +213,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             imports.put("P_USER", importsParam.getP_user());
             EjecutarRFC exec = new EjecutarRFC();
 
-            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData());
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData().toUpperCase().trim());
 
 
         }catch (Exception e){
@@ -255,7 +255,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             String valor="";
            for(int i=0;i<update.size();i++){
                mensajito=update.get(i).getField();
-               valor = update.get(i).getValor();
+               valor = update.get(i).getValor().toUpperCase().trim();
                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
                    if(entry.getKey().contains(mensajito)){
                        entry.setValue(valor);
