@@ -613,7 +613,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
         if(nombreAyuda.equals("BSQPLANTAS") || nombreAyuda.equals("BSQMAT") || nombreAyuda.equals("BSQESPEC") || nombreAyuda.equals("BSQPUERTO") ||
-                nombreAyuda.equals("BSQUNDEXT") ||nombreAyuda.equals("BSQUSR") ||nombreAyuda.equals("BSQPEDCOMP") ||nombreAyuda.equals("BSQCLSDOC") ){
+                nombreAyuda.equals("BSQUNDEXT") ||nombreAyuda.equals("BSQUSR") ||nombreAyuda.equals("BSQPEDCOMP") ||nombreAyuda.equals("BSQCLSDOC") || nombreAyuda.equals("BSQCENTRO")){
             logger.error("ENTRO AL IF QUE EVALUA 1");
 
             switch (nombreAyuda){
@@ -640,6 +640,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                     break;
                 case "BSQCLSDOC":
                     opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
+                    break;
+                case "BSQCENTRO":
+                    opt.setWa(AyudaBusquedaOptions.BSQCENTRO);
                     break;
             }
             options.add(opt);

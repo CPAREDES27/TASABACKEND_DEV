@@ -12,4 +12,5 @@ public class AyudaBusquedaOptions {
     public static String BSQCLSDOC="SPRAS EQ 'S'";
     public static String BSQEMBHORO="ESEMB = 'O'";
     public static String BSQEMBHORO1="AND INPRP LIKE 'P'";
+    public static String BSQCENTRO="CDEMP = '0000000001'";
 }
