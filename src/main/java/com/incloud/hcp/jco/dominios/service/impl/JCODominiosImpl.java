@@ -35,9 +35,7 @@ public class JCODominiosImpl implements JCODominiosService {
 
                 if (domParams.getDomname().startsWith("Z")) {
                     DominiosExports exports = new DominiosExports();
-                    if(domParams.getDomname().equals("ZCDMMACOM")){
-                        domParams.setDomname("ZCDMMA");
-                    }
+
                     List<DominioExportsData> listDatas = new ArrayList<>();
                     JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GET_LISTAED);
                     JCoParameterList importx = stfcConnection.getImportParameterList();
@@ -46,7 +44,12 @@ public class JCODominiosImpl implements JCODominiosService {
                     JCoParameterList tables = stfcConnection.getTableParameterList();
                     JCoTable domtab = tables.getTable(Tablas.DOMTAB);
                     domtab.appendRow();
-                    domtab.setValue("DOMNAME", domParams.getDomname());
+                    if(domParams.getDomname().equals("ZCDMMACOM")){
+                        domtab.setValue("DOMNAME", "ZCDMMA");
+                    }else{
+                        domtab.setValue("DOMNAME", domParams.getDomname());
+                    }
+
                     stfcConnection.execute(destination);
                     JCoTable lis_out = tables.getTable(Tablas.LIST_OUT);
 
