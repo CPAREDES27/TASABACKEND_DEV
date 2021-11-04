@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,11 +47,11 @@ public class Metodos {
 
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
                 }
-                if(key.equals("DSMIN")){
-                    value=value.toString();
+                if(key.equals("DSMIN")) {
+                    value = value.toString();
                 }
 
                 try {
@@ -60,6 +62,20 @@ public class Metodos {
                         String fecha = dia.format(value);
                         value = fecha;
                     }
+
+                    /*if(field.getTypeAsString().equals("BCD")){
+                        String strValue = String.valueOf(value);
+                        value = strValue;
+                    }*/
+
+
+                    /*if(field.getTypeAsString().equals("DEC")){
+                        BigDecimal val = new BigDecimal(String.valueOf(value));
+                        value = val.setScale(3, RoundingMode.HALF_UP);
+
+                    }*/
+
+
                 }catch (Exception e){
                    // value=String.valueOf(value);
                     value="-";
