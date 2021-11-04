@@ -1,8 +1,6 @@
 package com.incloud.hcp.jco.controlLogistico.service.impl;
 
-import com.incloud.hcp.jco.controlLogistico.dto.LogRegCombusExports;
-import com.incloud.hcp.jco.controlLogistico.dto.LogRegCombusImports;
-import com.incloud.hcp.jco.controlLogistico.dto.LogRegistroCombusDto;
+import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOLogRegisCombusService;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
@@ -173,4 +171,98 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
 
     }
 
+    public LogRegCombusExports Nuevo(LogRegCombusImports imports)throws Exception {
+
+        LogRegCombusExports lrce = new LogRegCombusExports();
+        Metodos metodo = new Metodos();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REG_COMB_MARE_SAP);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user());
+            importx.setValue("P_TOPE", imports.getP_tope());
+            importx.setValue("P_LCCO", imports.getP_lcco());
+            importx.setValue("P_CANTI", imports.getP_canti());
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+
+                for (int i = 0; i < imports.getStr_csmar().size(); i++) {
+                    Csmar dto = imports.getStr_csmar().get(i);
+                    STR_CSMAR.appendRow();
+                    STR_CSMAR.setValue("NRMAR", dto.getNRMAR());
+                    STR_CSMAR.setValue("CDMMA",dto.getCDMMA());
+                    STR_CSMAR.setValue("DSMMA",dto.getDSMMA());
+                    STR_CSMAR.setValue("FEMAR",dto.getFEMAR());
+                    STR_CSMAR.setValue("HAMAR",dto.getHAMAR());
+                    STR_CSMAR.setValue("FXMAR",dto.getFXMAR());
+                    STR_CSMAR.setValue("HXMAR",dto.getHXMAR());
+                    STR_CSMAR.setValue("CDEMB",dto.getCDEMB());
+                    STR_CSMAR.setValue("NMEMB",dto.getNMEMB());
+                    STR_CSMAR.setValue("PTOZA",dto.getPTOZA());
+                    STR_CSMAR.setValue("FECZA",dto.getFECZA());
+                    STR_CSMAR.setValue("HIZAR",dto.getHIZAR());
+                    STR_CSMAR.setValue("PTOAR",dto.getPTOAR());
+                    STR_CSMAR.setValue("FECAR",dto.getFECAR());
+                    STR_CSMAR.setValue("HIARR",dto.getHIARR());
+                    STR_CSMAR.setValue("STCMB",dto.getSTCMB());
+                    STR_CSMAR.setValue("CNSUM",dto.getCNSUM());
+                    STR_CSMAR.setValue("CONSU",dto.getCONSU());
+                    STR_CSMAR.setValue("STFIN",dto.getSTFIN());
+                    STR_CSMAR.setValue("CNPDS",dto.getCNPDS());
+                    STR_CSMAR.setValue("FECCONMOV",dto.getFECCONMOV());
+                    STR_CSMAR.setValue("CNCAL",dto.getCNCAL());
+                    STR_CSMAR.setValue("CNOBS",dto.getCNOBS());
+                    STR_CSMAR.setValue("CDIMP",dto.getCDIMP());
+                    STR_CSMAR.setValue("ESPRO",dto.getESPRO());
+                    STR_CSMAR.setValue("FECCONMO2",dto.getFECCONMO2());
+                    STR_CSMAR.setValue("CDIM2",dto.getCDIM2());
+                    STR_CSMAR.setValue("ESPR2",dto.getESPR2());
+                    STR_CSMAR.setValue("ZCDZAR",dto.getZCDZAR());
+                    STR_CSMAR.setValue("DSOBS",dto.getDSOBS());
+                    STR_CSMAR.setValue("DSOB2",dto.getDSOB2());
+                    STR_CSMAR.setValue("WERKS",dto.getWERKS());
+                    STR_CSMAR.setValue("CONS2",dto.getCONS2());
+                    STR_CSMAR.setValue("HOZMP",dto.getHOZMP());
+                    STR_CSMAR.setValue("HOZA1",dto.getHOZA1());
+                    STR_CSMAR.setValue("HOZA2",dto.getHOZA2());
+                    STR_CSMAR.setValue("HOZA3",dto.getHOZA3());
+                    STR_CSMAR.setValue("HOZA4",dto.getHOZA4());
+                    STR_CSMAR.setValue("HOZA5",dto.getHOZA5());
+                    STR_CSMAR.setValue("HOZPA",dto.getHOZPA());
+                    STR_CSMAR.setValue("HOZFP",dto.getHOZFP());
+                    STR_CSMAR.setValue("HOAMP",dto.getHOAMP());
+                    STR_CSMAR.setValue("HOAA1",dto.getHOAA1());
+                    STR_CSMAR.setValue("HOAA2",dto.getHOAA2());
+                    STR_CSMAR.setValue("HOAA3",dto.getHOAA3());
+                    STR_CSMAR.setValue("HOAA4",dto.getHOAA4());
+                    STR_CSMAR.setValue("HOAA5",dto.getHOAA5());
+                    STR_CSMAR.setValue("HOAPA",dto.getHOAPA());
+                    STR_CSMAR.setValue("HOAFP",dto.getHOAFP());
+                    STR_CSMAR.setValue("HODMP",dto.getHODMP());
+                    STR_CSMAR.setValue("HODFP",dto.getHODFP());
+                    STR_CSMAR.setValue("HOHMP",dto.getHOHMP());
+                    STR_CSMAR.setValue("HOHA1",dto.getHOHA1());
+                    STR_CSMAR.setValue("HOHA2",dto.getHOHA2());
+                    STR_CSMAR.setValue("HOHA3",dto.getHOHA3());
+                    STR_CSMAR.setValue("HOHA4",dto.getHOHA4());
+                    STR_CSMAR.setValue("HOHA5",dto.getHOHA5());
+                    STR_CSMAR.setValue("HOHPA",dto.getHOHPA());
+                    STR_CSMAR.setValue("HOHFP",dto.getHOHFP());
+                }
+            stfcConnection.execute(destination);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            lrce.setT_mensaje(t_mensaje);
+            
+        }catch(Exception e){
+
+            }
+            return lrce;
+    }
 }
+
