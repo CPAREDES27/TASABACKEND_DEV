@@ -9,26 +9,41 @@ import java.util.List;
 public class AnalisisCombusLisImports {
     private String p_user;
     private String p_row;
-    private String[]  fieldsStr_csmar;
-    private String[]  fieldsT_mensaje;
-    private List<MaestroOptions> option;
-    private List<MaestroOptionsKey> options;
+    private String embarcacionIni;
+    private String motivoIni;
+    private String fechaIni;
+    private String fechaFin;
 
-
-    public List<MaestroOptions> getOption() {
-        return option;
+    public String getEmbarcacionIni() {
+        return embarcacionIni;
     }
 
-    public void setOption(List<MaestroOptions> option) {
-        this.option = option;
+    public void setEmbarcacionIni(String embarcacionIni) {
+        this.embarcacionIni = embarcacionIni;
     }
 
-    public List<MaestroOptionsKey> getOptions() {
-        return options;
+    public String getMotivoIni() {
+        return motivoIni;
     }
 
-    public void setOptions(List<MaestroOptionsKey> options) {
-        this.options = options;
+    public void setMotivoIni(String motivoIni) {
+        this.motivoIni = motivoIni;
+    }
+
+    public String getFechaIni() {
+        return fechaIni;
+    }
+
+    public void setFechaIni(String fechaIni) {
+        this.fechaIni = fechaIni;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public String getP_user() {
@@ -47,19 +62,4 @@ public class AnalisisCombusLisImports {
         this.p_row = p_row;
     }
 
-    public String[] getFieldsStr_csmar() {
-        return fieldsStr_csmar;
-    }
-
-    public void setFieldsStr_csmar(String[] fieldsStr_csmar) {
-        this.fieldsStr_csmar = fieldsStr_csmar;
-    }
-
-    public String[] getFieldsT_mensaje() {
-        return fieldsT_mensaje;
-    }
-
-    public void setFieldsT_mensaje(String[] fieldsT_mensaje) {
-        this.fieldsT_mensaje = fieldsT_mensaje;
-    }
 }
