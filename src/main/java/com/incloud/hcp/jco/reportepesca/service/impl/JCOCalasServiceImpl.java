@@ -88,6 +88,45 @@ public class JCOCalasServiceImpl implements JCOCalasService {
                 m.put("DESC_TIPOMAREA", "");
             }
 
+            String strCppms = String.valueOf(m.get("CPPMS"));
+            m.put("CPPMS", strCppms);
+
+            String strTemar = String.valueOf(m.get("TEMAR"));
+            m.put("TEMAR", strTemar);
+
+            String strCnpcm = String.valueOf(m.get("CNPCM"));
+            m.put("CNPCM", strCnpcm);
+
+            String strZmoda = String.valueOf(m.get("ZMODA"));
+            m.put("ZMODA", strZmoda);
+
+            String strCnpju = String.valueOf(m.get("CNPJU"));
+            m.put("CNPJU", strCnpju);
+
+            String strZmoju = String.valueOf(m.get("ZMOJU"));
+            m.put("ZMOJU", strZmoju);
+
+            String strPorju = String.valueOf(m.get("PORJU"));
+            m.put("PORJU", strPorju);
+
+            String strCnpca = String.valueOf(m.get("CNPCA"));
+            m.put("CNPCA", strCnpca);
+
+            String strZmoca = String.valueOf(m.get("ZMOCA"));
+            m.put("ZMOCA", strZmoca);
+
+            String strPorca = String.valueOf(m.get("PORCA"));
+            m.put("PORCA", strPorca);
+
+            String strCnpot = String.valueOf(m.get("CNPOT"));
+            m.put("CNPOT", strCnpot);
+
+            String strZmoot = String.valueOf(m.get("ZMOOT"));
+            m.put("ZMOOT", strZmoot);
+
+            String strPorot = String.valueOf(m.get("POROT"));
+            m.put("POROT", strPorot);
+
             return m;
         }).collect(Collectors.toList());
 
