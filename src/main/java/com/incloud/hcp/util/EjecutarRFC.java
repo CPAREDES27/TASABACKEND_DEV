@@ -321,7 +321,7 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
+                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")) {
 
                                    String date = String.valueOf(value);
                                    SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
@@ -383,7 +383,7 @@ public class EjecutarRFC {
                             value = formateador.format(hora);
                         }
                         if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
-                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")) {
+                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")) {
 
                             SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
                             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
