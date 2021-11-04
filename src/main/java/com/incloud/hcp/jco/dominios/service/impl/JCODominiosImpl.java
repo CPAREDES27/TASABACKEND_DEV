@@ -44,7 +44,12 @@ public class JCODominiosImpl implements JCODominiosService {
                     JCoParameterList tables = stfcConnection.getTableParameterList();
                     JCoTable domtab = tables.getTable(Tablas.DOMTAB);
                     domtab.appendRow();
-                    domtab.setValue("DOMNAME", domParams.getDomname());
+                    if(domParams.getDomname().equals("ZCDMMACOM")){
+                        domtab.setValue("DOMNAME", "ZCDMMA");
+                    }else{
+                        domtab.setValue("DOMNAME", domParams.getDomname());
+                    }
+
                     stfcConnection.execute(destination);
                     JCoTable lis_out = tables.getTable(Tablas.LIST_OUT);
 
@@ -54,12 +59,27 @@ public class JCODominiosImpl implements JCODominiosService {
                         lis_out.setRow(i);
                         DominioExportsData data = new DominioExportsData();
                         HashMap<String, Object> newRecord = new HashMap<String, Object>();
-
                         data.setDescripcion(lis_out.getString("DDTEXT"));
                         data.setId(lis_out.getString("DOMVALUE_L"));
                         listDatas.add(data);
                     }
-                    exports.setData(listDatas);
+                    List<DominioExportsData> listDatas2 = new ArrayList<>();
+                    if(domParams.getDomname().equals("ZCDMMACOM")){
+                        for(int i=0;i<listDatas.size();i++){
+                            if(listDatas.get(i).getId().equals("1") || listDatas.get(i).getId().equals("2") || listDatas.get(i).getId().equals("7") || listDatas.get(i).getId().equals("8") ){
+                                DominioExportsData data = new DominioExportsData();
+                                data.setDescripcion(listDatas.get(i).getDescripcion());
+                                data.setId(listDatas.get(i).getId());
+                                listDatas2.add(data);
+
+                            }
+                        }
+                        exports.setData(listDatas2);
+                    }else{
+                        exports.setData(listDatas);
+                    }
+
+
                     listExports.add(exports);
                     domDto.setData(listExports);
                     domDto.setMensaje("Ok");

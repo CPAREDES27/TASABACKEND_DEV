@@ -85,7 +85,7 @@ public class Metodos {
 
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")||
-                        key.equals("CDFAS")||key.equals("CDMMA")){
+                        key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -651,31 +651,31 @@ public class Metodos {
                 }
 
                 if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put(optionName, mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'%" + mo.getValueLow().toUpperCase().trim() + "%'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))){
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
                 }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }
 
 
                 if (i > 0) {
                     if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow() + "%'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow().toUpperCase().trim() + "%'");
                     } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                     }else if (mo.getControl().equals("COMBOBOX") && (mo.getValueLow().equals("") || mo.getValueLow().equals(null))) {
-                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh().toUpperCase().trim() + "'");
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
-                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
+                        record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                     } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow() + "'");
+                        record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                     }
                 }
                 tmpOptions.add(record);
@@ -724,7 +724,7 @@ public class Metodos {
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                                     || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                                    || key.equals("CDFAS")||key.equals("CDMMA")){
+                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -826,7 +826,7 @@ public class Metodos {
                 newRecord.put(key, value);
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                        || key.equals("CDFAS")||key.equals("CDMMA")){
+                        || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -1102,6 +1102,10 @@ public class Metodos {
             }
             if(campo.equals("CDMMA")){
                 dom="ZCDMMA";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESRNV")){
+                dom="ZD_FLESRNV";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);

@@ -40,25 +40,82 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_ROW", imports.getP_row());
+            String cadena="";
+            boolean valida=false;
+            if(!imports.getEmbarcacionIni().equals("")){
+                valida=true;
+                cadena+="CDEMB LIKE '"+imports.getEmbarcacionIni()+"'";
+            }
+            if(!imports.getMotivoIni().equals("")){
+               if(valida==true){
+                   cadena+="AND (INUBC LIKE '"+imports.getMotivoIni()+"')";
+               }else{
+                   cadena+="INUBC LIKE '"+imports.getMotivoIni()+"'";
+                   valida=true;
+               }
+            }
+            if(!imports.getFechaIni().equals("") && !imports.getFechaFin().equals("")){
+                if(valida==true){
+                    cadena+="AND (FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
+                }else{
+                    cadena+="FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"'";
+                    valida=true;
+                }
+            }
+            if(!imports.getFechaIni().equals("") && imports.getFechaFin().equals("")){
+                if(valida==true){
+                    cadena+="AND (FIEVN LIKE '"+imports.getFechaIni()+"')";
+                }else{
+                    cadena+="FIEVN LIKE '"+imports.getFechaIni()+"'";
+                    valida=true;
+                }
+            }
+            if(imports.getFechaIni().equals("") && !imports.getFechaIni().equals("")){
+                if(valida==true){
+                    cadena+="AND (FIEVN LIKE '"+imports.getFechaFin()+"')";
+                }else{
+                    cadena+="FIEVN LIKE '"+imports.getFechaFin()+"'";
+                    valida=true;
+                }
+            }
+            if(!imports.getMotivoIni().equals("")){
+                if(imports.getMotivoIni().equals("1") || imports.getMotivoIni().equals("2")){
+                    if(valida==true){
+                        cadena+="AND (CDTEV EQ '5')";
+                    }else{
+                        cadena+="CDTEV EQ '5'";
+                        valida=true;
+                    }
+                }else if(imports.getMotivoIni().equals("7") || imports.getMotivoIni().equals("8")){
+                    if(valida==true){
+                        cadena+="AND (CDTEV EQ 'H' OR CDTEV EQ 'T')";
+                    }else{
+                        cadena+="CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                    }
+                }
 
-            List<MaestroOptions> option = imports.getOption();
-            List<MaestroOptionsKey> options2 = imports.getOptions();
-
-
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            tmpOptions=metodo.ValidarOptions(option,options2);
-
-
+            }else {
+                if(valida==true){
+                    cadena+="AND (CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
+                }else{
+                    cadena+="CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                }
+            }
+            logger.error("CADENA FINAL"+ cadena);
             JCoParameterList tables = stfcConnection.getTableParameterList();
-             EjecutarRFC exec=new EjecutarRFC();
-            exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
+            JCoTable tableImport = tables.getTable("P_OPTIONS");
+            tableImport.appendRow();
+            tableImport.setValue("WA", cadena);
+
+
+
             stfcConnection.execute(destination);
             JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
 
-            List<HashMap<String, Object>> str_csmar = metodo.ObtenerListObjetos(STR_CSMAR, imports.getFieldsStr_csmar());
-            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldsT_mensaje());
+            List<HashMap<String, Object>> str_csmar = metodo.ListarObjetos(STR_CSMAR);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
 
 
             ce.setStr_csmar(str_csmar);
