@@ -16,6 +16,15 @@ public class LogRegCombusImports {
     private List<MaestroOptions> option;
     private List<MaestroOptionsKey> options;
     private List<LogRegistroCombusDto> str_lgcco;
+    private List<Csmar> str_csmar;
+
+    public List<Csmar> getStr_csmar() {
+        return str_csmar;
+    }
+
+    public void setStr_csmar(List<Csmar> str_csmar) {
+        this.str_csmar = str_csmar;
+    }
 
     public List<LogRegistroCombusDto> getStr_lgcco() {
         return str_lgcco;
