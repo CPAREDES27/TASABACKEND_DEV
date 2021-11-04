@@ -35,7 +35,7 @@ public class LogRegistroCombusRest {
     public ResponseEntity<LogRegCombusExports> Nuevo(@RequestBody LogRegCombusImports imports) {
 
         try {
-            return Optional.ofNullable(this.jcoLogRegisCombusService.Listar(imports))
+            return Optional.ofNullable(this.jcoLogRegisCombusService.Nuevo(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

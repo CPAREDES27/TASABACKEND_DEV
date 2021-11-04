@@ -258,7 +258,7 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
             stfcConnection.execute(destination);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
             lrce.setT_mensaje(t_mensaje);
-            
+
         }catch(Exception e){
 
             }
