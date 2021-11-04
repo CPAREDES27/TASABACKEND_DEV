@@ -311,6 +311,15 @@ public class EjecutarRFC {
 
 
                            try {
+                               if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
+                                       ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                                   String valor=value.toString();
+                                   logger.error("valor= "+valor);
+                                   valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                                   logger.error("valor= "+valor);
+                                   value=valor.substring(0,6)+"'";
+                                   logger.error("value= "+value);
+                               }
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")) {
 
@@ -356,6 +365,16 @@ public class EjecutarRFC {
                     Object value = "";
                     try{
                         value = ArrayResponse[j].trim();
+
+                        if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
+                                ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                            String valor=value.toString();
+                            logger.error("valor= "+valor);
+                            valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                            logger.error("valor= "+valor);
+                            value=valor.substring(0,6)+"'";
+                            logger.error("value= "+value);
+                        }
 
                         if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
                             SimpleDateFormat parseador= new SimpleDateFormat("hhmmss");

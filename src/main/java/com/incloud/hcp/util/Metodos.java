@@ -55,6 +55,14 @@ public class Metodos {
                 }
 
                 try {
+                    if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
+                        String valor=value.toString();
+                        logger.error("valor= "+valor);
+                        valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                        logger.error("valor= "+valor);
+                        value=valor.substring(0,6)+"'";
+                        logger.error("value= "+value);
+                    }
                     if (field.getTypeAsString().equals("DATE")) {
 
                         String date = String.valueOf(value);
@@ -705,6 +713,7 @@ public class Metodos {
 
                         if (fields[k].trim().equals(key.trim())) {
 
+
                             if (field.getTypeAsString().equals("TIME")) {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
@@ -1106,6 +1115,10 @@ public class Metodos {
             }
             if(campo.equals("ESRNV")){
                 dom="ZD_FLESRNV";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESVVI")){
+                dom="ZESVVI";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);
