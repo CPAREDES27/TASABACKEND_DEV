@@ -49,6 +49,9 @@ public class Metodos {
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
+                    if(String.valueOf(value).equalsIgnoreCase("00:00")){
+                        value = "";
+                    }
                 }
                 if(key.equals("DSMIN")) {
                     value = value.toString();

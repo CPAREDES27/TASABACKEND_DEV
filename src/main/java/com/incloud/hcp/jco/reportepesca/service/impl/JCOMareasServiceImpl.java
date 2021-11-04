@@ -88,9 +88,14 @@ public class JCOMareasServiceImpl implements JCOMareasService {
                 m.put("DESC_CDMMA", "");
             }
 
+            String strCnpdc = String.valueOf(m.get("CNPDC"));
+            m.put("CNPDC", strCnpdc);
+
+            String strCntds = String.valueOf(m.get("CNTDS"));
+            m.put("CNTDS", strCntds);
+
             return m;
         }).collect(Collectors.toList());
-
 
         MareaExports dto = new MareaExports();
         dto.setS_marea(listS_MAREA);
