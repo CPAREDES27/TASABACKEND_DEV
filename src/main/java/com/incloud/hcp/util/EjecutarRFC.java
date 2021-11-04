@@ -321,12 +321,12 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")) {
+                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG")){
 
-                                   String date = String.valueOf(value);
-                                   SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                                   String fecha = dia.format(value);
-                                   value = fecha;
+                                   SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                                   SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                                   Date fecha = parseador.parse(value.toString());
+                                   value=formateador.format(fecha);
                                }
                            }catch (Exception e){
                                value=String.valueOf(value);
@@ -383,7 +383,7 @@ public class EjecutarRFC {
                             value = formateador.format(hora);
                         }
                         if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
-                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")) {
+                                key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")|| key.equals("FHIVG")) {
 
                             SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
                             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
