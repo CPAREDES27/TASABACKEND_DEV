@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,14 +47,22 @@ public class Metodos {
 
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
                 }
-                if(key.equals("DSMIN")){
-                    value=value.toString();
+                if(key.equals("DSMIN")) {
+                    value = value.toString();
                 }
 
                 try {
+                    if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
+                        String valor=value.toString();
+                        logger.error("valor= "+valor);
+                        valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                        logger.error("valor= "+valor);
+                        value=valor.substring(0,6)+"'";
+                        logger.error("value= "+value);
+                    }
                     if (field.getTypeAsString().equals("DATE")) {
 
                         String date = String.valueOf(value);
@@ -60,6 +70,20 @@ public class Metodos {
                         String fecha = dia.format(value);
                         value = fecha;
                     }
+
+                    /*if(field.getTypeAsString().equals("BCD")){
+                        String strValue = String.valueOf(value);
+                        value = strValue;
+                    }*/
+
+
+                    /*if(field.getTypeAsString().equals("DEC")){
+                        BigDecimal val = new BigDecimal(String.valueOf(value));
+                        value = val.setScale(3, RoundingMode.HALF_UP);
+
+                    }*/
+
+
                 }catch (Exception e){
                    // value=String.valueOf(value);
                     value="-";
@@ -689,6 +713,7 @@ public class Metodos {
 
                         if (fields[k].trim().equals(key.trim())) {
 
+
                             if (field.getTypeAsString().equals("TIME")) {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
@@ -1090,6 +1115,10 @@ public class Metodos {
             }
             if(campo.equals("ESRNV")){
                 dom="ZD_FLESRNV";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("ESVVI")){
+                dom="ZESVVI";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);

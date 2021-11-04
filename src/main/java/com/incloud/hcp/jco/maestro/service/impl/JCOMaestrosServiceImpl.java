@@ -233,7 +233,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         MaestroExport me= new MaestroExport();
         MensajeDto msj= new MensajeDto();
         try {
-
+            logger.error("editarMaestro2= FIELDWHERE: "+importsParam.getFieldWhere()+", KEYWHERE= "+importsParam.getKeyWhere()+", TABLA:"+importsParam.getTabla()+", P_USER: "+importsParam.getP_user());
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
             logger.error("VERIFICAR DATA"+me.getData().toString());
             List<MaestroUpdate> update = importsParam.getOpcion();
@@ -343,6 +343,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             JCoTable tableImport = tables.getTable("OPTIONS");
             tableImport.appendRow();
             tableImport.setValue("WA", key + " = " + "'" + value + "'");
+            logger.error("WA", key + " = " + "'" + value + "'");
         }
         logger.error("STEP 4");
 

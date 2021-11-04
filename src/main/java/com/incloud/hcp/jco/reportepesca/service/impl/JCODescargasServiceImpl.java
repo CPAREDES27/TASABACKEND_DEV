@@ -13,6 +13,8 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +93,16 @@ public class JCODescargasServiceImpl implements JCODescargasService {
             } else {
                 m.put("DESC_CDMMA", "");
             }
+
+            //logica para agregar 3 decimales a los campos CPPMS CNPDS CNPCM
+            String strCppms = String.valueOf(m.get("CPPMS"));
+            m.put("CPPMS", strCppms);
+
+            String strCnpds = String.valueOf(m.get("CNPDS"));
+            m.put("CNPDS", strCnpds);
+
+            String strCnpcm = String.valueOf(m.get("CNPCM"));
+            m.put("CNPCM", strCnpcm);
 
             return m;
         }).collect(Collectors.toList());
