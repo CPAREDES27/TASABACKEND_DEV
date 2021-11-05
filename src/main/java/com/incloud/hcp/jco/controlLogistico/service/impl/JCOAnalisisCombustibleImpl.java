@@ -1,9 +1,6 @@
 package com.incloud.hcp.jco.controlLogistico.service.impl;
 
-import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusLisExports;
-import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusLisImports;
-import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusImports;
-import com.incloud.hcp.jco.controlLogistico.dto.ControlLogExports;
+import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
@@ -158,6 +155,45 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
         }catch (Exception e){
             ce .setMensaje(e.getMessage());
+        }
+
+        return ce;
+    }
+
+    public QlikExport QlikView(QlikView imports)throws Exception{
+
+        QlikExport ce=new QlikExport();
+
+
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_QV_COMB_FASE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_FIEVN", imports.getpFievn());
+            importx.setValue("P_FFEVN", imports.getpFfevn());
+            importx.setValue("P_CDEMB", imports.getpCdemb());
+            importx.setValue("P_CDMMA", imports.getpCdmma());
+            importx.setValue("P_ROW", imports.getpRow());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+            JCoTable STR_CEF = tables.getTable(Tablas.STR_CEF);
+
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetos(T_MENSAJE);
+
+            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetos(STR_CEF);
+
+
+            ce.setT_mensaje(dataT_MENSAJE);
+            ce.setStr_cef(dataSTR_CEF);
+
+        }catch (Exception e){
+            ce.setMensaje(e.getMessage());
         }
 
         return ce;

@@ -165,8 +165,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
-
-
         stfcConnection.execute(destination);
         String hola = tableExport.getString();
         String[] fields= {"LIFNR","NAME1","STCD1"};
