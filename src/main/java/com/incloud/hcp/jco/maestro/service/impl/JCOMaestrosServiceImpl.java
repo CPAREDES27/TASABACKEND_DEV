@@ -27,6 +27,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     @Autowired
     private JCODominiosService jcoDominiosService;
+    @Autowired
+    private JCOEmbarcacionImpl jcoEmbarcacion;
+
     @Override
     public MaestroExport obtenerMaestro (MaestroImports importsParam) throws Exception {
 
@@ -795,6 +798,35 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }
 
         return ndata;
+    }
+
+    public AyudaBusquedaExports BuscarEmbarcacion(String p_user)throws Exception{
+
+        AyudaBusquedaExports dto= new AyudaBusquedaExports();
+
+        EmbarcacionImports ei=new EmbarcacionImports();
+
+        try {
+            List<MaestroOptions> options = new ArrayList<>();
+
+            MaestroOptions option = new MaestroOptions();
+            option.setWa(AyudaBusquedaOptions.BSQEMBARCA);
+
+            options.add(option);
+            ei.setOption(options);
+            ei.setP_pag("");
+            ei.setP_user(p_user);
+            EmbarcacionExports ee = jcoEmbarcacion.ListarEmbarcaciones(ei);
+
+            dto.setData(ee.getData());
+            dto.setMensaje(ee.getMensaje());
+
+        }catch (Exception e){
+
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
     }
 
 }

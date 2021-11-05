@@ -615,7 +615,7 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-                if(mo.getControl().equals("INPUT"))
+                if(mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC"))
                 {
                     control="LIKE";
                 }
@@ -627,7 +627,7 @@ public class Metodos {
                 }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     control="=";
                 }
-                if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                if(mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))||mo.getControl().equals("INPUT/NUMERIC") && (mo.getValueHigh().equals(""))){
                     record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'%"+mo.getValueLow()+"%'");
                 }else if(mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                     record.put(optionName,"AND"+" "+ mo.getKey() +" "+ control+ " "+ "'"+mo.getValueLow()+"'");
@@ -646,7 +646,7 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-                if (mo.getControl().equals("INPUT")) {
+                if (mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC")) {
                     control = "LIKE";
                 }
                 if (mo.getControl().equals("COMBOBOX")) {
@@ -661,7 +661,7 @@ public class Metodos {
                     control = "=";
                 }
 
-                if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))||mo.getControl().equals("INPUT/NUMERIC")&& (mo.getValueHigh().equals(""))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'%" + mo.getValueLow().toUpperCase().trim() + "%'");
                 } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
@@ -677,7 +677,7 @@ public class Metodos {
 
 
                 if (i > 0) {
-                    if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    if (mo.getControl().equals("INPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))||mo.getControl().equals("INPUT/NUMERIC")&& (mo.getValueHigh().equals(""))){
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'%" + mo.getValueLow().toUpperCase().trim() + "%'");
                     } else if (mo.getControl().equals("COMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
