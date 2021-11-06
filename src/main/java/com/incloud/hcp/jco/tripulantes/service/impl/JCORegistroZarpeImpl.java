@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeExports;
 import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeImports;
@@ -38,16 +40,11 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              importx.setValue("P_CANTI", imports.getP_canti());
              importx.setValue("P_CDMMA", imports.getP_cdmma());
              importx.setValue("P_PERNR", imports.getP_pernr());
-
-             List<Options> options = imports.getT_opciones();
+             Metodos metodo = new Metodos();
+             List<MaestroOptions> options = imports.getT_opciones();
+             List<MaestroOptionsKey> options2 = imports.getP_options();
              List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-             for (int i = 0; i < options.size(); i++) {
-                 Options o = options.get(i);
-                 HashMap<String, Object> record = new HashMap<String, Object>();
-
-                 record.put("DATA", o.getData());
-                 tmpOptions.add(record);
-             }
+             tmpOptions=metodo.ValidarOptions(options,options2,"DATA");
 
              JCoParameterList tables = stfcConnection.getTableParameterList();
 
@@ -61,7 +58,7 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
              JCoTable T_NZATR = tables.getTable(Tablas.T_NZATR);
 
-             Metodos metodo = new Metodos();
+
              List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
              List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
              List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());

@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class RegistrosZarpeImports {
@@ -11,7 +14,17 @@ public class RegistrosZarpeImports {
     private String p_canti;
     private String p_cdmma;
     private String p_pernr;
-    private List<Options> t_opciones;
+    private List<MaestroOptions> t_opciones;
+    private List<MaestroOptionsKey> p_options;
+
+    public List<MaestroOptionsKey> getP_options() {
+        return p_options;
+    }
+
+    public void setP_options(List<MaestroOptionsKey> p_options) {
+        this.p_options = p_options;
+    }
+
     private String[] fieldst_zatrp;
     private String[] fieldst_nzatr;
     private String[] fieldst_dzatr;
@@ -73,11 +86,11 @@ public class RegistrosZarpeImports {
         this.p_pernr = p_pernr;
     }
 
-    public List<Options> getT_opciones() {
+    public List<MaestroOptions> getT_opciones() {
         return t_opciones;
     }
 
-    public void setT_opciones(List<Options> t_opciones) {
+    public void setT_opciones(List<MaestroOptions> t_opciones) {
         this.t_opciones = t_opciones;
     }
 
