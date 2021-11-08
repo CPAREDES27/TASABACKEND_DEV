@@ -153,6 +153,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
     @Override
     public MaestroExport obtenerArmador(BusquedaArmadorDTO codigo) throws Exception {
+        Metodos metodos = new Metodos();
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         ;
         JCoRepository repo = destination.getRepository();
@@ -162,10 +163,17 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importx.setValue("DELIMITER","|");
         importx.setValue("QUERY_TABLE","LFA1");
         importx.setValue("ROWCOUNT",codigo.getCodigo());
+        List<MaestroOptions> option = codigo.getOption();
+        List<MaestroOptionsKey> options = codigo.getOptions2();
 
+
+        List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+        tmpOptions=metodos.ValidarOptions(option,options);
 
         JCoParameterList tables = stfcConnection.getTableParameterList();
+        EjecutarRFC executeRFC = new EjecutarRFC();
 
+        executeRFC.setTable(tables, "T_OPCION", tmpOptions);
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
         stfcConnection.execute(destination);
