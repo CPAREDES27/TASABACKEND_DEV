@@ -170,7 +170,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         JCoParameterList tables = stfcConnection.getTableParameterList();
         EjecutarRFC executeRFC = new EjecutarRFC();
 
-        executeRFC.setTable(tables, "T_OPCION", tmpOptions);
+        executeRFC.setTable(tables, "OPTIONS", tmpOptions);
         JCoTable tableExport = tables.getTable("DATA");
         JCoTable FIELDS = tables.getTable("FIELDS");
         stfcConnection.execute(destination);
