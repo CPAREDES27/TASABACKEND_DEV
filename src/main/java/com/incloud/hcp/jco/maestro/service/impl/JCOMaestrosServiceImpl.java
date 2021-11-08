@@ -4,6 +4,7 @@ import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -29,6 +30,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     private JCODominiosService jcoDominiosService;
     @Autowired
     private JCOEmbarcacionImpl jcoEmbarcacion;
+    @Autowired
+    private JCOCampoTablaService jcoCampoTablaService;
 
     @Override
     public MaestroExport obtenerMaestro (MaestroImports importsParam) throws Exception {
@@ -830,6 +833,126 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }catch (Exception e){
 
             dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
+    public CampoTablaExports UpdateEmbarcacionMasivo(UpdateEmbarcaMasivoImports imports)throws Exception{
+
+        CampoTablaExports dto= new CampoTablaExports();
+
+        try {
+            CampoTablaImports cti = new CampoTablaImports();
+
+            List<SetDto> ListSetDto = new ArrayList<>();
+
+
+            String tabla = "ZFLEMB";
+
+            if (imports.getId().equals("CAPTANQ")) {
+
+                for (int i = 0; i < imports.getStr_set().size(); i++) {
+                    SetDto set = new SetDto();
+                    set.setCmopt("CDEMB = '" + imports.getStr_set().get(i).getCDEMB() + "'");
+                    set.setCmset("CDTAN = '" + imports.getStr_set().get(i).getCDTAN() + "'");
+                    set.setNmtab(tabla);
+                    ListSetDto.add(set);
+                    logger.error("OPT = " + set.getCmopt());
+                    logger.error("OPT = " + set.getCmset());
+                }
+
+
+            } else if (imports.getId().equals("CUOTAEMB")) {
+
+                for (int i = 0; i < imports.getStr_set().size(); i++) {
+                    SetDto set = new SetDto();
+                    set.setCmopt("CDEMB = '" + imports.getStr_set().get(i).getCDEMB() + "'");
+                    set.setCmset("CPNCN = '" + imports.getStr_set().get(i).getCPNCN() + "' CPNSR" + imports.getStr_set().get(i).getCPNSR() + "'");
+                    set.setNmtab(tabla);
+                    ListSetDto.add(set);
+                    logger.error("OPT = " + set.getCmopt());
+                    logger.error("OPT = " + set.getCmset());
+                }
+
+            } else if (imports.getId().equals("EMBNOM")) {
+
+                for (int i = 0; i < imports.getStr_set().size(); i++) {
+                    SetDto set = new SetDto();
+                    set.setCmopt("CDEMB = '" + imports.getStr_set().get(i).getCDEMB() + "'");
+                    set.setCmset("CNVPS = '" + imports.getStr_set().get(i).getCNVPS() + "'");
+                    set.setNmtab(tabla);
+                    ListSetDto.add(set);
+                    logger.error("OPT = " + set.getCmopt());
+                    logger.error("OPT = " + set.getCmset());
+                }
+            } else if (imports.getId().equals("TRIPEMB")) {
+
+                for (int i = 0; i < imports.getStr_set().size(); i++) {
+                    SetDto set = new SetDto();
+                    set.setCmopt("CDEMB = '" + imports.getStr_set().get(i).getCDEMB() + "'");
+                    set.setCmset("NRTRI = '" + imports.getStr_set().get(i).getNRTRI() + "'");
+                    set.setNmtab(tabla);
+                    ListSetDto.add(set);
+                    logger.error("OPT = " + set.getCmopt());
+                    logger.error("OPT = " + set.getCmset());
+                }
+            }
+
+
+            cti.setP_user(imports.getP_user());
+            cti.setStr_set(ListSetDto);
+
+            for (int i = 0; i < cti.getStr_set().size(); i++) {
+                logger.error("cti opt= " + cti.getStr_set().get(i).getCmopt());
+                logger.error("cti set= " + cti.getStr_set().get(i).getCmset());
+                logger.error("cti tab= " + cti.getStr_set().get(i).getNmtab());
+            }
+
+            dto = jcoCampoTablaService.Actualizar(cti);
+
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+        return dto;
+    }
+
+    public CampoTablaExports UpdateTripulantesMasivo(UpdateTripuMasivoImports imports)throws Exception{
+
+        CampoTablaExports dto= new CampoTablaExports();
+        try {
+
+            CampoTablaImports cti = new CampoTablaImports();
+
+            List<SetDto> ListSetDto = new ArrayList<>();
+
+
+            String tabla = "ZTFL_TRIOBS";
+
+            for (int i = 0; i < imports.getStr_set().size(); i++) {
+
+                SetDto set = new SetDto();
+                set.setCmopt("BUKRS = '" + imports.getStr_set().get(i).getBUKRS() + "' AND PERNR = '" + imports.getStr_set().get(i).getPERNR() + "'");
+                set.setCmset("INDAPT = '" + imports.getStr_set().get(i).getINDAPT() + "' FEOBS ='" + imports.getStr_set().get(i).getFEOBS() + "' OBSER ='" + imports.getStr_set().get(i).getOBSER() + "'");
+                set.setNmtab(tabla);
+                ListSetDto.add(set);
+                logger.error("OPT = " + set.getCmopt());
+                logger.error("OPT = " + set.getCmset());
+            }
+
+
+            cti.setP_user(imports.getP_user());
+            cti.setStr_set(ListSetDto);
+
+            for (int i = 0; i < cti.getStr_set().size(); i++) {
+                logger.error("cti opt= " + cti.getStr_set().get(i).getCmopt());
+                logger.error("cti set= " + cti.getStr_set().get(i).getCmset());
+                logger.error("cti tab= " + cti.getStr_set().get(i).getNmtab());
+            }
+
+            dto = jcoCampoTablaService.Actualizar(cti);
+        }catch(Exception ex) {
+            dto.setMensaje(ex.getMessage());
         }
 
         return dto;
