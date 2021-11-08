@@ -66,7 +66,7 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
                 listaReqPesca.add(rp);
             }
             //List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(s_reqPesca,importsParam.getFieldReqPesca());
-
+            
             req_p.setS_reqpesca(listaReqPesca);
             req_p.setMensaje("Ok");
         }catch (Exception e){

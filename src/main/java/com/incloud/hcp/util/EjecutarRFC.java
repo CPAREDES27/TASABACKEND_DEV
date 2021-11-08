@@ -377,19 +377,28 @@ public class EjecutarRFC {
                         }
 
                         if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
-                            SimpleDateFormat parseador= new SimpleDateFormat("hhmmss");
-                            SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
-                            Date hora = parseador.parse(value.toString());
-                            value = formateador.format(hora);
+
+                            if(value.toString().equals("000000")){
+                                value="";
+                            }else {
+                                SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
+                                Date hora = parseador.parse(value.toString());
+                                value = formateador.format(hora);
+                            }
+
                         }
                         if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
                                 key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")|| key.equals("FHIVG")) {
 
-                            SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
-                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-                            Date fecha = parseador.parse(value.toString());
-                            value=formateador.format(fecha);
-
+                            if(value.toString().equals("00000000")){
+                               value="";
+                            }else {
+                                SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                                Date fecha = parseador.parse(value.toString());
+                                value = formateador.format(fecha);
+                            }
 
                         }
                     }catch (Exception e){
