@@ -467,10 +467,22 @@ public class Metodos {
 
     logger.error("ENTRE METODO GENERAR");
         String control = "";
+        String abrir="";
+        String cerrar="";
+        String cerrarFinal="";
         List<ListaWA> tmpOptions = new ArrayList<ListaWA>();
         List<MaestroOptionsKey> sorted= options.stream().sorted(Comparator.comparing(l->l.getKey())).collect(Collectors.toList());
         for(int i=0;i<sorted.size();i++){
             ListaWA objeto = new ListaWA();
+            if(sorted.size()<1){
+                abrir="(";
+                cerrar=")";
+            }
+            if(sorted.size()>1){
+                abrir="(";
+                cerrar="";
+                cerrarFinal=")";
+            }
             if (i < 1)
             {
                 switch (sorted.get(i).getControl()){
@@ -502,8 +514,8 @@ public class Metodos {
                         break;
                     case "MULTICOMBOBOX":
                         control="EQ";
-                        objeto.setClave(optionName);
-                        objeto.setValor(sorted.get(i).getKey()+" "+control+" '"+sorted.get(i).getValueLow()+"'");
+                        objeto.setClave(abrir+optionName);
+                        objeto.setValor(sorted.get(i).getKey()+" "+control+" '"+sorted.get(i).getValueLow()+"'"+cerrar);
                         break;
 
                 }
@@ -568,7 +580,7 @@ public class Metodos {
                         for(int k=0;k<i;k++){
                             if(sorted.get(i).getKey().equals(sorted.get(k).getKey())){
                                 objeto.setClave(optionName);
-                                objeto.setValor("OR "+sorted.get(i).getKey()+" "+"EQ "+"'"+sorted.get(i).getValueLow()+"'");
+                                objeto.setValor("OR "+sorted.get(i).getKey()+" "+"EQ "+"'"+sorted.get(i).getValueLow()+"'"+cerrarFinal);
                             }else{
                                 objeto.setClave(optionName);
                                 objeto.setValor("AND "+sorted.get(i).getKey()+" "+"EQ "+"'"+sorted.get(i).getValueLow()+"'");
@@ -643,6 +655,13 @@ public class Metodos {
         }
 
         if(options.size()>0 && option.size()==0) {
+            String abrir="(";
+            String cerrar=")";
+            String cerrarFinal="";
+            if(options.size()>1){
+                cerrar="";
+                cerrarFinal=")";
+            }
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
@@ -672,7 +691,7 @@ public class Metodos {
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                    record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
+                    record.put(optionName, abrir+mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrar);
                 }
 
 
@@ -686,7 +705,7 @@ public class Metodos {
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
                     } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
-                        record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
+                        record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
                 tmpOptions.add(record);
