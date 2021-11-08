@@ -9,14 +9,18 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOCampoTablaServiceImpl implements JCOCampoTablaService {
+
     @Override
     public CampoTablaExports Actualizar(CampoTablaImports imports) throws Exception {
         HashMap<String, Object> importParams = new HashMap<>();

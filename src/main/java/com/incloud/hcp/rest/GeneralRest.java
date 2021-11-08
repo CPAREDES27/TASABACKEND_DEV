@@ -162,6 +162,28 @@ public class GeneralRest {
         }
 
     }
+    @PostMapping(value = "/UpdateEmbarcacionMasivo/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CampoTablaExports> UpdateEmbarcacionMasivo(@RequestBody UpdateEmbarcaMasivoImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.UpdateEmbarcacionMasivo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/UpdateTripulantesMasivo/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CampoTablaExports> UpdateTripulantesMasivo(@RequestBody UpdateTripuMasivoImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.UpdateTripulantesMasivo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
 
 
