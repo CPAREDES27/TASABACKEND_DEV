@@ -13,6 +13,7 @@ public interface JCOMaestrosService {
     MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
 
     MensajeDto editarMaestro2 (MaestroEditImport imports) throws Exception;
+    MensajeDto2 editarMaestro3(MaestroEditImport imports) throws Exception;
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
     AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception;
     CampoTablaExports UpdateEmbarcacionMasivo(UpdateEmbarcaMasivoImports imports)throws Exception;

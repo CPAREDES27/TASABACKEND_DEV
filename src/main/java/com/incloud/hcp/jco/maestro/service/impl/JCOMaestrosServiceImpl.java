@@ -336,6 +336,111 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
     }
+
+    public MensajeDto2 editarMaestro3 (MaestroEditImport importsParam) throws Exception{
+
+        //DESPUES
+        MaestroExport me= new MaestroExport();
+        MensajeDto2 msj= new MensajeDto2();
+        try {
+            logger.error("editarMaestro2= FIELDWHERE: "+importsParam.getFieldWhere()+", KEYWHERE= "+importsParam.getKeyWhere()+", TABLA:"+importsParam.getTabla()+", P_USER: "+importsParam.getP_user());
+            me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
+            logger.error("VERIFICAR DATA"+me.getData().toString());
+            List<MaestroUpdate> update = importsParam.getOpcion();
+            List<HashMap<String, Object>> data= me.getData();
+            LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
+            LinkedHashMap<String,Object> setDAta = new LinkedHashMap<String,Object>();
+            logger.error("VERIFICAR DATA PASO2");
+            int contador=0;
+            for(Map<String,Object> datas: data){
+                for(Map.Entry<String,Object> entry: datas.entrySet()){
+                    String key= entry.getKey();
+                    Object value= entry.getValue();
+                    newRecord.put(key, value);
+                }
+
+            }
+            logger.error("VERIFICAR DATA PASO3");
+            String mensajito="";
+            String valor="";
+            for(int i=0;i<update.size();i++){
+                mensajito=update.get(i).getField();
+                valor = update.get(i).getValor().toUpperCase().trim();
+                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+                    if(entry.getKey().contains(mensajito)){
+                        entry.setValue(valor);
+                    }
+                }
+            }
+            logger.error("VERIFICAR DATA PASO4");
+            String cadena="";
+            if(importsParam.getKeyWhere() == null || importsParam.getKeyWhere() == "")
+            {
+                cadena ="||";
+                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+
+                    if(contador >1) {
+                        cadena += entry.getValue();
+                        cadena += "|";
+                    }
+                    contador++;
+                }
+            }else {
+                cadena = "|";
+                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+
+                    if(contador >0) {
+                        cadena += entry.getValue();
+                        cadena += "|";
+                    }
+                    contador++;
+                }
+            }
+            logger.error("VERIFICAR DATA PASO_ cadena"+cadena);
+
+            /*for(Map.Entry<String,Object> entry:newRecord.entrySet()){
+
+                if(contador >1) {
+                    cadena += entry.getValue();
+                    cadena += "|";
+                }
+                contador++;
+            }*/
+            logger.error("VERIFICAR DATA PASO5");
+            cadena = cadena.substring(0,cadena.length()-1);
+
+
+            logger.error("CADENA: " +cadena);
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("I_TABLE", importsParam.getTabla());
+            imports.put("P_FLAG", importsParam.getFlag());
+            imports.put("P_CASE", importsParam.getP_case());
+            imports.put("P_USER", importsParam.getP_user());
+
+
+
+            EjecutarRFC exec = new EjecutarRFC();
+
+
+            msj = exec.Execute_ZFL_RFC_UPDATE_TABLE3(imports, cadena);
+
+        }catch (Exception e){
+            ArrayList<MensajeDtoItem> mensajes=new ArrayList<>();
+            MensajeDtoItem msjItem=new MensajeDtoItem();
+            msjItem.setMANDT("00");
+            msjItem.setCMIN("Error");
+            msjItem.setCDMIN("Exception");
+            msjItem.setDSMIN(e.getMessage());
+
+            mensajes.add(msjItem);
+
+            msj.setMensajes(mensajes);
+        }
+        return msj;
+
+
+    }
+
     public MaestroExport ConsultaReadTable(String key, String value, String table, String usuario) throws Exception{
 
         logger.error("STEP 1");
