@@ -58,6 +58,7 @@ public class Metodos {
                 }
 
                 try {
+
                     if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
                         String valor=value.toString();
                         logger.error("valor= "+valor);
@@ -748,6 +749,8 @@ public class Metodos {
                                     String fecha = dia.format(value);
                                     value = fecha;
                                 }
+
+
                             }catch (Exception e){
                                 value=String.valueOf(value);
                             }
@@ -850,6 +853,7 @@ public class Metodos {
                         String fecha = dia.format(value);
                         value = fecha;
                     }
+
                 }catch (Exception e){
                     value=String.valueOf(value);
                 }
