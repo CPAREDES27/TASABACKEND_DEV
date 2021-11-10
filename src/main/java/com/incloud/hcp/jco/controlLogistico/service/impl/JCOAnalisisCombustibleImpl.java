@@ -45,23 +45,23 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             }
             if(!imports.getMotivoIni().equals("")){
                if(valida==true){
-                   cadena+="AND (INUBC LIKE '"+imports.getMotivoIni()+"')";
+                   cadena+=" AND (CDMMA LIKE '"+imports.getMotivoIni()+"')";
                }else{
-                   cadena+="INUBC LIKE '"+imports.getMotivoIni()+"'";
+                   cadena+="(CDMMA LIKE '"+imports.getMotivoIni()+"')";
                    valida=true;
                }
             }
             if(!imports.getFechaIni().equals("") && !imports.getFechaFin().equals("")){
                 if(valida==true){
-                    cadena+="AND (FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
+                    cadena+=" AND (FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
                 }else{
-                    cadena+="FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"'";
+                    cadena+="(FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
                     valida=true;
                 }
             }
             if(!imports.getFechaIni().equals("") && imports.getFechaFin().equals("")){
                 if(valida==true){
-                    cadena+="AND (FIEVN LIKE '"+imports.getFechaIni()+"')";
+                    cadena+=" AND (FIEVN LIKE '"+imports.getFechaIni()+"')";
                 }else{
                     cadena+="FIEVN LIKE '"+imports.getFechaIni()+"'";
                     valida=true;
@@ -69,33 +69,33 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             }
             if(imports.getFechaIni().equals("") && !imports.getFechaIni().equals("")){
                 if(valida==true){
-                    cadena+="AND (FIEVN LIKE '"+imports.getFechaFin()+"')";
+                    cadena+=" AND (FIEVN LIKE '"+imports.getFechaFin()+"')";
                 }else{
-                    cadena+="FIEVN LIKE '"+imports.getFechaFin()+"'";
+                    cadena+="(FIEVN LIKE '"+imports.getFechaFin()+"')";
                     valida=true;
                 }
             }
             if(!imports.getMotivoIni().equals("")){
                 if(imports.getMotivoIni().equals("1") || imports.getMotivoIni().equals("2")){
                     if(valida==true){
-                        cadena+="AND (CDTEV EQ '5')";
+                        cadena+=" AND (CDTEV EQ '5')";
                     }else{
-                        cadena+="CDTEV EQ '5'";
+                        cadena+="(CDTEV EQ '5')";
                         valida=true;
                     }
                 }else if(imports.getMotivoIni().equals("7") || imports.getMotivoIni().equals("8")){
                     if(valida==true){
-                        cadena+="AND (CDTEV EQ 'H' OR CDTEV EQ 'T')";
+                        cadena+=" AND (CDTEV EQ 'H' OR CDTEV EQ 'T')";
                     }else{
-                        cadena+="CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                        cadena+="(CDTEV EQ 'H' OR CDTEV EQ 'T')";
                     }
                 }
 
             }else {
                 if(valida==true){
-                    cadena+="AND (CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
+                    cadena+=" AND (CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
                 }else{
-                    cadena+="CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                    cadena+="(CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
                 }
             }
             logger.error("CADENA FINAL"+ cadena);
@@ -160,6 +160,43 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         return ce;
     }
 
+
+    public ControlDetalleExport Detalles(AnalisisCombusImports imports)throws Exception{
+
+        ControlDetalleExport ce=new ControlDetalleExport();
+
+
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_COMB_FASE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+
+            importx.setValue("P_MAREA", imports.getP_nrmar());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+            JCoTable tableExport = tables.getTable(Tablas.STR_FASE);
+            JCoTable tableExport2 = tables.getTable(Tablas.STR_DETF);
+
+
+            Metodos metodo = new Metodos();
+            //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            String[] fields=imports.getFields();
+            List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
+            List<HashMap<String, Object>> data2 = metodo.ObtenerListObjetos(tableExport2, fields);
+
+            ce.setStr_detf(data2);
+            ce.setStr_fase(data);
+            ce.setMensaje("Ok");
+
+        }catch (Exception e){
+            ce .setMensaje(e.getMessage());
+        }
+
+        return ce;
+    }
     public QlikExport QlikView(QlikView imports)throws Exception{
 
         QlikExport ce=new QlikExport();
