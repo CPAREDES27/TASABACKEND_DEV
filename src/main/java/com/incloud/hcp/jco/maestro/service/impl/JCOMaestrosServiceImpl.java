@@ -2,7 +2,6 @@ package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
@@ -11,14 +10,12 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -776,7 +773,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA_BTP);
             JCoParameterList importx = stfcConnection.getImportParameterList();
 
             importx.setValue("P_USER", "FGARCIA");
