@@ -22,6 +22,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQARMCOM={"LIFNR", "NAME1", "STCD1"};
     public static String[] BSQEMBHORO={"CDEMB","MREMB","NMEMB","LIFNR","NAME1"};
     public static String[] BSQEMBARCA={};
+    public static String[] ZFLEMP={"CDEMP","DSEMP","LIFNR"};
 
 
 }

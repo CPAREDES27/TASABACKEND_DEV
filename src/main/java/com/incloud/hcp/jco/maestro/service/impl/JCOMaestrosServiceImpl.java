@@ -647,6 +647,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQARMCOM":
                 tabla=AyudaBusquedaTablas.BSQARMCOM;
                 break;
+            case "BSQEMPLANTA":
+                tabla=AyudaBusquedaTablas.ZFLEMP;
+                break;
         }
 
         return tabla;
@@ -710,6 +713,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQARMCOM":
                 fields = AyudaBusquedaFields.BSQARMCOM;
+                break;
+            case "BSQEMPLANTA":
+                fields = AyudaBusquedaFields.ZFLEMP;
                 break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);

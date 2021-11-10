@@ -20,5 +20,6 @@ public class AyudaBusquedaTablas {
     public static String BSQCLSDOC="T003T";
     public static String BSQGPOCOMP="T024";
     public static String BSQARMCOM="LFA1";
+    public static String ZFLEMP="ZFLEMP";
 
 }
