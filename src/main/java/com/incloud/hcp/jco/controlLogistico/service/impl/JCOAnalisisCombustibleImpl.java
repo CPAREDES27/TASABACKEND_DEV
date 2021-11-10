@@ -173,7 +173,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_COMB_FASE);
             JCoParameterList importx = stfcConnection.getImportParameterList();
 
-            importx.setValue("P_NRMAR", imports.getP_nrmar());
+            importx.setValue("P_MAREA", imports.getP_nrmar());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
             stfcConnection.execute(destination);
