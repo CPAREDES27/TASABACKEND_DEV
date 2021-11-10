@@ -9,6 +9,7 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -59,8 +60,14 @@ public class JCORequerimientoPescaImpl implements JCORequerimientoPescaService {
                 rp.setZdszar(s_reqPesca.getString("ZDSZAR"));
                 rp.setFhreq(s_reqPesca.getString("FHREQ"));
                 rp.setHrreq(s_reqPesca.getString("HRREQ"));
-                rp.setCnprq(s_reqPesca.getString("CNPRQ"));
-                rp.setCnpcm(s_reqPesca.getString("CNPCM"));
+
+                double convertir=Double.parseDouble(s_reqPesca.getString("CNPRQ"));
+                int c= (int) convertir;
+                rp.setCnprq(String.valueOf(c));
+
+                convertir=Double.parseDouble(s_reqPesca.getString("CNPCM"));
+                c= (int) convertir;
+                rp.setCnpcm(String.valueOf(c));
                 rp.setAufnr(s_reqPesca.getString("AUFNR"));
 
                 listaReqPesca.add(rp);

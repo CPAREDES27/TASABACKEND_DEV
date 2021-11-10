@@ -10,13 +10,15 @@ public interface JCOMaestrosService {
     MaestroExport obtenerMaestro3 (MaestroImportsKey imports) throws Exception;
     MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception;
     MaestroExport obtenerArmador(BusquedaArmadorDTO codigo) throws Exception;
-    MensajeDto editarMaestro (MaestroEditImports imports) throws Exception;
+    UpdateTableExports editarMaestro (MaestroEditImports imports) throws Exception;
 
-    MensajeDto editarMaestro2 (MaestroEditImport imports) throws Exception;
+    UpdateTableExports editarMaestro2 (MaestroEditImport imports) throws Exception;
+    MensajeDto2 editarMaestro3(MaestroEditImport imports) throws Exception;
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
     AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception;
     CampoTablaExports UpdateEmbarcacionMasivo(UpdateEmbarcaMasivoImports imports)throws Exception;
     CampoTablaExports UpdateTripulantesMasivo(UpdateTripuMasivoImports imports)throws Exception;
+    CampoTablaExports UpdateMasivo(UpdateMasivoImports imports)throws Exception;
 
 
 }
