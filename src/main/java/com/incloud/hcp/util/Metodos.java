@@ -263,7 +263,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("1ZONAPESCA")) {
+        } else if (table.equals("ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
@@ -299,7 +299,7 @@ public class Metodos {
         } else if (table.equals("CATEGORIA")) {
             tablita = "ZFLCNS";
 
-        } else if (table.equals("1ZONAAREA")) {
+        } else if (table.equals("ZONAAREA")) {
             tablita = "ZFLZAR";
         }
         else if (table.equals("SISTVIRADO")) {

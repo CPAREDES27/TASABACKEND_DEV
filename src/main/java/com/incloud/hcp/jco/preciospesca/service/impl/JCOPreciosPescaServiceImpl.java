@@ -73,7 +73,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         List<MaestroOptionsKey> options2 = imports.getOptions();
 
 
-        List<HashMap<String, Object>> tmpOptions =metodo.ValidarOptions(option,options2,"WA");
+        List<HashMap<String, Object>> tmpOptions =metodo.ValidarOptions(option,options2);
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
