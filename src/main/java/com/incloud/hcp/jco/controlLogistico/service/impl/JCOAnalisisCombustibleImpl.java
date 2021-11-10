@@ -160,6 +160,43 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         return ce;
     }
 
+
+    public ControlDetalleExport Detalles(AnalisisCombusImports imports)throws Exception{
+
+        ControlDetalleExport ce=new ControlDetalleExport();
+
+
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_COMB_FASE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+
+            importx.setValue("P_NRMAR", imports.getP_nrmar());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+            JCoTable tableExport = tables.getTable(Tablas.STR_FASE);
+            JCoTable tableExport2 = tables.getTable(Tablas.STR_DETF);
+
+
+            Metodos metodo = new Metodos();
+            //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
+            String[] fields=imports.getFields();
+            List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
+            List<HashMap<String, Object>> data2 = metodo.ObtenerListObjetos(tableExport2, fields);
+
+            ce.setStr_detf(data2);
+            ce.setStr_fase(data);
+            ce.setMensaje("Ok");
+
+        }catch (Exception e){
+            ce .setMensaje(e.getMessage());
+        }
+
+        return ce;
+    }
     public QlikExport QlikView(QlikView imports)throws Exception{
 
         QlikExport ce=new QlikExport();

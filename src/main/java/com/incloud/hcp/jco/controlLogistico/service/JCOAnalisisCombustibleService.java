@@ -6,5 +6,6 @@ public interface JCOAnalisisCombustibleService {
 
     AnalisisCombusLisExports Listar(AnalisisCombusLisImports imports)throws Exception;
     ControlLogExports Detalle(AnalisisCombusImports imports)throws Exception;
+    ControlDetalleExport Detalles(AnalisisCombusImports imports)throws Exception;
     QlikExport QlikView(QlikView imports)throws Exception;
 }
