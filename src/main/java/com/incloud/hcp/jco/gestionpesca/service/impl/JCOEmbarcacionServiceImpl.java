@@ -154,6 +154,55 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return dto;
     }
 
+    public MareaDto consultaMarea2(MareaOptions marea) throws Exception{
+        MareaDto dto=consultaMarea(marea);
+
+        /*logger.error("ListarEventosPesca_1");;
+        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        logger.error("ListarEventosPesca_2");;
+        JCoRepository repo = destination.getRepository();
+        logger.error("ListarEventosPesca_3");;
+        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_CONS_MARE_EVENT");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+
+        importx.setValue("P_USER", marea.getUser());
+        //importx.setValue("P_MAREA", marea.getP_marea());
+        importx.setValue("P_MAREA", Integer.parseInt(marea.getP_marea()));
+        //importx.setValue("P_EMBARCACION", marea.getP_embarcacion());
+        //importx.setValue("P_FLAG", marea.getP_flag());
+        importx.setActive("P_FLAG", true);
+
+        logger.error("ListarEventosPesca_4");;
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        stfcConnection.execute(destination);
+        logger.error("ListarEventosPesca_5");
+
+        JCoTable S_MAREA = tables.getTable("S_MAREA");
+        logger.error("ListarEventosPesca_6");
+        JCoTable S_EVENTO = tables.getTable("S_EVENTO");
+        JCoTable STR_FLBSP = tables.getTable("STR_FLBSP");
+        JCoTable STR_PSCINC = tables.getTable("STR_PSCINC");
+
+        logger.error("ListarEventosPesca_7");
+
+        Metodos metodo = new Metodos();
+        List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(S_MAREA,marea.getFieldMarea());
+        List<HashMap<String, Object>> ListarS_EVENTO= metodo.ObtenerListObjetos(S_EVENTO,marea.getFieldEvento());
+        List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
+        List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
+
+        MareaDto dto= new MareaDto();
+        dto.setS_marea(ListarS_MAREA);
+        dto.setS_evento(ListarS_EVENTO);
+        dto.setStr_flbsp(ListarSTR_FLBSP);
+        dto.setStr_pscinc(ListarSTR_PSCINC);
+
+
+        dto.setMensaje("Ok");*/
+
+        return dto;
+    }
+
     @Override
     public HorometroExport consultarHorometro(HorometroDto horometro) throws Exception {
 

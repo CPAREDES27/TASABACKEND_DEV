@@ -300,7 +300,7 @@ public class Metodos {
         } else if (table.equals("CATEGORIA")) {
             tablita = "ZFLCNS";
 
-        } else if (table.equals("ZONAAREA")) {
+        } else if (table.equals("1ZONAAREA")) {
             tablita = "ZFLZAR";
         }
         else if (table.equals("SISTVIRADO")) {
