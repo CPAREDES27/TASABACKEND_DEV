@@ -45,9 +45,9 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             }
             if(!imports.getMotivoIni().equals("")){
                if(valida==true){
-                   cadena+=" AND (INUBC LIKE '"+imports.getMotivoIni()+"')";
+                   cadena+=" AND (CDMMA LIKE '"+imports.getMotivoIni()+"')";
                }else{
-                   cadena+="CDMMA LIKE '"+imports.getMotivoIni()+"'";
+                   cadena+="(CDMMA LIKE '"+imports.getMotivoIni()+"')";
                    valida=true;
                }
             }
@@ -55,7 +55,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 if(valida==true){
                     cadena+=" AND (FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
                 }else{
-                    cadena+="FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"'";
+                    cadena+="(FIEVN BETWEEN '"+imports.getFechaIni()+"'"+" AND "+"'"+imports.getFechaFin()+"')";
                     valida=true;
                 }
             }
@@ -71,7 +71,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 if(valida==true){
                     cadena+=" AND (FIEVN LIKE '"+imports.getFechaFin()+"')";
                 }else{
-                    cadena+="FIEVN LIKE '"+imports.getFechaFin()+"'";
+                    cadena+="(FIEVN LIKE '"+imports.getFechaFin()+"')";
                     valida=true;
                 }
             }
@@ -80,14 +80,14 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                     if(valida==true){
                         cadena+=" AND (CDTEV EQ '5')";
                     }else{
-                        cadena+="CDTEV EQ '5'";
+                        cadena+="(CDTEV EQ '5')";
                         valida=true;
                     }
                 }else if(imports.getMotivoIni().equals("7") || imports.getMotivoIni().equals("8")){
                     if(valida==true){
                         cadena+=" AND (CDTEV EQ 'H' OR CDTEV EQ 'T')";
                     }else{
-                        cadena+="CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                        cadena+="(CDTEV EQ 'H' OR CDTEV EQ 'T')";
                     }
                 }
 
@@ -95,7 +95,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 if(valida==true){
                     cadena+=" AND (CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
                 }else{
-                    cadena+="CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                    cadena+="(CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
                 }
             }
             logger.error("CADENA FINAL"+ cadena);
