@@ -4,6 +4,7 @@ import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.maestro.dto.AnularDescargaExports;
 import com.incloud.hcp.jco.maestro.dto.AnularDescargaImports;
 import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface JCOEmbarcacionService {
     FlotaDto obtenerDistribucionFlota(String user) throws Exception;
 
     MareaDto consultaMarea(MareaOptions marea) throws Exception;
+    MareaDto2 consultaMarea2(MareaOptions marea) throws Exception;
 
     HorometroExport consultarHorometro(HorometroDto horometro) throws Exception;
     MensajeDto crearMareaPropios(MarEventoDtoImport imports) throws Exception;

@@ -1,8 +1,11 @@
 package com.incloud.hcp.jco.gestionpesca.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.*;
+import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -10,15 +13,20 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 //@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
 public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    JCODominiosImpl dominioService;
 
     public List<EmbarcacionDto> listaEmbarcacion(String condicion) throws Exception {
 
@@ -154,10 +162,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return dto;
     }
 
-    public MareaDto consultaMarea2(MareaOptions marea) throws Exception{
-        MareaDto dto=consultaMarea(marea);
-
-        /*logger.error("ListarEventosPesca_1");;
+    public MareaDto2 consultaMarea2(MareaOptions marea) throws Exception{
+        logger.error("ListarEventosPesca_1");;
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
@@ -191,14 +197,59 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
         List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
 
-        MareaDto dto= new MareaDto();
+        MareaDto2 dto= new MareaDto2();
         dto.setS_marea(ListarS_MAREA);
         dto.setS_evento(ListarS_EVENTO);
         dto.setStr_flbsp(ListarSTR_FLBSP);
         dto.setStr_pscinc(ListarSTR_PSCINC);
 
 
-        dto.setMensaje("Ok");*/
+        dto.setMensaje("Ok");
+
+        // Agrupar los registros por el código de especie
+        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->s.get("CDSPC").toString()));
+
+        // Copy Map
+        HashMap<String,ArrayList<HashMap<String,Object>>> str_flbsp_group_copy=new HashMap<>();
+        for (Map.Entry<Object,List<HashMap<String,Object>>> entry: str_flbsp_group.entrySet()) {
+            ArrayList<HashMap<String,Object>> str_flbsp_especie=new ArrayList<>(entry.getValue());
+            str_flbsp_group_copy.put(entry.getKey().toString(),str_flbsp_especie);
+        }
+
+        //Obtener las especies
+        DominiosImports dominiosImports=new DominiosImports();
+        ArrayList<DominioParams> listDominioParams=new ArrayList<>();
+        DominioParams dominioParams=new DominioParams();
+        dominioParams.setStatus("A");
+        dominioParams.setDomname("ESPECIE");
+        listDominioParams.add(dominioParams);
+        dominiosImports.setDominios(listDominioParams);
+        DominioDto dominioExport=dominioService.Listar(dominiosImports);
+        ArrayList<DominioExportsData> listEspecies=new ArrayList<>(dominioExport.getData().get(0).getData());
+
+        List<HashMap<String,Object>> str_flbsp_matched=new ArrayList<>();
+        //Obtener columnas dinamicas
+        for (Map.Entry<String,ArrayList<HashMap<String,Object>>> entry: str_flbsp_group_copy.entrySet()) {
+            String codEspecie=entry.getKey();
+
+            //Fila al cual se le añadirán las columnas dinámicas
+            HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+            for (HashMap<String,Object> flbsp: entry.getValue()) {
+                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+                tnmmed=tnmmed.replace('.','_');
+                record.put(tnmmed,flbsp.get("TMMED"));
+            }
+
+            //Buscar el nombre de la especie en la lista y adicionarlo
+            DominioExportsData especie=listEspecies.stream().filter(s->s.getId().equals(codEspecie)).findAny().orElse(null);
+            String descEspecie=especie!=null?especie.getDescripcion():null;
+
+            record.put("DESC_CDSPC",descEspecie);
+
+            str_flbsp_matched.add(record);
+        }
+
+        dto.setStr_flbsp_matched(str_flbsp_matched);
 
         return dto;
     }
@@ -228,7 +279,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         dto.setT_event(ListarT_EVENTO);
         dto.setT_lechor(ListarT_LECHOR);
         dto.setT_mensaje(ListarT_MENSAJE);
-        
+
         return dto;
     }
     public MensajeDto crearMareaPropios(MarEventoDtoImport imports) throws Exception{
