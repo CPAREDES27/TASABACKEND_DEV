@@ -241,7 +241,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_QV_COMB_FASE);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ANALIS_COMB_FASE);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_FIEVN", imports.getFechaIni());
             importx.setValue("P_FFEVN", imports.getFechaFin());
