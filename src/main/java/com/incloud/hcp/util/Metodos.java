@@ -628,6 +628,10 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
+                if(mo.getControl().equals("DATE")){
+                    mo.setControl("MULTIINPUT");
+                }
+
                 if(mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC"))
                 {
                     control="LIKE";
