@@ -235,4 +235,36 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         return ce;
     }
 
+    @Override
+    public AnalisisDtoExport AnalisisCombu(AnalisisDtoImport imports) throws Exception {
+        AnalisisDtoExport dto = new AnalisisDtoExport();
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_QV_COMB_FASE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_FIEVN", imports.getFechaIni());
+            importx.setValue("P_FFEVN", imports.getFechaFin());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+            JCoTable STR_CEF = tables.getTable(Tablas.STR_CEF);
+
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetos(T_MENSAJE);
+
+            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetos(STR_CEF);
+
+
+            dto.setT_mensaje(dataT_MENSAJE);
+            dto.setStr_cef(dataSTR_CEF);
+
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+        return dto;
+    }
+
 }
