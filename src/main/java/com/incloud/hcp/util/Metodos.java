@@ -608,6 +608,12 @@ public class Metodos {
         String control="";
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
 
+        for (MaestroOptionsKey optionKey:options) {
+            if(optionKey.getControl().equals("DATE")){
+                optionKey.setControl("MULTIINPUT");
+            }
+        }
+
         if(option.size()>0 && options.size()==0){
             for(int j=0;j<option.size();j++){
                 MaestroOptions mop = option.get(j);
@@ -628,9 +634,6 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-                if(mo.getControl().equals("DATE")){
-                    mo.setControl("MULTIINPUT");
-                }
 
                 if(mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC"))
                 {
@@ -709,7 +712,9 @@ public class Metodos {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh().toUpperCase().trim() + "'");
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
-                    } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                    }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
