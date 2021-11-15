@@ -209,6 +209,18 @@ public class GeneralRest {
 
     }
 
+    @PostMapping(value = "/Update_Table_Maestro/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UpdateTableExports> Update_Table_Maestro(@RequestBody HiscomDTOImport imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.Update_Table_Maestro(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
 
 }

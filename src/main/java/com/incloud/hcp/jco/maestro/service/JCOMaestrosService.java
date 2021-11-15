@@ -19,6 +19,6 @@ public interface JCOMaestrosService {
     CampoTablaExports UpdateEmbarcacionMasivo(UpdateEmbarcaMasivoImports imports)throws Exception;
     CampoTablaExports UpdateTripulantesMasivo(UpdateTripuMasivoImports imports)throws Exception;
     CampoTablaExports UpdateMasivo(UpdateMasivoImports imports)throws Exception;
-
+    UpdateTableExports Update_Table_Maestro(HiscomDTOImport imports) throws Exception;
 
 }

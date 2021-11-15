@@ -1141,5 +1141,42 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return dto;
     }
 
+    @Override
+    public UpdateTableExports Update_Table_Maestro(HiscomDTOImport imports) throws Exception {
+        Metodos metodos = new Metodos();
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repo = destination.getRepository();
+        ;
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_UPDATE_TABLE);
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("I_TABLE","ZTFL_HISCOM");
+        importx.setValue("P_FLAG","X");
+        importx.setValue("P_CASE","E");
+        importx.setValue("P_USER",imports.getUser());
+
+
+
+        JCoParameterList jcoTables = stfcConnection.getTableParameterList();
+        JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
+        tableImport.appendRow();
+        String cadena= "|"+imports.getCdpcn()+"|"+imports.getIebpt()+"|"+"|"+imports.getCdgre()+"|"+imports.getCdemp()+"|"+imports.getCdemb()+"|"+imports.getCdpta();
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE DATA: "+cadena);
+        tableImport.setValue("DATA", cadena);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
+        stfcConnection.execute(destination);
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+        Metodos me = new Metodos();
+
+        List<HashMap<String, Object>> t_mensaje=me.ListarObjetos(tableExport);
+        UpdateTableExports dto = new UpdateTableExports();
+
+        dto.setT_mensaje(t_mensaje);
+
+        return  dto;
+
+
+    }
+
 
 }
