@@ -264,7 +264,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("ZONAPESCA")) {
+        } else if (table.equals("1ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
