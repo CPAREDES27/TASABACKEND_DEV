@@ -2,7 +2,6 @@ package com.incloud.hcp.jco.maestro.service.impl;
 
 import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
-import com.incloud.hcp.jco.gestionpesca.dto.EmbarcacionDto;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
@@ -11,14 +10,12 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -213,10 +210,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return obj;
     }
 
-    public MensajeDto editarMaestro (MaestroEditImports importsParam) throws Exception{
+    public UpdateTableExports editarMaestro (MaestroEditImports importsParam) throws Exception{
 
         //DESPUES
-        MensajeDto msj= new MensajeDto();
+        UpdateTableExports msj= new UpdateTableExports();
         try {
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("I_TABLE", importsParam.getTabla());
@@ -226,24 +223,21 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             EjecutarRFC exec = new EjecutarRFC();
 
             msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, importsParam.getData().toUpperCase().trim());
-
+            msj.setMensaje("Ok");
 
         }catch (Exception e){
 
-            msj.setMANDT("00");
-            msj.setCMIN("Error");
-            msj.setCDMIN("Exception");
-            msj.setDSMIN(e.getMessage());
+            msj.setMensaje(e.getMessage());
         }
         return msj;
 
 
     }
-    public MensajeDto editarMaestro2 (MaestroEditImport importsParam) throws Exception{
+    public UpdateTableExports editarMaestro2 (MaestroEditImport importsParam) throws Exception{
 
         //DESPUES
         MaestroExport me= new MaestroExport();
-        MensajeDto msj= new MensajeDto();
+        UpdateTableExports msj= new UpdateTableExports();
         try {
             logger.error("editarMaestro2= FIELDWHERE: "+importsParam.getFieldWhere()+", KEYWHERE= "+importsParam.getKeyWhere()+", TABLA:"+importsParam.getTabla()+", P_USER: "+importsParam.getP_user());
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
@@ -325,12 +319,11 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
             msj = exec.Execute_ZFL_RFC_UPDATE_TABLE(imports, cadena);
+            msj.setMensaje("Ok");
 
         }catch (Exception e){
-            msj.setMANDT("00");
-            msj.setCMIN("Error");
-            msj.setCDMIN("Exception");
-            msj.setDSMIN(e.getMessage());
+
+            msj.setMensaje(e.getMessage());
         }
         return msj;
 
@@ -654,6 +647,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQARMCOM":
                 tabla=AyudaBusquedaTablas.BSQARMCOM;
                 break;
+            case "BSQEMPLANTA":
+                tabla=AyudaBusquedaTablas.BSQEMPLANTA;
+                break;
+            case "BSQTEMPORADA":
+                tabla=AyudaBusquedaTablas.BSQTEMPORADA;
+                break;
         }
 
         return tabla;
@@ -718,6 +717,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQARMCOM":
                 fields = AyudaBusquedaFields.BSQARMCOM;
                 break;
+            case "BSQEMPLANTA":
+                fields = AyudaBusquedaFields.BSQEMPLANTA;
+                break;
+            case "BSQTEMPORADA":
+                fields = AyudaBusquedaFields.BSQTEMPORADA;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -728,46 +733,47 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         List<MaestroOptions> options= new ArrayList<>();
 
         MaestroOptions opt= new MaestroOptions();
+        boolean noExists=false;
 
-
-        if(nombreAyuda.equals("BSQPLANTAS") || nombreAyuda.equals("BSQMAT") || nombreAyuda.equals("BSQESPEC") || nombreAyuda.equals("BSQPUERTO") ||
-                nombreAyuda.equals("BSQUNDEXT") ||nombreAyuda.equals("BSQUSR") ||nombreAyuda.equals("BSQPEDCOMP") ||nombreAyuda.equals("BSQCLSDOC") || nombreAyuda.equals("BSQCENTRO")){
-            logger.error("ENTRO AL IF QUE EVALUA 1");
-
-            switch (nombreAyuda){
-                case "BSQPLANTAS":
-                    opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
-                    break;
-                case "BSQMAT":
-                    opt.setWa(AyudaBusquedaOptions.BSQMAT);
-                    break;
-                case "BSQESPEC":
-                    opt.setWa(AyudaBusquedaOptions.BSQESPEC);
-                    break;
-                case "BSQPUERTO":
-                    opt.setWa(AyudaBusquedaOptions.BSQPUERTO);
-                    break;
-                case "BSQUNDEXT":
-                    opt.setWa(AyudaBusquedaOptions.BSQUNDEXT);
-                    break;
-                case "BSQUSR":
-                    opt.setWa(AyudaBusquedaOptions.BSQUSR);
-                    break;
-                case "BSQPEDCOMP":
-                    opt.setWa(AyudaBusquedaOptions.BSQPEDCOMP);
-                    break;
-                case "BSQCLSDOC":
-                    opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
-                    break;
-                case "BSQCENTRO":
-                    opt.setWa(AyudaBusquedaOptions.BSQCENTRO);
-                    break;
-            }
-            options.add(opt);
+        switch (nombreAyuda){
+            case "BSQPLANTAS":
+                opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
+                break;
+            case "BSQMAT":
+                opt.setWa(AyudaBusquedaOptions.BSQMAT);
+                break;
+            case "BSQESPEC":
+                opt.setWa(AyudaBusquedaOptions.BSQESPEC);
+                break;
+            case "BSQPUERTO":
+                opt.setWa(AyudaBusquedaOptions.BSQPUERTO);
+                break;
+            case "BSQUNDEXT":
+                opt.setWa(AyudaBusquedaOptions.BSQUNDEXT);
+                break;
+            case "BSQUSR":
+                opt.setWa(AyudaBusquedaOptions.BSQUSR);
+                break;
+            case "BSQPEDCOMP":
+                opt.setWa(AyudaBusquedaOptions.BSQPEDCOMP);
+                break;
+            case "BSQCLSDOC":
+                opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
+                break;
+            case "BSQCENTRO":
+                opt.setWa(AyudaBusquedaOptions.BSQCENTRO);
+                break;
+            case "BSQTEMPORADA":
+                opt.setWa(AyudaBusquedaOptions.BSQTEMPORADA);
+                break;
+            default:
+                noExists=true;
+                break;
         }
 
-
-
+        if(!noExists){
+            options.add(opt);
+        }
 
         return options;
     }
@@ -780,7 +786,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA_BTP);
             JCoParameterList importx = stfcConnection.getImportParameterList();
 
             importx.setValue("P_USER", "FGARCIA");
@@ -1062,5 +1068,85 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         return dto;
     }
+
+    public CampoTablaExports UpdateMasivo(UpdateMasivoImports imports)throws Exception{
+
+        CampoTablaExports dto= new CampoTablaExports();
+        try {
+
+            CampoTablaImports cti = new CampoTablaImports();
+
+            List<SetDto> ListSetDto = new ArrayList<>();
+
+            for(int i=0; i<imports.getStr_set().size(); i++){
+
+                UpdateMasivoDto um= imports.getStr_set().get(i);
+
+                List<HashMap<String, Object>> options= um.getOptions();
+
+                String cmopt="";
+                int tam= options.get(i).size();
+                int con=0;
+                for (Map.Entry<String, Object>entry:options.get(i).entrySet()){
+
+                    String key=entry.getKey();
+                    String value=entry.getValue().toString();
+
+                    if(tam-1==con){
+                        cmopt+=key+" = '"+value+"'";
+                    }else{
+                        cmopt+=key+" = '"+value +"' AND ";
+                    }
+                    con++;
+                }
+
+                List<HashMap<String, Object>> values= um.getValues();
+
+                String cmset="";
+                tam= values.get(i).size();
+                con=0;
+                for (Map.Entry<String, Object>entry:values.get(i).entrySet()){
+
+                    String key=entry.getKey();
+                    String value=entry.getValue().toString();
+
+                    if(tam-1==con){
+                        cmset += key + " = '" + value + "' ";
+                    }else {
+                        cmset += key + " = '" + value + "'";
+                    }
+                    con++;
+                }
+
+                SetDto set = new SetDto();
+                set.setCmopt(cmopt);
+                set.setCmset(cmset);
+                set.setNmtab(imports.getTabla());
+                ListSetDto.add(set);
+            }
+
+
+
+
+
+
+            cti.setP_user(imports.getP_user());
+            cti.setStr_set(ListSetDto);
+
+            for (int i = 0; i < cti.getStr_set().size(); i++) {
+                logger.error("cti "+i+" opt ="  + cti.getStr_set().get(i).getCmopt());
+                logger.error("cti "+i+" set = " + cti.getStr_set().get(i).getCmset());
+                logger.error("cti "+i+" tab  = " + cti.getStr_set().get(i).getNmtab());
+            }
+
+            dto.setMensaje("prueba");
+            //dto = jcoCampoTablaService.Actualizar(cti);
+        }catch(Exception ex) {
+            dto.setMensaje(ex.getMessage());
+        }
+
+        return dto;
+    }
+
 
 }

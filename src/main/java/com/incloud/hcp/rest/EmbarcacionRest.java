@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.gestionpesca.service.JCOTipoEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,20 @@ public class EmbarcacionRest {
         }
 
     }
+
+    @PostMapping(value = "/consultaMarea2/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MareaDto2> consultaMarea2(@RequestBody MareaOptions marea){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.consultaMarea2(marea))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
     @PostMapping(value = "/consultarHorometro/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<HorometroExport> consultaMarea(@RequestBody HorometroDto horometro){
 

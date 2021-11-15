@@ -54,7 +54,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
             JCoRepository repo = destination.getRepository();
-            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA);
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA_BTP);
 
 
             logger.error("Execute_ZFL_RFC_CONS_EMBARCA_1");

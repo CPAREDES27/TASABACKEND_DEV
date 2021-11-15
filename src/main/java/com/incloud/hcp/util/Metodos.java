@@ -58,6 +58,7 @@ public class Metodos {
                 }
 
                 try {
+
                     if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
                         String valor=value.toString();
                         logger.error("valor= "+valor);
@@ -96,7 +97,7 @@ public class Metodos {
 
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")||
-                        key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")){
+                        key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -607,6 +608,12 @@ public class Metodos {
         String control="";
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
 
+        for (MaestroOptionsKey optionKey:options) {
+            if(optionKey.getControl().equals("DATE")){
+                optionKey.setControl("MULTIINPUT");
+            }
+        }
+
         if(option.size()>0 && options.size()==0){
             for(int j=0;j<option.size();j++){
                 MaestroOptions mop = option.get(j);
@@ -627,6 +634,7 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
+
                 if(mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC"))
                 {
                     control="LIKE";
@@ -704,7 +712,9 @@ public class Metodos {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh().toUpperCase().trim() + "'");
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
-                    } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                    }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
@@ -748,6 +758,8 @@ public class Metodos {
                                     String fecha = dia.format(value);
                                     value = fecha;
                                 }
+
+
                             }catch (Exception e){
                                 value=String.valueOf(value);
                             }
@@ -755,7 +767,7 @@ public class Metodos {
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                                     || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")){
+                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -850,6 +862,7 @@ public class Metodos {
                         String fecha = dia.format(value);
                         value = fecha;
                     }
+
                 }catch (Exception e){
                     value=String.valueOf(value);
                 }
@@ -857,7 +870,8 @@ public class Metodos {
                 newRecord.put(key, value);
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                        || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV") || key.equals("ESVVI")){
+                        || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV") || key.equals("ESVVI")|| key.equals("CDTEV")
+                        ){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -1128,7 +1142,7 @@ public class Metodos {
                 campo="DESC_"+campo;
             }
             if(campo.equals("CDFAS")){
-                dom="FASE";
+                dom="ZCDFAS";
                 campo="DESC_"+campo;
             }
             if(campo.equals("CDMMA")){
@@ -1143,6 +1157,11 @@ public class Metodos {
                 dom="ZESREG";
                 campo="DESC_"+campo;
             }
+            if(campo.equals("CDTEV")){
+                dom="ZCDTEV";
+                campo="DESC_"+campo;
+            }
+
             descripcion=ObtenerDominio(dom,valor);
        }
 

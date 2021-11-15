@@ -76,7 +76,7 @@ public class GeneralRest {
     }
 
     @PostMapping(value = "/Update_Table/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> EditarMaestro(@RequestBody MaestroEditImports imports){
+    public ResponseEntity<UpdateTableExports> EditarMaestro(@RequestBody MaestroEditImports imports){
 
         try {
             return Optional.ofNullable(this.MaestroService.editarMaestro(imports))
@@ -89,7 +89,7 @@ public class GeneralRest {
     }
 
     @PostMapping(value = "/Update_Table2/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> EditarMaestro2(@RequestBody MaestroEditImport imports){
+    public ResponseEntity<UpdateTableExports> EditarMaestro2(@RequestBody MaestroEditImport imports){
 
         try {
             return Optional.ofNullable(this.MaestroService.editarMaestro2(imports))
@@ -191,6 +191,17 @@ public class GeneralRest {
 
         try {
             return Optional.ofNullable(this.MaestroService.UpdateTripulantesMasivo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+    @PostMapping(value = "/UpdateMasivo/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CampoTablaExports> UpdateMasivo(@RequestBody UpdateMasivoImports imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.UpdateMasivo(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
