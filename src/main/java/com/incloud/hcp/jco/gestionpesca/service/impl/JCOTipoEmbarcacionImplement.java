@@ -110,7 +110,7 @@ public class JCOTipoEmbarcacionImplement implements JCOTipoEmbarcacionService {
         mi2.setFields(fields1);
         mi2.setNo_data("");
         mi2.setOptions(listMo1);
-        mi2.setOrder("");
+        mi2.setOrder("AUFNR ASCENDING");
         mi2.setRowcount(0);
         mi2.setRowskips(0);
         mi2.setTabla("ZV_FLPA");
