@@ -352,7 +352,21 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG")){
+                               if (key.equals("HFDES") || key.equals("HIDES")) {
+
+                                   if(value.toString().equals("000000")){
+                                       value="";
+                                   }else {
+                                       SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                       SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
+                                       Date hora = parseador.parse(value.toString());
+                                       value = formateador.format(hora);
+                                   }
+
+                               }
+
+                               if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
+                                       key.equals("FFDES") || key.equals("FIDES")){
 
                                    SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
                                    SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
