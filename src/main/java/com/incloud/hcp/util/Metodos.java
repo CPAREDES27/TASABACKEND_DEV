@@ -741,26 +741,20 @@ public class Metodos {
 
                     for (int k = 0; k < fields.length; k++) {
                         logger.error("key: " + key + " k: " + fields[k]);
-                        ;
 
                         if (fields[k].trim().equals(key.trim())) {
-
-
                             if (field.getTypeAsString().equals("TIME")) {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
                             }
                             try {
                                 if (field.getTypeAsString().equals("DATE")) {
+                                    String date = String.valueOf(value);
 
-                                    //String date = String.valueOf(value);
-                                    if(value != null){
                                         SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                                         String fecha = dia.format(value);
                                         value = fecha;
-                                    }else {
-                                        value = "";
-                                    }
+
                                 }
 
                             }catch (Exception e){
