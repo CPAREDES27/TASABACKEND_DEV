@@ -96,10 +96,10 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
         importx.setValue("P_CNDES", "");
         importx.setValue("P_CREA", imports.getP_crea());
         importx.setValue("P_ANUL", imports.getP_anul());
-        importx.setValue("P_REIN", false);
+        importx.setValue("P_REIN", 0);
         stfcConnection.execute(destination);
         JCoParameterList tables = stfcConnection.getExportParameterList();
-        String code = tables.getTable(" W_MENSAJE").toString();
+        String code = tables.getValue(" W_MENSAJE").toString();
 
         dto.setW_mensaje(code);
 
