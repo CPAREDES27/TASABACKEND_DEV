@@ -1167,7 +1167,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         JCoParameterList jcoTables = stfcConnection.getTableParameterList();
         JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
         tableImport.appendRow();
-        String cadena= "|"+imports.getCdpcn()+"|"+imports.getIebpt()+"|"+"|"+imports.getCdgre()+"|"+imports.getCdemp()+"|"+imports.getCdemb()+"|"+imports.getCdpta();
+        String cadena= "|"+imports.getCdpcn()+"|"+imports.getIebpt()+"|"+"|"+imports.getCdgre()+"|"+imports.getCdemp()+"|"+imports.getCdemb()+"|"+imports.getCdpta()+"|";
         logger.error("Execute_ZFL_RFC_UPDATE_TABLE DATA: "+cadena);
         tableImport.setValue("DATA", cadena);
         logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");

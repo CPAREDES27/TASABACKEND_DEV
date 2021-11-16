@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.tolvas.service.impl;
 
+import com.incloud.hcp.jco.tolvas.dto.DescargaExportDto;
+import com.incloud.hcp.jco.tolvas.dto.DescargaImportDto;
 import com.incloud.hcp.jco.tolvas.dto.PescaCompetenciaRExports;
 import com.incloud.hcp.jco.tolvas.dto.PescaCompetenciaRImports;
 import com.incloud.hcp.jco.tolvas.service.JCOPescaCompetenciaRService;
@@ -77,5 +79,30 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
 
         return pc;
 
+    }
+
+    @Override
+    public DescargaExportDto ejecutarPrograma(DescargaImportDto imports) throws Exception {
+        DescargaExportDto dto = new DescargaExportDto();
+
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_DECLA_COMPE);
+
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("P_USER", imports.getP_user());
+        importx.setValue("P_NRDES", imports.getP_nrdes());
+        importx.setValue("P_CNDES", "");
+        importx.setValue("P_CREA", imports.getP_crea());
+        importx.setValue("P_ANUL", imports.getP_anul());
+        importx.setValue("P_REIN", false);
+        stfcConnection.execute(destination);
+        JCoParameterList tables = stfcConnection.getExportParameterList();
+        String code = tables.getTable(" W_MENSAJE").toString();
+
+        dto.setW_mensaje(code);
+
+        return dto;
     }
 }
