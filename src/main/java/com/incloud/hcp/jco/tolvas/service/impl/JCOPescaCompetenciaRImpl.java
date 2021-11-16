@@ -88,7 +88,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
 
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_DECLA_COMPE);
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_JOB_DESCARGA);
 
         JCoParameterList importx = stfcConnection.getImportParameterList();
         importx.setValue("P_USER", imports.getP_user());
