@@ -346,9 +346,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         String[] fields = {"WERKS"};
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        ;
+
         JCoRepository repo = destination.getRepository();
-        ;
+
         JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
@@ -435,7 +435,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }else{
             bOk=true;
         }
-
+        String log = "ValidarBodegaCert: " + bOk;
+        logger.error(log);
         me.setEstado(bOk);
         return  me;
     }

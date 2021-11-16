@@ -753,15 +753,18 @@ public class Metodos {
                             try {
                                 if (field.getTypeAsString().equals("DATE")) {
 
-                                    String date = String.valueOf(value);
-                                    SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                                    String fecha = dia.format(value);
-                                    value = fecha;
+                                    //String date = String.valueOf(value);
+                                    if(value != null){
+                                        SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                        String fecha = dia.format(value);
+                                        value = fecha;
+                                    }else {
+                                        value = "";
+                                    }
                                 }
 
-
                             }catch (Exception e){
-                                value=String.valueOf(value);
+                                value="";
                             }
 
                             newRecord.put(key, value);
