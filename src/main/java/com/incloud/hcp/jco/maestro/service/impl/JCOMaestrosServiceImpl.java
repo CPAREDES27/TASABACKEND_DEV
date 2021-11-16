@@ -653,6 +653,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQTEMPORADA":
                 tabla=AyudaBusquedaTablas.BSQTEMPORADA;
                 break;
+            case "BSQEQUIPO":
+                tabla=AyudaBusquedaTablas.BSQEQUIPO;
+                break;
         }
 
         return tabla;
@@ -722,6 +725,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQTEMPORADA":
                 fields = AyudaBusquedaFields.BSQTEMPORADA;
+                break;
+            case "BSQEQUIPO":
+                fields = AyudaBusquedaFields.BSQEQUIPO;
                 break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
