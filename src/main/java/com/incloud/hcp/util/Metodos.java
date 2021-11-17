@@ -318,6 +318,8 @@ public class Metodos {
         }
         else if(table.equals("CENTRO")){
             tablita = "ZTB_CONSTANTES";
+        }else if(table.equals("TEMPHAB")){
+            tablita = "ZV_FLTZ";
         }
         return tablita;
     }
@@ -451,6 +453,8 @@ public class Metodos {
             fields = new String[] {"LOW", "LOW"};
         }else if(table.equals("CENTRO")){
             fields= new String[] {"LOW","LOW"};
+        }else if(table.equals("TEMPHAB")){
+            fields= new String[] {"CDPCN","DSPCN"};
         }
 
         return fields;
