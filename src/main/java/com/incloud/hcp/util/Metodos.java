@@ -264,7 +264,7 @@ public class Metodos {
 
             tablita = "ZFLSUM";
 
-        } else if (table.equals("ZONAPESCA")) {
+        } else if (table.equals("1ZONAPESCA")) {
             tablita = "ZFLZPC";
 
         } else if (table.equals("REPERCUSION")) {
@@ -608,6 +608,12 @@ public class Metodos {
         String control="";
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
 
+        for (MaestroOptionsKey optionKey:options) {
+            if(optionKey.getControl().equals("DATE")){
+                optionKey.setControl("MULTIINPUT");
+            }
+        }
+
         if(option.size()>0 && options.size()==0){
             for(int j=0;j<option.size();j++){
                 MaestroOptions mop = option.get(j);
@@ -628,6 +634,7 @@ public class Metodos {
             for (int i = 0; i < options.size(); i++) {
                 MaestroOptionsKey mo = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
+
                 if(mo.getControl().equals("INPUT")||mo.getControl().equals("INPUT/NUMERIC"))
                 {
                     control="LIKE";
@@ -705,7 +712,9 @@ public class Metodos {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueHigh().toUpperCase().trim() + "'");
                     }else if (mo.getControl().equals("MULTIINPUT") && (!mo.getValueLow().equals("") && !mo.getValueHigh().equals(""))) {
                         record.put(optionName, "AND" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'" + " AND " + "'" + mo.getValueHigh() + "'");
-                    } else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
+                        record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
+                    }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
@@ -732,27 +741,24 @@ public class Metodos {
 
                     for (int k = 0; k < fields.length; k++) {
                         logger.error("key: " + key + " k: " + fields[k]);
-                        ;
 
                         if (fields[k].trim().equals(key.trim())) {
-
-
                             if (field.getTypeAsString().equals("TIME")) {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
                             }
                             try {
                                 if (field.getTypeAsString().equals("DATE")) {
-
                                     String date = String.valueOf(value);
-                                    SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                                    String fecha = dia.format(value);
-                                    value = fecha;
+
+                                        SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                                        String fecha = dia.format(value);
+                                        value = fecha;
+
                                 }
 
-
-                            }catch (Exception e){
-                                value=String.valueOf(value);
+                            }catch (Exception e) {
+                                value = "";
                             }
 
                             newRecord.put(key, value);
@@ -766,6 +772,11 @@ public class Metodos {
                                     newRecord.put(campo, valor);
                                 }
                             }
+
+                            if(String.valueOf(value).equalsIgnoreCase("null")){
+                                value = "";
+                            }
+
                         }
                     }
 

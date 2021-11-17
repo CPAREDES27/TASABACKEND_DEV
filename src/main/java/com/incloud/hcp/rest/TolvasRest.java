@@ -71,4 +71,14 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/ejecutarPrograma", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DescargaExportDto> ejecutarPrograma(@RequestBody DescargaImportDto imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaCompetenciaRService.ejecutarPrograma(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

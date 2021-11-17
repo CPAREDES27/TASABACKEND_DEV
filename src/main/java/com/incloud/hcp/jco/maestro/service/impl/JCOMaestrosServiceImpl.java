@@ -648,7 +648,13 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 tabla=AyudaBusquedaTablas.BSQARMCOM;
                 break;
             case "BSQEMPLANTA":
-                tabla=AyudaBusquedaTablas.ZFLEMP;
+                tabla=AyudaBusquedaTablas.BSQEMPLANTA;
+                break;
+            case "BSQTEMPORADA":
+                tabla=AyudaBusquedaTablas.BSQTEMPORADA;
+                break;
+            case "BSQEQUIPO":
+                tabla=AyudaBusquedaTablas.BSQEQUIPO;
                 break;
         }
 
@@ -715,7 +721,13 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 fields = AyudaBusquedaFields.BSQARMCOM;
                 break;
             case "BSQEMPLANTA":
-                fields = AyudaBusquedaFields.ZFLEMP;
+                fields = AyudaBusquedaFields.BSQEMPLANTA;
+                break;
+            case "BSQTEMPORADA":
+                fields = AyudaBusquedaFields.BSQTEMPORADA;
+                break;
+            case "BSQEQUIPO":
+                fields = AyudaBusquedaFields.BSQEQUIPO;
                 break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
@@ -727,46 +739,47 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         List<MaestroOptions> options= new ArrayList<>();
 
         MaestroOptions opt= new MaestroOptions();
+        boolean noExists=false;
 
-
-        if(nombreAyuda.equals("BSQPLANTAS") || nombreAyuda.equals("BSQMAT") || nombreAyuda.equals("BSQESPEC") || nombreAyuda.equals("BSQPUERTO") ||
-                nombreAyuda.equals("BSQUNDEXT") ||nombreAyuda.equals("BSQUSR") ||nombreAyuda.equals("BSQPEDCOMP") ||nombreAyuda.equals("BSQCLSDOC") || nombreAyuda.equals("BSQCENTRO")){
-            logger.error("ENTRO AL IF QUE EVALUA 1");
-
-            switch (nombreAyuda){
-                case "BSQPLANTAS":
-                    opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
-                    break;
-                case "BSQMAT":
-                    opt.setWa(AyudaBusquedaOptions.BSQMAT);
-                    break;
-                case "BSQESPEC":
-                    opt.setWa(AyudaBusquedaOptions.BSQESPEC);
-                    break;
-                case "BSQPUERTO":
-                    opt.setWa(AyudaBusquedaOptions.BSQPUERTO);
-                    break;
-                case "BSQUNDEXT":
-                    opt.setWa(AyudaBusquedaOptions.BSQUNDEXT);
-                    break;
-                case "BSQUSR":
-                    opt.setWa(AyudaBusquedaOptions.BSQUSR);
-                    break;
-                case "BSQPEDCOMP":
-                    opt.setWa(AyudaBusquedaOptions.BSQPEDCOMP);
-                    break;
-                case "BSQCLSDOC":
-                    opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
-                    break;
-                case "BSQCENTRO":
-                    opt.setWa(AyudaBusquedaOptions.BSQCENTRO);
-                    break;
-            }
-            options.add(opt);
+        switch (nombreAyuda){
+            case "BSQPLANTAS":
+                opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
+                break;
+            case "BSQMAT":
+                opt.setWa(AyudaBusquedaOptions.BSQMAT);
+                break;
+            case "BSQESPEC":
+                opt.setWa(AyudaBusquedaOptions.BSQESPEC);
+                break;
+            case "BSQPUERTO":
+                opt.setWa(AyudaBusquedaOptions.BSQPUERTO);
+                break;
+            case "BSQUNDEXT":
+                opt.setWa(AyudaBusquedaOptions.BSQUNDEXT);
+                break;
+            case "BSQUSR":
+                opt.setWa(AyudaBusquedaOptions.BSQUSR);
+                break;
+            case "BSQPEDCOMP":
+                opt.setWa(AyudaBusquedaOptions.BSQPEDCOMP);
+                break;
+            case "BSQCLSDOC":
+                opt.setWa(AyudaBusquedaOptions.BSQCLSDOC);
+                break;
+            case "BSQCENTRO":
+                opt.setWa(AyudaBusquedaOptions.BSQCENTRO);
+                break;
+            case "BSQTEMPORADA":
+                opt.setWa(AyudaBusquedaOptions.BSQTEMPORADA);
+                break;
+            default:
+                noExists=true;
+                break;
         }
 
-
-
+        if(!noExists){
+            options.add(opt);
+        }
 
         return options;
     }
@@ -1139,6 +1152,43 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }
 
         return dto;
+    }
+
+    @Override
+    public UpdateTableExports Update_Table_Maestro(HiscomDTOImport imports) throws Exception {
+        Metodos metodos = new Metodos();
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        ;
+        JCoRepository repo = destination.getRepository();
+        ;
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_UPDATE_TABLE);
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        importx.setValue("I_TABLE","ZTFL_HISCOM");
+        importx.setValue("P_FLAG","X");
+        importx.setValue("P_CASE","E");
+        importx.setValue("P_USER",imports.getUser());
+
+
+
+        JCoParameterList jcoTables = stfcConnection.getTableParameterList();
+        JCoTable tableImport = jcoTables.getTable(Tablas.T_DATA);
+        tableImport.appendRow();
+        String cadena= "|"+imports.getCdpcn()+"|"+imports.getIebpt()+"|"+"|"+imports.getCdgre()+"|"+imports.getCdemp()+"|"+imports.getCdemb()+"|"+imports.getCdpta()+"|";
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE DATA: "+cadena);
+        tableImport.setValue("DATA", cadena);
+        logger.error("Execute_ZFL_RFC_UPDATE_TABLE_3");
+        stfcConnection.execute(destination);
+        JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+        Metodos me = new Metodos();
+
+        List<HashMap<String, Object>> t_mensaje=me.ListarObjetos(tableExport);
+        UpdateTableExports dto = new UpdateTableExports();
+
+        dto.setT_mensaje(t_mensaje);
+
+        return  dto;
+
+
     }
 
 

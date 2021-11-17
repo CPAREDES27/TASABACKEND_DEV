@@ -10,8 +10,13 @@ import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOIngresoDescManualImpl implements JCOIngresoDescManualService {
@@ -33,6 +38,23 @@ public class JCOIngresoDescManualImpl implements JCOIngresoDescManualService {
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec=new EjecutarRFC();
+
+            List<HashMap<String, Object>> data = imports.getStr_des();
+            for (int i = 0; i < data.size(); i++){
+                HashMap<String, Object> record = data.get(i);
+                Iterator iterator = record.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry tmpImport = (Map.Entry) iterator.next();
+                    String key = tmpImport.getKey().toString();
+                    Object value = tmpImport.getValue();
+                    if (key.equalsIgnoreCase("HIDES") || key.equalsIgnoreCase("HFDES")) {
+                        DateFormat formatter = new SimpleDateFormat("HH:mm");
+                        Time timeValue = new Time(formatter.parse(String.valueOf(value)).getTime());
+                        record.put(key, timeValue);
+                    }
+                }
+            }
+
             exec.setTable(tables, Tablas.STR_DES, imports.getStr_des());
             stfcConnection.execute(destination);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);

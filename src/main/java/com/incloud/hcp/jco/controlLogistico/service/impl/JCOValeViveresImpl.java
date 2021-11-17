@@ -2,6 +2,8 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -25,7 +27,7 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
         ValeViveresExports vve= new ValeViveresExports();
 
         try {
-
+            Metodos metodo = new Metodos();
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
@@ -34,27 +36,37 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("ROWCOUNT", imports.getRowcount());
 
+            List<MaestroOptions> option = imports.getOptions1();
+            List<MaestroOptionsKey> options2 = imports.getOptions2();
+
+            List<HashMap<String, Object>> tmpOption = new ArrayList<HashMap<String, Object>>();
+            tmpOption=metodo.ValidarOptions(option,options2,"TEXT");
+
+
+            /*
             List<Options> options = imports.getOptions();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < options.size(); i++) {
                 Options o = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
-
                 record.put("TEXT", o.getText());
                 tmpOptions.add(record);
-            }
+            }*/
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
-            exec.setTable(tables, Tablas.OPTIONS,tmpOptions);
+
+
+                exec.setTable(tables, Tablas.OPTIONS,tmpOption);
+
 
             stfcConnection.execute(destination);
 
             JCoTable S_DATA = tables.getTable(Tablas.S_DATA);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
-             Metodos metodo = new Metodos();
+  ;
             String [] fields=imports.getFields();
             List<HashMap<String, Object>> s_data = metodo.ObtenerListObjetos(S_DATA, fields);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
