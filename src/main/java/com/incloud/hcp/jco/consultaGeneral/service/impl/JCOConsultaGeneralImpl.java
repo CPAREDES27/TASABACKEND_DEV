@@ -54,10 +54,13 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
 
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            logger.error("CONSULTA GENERAL: size options "+option.size());
+
             for (int i = 0; i < option.size(); i++) {
                 MaestroOptions mo = option.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
                 record.put("WA", mo.getWa());
+                logger.error("CONSULTA GENERAL: WA: "+mo.getWa());
                 tmpOptions.add(record);
             }
 
@@ -193,7 +196,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
 
         if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES")
-                ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE ")
+                ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE")
                 || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC") || nombreAyuda.equals("CONSGENCALENTEMP")
         ||nombreAyuda.equals("CONSGENCLDRTEMPFECHA") || nombreAyuda.equals("CONSGENCONSTLAT")){
 
