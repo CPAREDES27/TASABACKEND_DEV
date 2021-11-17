@@ -352,7 +352,8 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR")) {
+                               if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR") ||
+                                       key.equals("HFEVN") || key.equals("HIEVN")) {
 
                                    if(value.toString().equals("000000")){
                                        value="";
@@ -366,7 +367,8 @@ public class EjecutarRFC {
                                }
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
-                                       key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR")){
+                                       key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
+                                       key.equals("FIEVN")){
                                     if(value.toString().equals("00000000")){
                                         value="";
                                     }else{
