@@ -757,8 +757,8 @@ public class Metodos {
 
                                 }
 
-                            }catch (Exception e){
-                                value="";
+                            }catch (Exception e) {
+                                value = "";
                             }
 
                             newRecord.put(key, value);
@@ -772,6 +772,11 @@ public class Metodos {
                                     newRecord.put(campo, valor);
                                 }
                             }
+
+                            if(String.valueOf(value).equalsIgnoreCase("null")){
+                                value = "";
+                            }
+
                         }
                     }
 
