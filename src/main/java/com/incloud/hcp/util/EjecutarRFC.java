@@ -367,11 +367,15 @@ public class EjecutarRFC {
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
                                        key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR")){
+                                    if(value.toString().equals("00000000")){
+                                        value="";
+                                    }else{
+                                        SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                                        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                                        Date fecha = parseador.parse(value.toString());
+                                        value=formateador.format(fecha);
+                                    }
 
-                                   SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
-                                   SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-                                   Date fecha = parseador.parse(value.toString());
-                                   value=formateador.format(fecha);
                                }
                            }catch (Exception e){
                                value=String.valueOf(value);
@@ -379,7 +383,7 @@ public class EjecutarRFC {
 
                             newRecord.put(key, value);
                            Metodos me=new Metodos();
-                            if(key.equals("INPRP") || key.equals("ESREG")){
+                            if(key.equals("INPRP") || key.equals("ESREG") || key.equals("CDMMA")){
                                 HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
