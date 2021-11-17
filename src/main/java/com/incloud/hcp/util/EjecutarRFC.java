@@ -352,7 +352,7 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("HFDES") || key.equals("HIDES")) {
+                               if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR")) {
 
                                    if(value.toString().equals("000000")){
                                        value="";
@@ -366,7 +366,7 @@ public class EjecutarRFC {
                                }
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
-                                       key.equals("FFDES") || key.equals("FIDES")){
+                                       key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR")){
 
                                    SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
                                    SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
