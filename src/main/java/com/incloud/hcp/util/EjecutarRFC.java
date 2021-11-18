@@ -344,6 +344,17 @@ public class EjecutarRFC {
                            try {
                                if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
                                        ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                                   String field="";
+                                   if(key.equals("LNMAX")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LNMIN")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LTMAX")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LTMIN")){
+                                       field=key+"_S";
+                                   }
+                                   newRecord.put(field, value);
                                    String valor=value.toString();
                                    logger.error("valor= "+valor);
                                    valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
@@ -419,6 +430,17 @@ public class EjecutarRFC {
 
                         if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
                                 ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                            String field="";
+                            if(key.equals("LNMAX")){
+                                field=key+"_S";
+                            }else if  (key.equals("LNMIN")){
+                                field=key+"_S";
+                            }else if  (key.equals("LTMAX")){
+                                field=key+"_S";
+                            }else if  (key.equals("LTMIN")){
+                                field=key+"_S";
+                            }
+                            newRecord.put(field, value);
                             String valor=value.toString();
                             logger.error("valor= "+valor);
                             valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
