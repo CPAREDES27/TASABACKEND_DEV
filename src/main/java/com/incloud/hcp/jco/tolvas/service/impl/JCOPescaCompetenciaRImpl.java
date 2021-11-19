@@ -109,7 +109,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
     @Override
     public PeriodoDtoExport validarPeriodo(PeriodoDtoImport imports) throws Exception {
         PeriodoDtoExport dto = new PeriodoDtoExport();
-        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
         String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -133,7 +133,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             stfcConnection.execute(destination);
             JCoTable tableExport = tables.getTable("DATA");
             Metodos me= new Metodos();
-            data=me.ObtenerListObjetosSinField(tableExport);
+            List<HashMap<String, Object>> data=me.ObtenerListObjetosSinField(tableExport);
             int contador=0;
 
 
@@ -158,11 +158,11 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             for(int j=0;j<dataFinal.length;j++){
                 logger.error("DATAFINAL"+dataFinal[j]);
             }
-
+            dto.setData(data);
         }catch (Exception e){
 
         }
-        dto.setData(data);
         return dto;
+
     }
 }
