@@ -139,7 +139,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
 
 
 
-            if(!data.equals(null)){
+            if(!data.isEmpty()){
                 valido=false;
                 message="Ya existe información para este ejercicio y periodo";
             }else{
