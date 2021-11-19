@@ -109,7 +109,8 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
     @Override
     public PeriodoDtoExport validarPeriodo(PeriodoDtoImport imports) throws Exception {
         PeriodoDtoExport dto = new PeriodoDtoExport();
-
+        boolean valido=false;
+        String message="";
         String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -120,10 +121,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             importx.setValue("P_USER", imports.getUsuario());
             importx.setValue("QUERY_TABLE", Tablas.ZV_FLDC1);
             importx.setValue("DELIMITER", Constantes.delimiter);
-            importx.setValue("NO_DATA","");
-            importx.setValue("ROWSKIPS",0);
-            importx.setValue("WORCOUNT",0);
-            importx.setValue("P_ORDER","");
+
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             JCoTable tableImport = tables.getTable("OPTIONS");
@@ -139,7 +137,13 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             List<HashMap<String, Object>> data=me.ObtenerListObjetosSinField(tableExport);
             int contador=0;
 
-
+            if(data!=null){
+                valido=false;
+                message="Ya existe información para este ejercicio y periodo";
+            }else{
+                valido=true;
+                message="";
+            }
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
                     contador++;
@@ -161,7 +165,8 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             for(int j=0;j<dataFinal.length;j++){
                 logger.error("DATAFINAL"+dataFinal[j]);
             }
-            dto.setData(data);
+            dto.setValido(valido);
+            dto.setMensaje(message);
         }catch (Exception e){
 
         }
