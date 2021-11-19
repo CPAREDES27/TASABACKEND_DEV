@@ -109,7 +109,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
     @Override
     public PeriodoDtoExport validarPeriodo(PeriodoDtoImport imports) throws Exception {
         PeriodoDtoExport dto = new PeriodoDtoExport();
-    logger.error("HOLI");
+
         String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -124,15 +124,17 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             importx.setValue("ROWSKIPS",0);
             importx.setValue("WORCOUNT",0);
             importx.setValue("P_ORDER","");
-            stfcConnection.execute(destination);
             JCoParameterList tables = stfcConnection.getTableParameterList();
+
             JCoTable tableImport = tables.getTable("OPTIONS");
             for(int i=0;i<opcions.length;i++){
                 tableImport.appendRow();
                 tableImport.setValue("WA",opcions[i]);
             }
+            stfcConnection.execute(destination);
 
             JCoTable tableExport = tables.getTable("DATA");
+
             Metodos me= new Metodos();
             List<HashMap<String, Object>> data=me.ObtenerListObjetosSinField(tableExport);
             int contador=0;

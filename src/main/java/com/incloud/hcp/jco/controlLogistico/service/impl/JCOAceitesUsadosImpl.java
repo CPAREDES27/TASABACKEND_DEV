@@ -132,7 +132,7 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             //endRegion
             stfcConnection.execute(destination);
 
-            JCoParameterList gg = stfcConnection.getExportParameterList();
+                JCoParameterList gg = stfcConnection.getExportParameterList();
             String code = gg.getTable("ET_MENSJ").getString("MESSAGE");
             String hola = gg.getValue("EP_NRRNV").toString();
             logger.error("ERRROR CODE "+code);
