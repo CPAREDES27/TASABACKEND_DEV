@@ -862,11 +862,15 @@ public class Metodos {
                 String key = (String) field.getName();
                 Object value = jcoTable.getValue(key);
                 logger.error("key: "+key+" valor: "+value);
-                if(value.toString().equals("null")){
-                    logger.error("valor es null");
-                    value="";
-                   // StringUtils.isAllBlank(value.toString());
-                }
+               try{
+                    if(value.equals("null") ){
+                        logger.error("valor es 'null'");
+                        value="";
+                    }
+               }catch (Exception e){
+                   value="";
+               }
+
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
