@@ -10,7 +10,7 @@ public class PDFDeclaracionJuradaConstantes {
     public static String Tolva="TOLVA Nº";
     public static String Balanza="BALANZA Nº";
     public static String Fecha="Fecha :";
-    public static String DiaMesAño="dias-mes-año";
+    public static String DiaMesAño="días-mes-año";
     public static String Observaciones="OBSERVACIONES:";
     public static String Especies="ESPECIES (*)";
     public static String Destino="DESTINO DEL RECURSO (**)";
