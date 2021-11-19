@@ -111,7 +111,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
         PeriodoDtoExport dto = new PeriodoDtoExport();
         boolean valido=false;
         String message="";
-        String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
+        String[] opcions={"MJAHR = '"+imports.getEjercicio()+"'","AND RDPCA = '"+imports.getPeriodo()+"'"};
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
