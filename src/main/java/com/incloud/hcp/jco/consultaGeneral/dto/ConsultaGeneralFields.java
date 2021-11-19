@@ -15,5 +15,15 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENCONSTLAT={"CDCNS", "VAL01", "VAL02"};
     public static String[] CONSGENLISTDESCPP={"NRDES", "TICKE", "CDTPC", "CDPTA", "DSPTA", "CDEMB", "NMEMB", "CDLDS", "CDSPC", "DSSPC", "CNPDS",
             "FIDES", "HIDES", "FFDES", "HFDES", "PESACUMOD","ESDES", "WEPTA", "MREMB"};
-
+    public static String[] CONSGENDPTO={"BLAND","BEZEI"};
+    public static String[] CONSGENMAREAANT={"NRMAR", "ESMAR", "CDMMA", "FEMAR", "HAMAR", "FXMAR", "HXMAR", "FIMAR", "HIMAR", "FFMAR", "HFMAR", "ESCMA", "MANDT", "CDEMB"};
+    public static String[] CONSGENEVENTANT={"NREVN", "CDTEV", "FIEVN", "HIEVN", "FFEVN", "HFEVN", "MANDT"};
+    public static String[] CONSGENNRORESERVA={"NRRSV"};
+    public static String[] CONSGENLISTSINIESTROS={"CDINC", "TTINC", "CDSIS", "EQKTX", "AUSWK", "ESOPA", "ESOPP"};
+    public static String[] CONSGENVERIFTEMP={"CDTPC"};
+    public static String[] CONSGENTEMP={"CDSPC", "DSSPC", "LTINI", "LNINI", "LTFIN", "LGFIN", "MILLA", "MANDT"};
+    public static String[] CONSGENCAPATANBARCA={"CDTAN"};
+    public static String[] CONSGENMILLASLIT={"LATGR", "LATMI", "LONGR", "LONMI"};
+    public static String[] CONSGENPERMISOZARPE={"CDEMB", "ESPMS"};
+    public static String[] CONSGENARMADOR={"CDEMP", "DSEMP"};
 }

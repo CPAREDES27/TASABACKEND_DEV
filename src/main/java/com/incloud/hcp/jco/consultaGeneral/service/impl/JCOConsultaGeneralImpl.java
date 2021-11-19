@@ -29,15 +29,79 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     @Autowired
     private JCODominiosService jcoDominiosService;
 
-    public ConsultaGeneralExports ConsultaGeneral(ConsultaGeneralImports importsParam)throws Exception{
+    public ConsultaGeneralExports ConsultaGeneral(ConsultaGeneralImports importsParam) throws Exception {
         logger.error("CONSULTA GENERAL");
-        ConsultaGeneralExports dto=new ConsultaGeneralExports();
+        ConsultaGeneralExports dto = new ConsultaGeneralExports();
 
         MaestroExport me;
 
         try {
-            String tabla=(Buscartabla(importsParam.getNombreConsulta()));
+            //Consultas avanzadas
+            String tabla;
+            List<MaestroOptions> options = new ArrayList<>();
+            List<MaestroOptionsKey> optionsKeys = new ArrayList<>();
+            String[] fields;
 
+            switch (importsParam.getNombreConsulta()) {
+                case "CONSGENDSTRFLOTA":
+                    tabla = "ZV_FLDF";
+                    String condicion = "CDEMB LIKE '" + importsParam + "'";
+                    MaestroOptions opt = new MaestroOptions();
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    fields = new String[]{"CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "FEARR", "HEARR", "EMPLA", "WKSPT", "CDUPT", "MANDT"};
+
+                    //Consulta en tabla ZV_FLDF
+                    ConsultaGeneralExports zvFldfDto = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields);
+                    HashMap<String, Object> data = zvFldfDto.getData().get(0);
+                    String empla = data.get("EMPLA").toString();
+
+                    //Consulta en tabla ZV_FLMP
+                    String tabla2 = "ZV_FLMP";
+                    String condicion2 = "CDEMP LIKE '" + empla + "'";
+                    List<MaestroOptions> options2 = new ArrayList<>();
+                    MaestroOptions opt2 = new MaestroOptions();
+                    opt2.setWa(condicion2);
+                    options2.add(opt2);
+                    List<MaestroOptionsKey> optionsKeys2 = new ArrayList<>();
+                    ConsultaGeneralExports zvFlmpDto = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys2, fields);
+                    List<HashMap<String, Object>> listData2 = zvFlmpDto.getData();
+
+                    HashMap<String, Object> result = data;
+                    result.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
+                    result.put("INPRP", listData2.size() > 0 ? listData2.get(0).get("INPRP") : null);
+
+                    List<HashMap<String, Object>> listResult = new ArrayList<>();
+                    listResult.add(result);
+
+                    dto.setData(listResult);
+                    dto.setMensaje("Ok");
+
+                    break;
+                default:
+                    tabla = Buscartabla(importsParam.getNombreConsulta());
+                    options = BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                    optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                    fields = BuscarFields(importsParam.getNombreConsulta());
+                    dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields);
+                    break;
+            }
+        } catch (Exception e) {
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
+    public ConsultaGeneralExports ConsultaGeneralReadTable(String nombreConsulta, String tabla, String user, List<MaestroOptions> option, List<MaestroOptionsKey> optionsKeys, String[] fields) throws Exception {
+        logger.error("CONSULTA GENERAL");
+        ConsultaGeneralExports dto = new ConsultaGeneralExports();
+
+        MaestroExport me;
+
+        try {
             //setear mapeo de parametros import
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("QUERY_TABLE", tabla);
@@ -45,141 +109,196 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             imports.put("NO_DATA", "");
             imports.put("ROWSKIPS", "");
             imports.put("ROWCOUNT", "200");
-            imports.put("P_USER", importsParam.getP_user());
+            imports.put("P_USER", user);
             imports.put("P_ORDER", "");
             //setear mapeo de tabla options
 
-            List<MaestroOptions> option =
-                    BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
-                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
-
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            logger.error("CONSULTA GENERAL: size options "+option.size());
+            logger.error("CONSULTA GENERAL: size options " + option.size());
 
             for (int i = 0; i < option.size(); i++) {
                 MaestroOptions mo = option.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
                 record.put("WA", mo.getWa());
-                logger.error("CONSULTA GENERAL: WA: "+mo.getWa());
+                logger.error("CONSULTA GENERAL: WA: " + mo.getWa());
                 tmpOptions.add(record);
             }
 
-            List<MaestroOptionsKey>optionsKeys=
-                    BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
-                    , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+            Metodos metodo = new Metodos();
 
-             Metodos metodo=new Metodos();
+            tmpOptions = metodo.ValidarOptions(option, optionsKeys);
 
-            tmpOptions=metodo.ValidarOptions(option, optionsKeys);
-
-            String []fields= BuscarFields(importsParam.getNombreConsulta());
             //ejecutar RFC ZFL_RFC_READ_TABLE
             EjecutarRFC exec = new EjecutarRFC();
             me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
 
-            if(importsParam.getNombreConsulta().equals("CONSGENPESDESC")) {
-                List<HashMap<String, Object>> data = ListaDataConDominio(me, importsParam.getNombreConsulta());
+            if (nombreConsulta.equals("CONSGENPESDESC")) {
+                List<HashMap<String, Object>> data = ListaDataConDominio(me, nombreConsulta);
                 dto.setData(data);
-            }else{
+            } else {
                 dto.setData(me.getData());
             }
 
             dto.setMensaje("Ok");
-        }catch (Exception e){
+        } catch (Exception e) {
             dto.setMensaje(e.getMessage());
         }
 
         return dto;
     }
 
-    public String Buscartabla(String nombreConsultaG){
+    public String Buscartabla(String nombreConsultaG) {
 
-        String tabla="";
+        String tabla = "";
 
-        switch (nombreConsultaG){
+        switch (nombreConsultaG) {
             case "CONSGENCODTIPRE":
-                tabla= ConsultaGeneralTablas.CONSGENCODTIPRE;
+                tabla = ConsultaGeneralTablas.CONSGENCODTIPRE;
                 break;
             case "CONSGENLISTEQUIP":
-                tabla= ConsultaGeneralTablas.CONSGENLISTEQUIP;
+                tabla = ConsultaGeneralTablas.CONSGENLISTEQUIP;
                 break;
             case "CONSGENCOOZONPES":
-                tabla= ConsultaGeneralTablas.CONSGENCOOZONPES;
+                tabla = ConsultaGeneralTablas.CONSGENCOOZONPES;
                 break;
             case "CONSGENPESDECLA":
-                tabla= ConsultaGeneralTablas.CONSGENPESDECLA;
+                tabla = ConsultaGeneralTablas.CONSGENPESDECLA;
                 break;
             case "CONSGENLISTBODE":
-                tabla= ConsultaGeneralTablas.CONSGENLISTBODE;
+                tabla = ConsultaGeneralTablas.CONSGENLISTBODE;
                 break;
             case "CONSGENPESBODE":
-                tabla= ConsultaGeneralTablas.CONSGENPESBODE;
+                tabla = ConsultaGeneralTablas.CONSGENPESBODE;
                 break;
             case "CONSGENPUNTDES":
-                tabla= ConsultaGeneralTablas.CONSGENPUNTDES;
+                tabla = ConsultaGeneralTablas.CONSGENPUNTDES;
                 break;
             case "CONSGENPESDESC":
-               tabla= ConsultaGeneralTablas.CONSGENPESDESC;
+                tabla = ConsultaGeneralTablas.CONSGENPESDESC;
                 break;
             case "CONSGENCALENTEMP":
-                tabla= ConsultaGeneralTablas.CONSGENCALENTEMP;
+                tabla = ConsultaGeneralTablas.CONSGENCALENTEMP;
                 break;
             case "CONSGENCLDRTEMPFECHA":
-                tabla= ConsultaGeneralTablas.CONSGENCLDRTEMPFECHA;
+                tabla = ConsultaGeneralTablas.CONSGENCLDRTEMPFECHA;
                 break;
             case "CONSGENCONSTLAT":
-                tabla= ConsultaGeneralTablas.CONSGENCONSTLAT;
+                tabla = ConsultaGeneralTablas.CONSGENCONSTLAT;
                 break;
             case "CONSGENLISTDESCPP":
-                tabla= ConsultaGeneralTablas.CONSGENLISTDESCPP;
+                tabla = ConsultaGeneralTablas.CONSGENLISTDESCPP;
                 break;
-
-
+            case "CONSGENDPTO":
+                tabla = ConsultaGeneralTablas.CONSGENDPTO;
+                break;
+            case "CONSGENMAREAANT":
+                tabla = ConsultaGeneralTablas.CONSGENMAREAANT;
+                break;
+            case "CONSGENEVENTANT":
+                tabla = ConsultaGeneralTablas.CONSGENEVENTANT;
+                break;
+            case "CONSGENNRORESERVA":
+                tabla = ConsultaGeneralTablas.CONSGENNRORESERVA;
+                break;
+            case "CONSGENLISTSINIESTROS":
+                tabla = ConsultaGeneralTablas.CONSGENLISTSINIESTROS;
+                break;
+            case "CONSGENVERIFTEMP":
+                tabla = ConsultaGeneralTablas.CONSGENVERIFTEMP;
+                break;
+            case "CONSGENTEMP":
+                tabla = ConsultaGeneralTablas.CONSGENTEMP;
+                break;
+            case "CONSGENCAPATANBARCA":
+                tabla = ConsultaGeneralTablas.CONSGENCAPATANBARCA;
+                break;
+            case "CONSGENMILLASLIT":
+                tabla = ConsultaGeneralTablas.CONSGENMILLASLIT;
+                break;
+            case "CONSGENPERMISOZARPE":
+                tabla = ConsultaGeneralTablas.CONSGENPERMISOZARPE;
+                break;
+            case "CONSGENARMADOR":
+                tabla = ConsultaGeneralTablas.CONSGENARMADOR;
+                break;
         }
-        logger.error("tabla= "+tabla);
+        logger.error("tabla= " + tabla);
         return tabla;
     }
 
-    public String[] BuscarFields(String nombreConsultaG){
+    public String[] BuscarFields(String nombreConsultaG) {
 
-        String[]fields={};
+        String[] fields = {};
 
-        switch (nombreConsultaG){
+        switch (nombreConsultaG) {
             case "CONSGENCODTIPRE":
-                fields= ConsultaGeneralFields.CONSGENCODTIPRE;
+                fields = ConsultaGeneralFields.CONSGENCODTIPRE;
                 break;
             case "CONSGENLISTEQUIP":
-                fields= ConsultaGeneralFields.CONSGENLISTEQUIP;
+                fields = ConsultaGeneralFields.CONSGENLISTEQUIP;
                 break;
             case "CONSGENCOOZONPES":
-                fields= ConsultaGeneralFields.CONSGENCOOZONPES;
+                fields = ConsultaGeneralFields.CONSGENCOOZONPES;
                 break;
             case "CONSGENPESDECLA":
-                fields= ConsultaGeneralFields.CONSGENPESDECLA;
+                fields = ConsultaGeneralFields.CONSGENPESDECLA;
                 break;
             case "CONSGENLISTBODE":
-                fields= ConsultaGeneralFields.CONSGENLISTBODE;
+                fields = ConsultaGeneralFields.CONSGENLISTBODE;
                 break;
             case "CONSGENPESBODE":
-                fields= ConsultaGeneralFields.CONSGENPESBODE;
+                fields = ConsultaGeneralFields.CONSGENPESBODE;
                 break;
             case "CONSGENPUNTDES":
-                fields= ConsultaGeneralFields.CONSGENPUNTDES;
+                fields = ConsultaGeneralFields.CONSGENPUNTDES;
                 break;
             case "CONSGENPESDESC":
-                fields= ConsultaGeneralFields.CONSGENPESDESC;
-                 break;
+                fields = ConsultaGeneralFields.CONSGENPESDESC;
+                break;
             case "CONSGENCALENTEMP":
-                fields= ConsultaGeneralFields.CONSGENCALENTEMP;
+                fields = ConsultaGeneralFields.CONSGENCALENTEMP;
                 break;
             case "CONSGENCLDRTEMPFECHA":
-                fields= ConsultaGeneralFields.CONSGENCLDRTEMPFECHA;
+                fields = ConsultaGeneralFields.CONSGENCLDRTEMPFECHA;
                 break;
             case "CONSGENCONSTLAT":
-                fields= ConsultaGeneralFields.CONSGENCONSTLAT;
+                fields = ConsultaGeneralFields.CONSGENCONSTLAT;
                 break;
             case "CONSGENLISTDESCPP":
-                fields= ConsultaGeneralFields.CONSGENLISTDESCPP;
+                fields = ConsultaGeneralFields.CONSGENLISTDESCPP;
+                break;
+            case "CONSGENDPTO":
+                fields = ConsultaGeneralFields.CONSGENDPTO;
+                break;
+            case "CONSGENMAREAANT":
+                fields = ConsultaGeneralFields.CONSGENMAREAANT;
+                break;
+            case "CONSGENEVENTANT":
+                fields = ConsultaGeneralFields.CONSGENEVENTANT;
+                break;
+            case "CONSGENNRORESERVA":
+                fields = ConsultaGeneralFields.CONSGENNRORESERVA;
+                break;
+            case "CONSGENLISTSINIESTROS":
+                fields = ConsultaGeneralFields.CONSGENLISTSINIESTROS;
+                break;
+            case "CONSGENVERIFTEMP":
+                fields = ConsultaGeneralFields.CONSGENVERIFTEMP;
+                break;
+            case "CONSGENTEMP":
+                fields = ConsultaGeneralFields.CONSGENTEMP;
+                break;
+            case "CONSGENCAPATANBARCA":
+                fields = ConsultaGeneralFields.CONSGENCAPATANBARCA;
+                break;
+            case "CONSGENMILLASLIT":
+                fields = ConsultaGeneralFields.CONSGENMILLASLIT;
+                break;
+            case "CONSGENPERMISOZARPE":
+                fields = ConsultaGeneralFields.CONSGENPERMISOZARPE;
+                break;
+            case "CONSGENARMADOR":
+                fields = ConsultaGeneralFields.CONSGENARMADOR;
                 break;
         }
 
@@ -188,134 +307,185 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     }
 
     public List<MaestroOptions> BuscarOption(String nombreAyuda, String parametro1, String parametro2,
-                                             String parametro3, String parametro4, String parametro5){
+                                             String parametro3, String parametro4, String parametro5) {
 
-        List<MaestroOptions> options= new ArrayList<>();
+        List<MaestroOptions> options = new ArrayList<>();
 
-        MaestroOptions opt= new MaestroOptions();
+        MaestroOptions opt = new MaestroOptions();
 
+        boolean inList = true;
 
-        if(nombreAyuda.equals("CONSGENCODTIPRE") || nombreAyuda.equals("CONSGENLISTEQUIP") || nombreAyuda.equals("CONSGENCOOZONPES")
-                ||nombreAyuda.equals("CONSGENPESDECLA") || nombreAyuda.equals("CONSGENLISTBODE") || nombreAyuda.equals("CONSGENPESBODE")
-                || nombreAyuda.equals("CONSGENPUNTDES") || nombreAyuda.equals("CONSGENPESDESC") || nombreAyuda.equals("CONSGENCALENTEMP")
-        ||nombreAyuda.equals("CONSGENCLDRTEMPFECHA") || nombreAyuda.equals("CONSGENCONSTLAT")){
+        String condicion = "";
 
-
-            String condicion="";
-
-            switch (nombreAyuda){
-                case "CONSGENCODTIPRE":
-                    condicion= ConsultaGeneralOptions.CONSGENCODTIPRE + parametro1+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENLISTEQUIP":
-                    condicion= ConsultaGeneralOptions.CONSGENLISTEQUIP + parametro1+ ConsultaGeneralOptions.CONSGENLISTEQUIP_ ;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENCOOZONPES":
-                    condicion= ConsultaGeneralOptions.CONSGENCOOZONPES + parametro1+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENPESDECLA":
-                    condicion= ConsultaGeneralOptions.CONSGENPESDECLA + parametro1+ ConsultaGeneralOptions.CONSGENPESDECLA_+ parametro2+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENLISTBODE":
-                    condicion= ConsultaGeneralOptions.CONSGENLISTBODE + parametro1+ ConsultaGeneralOptions.CONSGENLISTBODE_;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENPESBODE":
-                    condicion= ConsultaGeneralOptions.CONSGENPESBODE + parametro1+ ConsultaGeneralOptions.CONSGENPESBODE_+ parametro2+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENPUNTDES":
-                    condicion= ConsultaGeneralOptions.CONSGENPUNTDES +parametro1+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENPESDESC":
-                    condicion= ConsultaGeneralOptions.CONSGENPESDESC +parametro1+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENCALENTEMP":
-                    condicion= ConsultaGeneralOptions.CONSGENCALENTEMP +parametro2+parametro1+"%'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENCLDRTEMPFECHA":
-                    condicion= ConsultaGeneralOptions.CONSGENCLDRTEMPFECHA +parametro1+"' AND '"+parametro2+"'";
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-                case "CONSGENCONSTLAT":
-                    condicion= ConsultaGeneralOptions.CONSGENCONSTLAT + ConsultaGeneralOptions.CONSGENCONSTLAT2+ ConsultaGeneralOptions.CONSGENCONSTLAT3+ ConsultaGeneralOptions.CONSGENCONSTLAT4 ;
-                    opt.setWa(condicion);
-                    options.add(opt);
-                    break;
-
-
-
-            }
-            logger.error("option= "+opt.getWa());
-
+        switch (nombreAyuda) {
+            case "CONSGENCODTIPRE":
+                condicion = ConsultaGeneralOptions.CONSGENCODTIPRE + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENLISTEQUIP":
+                condicion = ConsultaGeneralOptions.CONSGENLISTEQUIP + parametro1 + ConsultaGeneralOptions.CONSGENLISTEQUIP_;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCOOZONPES":
+                condicion = ConsultaGeneralOptions.CONSGENCOOZONPES + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPESDECLA":
+                condicion = ConsultaGeneralOptions.CONSGENPESDECLA + parametro1 + ConsultaGeneralOptions.CONSGENPESDECLA_ + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENLISTBODE":
+                condicion = ConsultaGeneralOptions.CONSGENLISTBODE + parametro1 + ConsultaGeneralOptions.CONSGENLISTBODE_;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPESBODE":
+                condicion = ConsultaGeneralOptions.CONSGENPESBODE + parametro1 + ConsultaGeneralOptions.CONSGENPESBODE_ + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPUNTDES":
+                condicion = ConsultaGeneralOptions.CONSGENPUNTDES + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPESDESC":
+                condicion = ConsultaGeneralOptions.CONSGENPESDESC + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCALENTEMP":
+                condicion = ConsultaGeneralOptions.CONSGENCALENTEMP + parametro2 + parametro1 + "%'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCLDRTEMPFECHA":
+                condicion = ConsultaGeneralOptions.CONSGENCLDRTEMPFECHA + parametro1 + "' AND '" + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCONSTLAT":
+                condicion = ConsultaGeneralOptions.CONSGENCONSTLAT + ConsultaGeneralOptions.CONSGENCONSTLAT2 + ConsultaGeneralOptions.CONSGENCONSTLAT3 + ConsultaGeneralOptions.CONSGENCONSTLAT4;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENDPTO":
+                condicion = ConsultaGeneralOptions.CONSGENDPTO;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENMAREAANT":
+                //Evaluando el número de marea
+                int nrmar = Integer.parseInt(parametro1);
+                condicion = nrmar > 0 ? ConsultaGeneralOptions.CONSGENMAREAANT_OPTION1 + parametro1 + ConsultaGeneralOptions.CONSGENMAREAANT2_OPTION1 + parametro2 + "'" : ConsultaGeneralOptions.CONSGENMAREAANT2_OPTION2 + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENEVENTANT":
+                condicion = ConsultaGeneralOptions.CONSGENEVENTANT + parametro1;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENNRORESERVA":
+                condicion = ConsultaGeneralOptions.CONSGENNRORESERVA + parametro1 + ConsultaGeneralOptions.CONSGENNRORESERVA2;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENLISTSINIESTROS":
+                condicion = ConsultaGeneralOptions.CONSGENLISTSINIESTROS + parametro1 + ConsultaGeneralOptions.CONSGENLISTSINIESTROS2 + parametro2 + ConsultaGeneralOptions.CONSGENLISTSINIESTROS3;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENVERIFTEMP":
+                condicion = ConsultaGeneralOptions.CONSGENVERIFTEMP + parametro1 + "'" + ConsultaGeneralOptions.CONSGENVERIFTEMP2 + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENTEMP":
+                condicion = ConsultaGeneralOptions.CONSGENTEMP + parametro1 + "'" + ConsultaGeneralOptions.CONSGENTEMP2 + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCAPATANBARCA":
+                condicion = ConsultaGeneralOptions.CONSGENCAPATANBARCA + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENMILLASLIT":
+                int latiCalaM = Integer.parseInt(parametro2);
+                condicion = ConsultaGeneralOptions.CONSGENMILLASLIT + parametro1 + "'" + ConsultaGeneralOptions.CONSGENMILLASLIT2 + parametro2 + "'" + ConsultaGeneralOptions.CONSGENMILLASLIT3 + (latiCalaM + 1) + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPERMISOZARPE":
+                condicion = ConsultaGeneralOptions.CONSGENPERMISOZARPE + parametro1 + "'" + ConsultaGeneralOptions.CONSGENPERMISOZARPE2;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENARMADOR":
+                condicion = ConsultaGeneralOptions.CONSGENARMADOR + parametro1 + "'" + ConsultaGeneralOptions.CONSGENARMADOR2;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            default:
+                inList = false;
+                break;
         }
 
-
-
+        if (inList) {
+            logger.error("option= " + opt.getWa());
+        }
 
         return options;
     }
 
-    public HashMap<String, Object> BuscarNombreDominio(String nomConsulta){
+    public HashMap<String, Object> BuscarNombreDominio(String nomConsulta) {
         logger.error("BuscarNombreDominio");
-        HashMap<String, Object>data= new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
 
-        switch (nomConsulta){
+        switch (nomConsulta) {
             case "CONSGENPESDESC":
                 data.put("DOMINIO", "ZCDLDS");
                 data.put("CAMPO", "CDLDS");
                 break;
         }
-      //  logger.error("data1: "+data.get(0).toString());
+        //  logger.error("data1: "+data.get(0).toString());
 
         return data;
     }
 
-    public String BuscarDominio(String nomDomino, String valor)throws Exception{
+    public String BuscarDominio(String nomDomino, String valor) throws Exception {
 
 
-        String descripcion="";
+        String descripcion = "";
 
-        DominioParams dominioParams= new DominioParams();
+        DominioParams dominioParams = new DominioParams();
         dominioParams.setDomname(nomDomino);
         dominioParams.setStatus("A");
 
-        List<DominioParams> ListDominioParams= new ArrayList<>();
+        List<DominioParams> ListDominioParams = new ArrayList<>();
         ListDominioParams.add(dominioParams);
 
-        DominiosImports dominiosImports=new DominiosImports();
+        DominiosImports dominiosImports = new DominiosImports();
         dominiosImports.setDominios(ListDominioParams);
 
-        DominioDto dominioDto=jcoDominiosService.Listar(dominiosImports);
+        DominioDto dominioDto = jcoDominiosService.Listar(dominiosImports);
 
-        List<DominiosExports>ListaDomExports=dominioDto.getData();
+        List<DominiosExports> ListaDomExports = dominioDto.getData();
 
-        for(int i=0; i<ListaDomExports.size();i++){
-            DominiosExports dominiosExports=ListaDomExports.get(i);
-            List<DominioExportsData> ListaDomExportData=dominiosExports.getData();
+        for (int i = 0; i < ListaDomExports.size(); i++) {
+            DominiosExports dominiosExports = ListaDomExports.get(i);
+            List<DominioExportsData> ListaDomExportData = dominiosExports.getData();
 
-            for(int j=0; j<ListaDomExportData.size();j++){
-                DominioExportsData dominioExportsData=ListaDomExportData.get(j);
+            for (int j = 0; j < ListaDomExportData.size(); j++) {
+                DominioExportsData dominioExportsData = ListaDomExportData.get(j);
 
-                if(valor.equals(dominioExportsData.getId())){
-                   descripcion=dominioExportsData.getDescripcion();
+                if (valor.equals(dominioExportsData.getId())) {
+                    descripcion = dominioExportsData.getDescripcion();
 
                 }
             }
@@ -325,46 +495,46 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         return descripcion;
     }
 
-    public List<HashMap<String, Object>> ListaDataConDominio(MaestroExport me, String nomConsulta)throws Exception{
+    public List<HashMap<String, Object>> ListaDataConDominio(MaestroExport me, String nomConsulta) throws Exception {
 
-        List<HashMap<String, Object>> ndata= new ArrayList<>();
-        HashMap<String, Object> nombreDominio=BuscarNombreDominio(nomConsulta);
-        String campo="";
-        String dom="";
-        for (Map.Entry<String, Object> entry :nombreDominio.entrySet()) {
+        List<HashMap<String, Object>> ndata = new ArrayList<>();
+        HashMap<String, Object> nombreDominio = BuscarNombreDominio(nomConsulta);
+        String campo = "";
+        String dom = "";
+        for (Map.Entry<String, Object> entry : nombreDominio.entrySet()) {
 
-            if(entry.getKey().equals("DOMINIO")){
-                dom=entry.getValue().toString();
+            if (entry.getKey().equals("DOMINIO")) {
+                dom = entry.getValue().toString();
 
-            }else if(entry.getKey().equals("CAMPO")){
-                campo=entry.getValue().toString();
+            } else if (entry.getKey().equals("CAMPO")) {
+                campo = entry.getValue().toString();
 
             }
         }
 
-        String valor="";
+        String valor = "";
 
-        List<HashMap<String, Object>> data= me.getData();
+        List<HashMap<String, Object>> data = me.getData();
 
-        for(int i=0; i<data.size();i++){
-            HashMap<String, Object> registro=data.get(i);
+        for (int i = 0; i < data.size(); i++) {
+            HashMap<String, Object> registro = data.get(i);
 
-            for (Map.Entry<String, Object> entry :registro.entrySet()) {
+            for (Map.Entry<String, Object> entry : registro.entrySet()) {
 
-                if(entry.getKey().equals(campo)){
+                if (entry.getKey().equals(campo)) {
 
-                    valor=entry.getValue().toString();
+                    valor = entry.getValue().toString();
 
                 }
             }
 
-            String descripcion="";
-            if(!valor.equals("")){
-                 descripcion=BuscarDominio(dom, valor);
+            String descripcion = "";
+            if (!valor.equals("")) {
+                descripcion = BuscarDominio(dom, valor);
             }
 
 
-            String field="DESC_"+campo;
+            String field = "DESC_" + campo;
 
             registro.put(field, descripcion);
 
@@ -375,13 +545,13 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     }
 
     public List<MaestroOptionsKey> BuscarOptions(String nombreConsultaG, String parametro1, String parametro2,
-                                                String parametro3, String parametro4, String parametro5){
+                                                 String parametro3, String parametro4, String parametro5) {
 
-        List<MaestroOptionsKey>ListOptions= new ArrayList<>();
+        List<MaestroOptionsKey> ListOptions = new ArrayList<>();
 
 
-        if(nombreConsultaG.equals("CONSGENLISTDESCPP")){
-            MaestroOptionsKey matricula=new MaestroOptionsKey();
+        if (nombreConsultaG.equals("CONSGENLISTDESCPP")) {
+            MaestroOptionsKey matricula = new MaestroOptionsKey();
             matricula.setCantidad("12");
             matricula.setControl("INPUT");
             matricula.setKey("MREMB");
@@ -389,7 +559,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             matricula.setValueLow(parametro1);
             ListOptions.add(matricula);
 
-            MaestroOptionsKey nomEmbarcacion=new MaestroOptionsKey();
+            MaestroOptionsKey nomEmbarcacion = new MaestroOptionsKey();
             nomEmbarcacion.setCantidad("60");
             nomEmbarcacion.setControl("INPUT");
             nomEmbarcacion.setKey("NMEMB");
@@ -397,7 +567,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             nomEmbarcacion.setValueLow(parametro2);
             ListOptions.add(nomEmbarcacion);
 
-            MaestroOptionsKey codPlanta=new MaestroOptionsKey();
+            MaestroOptionsKey codPlanta = new MaestroOptionsKey();
             codPlanta.setCantidad("4");
             codPlanta.setControl("INPUT");
             codPlanta.setKey("CDPTA");
@@ -405,7 +575,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             codPlanta.setValueLow(parametro3);
             ListOptions.add(codPlanta);
 
-            MaestroOptionsKey nomPlanta=new MaestroOptionsKey();
+            MaestroOptionsKey nomPlanta = new MaestroOptionsKey();
             nomPlanta.setCantidad("60");
             nomPlanta.setControl("INPUT");
             nomPlanta.setKey("DSPTA");
@@ -413,7 +583,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             nomPlanta.setValueLow(parametro4);
             ListOptions.add(nomPlanta);
 
-            MaestroOptionsKey fechaInicio=new MaestroOptionsKey();
+            MaestroOptionsKey fechaInicio = new MaestroOptionsKey();
             fechaInicio.setCantidad("8");
             fechaInicio.setControl("INPUT");
             fechaInicio.setKey("FIDES");
