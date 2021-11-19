@@ -344,6 +344,17 @@ public class EjecutarRFC {
                            try {
                                if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
                                        ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                                   String field="";
+                                   if(key.equals("LNMAX")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LNMIN")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LTMAX")){
+                                       field=key+"_S";
+                                   }else if  (key.equals("LTMIN")){
+                                       field=key+"_S";
+                                   }
+                                   newRecord.put(field, value);
                                    String valor=value.toString();
                                    logger.error("valor= "+valor);
                                    valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
@@ -352,7 +363,8 @@ public class EjecutarRFC {
                                    logger.error("value= "+value);
                                }
 
-                               if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR")) {
+                               if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR") ||
+                                       key.equals("HFEVN") || key.equals("HIEVN")) {
 
                                    if(value.toString().equals("000000")){
                                        value="";
@@ -366,7 +378,8 @@ public class EjecutarRFC {
                                }
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
-                                       key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR")){
+                                       key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
+                                       key.equals("FIEVN")){
                                     if(value.toString().equals("00000000")){
                                         value="";
                                     }else{
@@ -417,6 +430,17 @@ public class EjecutarRFC {
 
                         if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
                                 ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                            String field="";
+                            if(key.equals("LNMAX")){
+                                field=key+"_S";
+                            }else if  (key.equals("LNMIN")){
+                                field=key+"_S";
+                            }else if  (key.equals("LTMAX")){
+                                field=key+"_S";
+                            }else if  (key.equals("LTMIN")){
+                                field=key+"_S";
+                            }
+                            newRecord.put(field, value);
                             String valor=value.toString();
                             logger.error("valor= "+valor);
                             valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());

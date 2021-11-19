@@ -14,4 +14,15 @@ public class ConsultaGeneralTablas {
     public static String CONSGENCLDRTEMPFECHA="ZV_FLCP";
     public static String CONSGENCONSTLAT="ZFLCNS";//
     public static String CONSGENLISTDESCPP="ZV_FLDS";
+    public static String CONSGENDPTO="T005U";
+    public static String CONSGENMAREAANT="ZFLMAR";
+    public static String CONSGENEVENTANT="ZFLEVN";
+    public static String CONSGENNRORESERVA="ZFLRSC";
+    public static String CONSGENLISTSINIESTROS="ZV_FLSI";
+    public static String CONSGENVERIFTEMP="ZFLCLT";
+    public static String CONSGENTEMP="ZV_FLCP";
+    public static String CONSGENCAPATANBARCA="ZFLEMB";
+    public static String CONSGENMILLASLIT="ZFLLLL";
+    public static String CONSGENPERMISOZARPE="ZFLPPE";
+    public static String CONSGENARMADOR="ZV_FLMP";
 }

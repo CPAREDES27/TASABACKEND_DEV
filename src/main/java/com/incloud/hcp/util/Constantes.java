@@ -22,6 +22,7 @@ public class Constantes {
     public static String ZFL_RFC_MANT_MAESTRO_EMB="ZFL_RFC_MANT_MAESTRO_EMB";
     public static String ZFL_RFC_FUEN_EXTER="ZFL_RFC_FUEN_EXTER";
     public static String ZFL_RFC_MUEVE_EMBARCA="ZFL_RFC_MUEVE_EMBARCA";
+    public static String ZFL_RFC_PESC_COMP_CARGA_HIST="ZFL_RFC_PESC_COMP_CARGA_HIST";
     public static String ZFL_RFC_JOB_FUENT_EXTERN="ZFL_RFC_JOB_FUENT_EXTERN";
     public static String ZFL_RFC_LECT_MAES_VIVER="ZFL_RFC_LECT_MAES_VIVER";
     public static String ZFL_RFC_DISTR_FLOTA="ZFL_RFC_DISTR_FLOTA";
