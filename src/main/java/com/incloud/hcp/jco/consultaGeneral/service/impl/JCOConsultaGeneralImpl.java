@@ -36,45 +36,93 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         MaestroExport me;
 
         try {
-            //Consultas avanzadas
             String tabla;
+            String condicion;
             List<MaestroOptions> options = new ArrayList<>();
+            MaestroOptions opt = new MaestroOptions();
             List<MaestroOptionsKey> optionsKeys = new ArrayList<>();
             String[] fields;
+            ConsultaGeneralExports result1;
+            HashMap<String, Object> data;
+            List<HashMap<String, Object>> listResult;
+
+            //Parámetros de consultas avanzadas
+            String tabla2;
+            String condicion2;
+            List<MaestroOptions> options2 = new ArrayList<>();
+            MaestroOptions opt2 = new MaestroOptions();
+            String[] fields2;
+            HashMap<String, Object> response;
+            ConsultaGeneralExports result2;
+            List<HashMap<String, Object>> listData2;
 
             switch (importsParam.getNombreConsulta()) {
                 case "CONSGENDSTRFLOTA":
                     tabla = "ZV_FLDF";
-                    String condicion = "CDEMB LIKE '" + importsParam + "'";
-                    MaestroOptions opt = new MaestroOptions();
+                    condicion = "CDEMB LIKE '" + importsParam.getParametro1() + "'";
                     opt.setWa(condicion);
                     options.add(opt);
                     fields = new String[]{"CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "FEARR", "HEARR", "EMPLA", "WKSPT", "CDUPT", "MANDT"};
 
                     //Consulta en tabla ZV_FLDF
-                    ConsultaGeneralExports zvFldfDto = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields);
-                    HashMap<String, Object> data = zvFldfDto.getData().get(0);
-                    String empla = data.get("EMPLA").toString();
+                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields);
+                    if (result1.getData().size() > 0) {
+                        data = result1.getData().get(0);
+                        String empla = data.get("EMPLA").toString();
 
-                    //Consulta en tabla ZV_FLMP
-                    String tabla2 = "ZV_FLMP";
-                    String condicion2 = "CDEMP LIKE '" + empla + "'";
-                    List<MaestroOptions> options2 = new ArrayList<>();
-                    MaestroOptions opt2 = new MaestroOptions();
-                    opt2.setWa(condicion2);
-                    options2.add(opt2);
-                    List<MaestroOptionsKey> optionsKeys2 = new ArrayList<>();
-                    ConsultaGeneralExports zvFlmpDto = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys2, fields);
-                    List<HashMap<String, Object>> listData2 = zvFlmpDto.getData();
+                        //Consulta en tabla ZV_FLMP
+                        tabla2 = "ZV_FLMP";
+                        condicion2 = "CDEMP LIKE '" + empla + "'";
+                        opt2.setWa(condicion2);
+                        options2.add(opt2);
+                        fields2 = new String[]{"DSEMP", "INPRP", "MANDT"};
 
-                    HashMap<String, Object> result = data;
-                    result.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
-                    result.put("INPRP", listData2.size() > 0 ? listData2.get(0).get("INPRP") : null);
+                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2);
+                        listData2 = result2.getData();
 
-                    List<HashMap<String, Object>> listResult = new ArrayList<>();
-                    listResult.add(result);
+                        data.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
+                        data.put("INPRP", listData2.size() > 0 ? listData2.get(0).get("INPRP") : null);
 
-                    dto.setData(listResult);
+                        listResult = new ArrayList<>();
+                        listResult.add(data);
+
+                        dto.setData(listResult);
+                    }
+
+                    dto.setMensaje("Ok");
+
+                    break;
+                case "CONSGENPLANTADIST":
+                    //Consulta a la tabla ZV_FLPL
+                    tabla = "ZV_FLPL";
+                    condicion = "CDPTA LIKE '" + importsParam.getParametro1() + "'";
+                    opt.setWa(condicion);
+                    options.add(opt);
+                    fields = new String[]{"CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "CDEMP", "CDUPT", "MANDT"};
+
+                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields);
+                    if (result1.getData().size() > 0) {
+                        data = result1.getData().get(0);
+                        String emplaZvFlpl = data.get("EMPLA").toString();
+
+                        //Consulta a la tabla ZV_FLMP
+                        tabla2 = "ZV_FLMP";
+                        condicion2 = "CDEMP LIKE '" + emplaZvFlpl + "'";
+                        opt2.setWa(condicion2);
+                        options2.add(opt2);
+                        fields2 = new String[]{"DSEMP", "INPRP", "MANDT"};
+
+                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2);
+                        listData2 = result2.getData();
+
+                        data.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
+                        data.put("INPRP", listData2.size() > 0 ? listData2.get(0).get("INPRP") : null);
+
+                        listResult = new ArrayList<>();
+                        listResult.add(data);
+                        dto.setData(listResult);
+                    }
+
                     dto.setMensaje("Ok");
 
                     break;
