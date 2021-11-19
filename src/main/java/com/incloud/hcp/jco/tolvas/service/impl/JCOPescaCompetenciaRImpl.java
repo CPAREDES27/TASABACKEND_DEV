@@ -1,24 +1,24 @@
 package com.incloud.hcp.jco.tolvas.service.impl;
 
-import com.incloud.hcp.jco.tolvas.dto.DescargaExportDto;
-import com.incloud.hcp.jco.tolvas.dto.DescargaImportDto;
-import com.incloud.hcp.jco.tolvas.dto.PescaCompetenciaRExports;
-import com.incloud.hcp.jco.tolvas.dto.PescaCompetenciaRImports;
+import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.JCOPescaCompetenciaRService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public PescaCompetenciaRExports PescaCompetencia(PescaCompetenciaRImports imports) throws Exception {
 
@@ -103,6 +103,66 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
 
         dto.setW_mensaje(code);
 
+        return dto;
+    }
+
+    @Override
+    public PeriodoDtoExport validarPeriodo(PeriodoDtoImport imports) throws Exception {
+        PeriodoDtoExport dto = new PeriodoDtoExport();
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getUsuario());
+            importx.setValue("QUERY_TABLE", Tablas.ZV_FLDC1);
+            importx.setValue("DELIMITER", Constantes.delimiter);
+            importx.setValue("NO_DATA","");
+            importx.setValue("ROWSKIPS",0);
+            importx.setValue("WORCOUNT",0);
+            importx.setValue("P_ORDER",0);
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable tableImport = tables.getTable("OPTIONS");
+            tableImport.appendRow();
+            for(int i=0;i<opcions.length;i++){
+                tableImport.appendRow();
+                tableImport.setValue("WA",opcions[i]);
+            }
+            stfcConnection.execute(destination);
+            JCoTable tableExport = tables.getTable("DATA");
+            Metodos me= new Metodos();
+            data=me.ObtenerListObjetosSinField(tableExport);
+            int contador=0;
+
+
+            for(Map<String,Object> datas: data){
+                for(Map.Entry<String,Object> entry: datas.entrySet()){
+                    contador++;
+                }
+            }
+            String[] dataFinal=new String[contador];
+
+
+            int contador2=0;
+            for(Map<String,Object> datas: data){
+                for(Map.Entry<String,Object> entry: datas.entrySet()){
+                    String key= entry.getKey();
+                    Object value= entry.getValue();
+                    dataFinal[contador2]=value.toString();
+                    contador2++;
+                }
+
+            }
+            for(int j=0;j<dataFinal.length;j++){
+                logger.error(dataFinal[j]);
+            }
+
+        }catch (Exception e){
+
+        }
         return dto;
     }
 }

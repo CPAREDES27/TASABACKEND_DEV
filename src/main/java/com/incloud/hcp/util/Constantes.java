@@ -45,6 +45,7 @@ public class Constantes {
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";
     public static String CODTIPOEVENTODESCARGA="6";
+    public  static String delimiter="|";
 
     public static String ZFL_RFC_LECT_POSI_VIVER="ZFL_RFC_LECT_POSI_VIVER";
 

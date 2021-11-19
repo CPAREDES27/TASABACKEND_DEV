@@ -81,4 +81,14 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/validarPeriodo", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PeriodoDtoExport> validarPeriodo(@RequestBody PeriodoDtoImport imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaCompetenciaRService.validarPeriodo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }
