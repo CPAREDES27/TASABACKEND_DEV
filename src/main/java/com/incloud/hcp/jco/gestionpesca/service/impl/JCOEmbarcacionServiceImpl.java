@@ -208,6 +208,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         // Agrupar los registros por el código de especie
         Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->s.get("CDSPC").toString()));
+        int totalCnspc=0;
+        int cnspcModa=0;
+        double moda=0;
 
         // Copy Map
         HashMap<String,ArrayList<HashMap<String,Object>>> str_flbsp_group_copy=new HashMap<>();
@@ -236,15 +239,30 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
             for (HashMap<String,Object> flbsp: entry.getValue()) {
                 String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+                int cnspc=Integer.parseInt(flbsp.get("CNSPC").toString());
+                double tmmed=Double.parseDouble(flbsp.get("TMMED").toString());
                 tnmmed=tnmmed.replace('.','_');
-                record.put(tnmmed,flbsp.get("TMMED"));
+                record.put(tnmmed,flbsp.get("CNSPC"));
+
+                //Total de cantidades
+                totalCnspc+=cnspc;
+
+                //Moda
+                if(cnspcModa<cnspc){
+                    moda=tmmed;
+                    cnspcModa=cnspc;
+                }
             }
+
+
 
             //Buscar el nombre de la especie en la lista y adicionarlo
             DominioExportsData especie=listEspecies.stream().filter(s->s.getId().equals(codEspecie)).findAny().orElse(null);
             String descEspecie=especie!=null?especie.getDescripcion():null;
 
             record.put("DESC_CDSPC",descEspecie);
+            record.put("CDSPC_TOTAL",totalCnspc);
+            record.put("MODA", moda);
 
             str_flbsp_matched.add(record);
         }

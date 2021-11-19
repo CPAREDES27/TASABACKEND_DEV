@@ -103,7 +103,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields);
                     if (result1.getData().size() > 0) {
                         data = result1.getData().get(0);
-                        String emplaZvFlpl = data.get("EMPLA").toString();
+                        String emplaZvFlpl = data.get("CDEMP").toString();
 
                         //Consulta a la tabla ZV_FLMP
                         tabla2 = "ZV_FLMP";
