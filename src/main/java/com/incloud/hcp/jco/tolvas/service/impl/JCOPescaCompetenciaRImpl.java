@@ -123,7 +123,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             importx.setValue("NO_DATA","");
             importx.setValue("ROWSKIPS",0);
             importx.setValue("WORCOUNT",0);
-            importx.setValue("P_ORDER",0);
+            importx.setValue("P_ORDER","");
             JCoParameterList tables = stfcConnection.getTableParameterList();
             JCoTable tableImport = tables.getTable("OPTIONS");
             tableImport.appendRow();
