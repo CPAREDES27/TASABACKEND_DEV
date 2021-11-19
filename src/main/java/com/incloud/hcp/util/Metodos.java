@@ -8,6 +8,7 @@ import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
 import com.sap.conn.jco.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -860,14 +861,18 @@ public class Metodos {
                 JCoField field = iter.nextField();
                 String key = (String) field.getName();
                 Object value = jcoTable.getValue(key);
-
+                logger.error("key: "+key+" valor: "+value);
+                if(value.toString().equals("null")){
+                    logger.error("valor es null");
+                    value="";
+                   // StringUtils.isAllBlank(value.toString());
+                }
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
-                    if(value.toString().equals(null)){
-                        value="";
-                    }
+
                 }
+
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
 
@@ -875,14 +880,15 @@ public class Metodos {
                         SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                         String fecha = dia.format(value);
                         value = fecha;
-                        if(value.toString().equals(null)){
-                            value="";
-                        }
+
                     }
 
                 }catch (Exception e){
                     value=String.valueOf(value);
                 }
+
+
+
 
                 newRecord.put(key, value);
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
