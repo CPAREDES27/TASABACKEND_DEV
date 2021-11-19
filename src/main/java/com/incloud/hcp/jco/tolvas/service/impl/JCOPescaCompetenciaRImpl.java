@@ -109,8 +109,9 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
     @Override
     public PeriodoDtoExport validarPeriodo(PeriodoDtoImport imports) throws Exception {
         PeriodoDtoExport dto = new PeriodoDtoExport();
-        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-        String[] opcions={"MJAHR = '2021'","AND RDPCA = '4'"};
+        boolean valido=false;
+        String message="";
+        String[] opcions={"MJAHR = '"+imports.getEjercicio()+"'","AND RDPCA = '"+imports.getPeriodo()+"'"};
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
@@ -120,24 +121,31 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             importx.setValue("P_USER", imports.getUsuario());
             importx.setValue("QUERY_TABLE", Tablas.ZV_FLDC1);
             importx.setValue("DELIMITER", Constantes.delimiter);
-            importx.setValue("NO_DATA","");
-            importx.setValue("ROWSKIPS",0);
-            importx.setValue("WORCOUNT",0);
-            importx.setValue("P_ORDER",0);
+
             JCoParameterList tables = stfcConnection.getTableParameterList();
+
             JCoTable tableImport = tables.getTable("OPTIONS");
-            tableImport.appendRow();
             for(int i=0;i<opcions.length;i++){
                 tableImport.appendRow();
                 tableImport.setValue("WA",opcions[i]);
             }
             stfcConnection.execute(destination);
+
             JCoTable tableExport = tables.getTable("DATA");
+
             Metodos me= new Metodos();
-            data=me.ObtenerListObjetosSinField(tableExport);
+            List<HashMap<String, Object>> data=me.ObtenerListObjetosSinField(tableExport);
             int contador=0;
 
 
+
+            if(!data.isEmpty()){
+                valido=false;
+                message="Ya existe información para este ejercicio y periodo";
+            }else{
+                valido=true;
+                message="";
+            }
             for(Map<String,Object> datas: data){
                 for(Map.Entry<String,Object> entry: datas.entrySet()){
                     contador++;
@@ -157,12 +165,15 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
 
             }
             for(int j=0;j<dataFinal.length;j++){
-                logger.error(dataFinal[j]);
+                logger.error("DATAFINAL"+dataFinal[j]);
             }
-
+            dto.setValido(valido);
+            dto.setData(data);
+            dto.setMensaje(message);
         }catch (Exception e){
 
         }
         return dto;
+
     }
 }
