@@ -2,10 +2,7 @@ package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.tolvas.dto.*;
-import com.incloud.hcp.jco.tolvas.service.JCOCalcuDerechoPescaService;
-import com.incloud.hcp.jco.tolvas.service.JCOIngresoDescManualService;
-import com.incloud.hcp.jco.tolvas.service.JCOPescaCompetenciaRService;
-import com.incloud.hcp.jco.tolvas.service.JCORegistroTolvasService;
+import com.incloud.hcp.jco.tolvas.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,8 @@ public class TolvasRest {
     private JCOCalcuDerechoPescaService jcoCalcuDerechoPescaService;
     @Autowired
     private JCOPescaCompetenciaRService jcoPescaCompetenciaRService;
+    @Autowired
+    private JCODeclaracionJuradaTolvasService jcoDeclaracionJuradaTolvasService;
 
     @PostMapping(value = "/registrotolvas_listar", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<MaestroExport> Listar(@RequestBody RegistroTolvasImports imports) {
@@ -76,6 +75,16 @@ public class TolvasRest {
 
         try {
             return Optional.ofNullable(this.jcoPescaCompetenciaRService.ejecutarPrograma(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+    @PostMapping(value = "/declaracionjurada", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeclaracionJuradaExports> DeclaracionJuradaTolvas(@RequestBody DeclaracionJuradaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.DeclaracionJuradaTolvas(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

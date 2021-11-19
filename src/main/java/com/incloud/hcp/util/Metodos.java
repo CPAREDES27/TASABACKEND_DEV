@@ -750,6 +750,9 @@ public class Metodos {
                             if (field.getTypeAsString().equals("TIME")) {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                                 value = dateFormat.format(value);
+                                if(value.toString().equals(null)){
+                                    value="";
+                                }
                             }
                             try {
                                 if (field.getTypeAsString().equals("DATE")) {
@@ -758,7 +761,9 @@ public class Metodos {
                                         SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                                         String fecha = dia.format(value);
                                         value = fecha;
-
+                                    if(value.toString().equals(null)){
+                                        value="";
+                                    }
                                 }
 
                             }catch (Exception e) {
@@ -859,6 +864,9 @@ public class Metodos {
                 if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
                     value = dateFormat.format(value);
+                    if(value.toString().equals(null)){
+                        value="";
+                    }
                 }
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
@@ -867,6 +875,9 @@ public class Metodos {
                         SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                         String fecha = dia.format(value);
                         value = fecha;
+                        if(value.toString().equals(null)){
+                            value="";
+                        }
                     }
 
                 }catch (Exception e){
