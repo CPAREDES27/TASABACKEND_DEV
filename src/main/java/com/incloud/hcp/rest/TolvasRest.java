@@ -3,6 +3,7 @@ package com.incloud.hcp.rest;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.*;
+import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,6 +96,16 @@ public class TolvasRest {
 
         try {
             return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.DeclaracionJuradaTolvas(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+    @PostMapping(value = "/pdfdeclaracionjurada", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFDeclaracionJuradaTolvas(@RequestBody DeclaracionJuradaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.PlantillaPDF(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

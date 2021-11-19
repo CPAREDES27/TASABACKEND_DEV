@@ -8,6 +8,7 @@ import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tolvas.dto.CentroDto;
 import com.incloud.hcp.jco.tolvas.dto.DeclaracionJuradaExports;
 import com.incloud.hcp.jco.tolvas.dto.DeclaracionJuradaImports;
+import com.incloud.hcp.jco.tolvas.dto.PDFDeclaracionJuradaConstantes;
 import com.incloud.hcp.jco.tolvas.service.JCODeclaracionJuradaTolvasService;
 import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
 import com.incloud.hcp.jco.tripulantes.dto.PDFTrabajoFFConstantes;
@@ -53,8 +54,8 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
             List<DominioExportsData> leyendaEspecies=ObtenerLeyendaEspecies();
             List<DominioExportsData> leyendaDestino=ObtenerLeyendaDestino();
 
-            exports.setTitulo("DECLARACION JURADA DIARIA DE REPORTE DE PESAJE POR TOLVA O BALANZA");
-            exports.setSubtitulo("R.M. Nº 153 - 2001 - PE");
+            exports.setTitulo(PDFDeclaracionJuradaConstantes.titulo);
+            exports.setSubtitulo(PDFDeclaracionJuradaConstantes.subtitlo);
             exports.setCentro(centro.getCentro());
             exports.setRazonSocial(centro.getRazonSocial());
             exports.setDetalle(detalle);
@@ -327,11 +328,15 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
 
 
-    public PDFExports PlantillaPDF()throws Exception{
+    public PDFExports PlantillaPDF(DeclaracionJuradaImports imports)throws Exception{
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
-        PDFTrabajoFFDto dto= new PDFTrabajoFFDto();
-        PlantillaPDFDeclaracion(path, dto);
+
+        DeclaracionJuradaExports exports=DeclaracionJuradaTolvas(imports);
+
+
+
+        PlantillaPDFDeclaracion(path, exports);
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -339,7 +344,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return  pdf;
     }
 
-    public void PlantillaPDFDeclaracion(String path, PDFTrabajoFFDto dto)throws IOException {
+    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto)throws IOException {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -352,106 +357,136 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         PDRectangle pageSize = page.getMediaBox();
         float pageWidth = pageSize.getWidth();
         PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
-// add the rotation using the current transformation matrix
-// including a translation of pageWidth to use the lower left corner as 0,0 reference
+
         contentStream.transform(new Matrix(0, 1, -1, 0, pageWidth, 0));
 
         contentStream.beginText();
-        contentStream.setFont(bold, 13);
-        contentStream.moveTextPositionByAmount(300, 520);
-        contentStream.drawString(PDFTrabajoFFConstantes.titulo);
+        contentStream.setFont(font, 10);
+        contentStream.moveTextPositionByAmount(250, 570);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 13);
-        contentStream.moveTextPositionByAmount(300, 520);
-        contentStream.drawString("___________________________________");
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 450);
-        contentStream.drawString(PDFTrabajoFFConstantes.numeroTrabajo);
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(370, 560);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.subtitlo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 450);
-        contentStream.drawString(dto.getNumeroTrabajo());
+        contentStream.moveTextPositionByAmount(40, 540);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.RazonSocial);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 540);
+        contentStream.drawString(dto.getRazonSocial());
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 520);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.UbicacionPlanta);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 520);
+        contentStream.drawString(dto.getUbicacionPlanta());
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 500);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Planta);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(150, 500);
+        contentStream.drawString(dto.getCentro());
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(580, 500);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Tolva);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(580, 480);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Balanza);
+        contentStream.endText();
+
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(720, 480);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.DiaMesAño);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 435);
-        contentStream.drawString(PDFTrabajoFFConstantes.tipoTrabajo);
+        contentStream.moveTextPositionByAmount(630, 460);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Fecha);
+        contentStream.endText();
+
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(40, 320);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Observaciones);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 435);
-        contentStream.drawString(dto.getTipoTrabajo());
+        contentStream.moveTextPositionByAmount(40, 260);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Especies);
+        contentStream.endText();
+
+        int y =240;
+        for(int i=0; i<dto.getEspecies().size();i++){
+
+            DominioExportsData d=dto.getEspecies().get(i);
+
+            contentStream.beginText();
+            contentStream.setFont(bold, 7);
+            contentStream.moveTextPositionByAmount(40, y);
+            contentStream.drawString(d.getId() + " "+d.getDescripcion());
+            contentStream.endText();
+            y-=10;
+        }
+        contentStream.beginText();
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(40, y-10);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Especificar);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 420);
-        contentStream.drawString(PDFTrabajoFFConstantes.semana);
+        contentStream.moveTextPositionByAmount(230, 260);
+        contentStream.drawString(PDFDeclaracionJuradaConstantes.Destino);
         contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 420);
-        contentStream.drawString(dto.getSemana());
-        contentStream.endText();
+        y=240;
+        for(int i=0; i<dto.getDestino().size();i++){
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 405);
-        contentStream.drawString(PDFTrabajoFFConstantes.fechaInicio);
-        contentStream.endText();
+            DominioExportsData d=dto.getDestino().get(i);
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 405);
-        contentStream.drawString(dto.getFechaInicio());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(210, 405);
-        contentStream.drawString(PDFTrabajoFFConstantes.fechaFin);
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(260, 405);
-        contentStream.drawString(dto.getFechaFin());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 390);
-        contentStream.drawString(PDFTrabajoFFConstantes.descripcionTrabajo);
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 390);
-        contentStream.drawString(dto.getDescripcionTrabajo());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(60, 375);
-        contentStream.drawString(PDFTrabajoFFConstantes.observacion);
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(160, 375);
-        contentStream.drawString(dto.getObservacion());
-        contentStream.endText();
-
+            contentStream.beginText();
+            contentStream.setFont(bold, 7);
+            contentStream.moveTextPositionByAmount(230, y);
+            contentStream.drawString(d.getId() + " "+d.getDescripcion());
+            contentStream.endText();
+            y-=10;
+        }
         // drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
 
         contentStream.close();
