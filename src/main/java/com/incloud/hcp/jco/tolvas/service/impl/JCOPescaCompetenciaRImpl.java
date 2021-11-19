@@ -157,7 +157,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
 
             }
             for(int j=0;j<dataFinal.length;j++){
-                logger.error(dataFinal[j]);
+                logger.error("DATAFINAL"+dataFinal[j]);
             }
 
         }catch (Exception e){
