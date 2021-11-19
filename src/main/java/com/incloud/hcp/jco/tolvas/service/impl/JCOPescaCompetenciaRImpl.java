@@ -137,7 +137,9 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             List<HashMap<String, Object>> data=me.ObtenerListObjetosSinField(tableExport);
             int contador=0;
 
-            if(data!=null){
+
+
+            if(!data.equals(null)){
                 valido=false;
                 message="Ya existe información para este ejercicio y periodo";
             }else{
@@ -166,7 +168,8 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
                 logger.error("DATAFINAL"+dataFinal[j]);
             }
             dto.setValido(valido);
-            dto.setMensaje(message);
+            dto.setData(data);
+            dto.setMensaje(""+contador);
         }catch (Exception e){
 
         }

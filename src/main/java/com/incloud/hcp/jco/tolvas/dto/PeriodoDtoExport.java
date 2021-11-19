@@ -5,6 +5,7 @@ import java.util.List;
 
 public class PeriodoDtoExport {
     private boolean valido;
+    private List<HashMap<String, Object>> data;
     private String mensaje;
 
     public String getMensaje() {
@@ -13,6 +14,14 @@ public class PeriodoDtoExport {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
+    }
+
+    public List<HashMap<String, Object>> getData() {
+        return data;
+    }
+
+    public void setData(List<HashMap<String, Object>> data) {
+        this.data = data;
     }
 
     public boolean isValido() {
