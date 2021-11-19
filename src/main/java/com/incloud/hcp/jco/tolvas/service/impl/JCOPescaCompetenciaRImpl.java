@@ -169,7 +169,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             }
             dto.setValido(valido);
             dto.setData(data);
-            dto.setMensaje(""+contador);
+            dto.setMensaje(message);
         }catch (Exception e){
 
         }
