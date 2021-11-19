@@ -163,6 +163,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
         }catch (Exception e){
 
         }
+        dto.setData(data);
         return dto;
     }
 }
