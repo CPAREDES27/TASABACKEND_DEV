@@ -173,9 +173,9 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
         return dto;
     }
 
-    public MensajeDto Nuevo(EmbarcacionNuevImports importsParam)throws Exception{
+    public MensajeEmbarcaExport Nuevo(EmbarcacionNuevImports importsParam)throws Exception{
 
-        MensajeDto msj= new MensajeDto();
+        MensajeEmbarcaExport msj= new MensajeEmbarcaExport();
         try {
             EmbarcaImports embarcaImports = importsParam.getParams();
 
@@ -207,24 +207,13 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             exec.setTable(jcoTables, Tablas.S_BPE, s_bpe);
             exec.setTable(jcoTables, Tablas.STR_HOR, str_hor);
             function.execute(destination);
-
+            Metodos metodo = new Metodos();
             JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(tableExport);
+            msj.setT_mensaje(t_mensaje);
 
-
-            for (int i = 0; i < tableExport.getNumRows(); i++) {
-                tableExport.setRow(i);
-
-                msj.setMANDT(tableExport.getString("MANDT"));
-                msj.setCMIN(tableExport.getString("CMIN"));
-                msj.setCDMIN(tableExport.getString("CDMIN"));
-                msj.setDSMIN(tableExport.getString("DSMIN"));
-                //lista.add(param);
-            }
         }catch (Exception e){
-            msj.setMANDT("00");
-            msj.setCMIN("Error");
-            msj.setCDMIN("Exception");
-            msj.setDSMIN(e.getMessage());
+            msj.setMessage(e.toString());
         }
 
         return msj;

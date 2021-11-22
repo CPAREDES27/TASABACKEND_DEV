@@ -11,7 +11,7 @@ public interface JCOEmbarcacionService {
      EmbarcacionExports ListarEmbarcaciones(EmbarcacionImports importsParam)throws Exception;
      MaestroExport BuscarEmbarcaciones(BusquedaEmbarcacionImports importsParam)throws Exception;
      BusqAdicEmbarExports BusquedaAdicionalEmbarca(BusqAdicEmbarImports importsParam) throws Exception;
-     MensajeDto Nuevo(EmbarcacionNuevImports importsParam)throws Exception;
+     MensajeEmbarcaExport Nuevo(EmbarcacionNuevImports importsParam)throws Exception;
      Mensaje Editar(EmbarcacionEditImports importsParam)throws Exception;
      MensajeDto MoverEmbarcacion(MoverEmbarcaImports importsParam)throws Exception;
 

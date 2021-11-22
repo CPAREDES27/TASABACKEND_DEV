@@ -175,7 +175,7 @@ public class EmbarcacionRest {
 
     }
     @PostMapping(value = "/Editar_Crear/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MensajeDto> Nuevo(@RequestBody EmbarcacionNuevImports imports){
+    public ResponseEntity<MensajeEmbarcaExport> Nuevo(@RequestBody EmbarcacionNuevImports imports){
 
         try {
             return Optional.ofNullable(this.EmbarcacionService.Nuevo(imports))
