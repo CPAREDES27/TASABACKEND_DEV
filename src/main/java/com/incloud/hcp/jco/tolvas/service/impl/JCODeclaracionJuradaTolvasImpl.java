@@ -5,10 +5,7 @@ import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.jco.tolvas.dto.CentroDto;
-import com.incloud.hcp.jco.tolvas.dto.DeclaracionJuradaExports;
-import com.incloud.hcp.jco.tolvas.dto.DeclaracionJuradaImports;
-import com.incloud.hcp.jco.tolvas.dto.PDFDeclaracionJuradaConstantes;
+import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.JCODeclaracionJuradaTolvasService;
 import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
 import com.incloud.hcp.jco.tripulantes.dto.PDFTrabajoFFConstantes;
@@ -29,10 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolvasService {
@@ -334,9 +329,45 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         DeclaracionJuradaExports exports=DeclaracionJuradaTolvas(imports);
 
+        Metodos me=new Metodos();
 
+        PDFDeclaracionJuradaDetallaDto detalle=new PDFDeclaracionJuradaDetallaDto();
+        for (int i=0;i<exports.getDetalle().size(); i++){
 
-        PlantillaPDFDeclaracion(path, exports);
+            for (Map.Entry<String, Object> entry :exports.getDetalle().get(i).entrySet()) {
+                String key=entry.getKey();
+                String valor=entry.getValue().toString();
+
+                if(key.equals("INBAL")){
+                    detalle.setTolva(valor);
+                    detalle.setBalanza(valor);
+                }else if(key.equals("FIDES")){
+                    String fecha=ConvertirFecha(valor);
+                    detalle.setFecha(fecha);
+                }else if(key.equals("TICKE")){
+                    detalle.setReporte(valor);
+                }else if(key.equals("NMEMB")){
+                    detalle.setNombreEmbarca(valor);
+                }else if(key.equals("MREMB")){
+                    detalle.setMatricula(valor);
+                }else if(key.equals("CNTOL")){
+                    detalle.setCantidad(valor);
+                }else if(key.equals("PESACUMOD")){
+                    detalle.setPesoAcumulado(valor);
+                }else if(key.equals("HIDES")){
+                    String hora=Convertirhora(valor);
+                    detalle.setHoraInicio(hora);
+                }else if(key.equals("HFDES")){
+                    String hora=Convertirhora(valor);
+                    detalle.setHoraFin(hora);
+                }else if(key.equals("DSSPC")){
+                    detalle.setEspecie(valor);
+                }
+
+            }
+        }
+
+        PlantillaPDFDeclaracion(path, exports,detalle);
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -344,7 +375,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return  pdf;
     }
 
-    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto)throws IOException {
+    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle)throws IOException {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -360,6 +391,8 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.transform(new Matrix(0, 1, -1, 0, pageWidth, 0));
 
+        drawCuadro(contentStream,35,580,15,750);
+
         contentStream.beginText();
         contentStream.setFont(font, 10);
         contentStream.moveTextPositionByAmount(250, 570);
@@ -368,9 +401,11 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(bold, 7);
-        contentStream.moveTextPositionByAmount(370, 560);
+        contentStream.moveTextPositionByAmount(370, 555);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.subtitlo);
         contentStream.endText();
+
+        drawCuadro(contentStream,35,550,15,125);
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -379,11 +414,18 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.endText();
 
         contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 536);
+        contentStream.drawString("____________________________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(150, 540);
+        contentStream.moveTextPositionByAmount(170, 540);
         contentStream.drawString(dto.getRazonSocial());
         contentStream.endText();
 
+        drawCuadro(contentStream,35,530,15,125);
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -392,11 +434,18 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.endText();
 
         contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 516);
+        contentStream.drawString("____________________________________________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(150, 520);
+        contentStream.moveTextPositionByAmount(170, 520);
         contentStream.drawString(dto.getUbicacionPlanta());
         contentStream.endText();
 
+        drawCuadro(contentStream,35,510,15,125);
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -405,37 +454,69 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.endText();
 
         contentStream.beginText();
+        contentStream.setFont(bold, 8);
+        contentStream.moveTextPositionByAmount(160, 496);
+        contentStream.drawString("_________________________________________________________________________");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(150, 500);
+        contentStream.moveTextPositionByAmount(170, 500);
         contentStream.drawString(dto.getCentro());
         contentStream.endText();
 
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(580, 500);
+        contentStream.moveTextPositionByAmount(570, 504);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Tolva);
         contentStream.endText();
 
+        drawCuadro(contentStream,635,514,20,65);
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(640, 504);
+        contentStream.drawString(detalle.getTolva());
+        contentStream.endText();
+
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(580, 480);
+        contentStream.moveTextPositionByAmount(570, 484);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Balanza);
         contentStream.endText();
 
+        drawCuadro(contentStream,635,494,20,65);
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(640, 484);
+        contentStream.drawString(detalle.getBalanza());
+        contentStream.endText();
 
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(720, 480);
+        contentStream.moveTextPositionByAmount(715, 484);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.DiaMesAño);
         contentStream.endText();
 
+        drawCuadro(contentStream,700,494,20,80);
+
+
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(630, 460);
+        contentStream.moveTextPositionByAmount(640, 463);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Fecha);
+        contentStream.endText();
+
+        drawCuadro(contentStream,700,474,20,80);
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(720, 463);
+        contentStream.drawString(detalle.getFecha());
         contentStream.endText();
 
 
@@ -494,5 +575,53 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         document.close();
     }
 
+    public void drawCuadro( PDPageContentStream contentStream, float x, float y, int alto, int ancho)throws IOException{
 
+        final int rows = 1;
+        final int cols = 1;
+
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+            contentStream.moveTo(x, nexty);
+            contentStream.lineTo(x + ancho, nexty);
+            contentStream.stroke();
+            nexty -= alto;
+
+        }
+
+
+        //draw the columns
+        float nextx = x;
+        for (int i = 0; i <= cols; i++) {
+
+
+            contentStream.moveTo(nextx, y);
+            contentStream.lineTo(nextx, y - alto);
+            contentStream.stroke();
+            nextx+=ancho;
+        }
+
+
+    }
+
+
+
+
+
+    public String ConvertirFecha(String valor)throws Exception{
+        SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd-MM-yyyy");
+        Date fecha = parseador.parse(valor);
+        valor = formateador.format(fecha);
+        return  valor;
+    }
+    public String Convertirhora(String valor)throws Exception{
+        SimpleDateFormat parseador = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat formateador = new SimpleDateFormat("HH:mm:ss");
+        Date hora = parseador.parse(valor);
+        valor = formateador.format(hora);
+        return  valor;
+    }
 }
