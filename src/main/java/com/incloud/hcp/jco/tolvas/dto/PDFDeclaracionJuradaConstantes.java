@@ -15,7 +15,7 @@ public class PDFDeclaracionJuradaConstantes {
     public static String Especies="ESPECIES (*)";
     public static String Destino="DESTINO DEL RECURSO (**)";
     public static String Especificar="(a)   Especificar el Tipo de Instrumento de Pesaje";
-    public static String[] Detalle={"Tolva Nº o Balanza","REPORTE Nº", "NOMBRE DE EMBARCACION", "MATRICULA", "ESPECIE (*)",
-                    "DESTINO DE RECURSO (**)", "CANTIDAD DE PESADAS", "PESO (t) ACUMULADO", "HORA INICIO", "HORA TERMINO"};
-
+    public static String[] Detalle={"Tolva Nº","REPORTE", "NOMBRE DE", "MATRICULA", "ESPECIE",
+                    "DESTINO DE", "CANTIDAD DE", "PESO (t)", "HORA", "HORA"};
+    public static String[] Detalle2={"o Balanza","Nº", "EMBARCACION", "", "(*)", "RECURSO (**)", "PESADAS", "ACUMULADO", "INICIO", "TERMINO"};
 }

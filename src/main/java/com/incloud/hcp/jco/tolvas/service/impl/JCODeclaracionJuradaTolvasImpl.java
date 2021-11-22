@@ -8,8 +8,6 @@ import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.JCODeclaracionJuradaTolvasService;
 import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
-import com.incloud.hcp.jco.tripulantes.dto.PDFTrabajoFFConstantes;
-import com.incloud.hcp.jco.tripulantes.dto.PDFTrabajoFFDto;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
@@ -26,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -331,9 +330,17 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         Metodos me=new Metodos();
 
+
+
         PDFDeclaracionJuradaDetallaDto detalle=new PDFDeclaracionJuradaDetallaDto();
+        List<String[]>ListDetalle= new ArrayList<>();
+
+        ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle);
+        ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle2);
+
         for (int i=0;i<exports.getDetalle().size(); i++){
 
+            String[]det= new String[9];
             for (Map.Entry<String, Object> entry :exports.getDetalle().get(i).entrySet()) {
                 String key=entry.getKey();
                 String valor=entry.getValue().toString();
@@ -341,33 +348,56 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
                 if(key.equals("INBAL")){
                     detalle.setTolva(valor);
                     detalle.setBalanza(valor);
+                    det[0]=detalle.getBalanza();
                 }else if(key.equals("FIDES")){
                     String fecha=ConvertirFecha(valor);
                     detalle.setFecha(fecha);
+
                 }else if(key.equals("TICKE")){
                     detalle.setReporte(valor);
+                    det[1]=detalle.getReporte();
                 }else if(key.equals("NMEMB")){
                     detalle.setNombreEmbarca(valor);
+                    det[2]=detalle.getNombreEmbarca();
+
                 }else if(key.equals("MREMB")){
                     detalle.setMatricula(valor);
+                    det[3]=detalle.getMatricula();
+
                 }else if(key.equals("CNTOL")){
                     detalle.setCantidad(valor);
+                    det[6]=detalle.getCantidad();
+
                 }else if(key.equals("PESACUMOD")){
                     detalle.setPesoAcumulado(valor);
+                    det[7]=detalle.getPesoAcumulado();
+
                 }else if(key.equals("HIDES")){
                     String hora=Convertirhora(valor);
                     detalle.setHoraInicio(hora);
+                    det[8]=detalle.getHoraInicio();
                 }else if(key.equals("HFDES")){
                     String hora=Convertirhora(valor);
+                    detalle.getHoraFin();
                     detalle.setHoraFin(hora);
                 }else if(key.equals("DSSPC")){
                     detalle.setEspecie(valor);
                 }
 
             }
+            det[4]="01";
+            det[5]="01";
+            ListDetalle.add(det);
         }
 
-        PlantillaPDFDeclaracion(path, exports,detalle);
+
+
+        //Agregando las cabeceras
+
+
+
+
+        PlantillaPDFDeclaracion(path, exports,detalle, ListDetalle);
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -375,7 +405,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return  pdf;
     }
 
-    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle)throws IOException {
+    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle, List<String[]> content)throws IOException {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -468,7 +498,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(570, 504);
+        contentStream.moveTextPositionByAmount(570, 502);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Tolva);
         contentStream.endText();
 
@@ -476,14 +506,14 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(640, 504);
+        contentStream.moveTextPositionByAmount(640, 502);
         contentStream.drawString(detalle.getTolva());
         contentStream.endText();
 
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(570, 484);
+        contentStream.moveTextPositionByAmount(570, 482);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Balanza);
         contentStream.endText();
 
@@ -491,14 +521,14 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(640, 484);
+        contentStream.moveTextPositionByAmount(640, 482);
         contentStream.drawString(detalle.getBalanza());
         contentStream.endText();
 
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(715, 484);
+        contentStream.moveTextPositionByAmount(715, 482);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.DiaMesAño);
         contentStream.endText();
 
@@ -507,7 +537,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(640, 463);
+        contentStream.moveTextPositionByAmount(640, 462);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Fecha);
         contentStream.endText();
 
@@ -515,10 +545,11 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(720, 463);
+        contentStream.moveTextPositionByAmount(720, 462);
         contentStream.drawString(detalle.getFecha());
         contentStream.endText();
 
+        drawCuadroDetalle(page, contentStream, 40,440,745, content);
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -606,7 +637,167 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
     }
 
+    public  void drawCuadroDetalle(PDPage page, PDPageContentStream contentStream,
+                                   float x, float y, int ancho,List<String[]> content) throws IOException {
 
+        logger.error("drawTableRolTripulacion");
+        final int rows = content.size();
+        final int cols = content.get(0).length;
+        float rowHeight = 25.0f;
+        final float tableHeight =(15 * (float) rows)+10;
+        final float colWidth = 94.33f;
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+
+            if(i!=0){
+                rowHeight = 15.0f;
+            }
+            contentStream.moveTo(x, nexty);
+            contentStream.lineTo(x + ancho, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+        //draw the columns
+        float nextx = x;
+        for (int i = 0; i <= cols+2; i++) {
+
+            if(i==1 || i==6 || i==7 || i==8){
+                nextx+=50;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }else if(i==2 || i==4){
+                nextx+=50f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }
+            else if(i==3){
+                nextx+=50f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }
+            else if(i==5 || i==9 || i==10){
+                nextx+=50f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth-21;
+            }else {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+                nextx += colWidth;
+            }
+
+        }
+
+
+        //now add the text
+        PDFont font;
+
+
+        float texty=y-15;
+        for(int i=0; i<content.size(); i++) {
+
+            String[]fields=content.get(i);
+            float textx=x+5;
+
+            for (int j = 0; j < fields.length; j++) {
+
+                switch (j) {
+                    case 1:
+                        if(i==0){
+                            textx = 100;
+                        }else {
+                            textx = 58;
+                        }
+                        break;
+                    case 2:
+                        if(i==0){
+                            textx=220;
+                        }else {
+                            textx = 250;
+                        }
+                        break;
+                    case 3:
+                        if(i==0){
+                            textx = 340;
+                        }else{
+                            textx = 330;
+                        }
+                        break;
+                    case 4:
+                        if(i==0){
+                            textx = 440;
+                        }else {
+                            textx = 425;
+                        }
+                        break;
+                    case 5:
+                        if(i==0){
+                            textx = 510;
+                        }else {
+                            textx = 500;
+                        }
+                        break;
+                    case 6:
+                        if(i==0){
+                            textx = 560;
+                        }else {
+                            textx = 540;
+                        }
+                        break;
+                    case 7:
+                        if(i==0){
+                            textx = 610;
+                        }else {
+                            textx = 590;
+                        }
+                        break;
+                    case 8:
+                        if(i==0){
+                            textx = 660;
+                        }else {
+                            textx = 540;
+                        }
+                        break;
+                    case 9:
+                        if(i==0){
+                            textx = 700;
+                        }else {
+                            textx = 680;
+                        }
+                        break;
+
+                }
+                if(i==0 || 1==1){
+                    font=PDType1Font.HELVETICA_BOLD;
+                }else{
+                    font=PDType1Font.HELVETICA;
+                }
+
+                contentStream.beginText();
+                contentStream.setFont(font, 6.5f);
+                contentStream.newLineAtOffset(textx, texty);
+                contentStream.showText(fields[j]);
+                contentStream.endText();
+
+
+            }
+            if(i==0){
+                texty-=10;
+            }
+            texty-=15;
+        }
+
+    }
 
 
 

@@ -137,6 +137,9 @@ public class JCODominiosImpl implements JCODominiosService {
                             importx.setValue("DELIMITER", "|");
                             importx.setValue("P_USER", "FGARCIA");
 
+                            logger.error("TABLA= "+TABLE_READ_TABLE);
+                            logger.error("WA= "+WA_READ_TABLE);
+                            logger.error("fieldname[0]= "+fieldname[0]);
 
                             JCoParameterList tables = stfcConnection.getTableParameterList();
                             JCoTable tableImport = tables.getTable("OPTIONS");
