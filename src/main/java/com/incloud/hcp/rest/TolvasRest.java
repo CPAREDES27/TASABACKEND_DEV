@@ -1,6 +1,7 @@
 package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MaestroImportsKey;
 import com.incloud.hcp.jco.tolvas.dto.*;
 import com.incloud.hcp.jco.tolvas.service.*;
 import com.incloud.hcp.jco.tripulantes.dto.PDFExports;
@@ -20,6 +21,8 @@ public class TolvasRest {
 
     @Autowired
     private JCORegistroTolvasService jcoRegistroTolvasService;
+    @Autowired
+    private JCODescargasPorTolvasService jcoDescargasPorTolvasService;
     @Autowired
     private JCOIngresoDescManualService jcoIngresoDescManualService;
     @Autowired
@@ -50,6 +53,18 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+    @PostMapping(value = "/buscar_descargas", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> BuscarDescargasPorTolvas(@RequestBody MaestroImportsKey imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoDescargasPorTolvasService.buscarDescargasPorTolvas(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
     @PostMapping(value = "/calculoderechopesca", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CalcuDerechoPescaExports> Guardar(@RequestBody CalcuDerechoPescaImports imports) {
 
