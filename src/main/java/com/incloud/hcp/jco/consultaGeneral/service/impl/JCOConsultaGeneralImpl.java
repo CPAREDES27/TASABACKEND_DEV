@@ -272,6 +272,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENOBTTALLAMIN":
                 tabla = ConsultaGeneralTablas.CONSGENOBTTALLAMIN;
                 break;
+            case "CONSGENTEMPVEDA":
+                tabla = ConsultaGeneralTablas.CONSGENTEMPVEDA;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -353,6 +356,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENOBTTALLAMIN":
                 fields = ConsultaGeneralFields.CONSGENOBTTALLAMIN;
+                break;
+            case "CONSGENTEMPVEDA":
+                fields = ConsultaGeneralFields.CONSGENTEMPVEDA;
                 break;
         }
 
@@ -487,6 +493,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENOBTTALLAMIN":
                 condicion = ConsultaGeneralOptions.CONSGENOBTTALLAMIN + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENTEMPVEDA":
+                condicion = ConsultaGeneralOptions.CONSGENTEMPVEDA + parametro1 + "'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;

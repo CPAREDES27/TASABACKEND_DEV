@@ -27,4 +27,5 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENPERMISOZARPE={"CDEMB", "ESPMS"};
     public static String[] CONSGENARMADOR={"CDEMP", "DSEMP"};
     public static String[] CONSGENOBTTALLAMIN={"TMMIN"};
+    public static String[] CONSGENTEMPVEDA={"LTINI", "LNINI", "LTFIN", "LGFIN", "MILLA"};
 }
