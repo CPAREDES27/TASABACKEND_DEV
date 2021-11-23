@@ -206,8 +206,12 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         dto.setMensaje("Ok");
 
-        // Agrupar los registros por el código de especie
-        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->s.get("NREVN").toString()));
+        // Agrupar los registros por el código de especie y evento
+
+        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->{
+            return new ArrayList<String>(Arrays.asList(s.get("NREVN").toString(),s.get("CDSPC").toString()));
+        }));
+
         int totalCnspc=0;
         int cnspcModa=0;
         double moda=0;
