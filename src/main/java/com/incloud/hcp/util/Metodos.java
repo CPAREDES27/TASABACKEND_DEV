@@ -182,7 +182,7 @@ public class Metodos {
                 Object value = tableExport.getValue(key);
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
                 }
 
