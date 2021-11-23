@@ -91,7 +91,7 @@ public class Metodos {
 
                 }catch (Exception e){
                    // value=String.valueOf(value);
-                    value="-";
+                    value="";
 
                 }
                 newRecord.put(key, value);
