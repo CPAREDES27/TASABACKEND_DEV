@@ -207,7 +207,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         dto.setMensaje("Ok");
 
         // Agrupar los registros por el código de especie
-        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->s.get("CDSPC").toString()));
+        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->s.get("NREVN").toString()));
         int totalCnspc=0;
         int cnspcModa=0;
         double moda=0;
@@ -233,11 +233,12 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String,Object>> str_flbsp_matched=new ArrayList<>();
         //Obtener columnas dinamicas
         for (Map.Entry<String,ArrayList<HashMap<String,Object>>> entry: str_flbsp_group_copy.entrySet()) {
-            String codEspecie=entry.getKey();
+            String codEspecie = null;
 
             //Fila al cual se le añadirán las columnas dinámicas
             HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
             for (HashMap<String,Object> flbsp: entry.getValue()) {
+                codEspecie = flbsp.get("CDSPC").toString();
                 String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
                 int cnspc=Integer.parseInt(flbsp.get("CNSPC").toString());
                 double tmmed=Double.parseDouble(flbsp.get("TMMED").toString());
@@ -257,7 +258,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
 
             //Buscar el nombre de la especie en la lista y adicionarlo
-            DominioExportsData especie=listEspecies.stream().filter(s->s.getId().equals(codEspecie)).findAny().orElse(null);
+            String finalCodEspecie = codEspecie;
+            DominioExportsData especie=listEspecies.stream().filter(s->s.getId().equals(finalCodEspecie)).findAny().orElse(null);
             String descEspecie=especie!=null?especie.getDescripcion():null;
 
             record.put("DESC_CDSPC",descEspecie);
