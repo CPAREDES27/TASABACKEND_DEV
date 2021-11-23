@@ -429,7 +429,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         if(!bodega.equalsIgnoreCase("S")){
 
             JCoDestination destination3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-            ;
+
             JCoRepository repos3 = destination3.getRepository();
             JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
             JCoParameterList importz3 = stfcConnections3.getImportParameterList();
@@ -443,18 +443,26 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             tableImports3.setValue("WA","APLICACION = 'FL'");
             tableImports3.setValue("WA","AND PROGRAMA = 'ZFL_RFC_DISTR_FLOTA'");
             tableImports3.setValue("WA","AND CAMPO = 'WERKS'");
+            JCoTable tableFields = table3.getTable("FIELDS");
+            tableFields.appendRow();
+            tableFields.setValue("FIELDNAME","LOW");
+
             stfcConnections3.execute(destination3);
 
             JCoTable tableExports3 = table3.getTable("DATA");
 
             for(int i=0;i<tableExports3.getNumRows();i++){
                 tableExports3.setRow(i);
+                String centroData = tableExports3.getString();
                 String ArrayResponse[] = tableExports3.getString().split("\\|");
-                if(ArrayResponse[0].equalsIgnoreCase(werks)){
+                for (int j = 0; j < ArrayResponse.length; j++){
+                    logger.error("DATO >>", ArrayResponse[j]);
+                }
+                /*if(ArrayResponse[0].equalsIgnoreCase(werks)){
                     bOk=false;
                     logger.error("GG",ArrayResponse[0]);
                     break;
-                }
+                }*/
             }
         }else{
             bOk=true;
