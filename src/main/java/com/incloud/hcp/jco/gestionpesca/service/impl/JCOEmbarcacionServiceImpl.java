@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -27,6 +28,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
     @Autowired
     JCODominiosImpl dominioService;
+
+    @Autowired
+    JCOMaestrosService MaestroService;
 
     public List<EmbarcacionDto> listaEmbarcacion(String condicion) throws Exception {
 
@@ -365,10 +369,97 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
     public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
         Metodos metodo = new Metodos();
         boolean bOk  = true;
-        String werks ="";
-        String bodCert = " ";
-        String[] fields = {"WERKS"};
 
+        String bodCert = "";
+        String werks ="";
+        String codEmba = imports.getCodEmba();
+        String codPlanta = imports.getCodPlanta();
+        String usuario = imports.getUsuario();
+
+        //consulta ZFLPTA
+        MaestroImportsKey imports1 = new MaestroImportsKey();
+        imports1.setTabla(Tablas.ZFLPTA);
+        MaestroOptions mo1 = new MaestroOptions();
+        String wa1 = "CDPTA = '" + codPlanta + "'";
+        mo1.setWa(wa1);
+        List<MaestroOptions> listOptions1 = new ArrayList<MaestroOptions>();
+        listOptions1.add(mo1);
+        imports1.setDelimitador("|");
+        imports1.setOption(listOptions1);
+        String[] fields = {"WERKS"};
+        imports1.setFields(fields);
+        List<MaestroOptionsKey> listOptKey1 = new ArrayList<MaestroOptionsKey>();
+        imports1.setOptions(listOptKey1);
+        imports1.setOrder("");
+        imports1.setRowcount(0);
+        imports1.setRowskips(0);
+        imports1.setP_user(usuario);
+        MaestroExport me1 = MaestroService.obtenerMaestro2(imports1);
+        if (me1.getData().size() > 0){
+            List<HashMap<String, Object>> data = me1.getData();
+            HashMap<String, Object> obj = data.get(0);
+            Object objWerk = obj.get("WERKS");
+            if(objWerk != null){
+                werks = String.valueOf(objWerk);
+            }
+        }else{
+            werks = codPlanta;
+            bOk = false;
+        }
+        imports1.setTabla(Tablas.ZFLEMB);
+        String wa2 = "CDEMB = '" +codEmba+ "'";
+        mo1.setWa(wa2);
+        listOptions1.clear();
+        listOptions1.add(mo1);
+        imports1.setOption(listOptions1);
+        String[] fields1 = {"HPACH"};
+        imports1.setFields(fields1);
+        MaestroExport me2 = MaestroService.obtenerMaestro2(imports1);
+        if(me2.getData().size() > 0){
+            List<HashMap<String, Object>> data = me2.getData();
+            HashMap<String, Object> obj = data.get(0);
+            Object objHpach = obj.get("HPACH");
+            if(objHpach != null){
+                bodCert = String.valueOf(objHpach).trim();
+            }
+        }else{
+            bodCert = " ";
+        }
+
+        if (!bodCert.equalsIgnoreCase("S")){
+
+            imports1.setTabla("ZTB_CONSTANTES");
+            String[] fields2 = {"LOW"};
+            imports1.setFields(fields2);
+            String wa3 = "APLICACION = 'FL' AND PROGRAMA = 'ZFL_RFC_DISTR_FLOTA' AND CAMPO = 'WERKS'";
+            mo1.setWa(wa3);
+            listOptions1.clear();
+            listOptions1.add(mo1);
+            imports1.setOption(listOptions1);
+            MaestroExport me3 = MaestroService.obtenerMaestro2(imports1);
+            if(me3.getData().size() > 0){
+                List<HashMap<String, Object>> data = me2.getData();
+                for (int i = 0; i < data.size(); i++){
+                    HashMap<String, Object> obj = data.get(i);
+                    Object objLow = obj.get("LOW");
+                    if(objLow != null){
+                        String low = String.valueOf(objLow);
+                        if(low.equalsIgnoreCase(werks)){
+                            bOk = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }else{
+            bOk = true;
+        }
+
+        BodegaExport valBodega = new BodegaExport();
+        valBodega.setEstado(bOk);
+        return valBodega;
+
+        /*
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
         JCoRepository repo = destination.getRepository();
@@ -454,15 +545,14 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             for(int i=0;i<tableExports3.getNumRows();i++){
                 tableExports3.setRow(i);
                 String centroData = tableExports3.getString();
-                String ArrayResponse[] = tableExports3.getString().split("\\|");
-                for (int j = 0; j < ArrayResponse.length; j++){
-                    logger.error("DATO >>", ArrayResponse[j]);
-                }
-                /*if(ArrayResponse[0].equalsIgnoreCase(werks)){
+
+                String[] ArrayResponse = tableExports3.getString().split("\\|");
+
+                if(ArrayResponse[0].equalsIgnoreCase(werks)){
                     bOk=false;
                     logger.error("GG",ArrayResponse[0]);
                     break;
-                }*/
+                }
             }
         }else{
             bOk=true;
@@ -470,7 +560,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         String log = "ValidarBodegaCert: " + bOk;
         logger.error(log);
         me.setEstado(bOk);
-        return  me;
+        return  me;*/
     }
 
 
