@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class RolTripulacionImports {
@@ -7,7 +10,8 @@ public class RolTripulacionImports {
     private String p_tope;
     private String p_cdrtr;
     private String p_canti;
-    private List<Options> t_opciones;
+    private List<MaestroOptions> p_option;
+    private List<MaestroOptionsKey> p_options;
     private String[] fieldsT_zartr;
     private String[] fieldsT_dzart;
 
@@ -51,11 +55,19 @@ public class RolTripulacionImports {
         this.p_canti = p_canti;
     }
 
-    public List<Options> getT_opciones() {
-        return t_opciones;
+    public List<MaestroOptions> getP_option() {
+        return p_option;
     }
 
-    public void setT_opciones(List<Options> t_opciones) {
-        this.t_opciones = t_opciones;
+    public void setP_option(List<MaestroOptions> p_option) {
+        this.p_option = p_option;
+    }
+
+    public List<MaestroOptionsKey> getP_options() {
+        return p_options;
+    }
+
+    public void setP_options(List<MaestroOptionsKey> p_options) {
+        this.p_options = p_options;
     }
 }

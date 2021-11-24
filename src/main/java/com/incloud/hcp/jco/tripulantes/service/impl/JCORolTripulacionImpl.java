@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionExports;
 import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionImports;
@@ -24,7 +25,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
 
        RolTripulacionExports rt=new RolTripulacionExports();
 
-
+        Metodos metodo = new Metodos();
         try {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -36,14 +37,13 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             importx.setValue("P_CDRTR", imports.getP_cdrtr());
             importx.setValue("P_CANTI", imports.getP_canti());
 
-            List<Options> options = imports.getT_opciones();
+            List<MaestroOptions>  options = imports.getP_option();
+            MaestroOptions me = new MaestroOptions();
+            me.setWa("CDRTR NE 0");
+            options.add(me);
+            List<MaestroOptionsKey>  options2 = imports.getP_options();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("DATA", o.getData());
-                tmpOptions.add(record);
-            }
+            tmpOptions=metodo.ValidarOptions(options,options2,"DATA");
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
@@ -56,7 +56,6 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
 
 
-            Metodos metodo = new Metodos();
             List<HashMap<String, Object>>  t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
             List<HashMap<String, Object>>  t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
 
