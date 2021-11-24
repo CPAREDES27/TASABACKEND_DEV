@@ -158,5 +158,8 @@ public class Tablas {
     public static String STR_GZP="STR_GZP";
     public static String STR_PED="STR_PED";
 
+    public static String T_RESERVAS="T_RESERVAS";
+    public static String T_DETALLE="T_DETALLE";
+
 
 }

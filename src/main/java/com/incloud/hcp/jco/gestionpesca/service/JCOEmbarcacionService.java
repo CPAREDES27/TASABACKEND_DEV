@@ -23,4 +23,7 @@ public interface JCOEmbarcacionService {
     BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception;
 
     ValidaMareaExports ValidarMarea(ValidaMareaImports imports)throws Exception;
+
+    ConsultaReservaExport consultarReserva(ConsultaReservaImport imports)throws Exception;
+
 }
