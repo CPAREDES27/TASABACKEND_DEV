@@ -91,7 +91,7 @@ public class Metodos {
 
                 }catch (Exception e){
                    // value=String.valueOf(value);
-                    value="-";
+                    value="";
 
                 }
                 newRecord.put(key, value);
@@ -182,7 +182,7 @@ public class Metodos {
                 Object value = tableExport.getValue(key);
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
                 }
 
@@ -320,7 +320,7 @@ public class Metodos {
         else if(table.equals("CENTRO")){
             tablita = "ZTB_CONSTANTES";
         }else if(table.equals("TEMPHAB")){
-            tablita = "ZV_FLTZ";
+            tablita = "ZFLPCN";
         }
         return tablita;
     }
@@ -356,6 +356,8 @@ public class Metodos {
             wa= "APLICACION EQ 'FL' AND (PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES') AND (CORR EQ '0003')";
         }else if(table.equals("CENTRO")){
             wa="APLICACION EQ 'FL' AND PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES' AND CAMPO EQ 'WERKS'";
+        }else if(table.equals("TEMPHAB")){
+            wa="FGPCN  = 'A'";
         }
 
         return wa;

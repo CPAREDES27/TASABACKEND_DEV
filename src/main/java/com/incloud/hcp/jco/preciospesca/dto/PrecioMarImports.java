@@ -11,6 +11,8 @@ public class PrecioMarImports {
     private String p_rows;
     private String p_calidad;
     private String p_flag;
+    private int num_application;
+    private String id_estado;
     private List<MaestroOptions> p_option;
     private List<MaestroOptionsKey> p_options;
     public String getP_user() {
@@ -51,6 +53,22 @@ public class PrecioMarImports {
 
     public void setP_flag(String p_flag) {
         this.p_flag = p_flag;
+    }
+
+    public int getNum_application() {
+        return num_application;
+    }
+
+    public void setNum_application(int num_application) {
+        this.num_application = num_application;
+    }
+
+    public String getId_estado() {
+        return id_estado;
+    }
+
+    public void setId_estado(String id_estado) {
+        this.id_estado = id_estado;
     }
 
     public List<MaestroOptions> getP_option() {
