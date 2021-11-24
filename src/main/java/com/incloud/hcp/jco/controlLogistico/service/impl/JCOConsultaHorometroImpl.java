@@ -23,7 +23,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
         ConsultaHorometroExports ch= new ConsultaHorometroExports();
 
         try {
-
+            ZFL_RFC_REGROL_ADM_REGROL
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
