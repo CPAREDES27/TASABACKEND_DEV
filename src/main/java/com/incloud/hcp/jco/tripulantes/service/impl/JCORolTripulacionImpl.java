@@ -38,9 +38,12 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             importx.setValue("P_CANTI", imports.getP_canti());
 
             List<MaestroOptions>  options = imports.getP_option();
+            MaestroOptions me = new MaestroOptions();
+            me.setWa("CDRTR NE 0");
+            options.add(me);
             List<MaestroOptionsKey>  options2 = imports.getP_options();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            tmpOptions=metodo.ValidarOptions(options,options2);
+            tmpOptions=metodo.ValidarOptions(options,options2,"DATA");
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
