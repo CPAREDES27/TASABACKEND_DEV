@@ -25,4 +25,6 @@ public class ConsultaGeneralTablas {
     public static String CONSGENMILLASLIT="ZFLLLL";
     public static String CONSGENPERMISOZARPE="ZFLPPE";
     public static String CONSGENARMADOR="ZV_FLMP";
+    public static String CONSGENOBTTALLAMIN="ZFLSPC";
+    public static String CONSGENTEMPVEDA="ZFLCLT";
 }

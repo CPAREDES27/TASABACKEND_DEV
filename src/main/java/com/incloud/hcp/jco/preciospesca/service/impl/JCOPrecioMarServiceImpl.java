@@ -32,6 +32,42 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
         List<MaestroOptions> option = imports.getP_option();
         List<MaestroOptionsKey> options2 = imports.getP_options();
 
+        /**
+         * Añadir el options de acuerdo a la aplicación
+         */
+        String optionWaApplications=null;
+        switch (imports.getNum_application()){
+            case 1: //Aprobacion Castigos Propuestos
+                if(imports.getId_estado().equalsIgnoreCase("PC")){
+                    optionWaApplications="(USCPP NE '' OR USCPP IS NOT NULL) AND ESCSG EQ 'N'";
+                }
+                break;
+            case 2: //Aprobacion Precios
+                optionWaApplications="(ESPRC EQ 'N' AND (ESCSG EQ 'L' OR ESCSG EQ '' OR ESCSG EQ ' ' OR ESCSG IS NULL)) AND PRCOM > '0.00'";
+                break;
+            case 3: //Castigos Propuestos
+                if(imports.getId_estado().equalsIgnoreCase("PC")){
+                    optionWaApplications="(USCPP EQ '' OR USCPP IS NULL) AND ESCSG NE 'L'";
+                }
+                break;
+            case 4: //Precios acopio
+                switch (imports.getId_estado()){
+                    case "C":
+                        optionWaApplications="(PRCOM IS NOT NULL AND PRCOM > 0)";
+                        break;
+                    case "S":
+                        optionWaApplications="(PRCOM IS NULL OR PRCOM = 0)";
+                        break;
+                }
+                break;
+        }
+
+        if(optionWaApplications!=null){
+            MaestroOptions optionApplication=new MaestroOptions();
+            optionApplication.setWa(optionWaApplications);
+            option.add(optionApplication);
+        }
+
 
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
         tmpOptions=metodos.ValidarOptions(option,options2);

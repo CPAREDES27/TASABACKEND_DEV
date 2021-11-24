@@ -41,4 +41,6 @@ public class ConsultaGeneralOptions {
     public static String CONSGENPERMISOZARPE2=" AND CDTPM LIKE 'Z'";
     public static String CONSGENARMADOR="CDEMP LIKE '";
     public static String CONSGENARMADOR2=" AND ESREG = 'S'";
+    public static String CONSGENOBTTALLAMIN="CDSPC eq '";
+    public static String CONSGENTEMPVEDA="CDTPC = 'V' AND FHCAL LIKE '";
 }
