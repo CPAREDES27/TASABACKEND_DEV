@@ -610,6 +610,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             JCoRepository repo = destination.getRepository();
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GCOM_CONS_COMBU);
             JCoParameterList importx = stfcConnection.getImportParameterList();
+            JCoParameterList tables = stfcConnection.getTableParameterList();
 
             importx.setValue("P_USER", usuario);
 
@@ -617,13 +618,13 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
                 importx.setValue("P_RESERVA", reserva);
                 importx.setValue("P_NRMAR", marea);
             }else{
-                JCoTable tableImport = importx.getTable("OPTIONS");
+                JCoTable tableImport = tables.getTable("OPTIONS");
                 tableImport.appendRow();
                 String consulta = "NRMAR = " + marea + " AND ESRSV = 'S'";
-                tableImport.setValue("WA", consulta);
+                tableImport.setValue("DATA", consulta);
             }
 
-            JCoParameterList tables = stfcConnection.getTableParameterList();
+
             stfcConnection.execute(destination);
             JCoTable t_reservas = tables.getTable(Tablas.T_RESERVAS);
             JCoTable t_detalle = tables.getTable(Tablas.T_DETALLE);

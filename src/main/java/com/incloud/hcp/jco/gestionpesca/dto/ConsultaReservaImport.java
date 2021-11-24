@@ -2,6 +2,9 @@ package com.incloud.hcp.jco.gestionpesca.dto;
 
 public class ConsultaReservaImport {
 
+    private int Marea;
+    private String Reserva;
+
     public int getMarea() {
         return Marea;
     }
@@ -34,20 +37,8 @@ public class ConsultaReservaImport {
         FlagDetalle = flagDetalle;
     }
 
-    public int Marea;
-    public String Reserva;
-    public String Usuario;
-    public String FlagDetalle;
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public String mensaje;
+    private String Usuario;
+    private String FlagDetalle;
 
 
 }
