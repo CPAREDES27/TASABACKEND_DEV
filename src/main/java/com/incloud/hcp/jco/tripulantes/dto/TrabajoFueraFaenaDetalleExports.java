@@ -11,9 +11,63 @@ public class TrabajoFueraFaenaDetalleExports {
     private String semana;
     private String fechaInicio;
     private String fechaFin;
+    private String descripcionTrabajo;
     private String observacion;
+    private String usuarioCreacion;
+    private String fechaHoraCreacion;
+    private String usuarioModif;
+    private String fechaHoraModif;
+    private String[] fechas;
     private List<TrabajoFFDetalleDto> detalle;
     private String mensaje;
+
+    public String[] getFechas() {
+        return fechas;
+    }
+
+    public void setFechas(String[] fechas) {
+        this.fechas = fechas;
+    }
+
+    public String getUsuarioCreacion() {
+        return usuarioCreacion;
+    }
+
+    public void setUsuarioCreacion(String usuarioCreacion) {
+        this.usuarioCreacion = usuarioCreacion;
+    }
+
+    public String getUsuarioModif() {
+        return usuarioModif;
+    }
+
+    public void setUsuarioModif(String usuarioModif) {
+        this.usuarioModif = usuarioModif;
+    }
+
+    public String getFechaHoraCreacion() {
+        return fechaHoraCreacion;
+    }
+
+    public void setFechaHoraCreacion(String fechaHoraCreacion) {
+        this.fechaHoraCreacion = fechaHoraCreacion;
+    }
+
+    public String getFechaHoraModif() {
+        return fechaHoraModif;
+    }
+
+    public void setFechaHoraModif(String fechaHoraModif) {
+        this.fechaHoraModif = fechaHoraModif;
+    }
+
+    public String getDescripcionTrabajo() {
+        return descripcionTrabajo;
+    }
+
+    public void setDescripcionTrabajo(String descripcionTrabajo) {
+        this.descripcionTrabajo = descripcionTrabajo;
+    }
 
     public String getNrTrabajo() {
         return nrTrabajo;

@@ -73,7 +73,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
                 rt.setT_zartr(t_zartr);
             }
 
-            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJES);
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
             rt.setT_mensaje(t_mensaje);
 

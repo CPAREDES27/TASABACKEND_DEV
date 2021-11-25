@@ -154,9 +154,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
 
             String[] fieldfechas= {"WERKS","PERNR","FETRA"};
-            String[] fieldtextos= {"TDLINE"};
+            String[] fieldtextos= {"TDLINE","TDFORMAT"};
             String[] fieldtrabaj= {"PERNR","NOMBR"};
-            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
             tfi.setFieldst_trabff(fieldtrabaff);
@@ -169,13 +169,32 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             tffde=TrabajoFueraFaenaTransporte(tfi);
 
 
-            for(Map.Entry<String, Object> entry:tffde.getT_textos().get(0).entrySet()){
-                String key=entry.getKey();
-                String valor=entry.getValue().toString();
-                if(key.equals("TDLINE")){
-                    dto.setObservacion(valor);
+            for (int i=0; i<tffde.getT_textos().size();i++){
+                String format="";
+                String line="";
+                for(Map.Entry<String, Object> entry:tffde.getT_textos().get(i).entrySet()){
+                    String key=entry.getKey();
+                    String valor=entry.getValue().toString();
+                    if(key.equals("TDLINE")){
+                        line=valor;
+                    }else if(key.equals("TDFORMAT")){
+                        format=valor;
+                    }
                 }
+                dto.setObservacion("");
+                if(format.equals("D")){
+                    dto.setDescripcionTrabajo(line);
+                }else if(format.equals("O")){
+                    dto.setObservacion(line);
+                }
+
+
             }
+
+            String fechaCrea="";
+            String horaCrea="";
+            String fechaMod="";
+            String horaMod="";
 
             for(Map.Entry<String, Object> entry:tffde.getT_trabff().get(0).entrySet()){
                 String key=entry.getKey();
@@ -190,8 +209,35 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     dto.setTipoTrabajo(valor);
                 }else if(key.equals("SEPES")){
                     dto.setSemana(valor);
+                }else if(key.equals("USCRE")){
+                    dto.setUsuarioCreacion(valor);
+                }else if(key.equals("FECRE")){
+                   fechaCrea=valor;
+                }else if(key.equals("HOCRE")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaCrea=formateador.format(date);
+                }else if(key.equals("USMOD")){
+                    dto.setUsuarioModif(valor);
+                }else if(key.equals("FEMOD")){
+                    fechaMod=valor;
+                }else if(key.equals("HOMOD")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaMod=formateador.format(date);
                 }
             }
+            dto.setFechaHoraCreacion(fechaCrea+" "+horaCrea);
+            if(!dto.getUsuarioModif().equals("")) {
+                dto.setFechaHoraModif(fechaMod + " " + horaMod);
+            }else{
+                dto.setFechaHoraModif("");
+            }
+
+            String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
+            dto.setFechas(Listfechas);
             List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
 
             for (int i=0; i<tffde.getT_trabaj().size(); i++){
@@ -212,13 +258,13 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                         String value=tffde.getT_fechas().get(j).get("PERNR").toString();
 
                         if(value.equals(detalle.getNroPersona())){
-
+                            String fecha="";
+                            String centro="";
                             for (Map.Entry<String, Object> entry1:tffde.getT_fechas().get(j).entrySet()){
                                 String key1=entry1.getKey();
                                 String valor1=entry1.getValue().toString();
 
-                                String fecha="";
-                                String centro="";
+                                logger.error("FECHA: "+key1+" : "+valor1);
                                 if(key1.equals("WERKS")){
                                     centro=valor1;
                                 }else if(key1.equals("FETRA")){
@@ -228,9 +274,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                     fecha = formateador.format(date);
 
                                 }
-                                fechas.put(fecha,centro);
+                             }
 
-                            }
+                            fechas.put(fecha, centro);
                         }
                     }
                     listFechas.add(fechas);
@@ -252,5 +298,26 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         }
 
         return dto;
+    }
+
+    public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{
+        String[]fechas=new String[7];
+
+        SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd");
+        Date date = parseador.parse(fechaInicio);
+        String inicio = formateador.format(date);
+
+        date = parseador.parse(fechaFin);
+        String fin = formateador.format(date);
+
+        int con=0;
+        for(int i=Integer.parseInt(inicio); i<=Integer.parseInt(fin);i++ ){
+
+            fechas[con]=String.valueOf(i);
+            con++;
+        }
+
+        return fechas;
     }
 }
