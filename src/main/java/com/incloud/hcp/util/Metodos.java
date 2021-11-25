@@ -215,6 +215,9 @@ public class Metodos {
         if (table.equals("MONEDA")) {
             tablita = "ZFLMND";
         }
+        if (table.equals("CARGOTRIPU")) {
+            tablita = "ZTBC_DATA";
+        }
         if (table.equals("ALMACEN")) {
             tablita = "ZFLALM";
         }
@@ -358,6 +361,8 @@ public class Metodos {
             wa="APLICACION EQ 'FL' AND PROGRAMA EQ 'ZFL_RFC_GEST_ACEITES' AND CAMPO EQ 'WERKS'";
         }else if(table.equals("TEMPHAB")){
             wa="FGPCN  = 'A'";
+        }else if (table.equals("CARGOTRIPU")) {
+            wa = "CODIG EQ 'PH' AND STATU EQ '1'";
         }
 
         return wa;
@@ -458,6 +463,8 @@ public class Metodos {
             fields= new String[] {"LOW","LOW"};
         }else if(table.equals("TEMPHAB")){
             fields= new String[] {"CDPCN","DSPCN"};
+        }else if (table.equals("CARGOTRIPU")) {
+            fields= new String[] {"ARGUM","DESCR"};
         }
 
         return fields;
