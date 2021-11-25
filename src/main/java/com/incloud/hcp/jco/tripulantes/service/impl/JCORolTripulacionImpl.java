@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.tripulantes.service.impl;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
+import com.incloud.hcp.jco.tripulantes.dto.PersonalDtoImport;
 import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionExports;
 import com.incloud.hcp.jco.tripulantes.dto.RolTripulacionImports;
 import com.incloud.hcp.jco.tripulantes.service.JCORolTripulacionService;
@@ -11,6 +12,8 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ import java.util.List;
 
 @Service
 public class JCORolTripulacionImpl implements JCORolTripulacionService {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public RolTripulacionExports RolTripulacion(RolTripulacionImports imports) throws Exception {
 
@@ -70,5 +73,39 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
 
 
         return rt;
+    }
+
+    @Override
+    public RolTripulacionExports PersonalRol(PersonalDtoImport imports) throws Exception {
+        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        //JCo
+
+        JCoRepository repo = destination.getRepository();
+
+        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
+        JCoParameterList importx = stfcConnection.getImportParameterList();
+        //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
+        importx.setValue("QUERY_TABLE", "ZTFL_ZARTR");
+        importx.setValue("DELIMITER", "|");
+        importx.setValue("P_USER", "FGARCIA");
+        importx.setValue("P_ORDER", "FERTR DESCENDING");
+        JCoParameterList tables = stfcConnection.getTableParameterList();
+        JCoTable tableImport = tables.getTable("OPTIONS");
+        tableImport.appendRow();
+
+        tableImport.setValue("WA", "WERKS EQ '"+imports.getEmbarcacion()+"'");
+
+
+        //Ejecutar Funcion
+        stfcConnection.execute(destination);
+
+        //DestinationAcce
+
+        //Recuperar Datos de SAP
+
+        JCoTable tableExport = tables.getTable("DATA");
+
+
+        return null;
     }
 }

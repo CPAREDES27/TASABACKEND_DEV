@@ -45,6 +45,17 @@ public class TripulantesRest {
         }
 
     }
+    @PostMapping(value = "/PersonalRol/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RolTripulacionExports> PersonalRol(@RequestBody PersonalDtoImport imports){
+
+        try {
+            return Optional.ofNullable(this.jcoRolTripulacionService.PersonalRol(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
     @PostMapping(value = "/RolTripulacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RolTripulacionExports> RolTripulacion(@RequestBody RolTripulacionImports imports){
