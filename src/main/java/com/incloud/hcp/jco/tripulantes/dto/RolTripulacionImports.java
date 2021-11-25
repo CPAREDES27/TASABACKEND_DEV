@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.tripulantes.dto;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class RolTripulacionImports {
@@ -14,6 +15,24 @@ public class RolTripulacionImports {
     private List<MaestroOptionsKey> p_options;
     private String[] fieldsT_zartr;
     private String[] fieldsT_dzart;
+    private List<HashMap<String, Object>> t_zartr;
+    private List<HashMap<String, Object>> t_dzart;
+
+    public List<HashMap<String, Object>> getT_zartr() {
+        return t_zartr;
+    }
+
+    public void setT_zartr(List<HashMap<String, Object>> t_zartr) {
+        this.t_zartr = t_zartr;
+    }
+
+    public List<HashMap<String, Object>> getT_dzart() {
+        return t_dzart;
+    }
+
+    public void setT_dzart(List<HashMap<String, Object>> t_dzart) {
+        this.t_dzart = t_dzart;
+    }
 
     public String[] getFieldsT_zartr() {
         return fieldsT_zartr;

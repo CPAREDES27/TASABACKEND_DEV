@@ -50,18 +50,26 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             EjecutarRFC exec= new EjecutarRFC();
             exec.setTable(tables, Tablas.T_OPCIONES,tmpOptions);
 
+            if(imports.getP_tope().equals("C")){
+
+                exec.setTable(tables, Tablas.T_ZARTR,imports.getT_zartr());
+                exec.setTable(tables, Tablas.T_DZART,imports.getT_dzart());
+            }
+
             stfcConnection.execute(destination);
+            if(imports.getP_tope().equals("L")) {
 
-            JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
-            JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
-
-
-            List<HashMap<String, Object>>  t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
-            List<HashMap<String, Object>>  t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
+                JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
+                JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
 
 
-            rt.setT_dzart(t_dzart);
-            rt.setT_zartr(t_zartr);
+                List<HashMap<String, Object>> t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
+                List<HashMap<String, Object>> t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
+
+
+                rt.setT_dzart(t_dzart);
+                rt.setT_zartr(t_zartr);
+            }
             rt.setMensaje("Ok");
 
         }catch (Exception e){

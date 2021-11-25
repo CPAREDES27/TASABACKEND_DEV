@@ -12,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
@@ -24,16 +23,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
     @Override
     public TrabajoFueraFaenaExports TrabajoFueraFaenaTransporte(TrabajoFueraFaenaImports imports) throws Exception {
 
-        logger.error("IP_NRTFF"+ imports.getIp_nrtff());
-        logger.error("IP_CDGFL"+ imports.getIp_cdgfl());
-        logger.error("IP_WERKS"+ imports.getIp_werks());
-        logger.error("IP_TOPE"+imports.getIp_tope());
-        logger.error("IP_CANTI"+ imports.getIp_canti());
-        logger.error("IP_TIPTR"+ imports.getIp_tiptr());
-        logger.error("IP_SEPES"+ imports.getIp_sepes());
-        logger.error("IP_ESREG"+ imports.getIp_esreg());
-        logger.error("IP_FECIN"+ imports.getIp_fecin());
-        logger.error("IP_FECFN"+ imports.getIp_fecfn());
+
         TrabajoFueraFaenaExports tff=new TrabajoFueraFaenaExports();
 
         try {
@@ -158,23 +148,93 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
         TrabajoFueraFaenaExports tffde= new TrabajoFueraFaenaExports();
 
+        TrabajoFueraFaenaDetalleExports dto= new TrabajoFueraFaenaDetalleExports();
+
         try{
             TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
 
+            String[] fechas= {"WERKS","PERNR","FETRA"};
+            String[] textos= {"TDLINE"};
+            String[] trabaj= {"PERNR","NOMBR"};
+            String[] trabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
-            tfi.setIp_cdgfl("");
-            tfi.setIp_esreg("");
-            tfi.setIp_sepes("");
-            tfi.setIp_tiptr("");
-            tfi.setIp_fecfn("");
-            tfi.setIp_fecin("");
-            tfi.setIp_werks("");
-            tfi.setIp_tope("");
+            tfi.setFieldst_trabff(trabaff);
+            tfi.setFieldst_fechas(fechas);
+            tfi.setFieldst_textos(textos);
+            tfi.setFieldst_trabaj(trabaj);
             List<Options>options= new ArrayList<>();
             tfi.setT_opcion(options);
 
             tffde=TrabajoFueraFaenaTransporte(tfi);
+
+
+            for(Map.Entry<String, Object> entry:tffde.getT_textos().get(0).entrySet()){
+                String key=entry.getKey();
+                String valor=entry.getValue().toString();
+                if(key.equals("TDLINE")){
+                    dto.setObservacion(valor);
+                }
+            }
+
+            for(Map.Entry<String, Object> entry:tffde.getT_trabff().get(0).entrySet()){
+                String key=entry.getKey();
+                String valor=entry.getValue().toString();
+                if(key.equals("NRTFF")){
+                    dto.setNrTrabajo(valor);
+                }else if(key.equals("FEINI")){
+                    dto.setFechaInicio(valor);
+                }else if(key.equals("FEFIN")){
+                    dto.setFechaFin(valor);
+                }else if(key.equals("TIPTR")){
+                    dto.setTipoTrabajo(valor);
+                }else if(key.equals("SEPES")){
+                    dto.setSemana(valor);
+                }
+            }
+            List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
+
+            for (int i=0; i<tffde.getT_trabaj().size(); i++){
+                    TrabajoFFDetalleDto detalle=new TrabajoFFDetalleDto();
+                for(Map.Entry<String, Object>entry: tffde.getT_trabaj().get(i).entrySet()){
+                    String key=entry.getKey();
+                    String valor=entry.getValue().toString();
+
+                    if(key.equals("PERNR")){
+                        detalle.setNroPersona(valor);
+                    }else if(key.equals("NOMBR")){
+                        detalle.setNombre(valor);
+                    }
+
+                    for(int j=0; j<tffde.getT_fechas().size(); j++){
+
+                        String value=tffde.getT_fechas().get(j).get("PERNR").toString();
+
+                        if(value.equals(detalle.getNroPersona())){
+                            for (Map.Entry<String, Object> entry1:tffde.getT_fechas().get(j).entrySet()){
+                                String key1=entry1.getKey();
+                                String valor1=entry1.getValue().toString();
+
+                                String fecha="";
+                                String centro="";
+                                if(key1.equals("WERKS")){
+                                    centro=valor1;
+                                }else if(key1.equals("FETRA")){
+                                    SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+                                    SimpleDateFormat formateador = new SimpleDateFormat("dd");
+                                    Date date = parseador.parse(valor);
+                                    valor = formateador.format(date);
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                }
+            }
+
 
 
         }catch (Exception e){

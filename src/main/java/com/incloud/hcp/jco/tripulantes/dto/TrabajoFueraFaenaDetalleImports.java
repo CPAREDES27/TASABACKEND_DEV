@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class TrabajoFueraFaenaDetalleImports {
 
     private String nroTrabajo;

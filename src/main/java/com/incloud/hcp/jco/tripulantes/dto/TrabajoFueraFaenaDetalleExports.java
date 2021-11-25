@@ -5,43 +5,73 @@ import java.util.List;
 
 public class TrabajoFueraFaenaDetalleExports {
 
-    private List<HashMap<String, Object>> t_trabff;
-    private List<HashMap<String, Object>> t_trabaj;
-    private List<HashMap<String, Object>> t_fechas;
-    private List<HashMap<String, Object>> t_textos;
+
+    private String nrTrabajo;
+    private String tipoTrabajo;
+    private String semana;
+    private String fechaInicio;
+    private String fechaFin;
+    private String observacion;
+    private List<HashMap<String, Object>> detalle;
     private String mensaje;
 
-    public List<HashMap<String, Object>> getT_trabff() {
-        return t_trabff;
+    public String getNrTrabajo() {
+        return nrTrabajo;
     }
 
-    public void setT_trabff(List<HashMap<String, Object>> t_trabff) {
-        this.t_trabff = t_trabff;
+    public void setNrTrabajo(String nrTrabajo) {
+        this.nrTrabajo = nrTrabajo;
     }
 
-    public List<HashMap<String, Object>> getT_trabaj() {
-        return t_trabaj;
+    public String getTipoTrabajo() {
+        return tipoTrabajo;
     }
 
-    public void setT_trabaj(List<HashMap<String, Object>> t_trabaj) {
-        this.t_trabaj = t_trabaj;
+    public void setTipoTrabajo(String tipoTrabajo) {
+        this.tipoTrabajo = tipoTrabajo;
     }
 
-    public List<HashMap<String, Object>> getT_fechas() {
-        return t_fechas;
+    public String getSemana() {
+        return semana;
     }
 
-    public void setT_fechas(List<HashMap<String, Object>> t_fechas) {
-        this.t_fechas = t_fechas;
+    public void setSemana(String semana) {
+        this.semana = semana;
     }
 
-    public List<HashMap<String, Object>> getT_textos() {
-        return t_textos;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setT_textos(List<HashMap<String, Object>> t_textos) {
-        this.t_textos = t_textos;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public List<HashMap<String, Object>> getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(List<HashMap<String, Object>> detalle) {
+        this.detalle = detalle;
+    }
+
+
 
     public String getMensaje() {
         return mensaje;
