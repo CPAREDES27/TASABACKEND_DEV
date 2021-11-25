@@ -201,10 +201,10 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/PDFTrabajoFF", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFExports> GenerarPDFTrabajoFF() {
+    public ResponseEntity<PDFExports> GenerarPDFTrabajoFF(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTrabajoFF())
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTrabajoFF(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
