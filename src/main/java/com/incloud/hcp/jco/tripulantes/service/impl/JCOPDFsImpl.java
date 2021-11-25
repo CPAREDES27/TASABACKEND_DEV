@@ -33,6 +33,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
     @Autowired
     private JCOImpresFormatosProduceImpl jcoImpresFormatosProduce;
+    @Autowired
+    private JCOTrabajoFueraFaenaImpl jcoTrabajoFueraFaena;
 
     public PDFExports GenerarPDFZarpe(PDFZarpeImports imports)throws Exception{
 
@@ -3634,11 +3636,15 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
     }
 
+
+
     public PDFExports GenerarPDFTrabajoFF()throws Exception{
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         PDFTrabajoFFDto dto= new PDFTrabajoFFDto();
 
+        TrabajoFueraFaenaImports tfi= new TrabajoFueraFaenaImports();
+        TrabajoFueraFaenaExports tfe= jcoTrabajoFueraFaena.TrabajoFueraFaenaTransporte(tfi);
 
         dto.setNumeroTrabajo("prueba");
         dto.setTipoTrabajo("prueba");

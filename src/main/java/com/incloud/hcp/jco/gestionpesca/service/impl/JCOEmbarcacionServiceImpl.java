@@ -598,5 +598,48 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return vm;
     }
 
+    public ConsultaReservaExport consultarReserva(ConsultaReservaImport cri){
+        ConsultaReservaExport cre = new ConsultaReservaExport();
+        try {
+            int marea = cri.getMarea();
+            String usuario = cri.getUsuario();
+            String reserva = cri.getReserva();
+            String flag = cri.getFlagDetalle();
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GCOM_CONS_COMBU);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            importx.setValue("P_USER", usuario);
+
+            if(flag.equalsIgnoreCase("X")){
+                importx.setValue("P_RESERVA", reserva);
+                importx.setValue("P_NRMAR", marea);
+            }else{
+                JCoTable tableImport = tables.getTable("OPTIONS");
+                tableImport.appendRow();
+                String consulta = "NRMAR = " + marea + " AND ESRSV = 'S'";
+                tableImport.setValue("DATA", consulta);
+            }
+
+
+            stfcConnection.execute(destination);
+            JCoTable t_reservas = tables.getTable(Tablas.T_RESERVAS);
+            JCoTable t_detalle = tables.getTable(Tablas.T_DETALLE);
+
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> listaReservas = metodo.ListarObjetos(t_reservas);
+            List<HashMap<String, Object>> listaDetalle = metodo.ListarObjetos(t_detalle);
+            cre.setT_detalle(listaDetalle);
+            cre.setT_reservas(listaReservas);
+
+        }catch(Exception e){
+            cre.setMensaje(e.getMessage());
+        }
+        return cre;
+    }
+
 
 }

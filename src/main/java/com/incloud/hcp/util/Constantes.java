@@ -67,6 +67,7 @@ public class Constantes {
     public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";
     public static String ZFL_RFC_GPES_CONS_BIOM="ZFL_RFC_GPES_CONS_BIOM";
     public static String ZFL_RFC_GESP_CONSULTA_CHDPM="ZFL_RFC_GESP_CONSULTA_CHDPM";
+    public static String ZFL_RFC_GCOM_CONS_COMBU="ZFL_RFC_GCOM_CONS_COMBU";
 
     // Política de precios
     public static String ZFL_RFC_LECT_PREC_PESC="ZFL_RFC_LECT_PREC_PESC";
