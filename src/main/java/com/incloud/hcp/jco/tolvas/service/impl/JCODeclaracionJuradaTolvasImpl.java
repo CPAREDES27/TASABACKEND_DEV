@@ -152,7 +152,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
             imports.put("ROWSKIPS", "");
             imports.put("ROWCOUNT", "0");
             imports.put("P_USER", "FGARCIA");
-            imports.put("P_ORDER", "");
+            imports.put("P_ORDER", "INBAL ASCENDING");
             //setear mapeo de tabla options
 
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();

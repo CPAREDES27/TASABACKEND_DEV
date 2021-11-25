@@ -43,4 +43,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENARMADOR2=" AND ESREG = 'S'";
     public static String CONSGENOBTTALLAMIN="CDSPC eq '";
     public static String CONSGENTEMPVEDA="CDTPC = 'V' AND FHCAL LIKE '";
+    public static String CONSGENBSQTRIPU="WERKS EQ '";
+    public static String CONSGENBSQTRIPU1="CDRTR EQ '" ;
+    public static String CONSGENBSQTRIPU2="ABKRS EQ 'TT' AND CENTRO EQ '";
 }
