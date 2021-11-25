@@ -12,7 +12,7 @@ public class TrabajoFueraFaenaDetalleExports {
     private String fechaInicio;
     private String fechaFin;
     private String observacion;
-    private List<HashMap<String, Object>> detalle;
+    private List<TrabajoFFDetalleDto> detalle;
     private String mensaje;
 
     public String getNrTrabajo() {
@@ -63,11 +63,11 @@ public class TrabajoFueraFaenaDetalleExports {
         this.observacion = observacion;
     }
 
-    public List<HashMap<String, Object>> getDetalle() {
+    public List<TrabajoFFDetalleDto> getDetalle() {
         return detalle;
     }
 
-    public void setDetalle(List<HashMap<String, Object>> detalle) {
+    public void setDetalle(List<TrabajoFFDetalleDto> detalle) {
         this.detalle = detalle;
     }
 

@@ -232,7 +232,7 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/TrabajoFueraFaenaDetalle", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrabajoFueraFaenaExports> TrabajoFueraFaenaDetalle(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
+    public ResponseEntity<TrabajoFueraFaenaDetalleExports> TrabajoFueraFaenaDetalle(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.DetalleTrabajoFueraFaenaTransporte(imports))

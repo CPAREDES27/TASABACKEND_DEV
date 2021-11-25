@@ -144,7 +144,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         return gt;
     }
 
-    public TrabajoFueraFaenaExports DetalleTrabajoFueraFaenaTransporte(TrabajoFueraFaenaDetalleImports imports)throws Exception{
+    public TrabajoFueraFaenaDetalleExports DetalleTrabajoFueraFaenaTransporte(TrabajoFueraFaenaDetalleImports imports)throws Exception{
 
         TrabajoFueraFaenaExports tffde= new TrabajoFueraFaenaExports();
 
@@ -153,16 +153,16 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         try{
             TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
 
-            String[] fechas= {"WERKS","PERNR","FETRA"};
-            String[] textos= {"TDLINE"};
-            String[] trabaj= {"PERNR","NOMBR"};
-            String[] trabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES"};
+            String[] fieldfechas= {"WERKS","PERNR","FETRA"};
+            String[] fieldtextos= {"TDLINE"};
+            String[] fieldtrabaj= {"PERNR","NOMBR"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
-            tfi.setFieldst_trabff(trabaff);
-            tfi.setFieldst_fechas(fechas);
-            tfi.setFieldst_textos(textos);
-            tfi.setFieldst_trabaj(trabaj);
+            tfi.setFieldst_trabff(fieldtrabaff);
+            tfi.setFieldst_fechas(fieldfechas);
+            tfi.setFieldst_textos(fieldtextos);
+            tfi.setFieldst_trabaj(fieldtrabaj);
             List<Options>options= new ArrayList<>();
             tfi.setT_opcion(options);
 
@@ -205,12 +205,14 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     }else if(key.equals("NOMBR")){
                         detalle.setNombre(valor);
                     }
-
+                    List<HashMap<String, Object>> listFechas= new ArrayList<>();
+                    HashMap<String, Object>fechas= new HashMap<>();
                     for(int j=0; j<tffde.getT_fechas().size(); j++){
 
                         String value=tffde.getT_fechas().get(j).get("PERNR").toString();
 
                         if(value.equals(detalle.getNroPersona())){
+
                             for (Map.Entry<String, Object> entry1:tffde.getT_fechas().get(j).entrySet()){
                                 String key1=entry1.getKey();
                                 String valor1=entry1.getValue().toString();
@@ -222,27 +224,33 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                 }else if(key1.equals("FETRA")){
                                     SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
                                     SimpleDateFormat formateador = new SimpleDateFormat("dd");
-                                    Date date = parseador.parse(valor);
-                                    valor = formateador.format(date);
+                                    Date date = parseador.parse(valor1);
+                                    fecha = formateador.format(date);
+
                                 }
+                                fechas.put(fecha,centro);
 
                             }
                         }
-
-
                     }
-
+                    listFechas.add(fechas);
+                    detalle.setFechas(listFechas);
+                    detalle.setCargo("");
+                    detalle.setCentro("");
+                    detalle.setDestino("");
+                    detalle.setOrigen("");
                 }
+                ListDetalle.add(detalle);
             }
-
-
+            dto.setDetalle(ListDetalle);
+            dto.setMensaje("Ok");
 
         }catch (Exception e){
 
-            tffde.setMensaje(e.getMessage());
+            dto.setMensaje(e.getMessage());
 
         }
 
-        return tffde;
+        return dto;
     }
 }
