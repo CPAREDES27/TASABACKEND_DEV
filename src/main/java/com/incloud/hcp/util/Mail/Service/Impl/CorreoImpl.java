@@ -208,7 +208,7 @@ public class CorreoImpl implements CorreoService {
     }
 
     /**
-     * Evalua las condiciones de emplear los correos de ptoducción o de pruebas
+     * Evalua las condiciones de emplear los correos de ptoducción, de pruebas o ambos
      *
      * @param enviosPrd condición para indicar que se enviará a los correos de producción
      * @param emailsPrd correos de producción
@@ -216,7 +216,7 @@ public class CorreoImpl implements CorreoService {
      * @throws Exception
      */
     public List<String> verificarEmails(String enviosPrd, List<String> emailsPrd) throws Exception {
-        List<String> correos;
+        List<String> correos = new ArrayList<>();
         try {
             String[] fields = {"CDCNS", "DESCR", "VAL01", "VAL02", "VAL03", "VAL04"};
             MaestroImportsKey importsReadTabla = new MaestroImportsKey();
@@ -245,11 +245,15 @@ public class CorreoImpl implements CorreoService {
             String enviarCorreosPrueba = constanteEnviarCorreosPrueba != null ? constanteEnviarCorreosPrueba.get("VAL01").toString() : "";
             String enviarCorreoPrd = constanteEnviarCorreosPrd != null ? constanteEnviarCorreosPrd.get("VAL01").toString() : "";
 
+            if (enviosPrd.equalsIgnoreCase("X") && enviarCorreoPrd.equalsIgnoreCase("X")) {
+                //Añadir los correos de PRD
+                correos = new ArrayList<>(emailsPrd);
+            }
+
             if (enviarCorreosPrueba.equalsIgnoreCase("X")) {
-                //Mandar los correos de prueba
+                //Añadir los correos de prueba
 
                 //Obtener correos de prueba
-                correos = new ArrayList<>();
                 HashMap<String, Object> constanteCorreos = constantes.stream().filter(constante -> constante.get("CDCNS").toString().equals("85")).findFirst().orElse(null);
                 if (constanteCorreos != null) {
                     String correo1 = constanteCorreos.get("VAL01").toString();
@@ -270,14 +274,9 @@ public class CorreoImpl implements CorreoService {
                         correos.add(correo4);
                     }
                 }
-            } else if (enviosPrd.equalsIgnoreCase("X") && enviarCorreoPrd.equalsIgnoreCase("X")) {
-                //Mandar los correos de PRD
-                correos = emailsPrd;
-            } else {
-                correos = new ArrayList<>();
             }
         } catch (Exception ex) {
-            correos = new ArrayList<>();
+            throw new Exception(ex.getMessage());
         }
 
         return correos;
