@@ -51,11 +51,11 @@ public class CorreoImpl implements CorreoService {
             String body = "<p>Los siguientes horómetros han sido marcados como averiados en la embarcacion ";
             body += "<strong>" + imports.getEmbarcacion().getDescripcion() + "</strong>:</p>";
 
-            for (EventoDto evento : imports.getEmbarcacion().getEventos()) {
-                ArrayList<HorometroDto> listHorometrosAveriados = evento.getHorometrosAveriados();
+            for (EventoForEmailDto evento : imports.getEmbarcacion().getEventos()) {
+                ArrayList<HorometroForEmailDto> listHorometrosAveriados = evento.getHorometrosAveriados();
                 body += "<li>Para el evento " + evento.getNroEvento() + ": ";
                 for (int i = 0; i < listHorometrosAveriados.size(); i++) {
-                    HorometroDto horometroAveriado = listHorometrosAveriados.get(i);
+                    HorometroForEmailDto horometroAveriado = listHorometrosAveriados.get(i);
                     body += horometroAveriado.getNombre();
                     if (i < listHorometrosAveriados.size()) {
                         body += ", ";
@@ -111,7 +111,7 @@ public class CorreoImpl implements CorreoService {
     public Mensaje EnviarCorreosSiniestro(InfoEventoImports imports) throws Exception {
         Mensaje msj = new Mensaje();
         try {
-            for (SiniestroImports siniestro : imports.getEvento().getSiniestros()) {
+            for (SiniestroForEmailDto siniestro : imports.getEvento().getSiniestros()) {
                 String remitente = "mareaeventos@tasa.com.pe";
                 String asunto = "Marea y Eventos - Siniestro";
                 //Cuerpo del correo

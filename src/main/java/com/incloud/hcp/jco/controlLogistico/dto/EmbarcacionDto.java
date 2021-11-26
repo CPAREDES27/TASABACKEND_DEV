@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class EmbarcacionDto {
     private String descripcion;
-    private ArrayList<EventoDto> eventos;
+    private ArrayList<EventoForEmailDto> eventos;
 
     public String getDescripcion() {
         return descripcion;
@@ -14,11 +14,11 @@ public class EmbarcacionDto {
         this.descripcion = descripcion;
     }
 
-    public ArrayList<EventoDto> getEventos() {
+    public ArrayList<EventoForEmailDto> getEventos() {
         return eventos;
     }
 
-    public void setEventos(ArrayList<EventoDto> eventos) {
+    public void setEventos(ArrayList<EventoForEmailDto> eventos) {
         this.eventos = eventos;
     }
 }
