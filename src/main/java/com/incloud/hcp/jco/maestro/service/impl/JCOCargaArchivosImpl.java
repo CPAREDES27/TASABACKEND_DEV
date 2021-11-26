@@ -69,7 +69,8 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             imports.put("I_DIRECTORIO", importsParam.getI_directorio());
             imports.put("I_FILENAME", importsParam.getI_filename());
             imports.put("I_ACCION", importsParam.getI_accion());
-
+            imports.put("I_PROCESOBTP",importsParam.getI_procesobtp());
+            imports.put("I_USER",importsParam.getI_user());
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
