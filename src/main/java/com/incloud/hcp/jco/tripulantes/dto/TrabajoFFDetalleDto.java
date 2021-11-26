@@ -8,7 +8,7 @@ public class TrabajoFFDetalleDto {
     private String nroPersona;
     private String nombre;
     private String cargo;
-    private List<HashMap<String,Object>> fechas;
+    private HashMap<String,Object> fechas;
     private String origen;
     private String centro;
     private String destino;
@@ -38,11 +38,11 @@ public class TrabajoFFDetalleDto {
         this.cargo = cargo;
     }
 
-    public List<HashMap<String, Object>> getFechas() {
+    public HashMap<String, Object> getFechas() {
         return fechas;
     }
 
-    public void setFechas(List<HashMap<String, Object>> fechas) {
+    public void setFechas(HashMap<String, Object> fechas) {
         this.fechas = fechas;
     }
 

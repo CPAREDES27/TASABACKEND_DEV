@@ -324,6 +324,12 @@ public class Metodos {
             tablita = "ZTB_CONSTANTES";
         }else if(table.equals("TEMPHAB")){
             tablita = "ZFLPCN";
+        }else if(table.equals("SITUACIONTRIPU")){
+            tablita = "ZTBC_DATA";
+        }else if(table.equals("CIUDADTARIFA")){
+            tablita = "ZTFL_ZACIU";
+        }else if(table.equals("GRUPOFLOTA")){
+            tablita = "ZFLGFL";
         }
         return tablita;
     }
@@ -363,6 +369,8 @@ public class Metodos {
             wa="FGPCN  = 'A'";
         }else if (table.equals("CARGOTRIPU")) {
             wa = "CODIG EQ 'PH' AND STATU EQ '1'";
+        }else if(table.equals("SITUACIONTRIPU")){
+            wa="CODIG EQ 'PI' AND STATU EQ '1'";
         }
 
         return wa;
@@ -465,9 +473,29 @@ public class Metodos {
             fields= new String[] {"CDPCN","DSPCN"};
         }else if (table.equals("CARGOTRIPU")) {
             fields= new String[] {"ARGUM","DESCR"};
+        }else if(table.equals("SITUACIONTRIPU")){
+            fields= new String[] {"ARGUM", "DESCR"};
+        }else if(table.equals("CIUDADTARIFA")){
+            fields= new String[] {"CDCIU", "DESCR"};
+        }else if(table.equals("GRUPOFLOTA")){
+            fields= new String[] {"CDGFL", "DSGFL"};
         }
 
         return fields;
+    }
+    public String returnOrder(String table){
+        String order="";
+
+        if(table.equals("1ZONAPESCA")){
+            order="CDZPC ASCENDING";
+        }else if(table.equals("CIUDADTARIFA")){
+            order="DESCR ASCENDING ";
+        }else if(table.equals("GRUPOFLOTA")){
+            order="CDGFL ASCENDING";
+        }
+
+
+        return order;
     }
 
     public List<HashMap<String, Object>> ValidarOptions(List<MaestroOptions> option ,List<MaestroOptionsKey> options){
@@ -1326,9 +1354,12 @@ public class Metodos {
                         String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
                         String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
                         String[] fieldname = metodo.returnField(domParams.getDomname());
+                        String order=metodo.returnOrder(domParams.getDomname());
+
                         importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
                         importx.setValue("DELIMITER", "|");
                         importx.setValue("P_USER", "FGARCIA");
+                        importx.setValue("P_ORDER", order);
 
 
                         JCoParameterList tables = stfcConnection.getTableParameterList();

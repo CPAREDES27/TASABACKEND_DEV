@@ -196,6 +196,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             String fechaMod="";
             String horaMod="";
 
+            Metodos me=new Metodos();
+
             for(Map.Entry<String, Object> entry:tffde.getT_trabff().get(0).entrySet()){
                 String key=entry.getKey();
                 String valor=entry.getValue().toString();
@@ -206,7 +208,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 }else if(key.equals("FEFIN")){
                     dto.setFechaFin(valor);
                 }else if(key.equals("TIPTR")){
-                    dto.setTipoTrabajo(valor);
+                    String dom=me.ObtenerDominio("ZDO_TIPOTRABAJO",valor);
+                    dto.setTipoTrabajo(dom);
                 }else if(key.equals("SEPES")){
                     dto.setSemana(valor);
                 }else if(key.equals("USCRE")){
@@ -251,7 +254,6 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     }else if(key.equals("NOMBR")){
                         detalle.setNombre(valor);
                     }
-                    List<HashMap<String, Object>> listFechas= new ArrayList<>();
                     HashMap<String, Object>fechas= new HashMap<>();
                     for(int j=0; j<tffde.getT_fechas().size(); j++){
 
@@ -279,8 +281,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                             fechas.put(fecha, centro);
                         }
                     }
-                    listFechas.add(fechas);
-                    detalle.setFechas(listFechas);
+
+                    detalle.setFechas(fechas);
                     detalle.setCargo("");
                     detalle.setCentro("");
                     detalle.setDestino("");
