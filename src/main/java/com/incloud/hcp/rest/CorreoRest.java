@@ -1,5 +1,7 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.controlLogistico.dto.InfoEventoImports;
+import com.incloud.hcp.jco.controlLogistico.dto.InfoHorometrosAveriadosImport;
 import com.incloud.hcp.util.Mail.Dto.CorreoDto;
 import com.incloud.hcp.util.Mail.Service.CorreoService;
 import com.incloud.hcp.util.Mail.Dto.NotifDescTolvasDto;
@@ -58,6 +60,37 @@ public class CorreoRest {
         }
     }
 
+    @PostMapping(value = "/InformarHorometroAveriado", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> InformarHorometroAveriado(@RequestBody NotifDescTolvasDto imports) {
 
+        try {
+            return Optional.ofNullable(this.correoService.EnviarNotifDescTolvas(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/EnviarCorreosSiniestro", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> EnviarCorreosSiniestro(@RequestBody InfoEventoImports imports) {
+
+        try {
+            return Optional.ofNullable(this.correoService.EnviarCorreosSiniestro(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/EnviarInfoHorometroAveriado", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Mensaje> EnviarInfoHorometroAveriado(@RequestBody InfoHorometrosAveriadosImport imports) {
+
+        try {
+            return Optional.ofNullable(this.correoService.EnviarInfoHorometroAveriado(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 
 }
