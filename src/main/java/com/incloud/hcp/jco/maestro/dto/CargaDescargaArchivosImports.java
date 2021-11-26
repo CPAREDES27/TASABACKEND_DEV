@@ -6,6 +6,24 @@ public class CargaDescargaArchivosImports {
     private String i_directorio;
     private String i_filename;
     private String i_accion;
+    private String i_procesobtp;
+    private String i_user;
+
+    public String getI_procesobtp() {
+        return i_procesobtp;
+    }
+
+    public void setI_procesobtp(String i_procesobtp) {
+        this.i_procesobtp = i_procesobtp;
+    }
+
+    public String getI_user() {
+        return i_user;
+    }
+
+    public void setI_user(String i_user) {
+        this.i_user = i_user;
+    }
 
     public String getI_trama() {
         return i_trama;
