@@ -320,8 +320,6 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
 
 
-
-
     public PDFExports PlantillaPDF(DeclaracionJuradaImports imports)throws Exception{
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
@@ -387,8 +385,8 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
                 }
 
             }
-            det[4]="01";
-            det[5]="01";
+            det[4]=ObtenerCodEspecie();
+            det[5]=ObtenerCodDestino();
             ListDetalle.add(det);
         }
 
@@ -898,7 +896,83 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return texty;
     }
 
+    public String ObtenerCodEspecie()throws Exception{
+        String codEspecie="";
 
+        EjecutarRFC exec =new EjecutarRFC();
+        MaestroExport me;
+        try{
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("QUERY_TABLE", "ZFLCNS");
+            imports.put("DELIMITER", "|");
+            imports.put("NO_DATA", "");
+            imports.put("ROWSKIPS", "");
+            imports.put("ROWCOUNT", "");
+            imports.put("P_USER", "FGARCIA");
+            //setear mapeo de tabla options
+
+
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+
+            HashMap<String, Object> record = new HashMap<String, Object>();
+            record.put("WA", "CDCNS = '81'");
+            tmpOptions.add(record);
+
+            String[]fields={"VAL01"};
+
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+
+            for(Map.Entry<String, Object> entry:me.getData().get(0).entrySet()){
+                codEspecie= entry.getValue().toString();
+
+            }
+
+        }catch (Exception e){
+
+        }
+
+        return codEspecie;
+    }
+
+    public String ObtenerCodDestino()throws Exception{
+        String codEspecie="";
+
+        EjecutarRFC exec =new EjecutarRFC();
+        MaestroExport me;
+        try{
+            HashMap<String, Object> imports = new HashMap<String, Object>();
+            imports.put("QUERY_TABLE", "ZFLCNS");
+            imports.put("DELIMITER", "|");
+            imports.put("NO_DATA", "");
+            imports.put("ROWSKIPS", "");
+            imports.put("ROWCOUNT", "");
+            imports.put("P_USER", "FGARCIA");
+            //setear mapeo de tabla options
+
+
+            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+
+            HashMap<String, Object> record = new HashMap<String, Object>();
+            record.put("WA", "CDCNS = '82'");
+            tmpOptions.add(record);
+
+            String[]fields={"VAL01"};
+
+            //ejecutar RFC ZFL_RFC_READ_TABLE
+            me = exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+
+            for(Map.Entry<String, Object> entry:me.getData().get(0).entrySet()){
+                codEspecie= entry.getValue().toString();
+
+            }
+
+        }catch (Exception e){
+
+        }
+
+        return codEspecie;
+    }
 
     public String ConvertirFecha(String valor)throws Exception{
         SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
