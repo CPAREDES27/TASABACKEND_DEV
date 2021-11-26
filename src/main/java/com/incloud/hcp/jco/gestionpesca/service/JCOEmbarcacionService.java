@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.gestionpesca.service;
 import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.maestro.dto.AnularDescargaExports;
 import com.incloud.hcp.jco.maestro.dto.AnularDescargaImports;
+import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MensajeDto;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 
@@ -22,4 +23,7 @@ public interface JCOEmbarcacionService {
     BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception;
 
     ValidaMareaExports ValidarMarea(ValidaMareaImports imports)throws Exception;
+
+    ConsultaReservaExport consultarReserva(ConsultaReservaImport imports)throws Exception;
+
 }

@@ -133,9 +133,12 @@ public class JCODominiosImpl implements JCODominiosService {
                             String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
                             String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());
                             String[] fieldname = metodo.returnField(domParams.getDomname());
+                            String order=metodo.returnOrder(domParams.getDomname());
+
                             importx.setValue("QUERY_TABLE", TABLE_READ_TABLE);
                             importx.setValue("DELIMITER", "|");
                             importx.setValue("P_USER", "FGARCIA");
+                            importx.setValue("P_ORDER", order);
 
                             logger.error("TABLA= "+TABLE_READ_TABLE);
                             logger.error("WA= "+WA_READ_TABLE);

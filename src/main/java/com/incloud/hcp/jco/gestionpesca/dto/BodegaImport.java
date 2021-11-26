@@ -8,6 +8,17 @@ public class BodegaImport {
         private String codEmba;
         private String codPlanta;
 
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    private String usuario;
+
     public String getCodEmba() {
         return codEmba;
     }

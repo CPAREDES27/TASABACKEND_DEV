@@ -7,18 +7,22 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import javax.swing.text.html.Option;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public TrabajoFueraFaenaExports TrabajoFueraFaenaTransporte(TrabajoFueraFaenaImports imports) throws Exception {
+
 
         TrabajoFueraFaenaExports tff=new TrabajoFueraFaenaExports();
 
@@ -58,6 +62,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             stfcConnection.execute(destination);
 
             JCoTable T_TRABFF = tables.getTable(Tablas.T_TRABFF);
+
             JCoTable T_TRABAJ = tables.getTable(Tablas.T_TRABAJ);
             JCoTable T_FECHAS = tables.getTable(Tablas.T_FECHAS);
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
@@ -69,6 +74,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
             List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
             List<HashMap<String, Object>>  t_mensajes = metodo.ListarObjetos(T_MENSAJES);
+            logger.error("t_trabff"+ t_trabff.size());
+            logger.error("t_trabaj"+ t_trabaj.size());
+            logger.error("t_fechas"+ t_fechas.size());
+            logger.error("t_textos"+ t_textos.size());
+
 
             tff.setT_trabff(t_trabff);
             tff.setT_trabaj(t_trabaj);
@@ -132,5 +142,184 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
 
         return gt;
+    }
+
+    public TrabajoFueraFaenaDetalleExports DetalleTrabajoFueraFaenaTransporte(TrabajoFueraFaenaDetalleImports imports)throws Exception{
+
+        TrabajoFueraFaenaExports tffde= new TrabajoFueraFaenaExports();
+
+        TrabajoFueraFaenaDetalleExports dto= new TrabajoFueraFaenaDetalleExports();
+
+        try{
+            TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
+
+            String[] fieldfechas= {"WERKS","PERNR","FETRA"};
+            String[] fieldtextos= {"TDLINE","TDFORMAT"};
+            String[] fieldtrabaj= {"PERNR","NOMBR"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD"};
+            tfi.setIp_nrtff(imports.getNroTrabajo());
+            tfi.setIp_canti("200");
+            tfi.setFieldst_trabff(fieldtrabaff);
+            tfi.setFieldst_fechas(fieldfechas);
+            tfi.setFieldst_textos(fieldtextos);
+            tfi.setFieldst_trabaj(fieldtrabaj);
+            List<Options>options= new ArrayList<>();
+            tfi.setT_opcion(options);
+
+            tffde=TrabajoFueraFaenaTransporte(tfi);
+
+
+            for (int i=0; i<tffde.getT_textos().size();i++){
+                String format="";
+                String line="";
+                for(Map.Entry<String, Object> entry:tffde.getT_textos().get(i).entrySet()){
+                    String key=entry.getKey();
+                    String valor=entry.getValue().toString();
+                    if(key.equals("TDLINE")){
+                        line=valor;
+                    }else if(key.equals("TDFORMAT")){
+                        format=valor;
+                    }
+                }
+                dto.setObservacion("");
+                if(format.equals("D")){
+                    dto.setDescripcionTrabajo(line);
+                }else if(format.equals("O")){
+                    dto.setObservacion(line);
+                }
+
+
+            }
+
+            String fechaCrea="";
+            String horaCrea="";
+            String fechaMod="";
+            String horaMod="";
+
+            Metodos me=new Metodos();
+
+            for(Map.Entry<String, Object> entry:tffde.getT_trabff().get(0).entrySet()){
+                String key=entry.getKey();
+                String valor=entry.getValue().toString();
+                if(key.equals("NRTFF")){
+                    dto.setNrTrabajo(valor);
+                }else if(key.equals("FEINI")){
+                    dto.setFechaInicio(valor);
+                }else if(key.equals("FEFIN")){
+                    dto.setFechaFin(valor);
+                }else if(key.equals("TIPTR")){
+                    String dom=me.ObtenerDominio("ZDO_TIPOTRABAJO",valor);
+                    dto.setTipoTrabajo(dom);
+                }else if(key.equals("SEPES")){
+                    dto.setSemana(valor);
+                }else if(key.equals("USCRE")){
+                    dto.setUsuarioCreacion(valor);
+                }else if(key.equals("FECRE")){
+                   fechaCrea=valor;
+                }else if(key.equals("HOCRE")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaCrea=formateador.format(date);
+                }else if(key.equals("USMOD")){
+                    dto.setUsuarioModif(valor);
+                }else if(key.equals("FEMOD")){
+                    fechaMod=valor;
+                }else if(key.equals("HOMOD")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaMod=formateador.format(date);
+                }
+            }
+            dto.setFechaHoraCreacion(fechaCrea+" "+horaCrea);
+            if(!dto.getUsuarioModif().equals("")) {
+                dto.setFechaHoraModif(fechaMod + " " + horaMod);
+            }else{
+                dto.setFechaHoraModif("");
+            }
+
+            String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
+            dto.setFechas(Listfechas);
+            List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
+
+            for (int i=0; i<tffde.getT_trabaj().size(); i++){
+                    TrabajoFFDetalleDto detalle=new TrabajoFFDetalleDto();
+                for(Map.Entry<String, Object>entry: tffde.getT_trabaj().get(i).entrySet()){
+                    String key=entry.getKey();
+                    String valor=entry.getValue().toString();
+
+                    if(key.equals("PERNR")){
+                        detalle.setNroPersona(valor);
+                    }else if(key.equals("NOMBR")){
+                        detalle.setNombre(valor);
+                    }
+                    HashMap<String, Object>fechas= new HashMap<>();
+                    for(int j=0; j<tffde.getT_fechas().size(); j++){
+
+                        String value=tffde.getT_fechas().get(j).get("PERNR").toString();
+
+                        if(value.equals(detalle.getNroPersona())){
+                            String fecha="";
+                            String centro="";
+                            for (Map.Entry<String, Object> entry1:tffde.getT_fechas().get(j).entrySet()){
+                                String key1=entry1.getKey();
+                                String valor1=entry1.getValue().toString();
+
+                                logger.error("FECHA: "+key1+" : "+valor1);
+                                if(key1.equals("WERKS")){
+                                    centro=valor1;
+                                }else if(key1.equals("FETRA")){
+                                    SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+                                    SimpleDateFormat formateador = new SimpleDateFormat("dd");
+                                    Date date = parseador.parse(valor1);
+                                    fecha = formateador.format(date);
+
+                                }
+                             }
+
+                            fechas.put(fecha, centro);
+                        }
+                    }
+
+                    detalle.setFechas(fechas);
+                    detalle.setCargo("");
+                    detalle.setCentro("");
+                    detalle.setDestino("");
+                    detalle.setOrigen("");
+                }
+                ListDetalle.add(detalle);
+            }
+            dto.setDetalle(ListDetalle);
+            dto.setMensaje("Ok");
+
+        }catch (Exception e){
+
+            dto.setMensaje(e.getMessage());
+
+        }
+
+        return dto;
+    }
+
+    public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{
+        String[]fechas=new String[7];
+
+        SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd");
+        Date date = parseador.parse(fechaInicio);
+        String inicio = formateador.format(date);
+
+        date = parseador.parse(fechaFin);
+        String fin = formateador.format(date);
+
+        int con=0;
+        for(int i=Integer.parseInt(inicio); i<=Integer.parseInt(fin);i++ ){
+
+            fechas[con]=String.valueOf(i);
+            con++;
+        }
+
+        return fechas;
     }
 }

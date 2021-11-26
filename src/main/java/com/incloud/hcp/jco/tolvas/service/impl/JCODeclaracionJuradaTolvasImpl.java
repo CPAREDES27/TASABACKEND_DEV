@@ -152,7 +152,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
             imports.put("ROWSKIPS", "");
             imports.put("ROWCOUNT", "0");
             imports.put("P_USER", "FGARCIA");
-            imports.put("P_ORDER", "");
+            imports.put("P_ORDER", "INBAL ASCENDING");
             //setear mapeo de tabla options
 
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
@@ -338,6 +338,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle);
         ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle2);
 
+        float total=0f;
         for (int i=0;i<exports.getDetalle().size(); i++){
 
             String[]det= new String[9];
@@ -371,6 +372,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
                 }else if(key.equals("PESACUMOD")){
                     detalle.setPesoAcumulado(valor);
                     det[7]=detalle.getPesoAcumulado();
+                    total+=Float.parseFloat(valor);
 
                 }else if(key.equals("HIDES")){
                     String hora=Convertirhora(valor);
@@ -397,7 +399,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
 
 
-        PlantillaPDFDeclaracion(path, exports,detalle, ListDetalle);
+        PlantillaPDFDeclaracion(path, exports,detalle, ListDetalle, total);
         Metodos exec = new Metodos();
         pdf.setBase64(exec.ConvertirABase64(path));
         pdf.setMensaje("Ok");
@@ -405,7 +407,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return  pdf;
     }
 
-    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle, List<String[]> content)throws IOException {
+    public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle, List<String[]> content, float total)throws IOException {
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -549,55 +551,57 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.drawString(detalle.getFecha());
         contentStream.endText();
 
-        drawCuadroDetalle(page, contentStream, 40,440,745, content);
+        int txty=drawCuadroDetalle(page, contentStream, 40,440,745, content, total);
 
         contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(40, 320);
+        contentStream.setFont(bold, 7);
+        contentStream.moveTextPositionByAmount(40, txty-20);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Observaciones);
         contentStream.endText();
 
+        drawCuadro(contentStream, 160, txty-15, 30, 525);
+
         contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(40, 260);
+        contentStream.setFont(bold, 6);
+        contentStream.moveTextPositionByAmount(40, txty-60);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Especies);
         contentStream.endText();
 
-        int y =240;
+        int y =txty-75;
         for(int i=0; i<dto.getEspecies().size();i++){
 
             DominioExportsData d=dto.getEspecies().get(i);
 
             contentStream.beginText();
-            contentStream.setFont(bold, 7);
+            contentStream.setFont(bold, 6);
             contentStream.moveTextPositionByAmount(40, y);
             contentStream.drawString(d.getId() + " "+d.getDescripcion());
             contentStream.endText();
-            y-=10;
+            y-=8;
         }
         contentStream.beginText();
-        contentStream.setFont(bold, 7);
+        contentStream.setFont(bold, 6);
         contentStream.moveTextPositionByAmount(40, y-10);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Especificar);
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(230, 260);
+        contentStream.setFont(bold, 6);
+        contentStream.moveTextPositionByAmount(230, txty-60);
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Destino);
         contentStream.endText();
 
-        y=240;
+        y=txty-75;
         for(int i=0; i<dto.getDestino().size();i++){
 
             DominioExportsData d=dto.getDestino().get(i);
 
             contentStream.beginText();
-            contentStream.setFont(bold, 7);
+            contentStream.setFont(bold, 6);
             contentStream.moveTextPositionByAmount(230, y);
             contentStream.drawString(d.getId() + " "+d.getDescripcion());
             contentStream.endText();
-            y-=10;
+            y-=8;
         }
         // drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
 
@@ -637,19 +641,19 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
     }
 
-    public  void drawCuadroDetalle(PDPage page, PDPageContentStream contentStream,
-                                   float x, float y, int ancho,List<String[]> content) throws IOException {
+    public  int drawCuadroDetalle(PDPage page, PDPageContentStream contentStream,
+                                   int x, int y, int ancho,List<String[]> content, float total) throws IOException {
 
         logger.error("drawTableRolTripulacion");
         final int rows = content.size();
         final int cols = content.get(0).length;
-        float rowHeight = 25.0f;
-        final float tableHeight =(15 * (float) rows)+10;
-        final float colWidth = 94.33f;
+        float rowHeight = 30.0f;
+        final float tableHeight =15 * (float) rows;
+
 
         //draw the rows
         float nexty = y ;
-        for (int i = 0; i <= rows; i++) {
+        for (int i = 0; i < rows; i++) {
 
             if(i!=0){
                 rowHeight = 15.0f;
@@ -660,40 +664,86 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
             nexty -= rowHeight;
 
         }
+        contentStream.moveTo(x, nexty);
+        contentStream.lineTo(x + ancho-100, nexty);
+        contentStream.stroke();
+
+
 
 
         //draw the columns
         float nextx = x;
         for (int i = 0; i <= cols+2; i++) {
 
-            if(i==1 || i==6 || i==7 || i==8){
+            if(i==1 ){
                 nextx+=50;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
-            }else if(i==2 || i==4){
-                nextx+=50f;
+            }else if(i==2){
+                nextx+=70f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
             else if(i==3){
-                nextx+=50f;
+                nextx+=205f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
-            else if(i==5 || i==9 || i==10){
+            else if(i==4){
+                nextx+=70f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==5){
                 nextx+=50f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
-                nextx += colWidth-21;
+
+            }else if(i==6){
+                nextx+=70f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==7 ){
+                nextx+=70f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight-15);
+                contentStream.stroke();
+
+            }else if(i==8){
+                nextx+=60f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight-15);
+                contentStream.stroke();
+
+            }else if( i==9){
+                nextx+=50f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==10){
+                nextx+=50f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==0) {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight-15);
+                contentStream.stroke();
+
             }else {
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
-                nextx += colWidth;
+
             }
 
         }
@@ -703,7 +753,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         PDFont font;
 
 
-        float texty=y-15;
+        int texty=y-15;
         for(int i=0; i<content.size(); i++) {
 
             String[]fields=content.get(i);
@@ -712,72 +762,106 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
             for (int j = 0; j < fields.length; j++) {
 
                 switch (j) {
+                    case 0:
+                        if(i==0){
+                            textx = 55;
+                        }else if(i==1){
+                            textx = 50;
+                        }else {
+                            textx = 65;
+                        }
+                        break;
                     case 1:
                         if(i==0){
-                            textx = 100;
-                        }else {
-                            textx = 58;
+                            textx = 110;
+                        }else if(i==1){
+                        textx = 120;
+                         }else {
+                            textx = 110;
                         }
                         break;
                     case 2:
                         if(i==0){
-                            textx=220;
+                            textx=240;
+                        }else if(i==1){
+                            textx = 235;
                         }else {
-                            textx = 250;
+                            textx = 170;
                         }
                         break;
                     case 3:
                         if(i==0){
-                            textx = 340;
+                            textx = 380;
                         }else{
-                            textx = 330;
+                            textx = 375;
                         }
                         break;
                     case 4:
                         if(i==0){
-                            textx = 440;
+                            textx = 445;
+                        }else if(i==1){
+                            textx = 460;
                         }else {
-                            textx = 425;
+                            textx = 460;
                         }
                         break;
                     case 5:
                         if(i==0){
-                            textx = 510;
-                        }else {
                             textx = 500;
+                        }else if(i==1){
+                            textx = 500;
+                        }else {
+                            textx = 520;
                         }
                         break;
                     case 6:
                         if(i==0){
-                            textx = 560;
-                        }else {
-                            textx = 540;
-                        }
-                        break;
-                    case 7:
-                        if(i==0){
-                            textx = 610;
+                            textx = 570;
+                        }else if(i==1){
+                            textx = 575;
                         }else {
                             textx = 590;
                         }
                         break;
+                    case 7:
+                        if(i==0){
+                            textx = 645;
+                        }else if(i==1){
+                            textx = 635;
+                        }else {
+                            textx = 650;
+                        }
+                        break;
                     case 8:
                         if(i==0){
-                            textx = 660;
+                            textx = 700;
+                        }else if(i==1){
+                            textx = 700;
                         }else {
-                            textx = 540;
+                            textx = 700;
                         }
                         break;
                     case 9:
                         if(i==0){
-                            textx = 700;
+                            textx = 750;
+                        }else if(i==1){
+                            textx = 745;
                         }else {
-                            textx = 680;
+                            textx = 740;
+                        }
+                        break;
+                    case 10:
+                        if(i==0){
+                            textx = 770;
+                        }else if(i==1){
+                            textx = 730;
+                        }else {
+                            textx = 730;
                         }
                         break;
 
                 }
-                if(i==0 || 1==1){
+                if(i==0 || i==1){
                     font=PDType1Font.HELVETICA_BOLD;
                 }else{
                     font=PDType1Font.HELVETICA;
@@ -791,12 +875,27 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
 
             }
+
             if(i==0){
                 texty-=10;
+            }else {
+                texty -= 15;
             }
-            texty-=15;
         }
 
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 6.5f);
+        contentStream.newLineAtOffset(50, texty);
+        contentStream.showText("TOTAL:");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.HELVETICA_BOLD, 6.5f);
+        contentStream.newLineAtOffset(650, texty);
+        contentStream.showText(String.valueOf(total));
+        contentStream.endText();
+
+        return texty;
     }
 
 

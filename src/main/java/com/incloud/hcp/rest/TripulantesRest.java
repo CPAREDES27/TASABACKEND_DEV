@@ -45,6 +45,17 @@ public class TripulantesRest {
         }
 
     }
+    @PostMapping(value = "/PersonalRol/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RolTripulacionExports> PersonalRol(@RequestBody PersonalDtoImport imports){
+
+        try {
+            return Optional.ofNullable(this.jcoRolTripulacionService.PersonalRol(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
     @PostMapping(value = "/RolTripulacion/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<RolTripulacionExports> RolTripulacion(@RequestBody RolTripulacionImports imports){
@@ -190,10 +201,10 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/PDFTrabajoFF", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFExports> GenerarPDFTrabajoFF() {
+    public ResponseEntity<PDFExports> GenerarPDFTrabajoFF(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
 
         try {
-            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTrabajoFF())
+            return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTrabajoFF(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
@@ -225,6 +236,17 @@ public class TripulantesRest {
 
         try {
             return Optional.ofNullable(this.JCOPDFsService.GenerarPDFProduceResumen(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/TrabajoFueraFaenaDetalle", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrabajoFueraFaenaDetalleExports> TrabajoFueraFaenaDetalle(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.DetalleTrabajoFueraFaenaTransporte(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
