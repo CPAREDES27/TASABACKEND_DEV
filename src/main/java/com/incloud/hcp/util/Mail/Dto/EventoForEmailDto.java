@@ -1,4 +1,7 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.util.Mail.Dto;
+
+import com.incloud.hcp.jco.controlLogistico.dto.HorometroForEmailDto;
+import com.incloud.hcp.jco.controlLogistico.dto.SiniestroForEmailDto;
 
 import java.util.ArrayList;
 

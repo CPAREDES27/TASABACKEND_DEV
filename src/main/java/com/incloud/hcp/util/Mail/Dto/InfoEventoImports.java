@@ -1,4 +1,4 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.util.Mail.Dto;
 
 public class InfoEventoImports {
     private String envioPrd;

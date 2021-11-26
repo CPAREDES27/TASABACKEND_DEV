@@ -1,8 +1,8 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.util.Mail.Dto;
 
 import java.util.ArrayList;
 
-public class EmbarcacionDto {
+public class EmbarcacionForEmailDto {
     private String descripcion;
     private ArrayList<EventoForEmailDto> eventos;
 

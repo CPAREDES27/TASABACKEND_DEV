@@ -1,7 +1,7 @@
 package com.incloud.hcp.rest;
 
-import com.incloud.hcp.jco.controlLogistico.dto.InfoEventoImports;
-import com.incloud.hcp.jco.controlLogistico.dto.InfoHorometrosAveriadosImport;
+import com.incloud.hcp.util.Mail.Dto.InfoEventoImports;
+import com.incloud.hcp.util.Mail.Dto.InfoHorometrosAveriadosImport;
 import com.incloud.hcp.util.Mail.Dto.CorreoDto;
 import com.incloud.hcp.util.Mail.Service.CorreoService;
 import com.incloud.hcp.util.Mail.Dto.NotifDescTolvasDto;

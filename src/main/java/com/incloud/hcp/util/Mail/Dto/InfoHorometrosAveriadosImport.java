@@ -1,8 +1,8 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.util.Mail.Dto;
 
 public class InfoHorometrosAveriadosImport {
     private String envioPrd;
-    private EmbarcacionDto embarcacion;
+    private EmbarcacionForEmailDto embarcacion;
 
     public String getEnvioPrd() {
         return envioPrd;
@@ -12,11 +12,11 @@ public class InfoHorometrosAveriadosImport {
         this.envioPrd = envioPrd;
     }
 
-    public EmbarcacionDto getEmbarcacion() {
+    public EmbarcacionForEmailDto getEmbarcacion() {
         return embarcacion;
     }
 
-    public void setEmbarcacion(EmbarcacionDto embarcacion) {
+    public void setEmbarcacion(EmbarcacionForEmailDto embarcacion) {
         this.embarcacion = embarcacion;
     }
 }
