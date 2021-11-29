@@ -20,5 +20,5 @@ public interface JCOMaestrosService {
     CampoTablaExports UpdateTripulantesMasivo(UpdateTripuMasivoImports imports)throws Exception;
     CampoTablaExports UpdateMasivo(UpdateMasivoImports imports)throws Exception;
     UpdateTableExports Update_Table_Maestro(HiscomDTOImport imports) throws Exception;
-
+    EstructurasRfc obtenerEstructurasRfc(String funcion)throws  Exception;
 }

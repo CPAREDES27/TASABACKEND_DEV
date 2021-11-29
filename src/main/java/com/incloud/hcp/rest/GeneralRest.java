@@ -222,5 +222,18 @@ public class GeneralRest {
 
     }
 
+    @PostMapping(value = "/ObtenerEstructurasRfc/", produces = APPLICATION_JSON_VALUE)
+    public  ResponseEntity<EstructurasRfc> obtenerEstructurasRfc(@RequestBody String nombreRfc){
+        try {
+            return Optional.ofNullable(this.MaestroService.obtenerEstructurasRfc(nombreRfc))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+
+
 
 }

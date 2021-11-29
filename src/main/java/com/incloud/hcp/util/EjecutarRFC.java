@@ -110,6 +110,7 @@ public class EjecutarRFC {
         logger.error("Lista de parametros: " +listTables);
         JCoTable tableImport = listTables.getTable(tableName);
         logger.error("setTable_1");
+
         for (int i = 0; i < data.size(); i++){
             tableImport.appendRow();
             HashMap<String, Object> record = data.get(i);
