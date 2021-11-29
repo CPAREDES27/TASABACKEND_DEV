@@ -144,6 +144,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 RolTripulacion[con]=registros;
                 con++;
             }
+
+            if(dto.getNombrePatron()==null){
+                dto.setNombrePatron("");
+            }
+            if(dto.getDni()==null){
+                dto.setDni("");
+            }
             logger.error("Certificados");
 
             String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
@@ -1905,6 +1912,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
                 RolTripulacion[con]=registros;
                 con++;
+            }
+
+            if(dto.getNombreCapitanPatron()==null){
+                dto.setNombreCapitanPatron("");
+            }
+            if(dto.getDni()==null){
+                dto.setDni("");
             }
             logger.error("Certificados");
 
