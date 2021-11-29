@@ -74,10 +74,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
             List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
             List<HashMap<String, Object>>  t_mensajes = metodo.ListarObjetos(T_MENSAJES);
-            logger.error("t_trabff"+ t_trabff.size());
-            logger.error("t_trabaj"+ t_trabaj.size());
-            logger.error("t_fechas"+ t_fechas.size());
-            logger.error("t_textos"+ t_textos.size());
+
 
 
             tff.setT_trabff(t_trabff);
@@ -266,7 +263,6 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                 String key1=entry1.getKey();
                                 String valor1=entry1.getValue().toString();
 
-                                logger.error("FECHA: "+key1+" : "+valor1);
                                 if(key1.equals("WERKS")){
                                     centro=valor1;
                                 }else if(key1.equals("FETRA")){
@@ -316,7 +312,13 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         int con=0;
         for(int i=Integer.parseInt(inicio); i<=Integer.parseInt(fin);i++ ){
 
-            fechas[con]=String.valueOf(i);
+           if(i>9){
+               fechas[con] = String.valueOf(i);
+           }else{
+               fechas[con]="0"+String.valueOf(i);
+           }
+
+
             con++;
         }
 

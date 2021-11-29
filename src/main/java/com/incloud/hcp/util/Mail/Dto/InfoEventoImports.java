@@ -1,8 +1,8 @@
-package com.incloud.hcp.jco.controlLogistico.dto;
+package com.incloud.hcp.util.Mail.Dto;
 
 public class InfoEventoImports {
     private String envioPrd;
-    private EventoDto evento;
+    private EventoForEmailDto evento;
 
     public String getEnvioPrd() {
         return envioPrd;
@@ -12,11 +12,11 @@ public class InfoEventoImports {
         this.envioPrd = envioPrd;
     }
 
-    public EventoDto getEvento() {
+    public EventoForEmailDto getEvento() {
         return evento;
     }
 
-    public void setEvento(EventoDto evento) {
+    public void setEvento(EventoForEmailDto evento) {
         this.evento = evento;
     }
 }

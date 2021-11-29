@@ -4,9 +4,7 @@ import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
 import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.Mail.Dto.CorreoConAdjuntoDto;
-import com.incloud.hcp.util.Mail.Dto.CorreoDto;
-import com.incloud.hcp.util.Mail.Dto.NotifDescTolvasDto;
+import com.incloud.hcp.util.Mail.Dto.*;
 import com.incloud.hcp.util.Mail.Service.CorreoService;
 import com.incloud.hcp.util.Mensaje;
 import org.slf4j.Logger;
@@ -51,11 +49,11 @@ public class CorreoImpl implements CorreoService {
             String body = "<p>Los siguientes horómetros han sido marcados como averiados en la embarcacion ";
             body += "<strong>" + imports.getEmbarcacion().getDescripcion() + "</strong>:</p>";
 
-            for (EventoDto evento : imports.getEmbarcacion().getEventos()) {
-                ArrayList<HorometroDto> listHorometrosAveriados = evento.getHorometrosAveriados();
+            for (EventoForEmailDto evento : imports.getEmbarcacion().getEventos()) {
+                ArrayList<HorometroForEmailDto> listHorometrosAveriados = evento.getHorometrosAveriados();
                 body += "<li>Para el evento " + evento.getNroEvento() + ": ";
                 for (int i = 0; i < listHorometrosAveriados.size(); i++) {
-                    HorometroDto horometroAveriado = listHorometrosAveriados.get(i);
+                    HorometroForEmailDto horometroAveriado = listHorometrosAveriados.get(i);
                     body += horometroAveriado.getNombre();
                     if (i < listHorometrosAveriados.size()) {
                         body += ", ";
@@ -111,7 +109,7 @@ public class CorreoImpl implements CorreoService {
     public Mensaje EnviarCorreosSiniestro(InfoEventoImports imports) throws Exception {
         Mensaje msj = new Mensaje();
         try {
-            for (SiniestroImports siniestro : imports.getEvento().getSiniestros()) {
+            for (SiniestroForEmailDto siniestro : imports.getEvento().getSiniestros()) {
                 String remitente = "mareaeventos@tasa.com.pe";
                 String asunto = "Marea y Eventos - Siniestro";
                 //Cuerpo del correo
@@ -208,7 +206,7 @@ public class CorreoImpl implements CorreoService {
     }
 
     /**
-     * Evalua las condiciones de emplear los correos de ptoducción o de pruebas
+     * Evalua las condiciones de emplear los correos de ptoducción, de pruebas o ambos
      *
      * @param enviosPrd condición para indicar que se enviará a los correos de producción
      * @param emailsPrd correos de producción
@@ -216,7 +214,7 @@ public class CorreoImpl implements CorreoService {
      * @throws Exception
      */
     public List<String> verificarEmails(String enviosPrd, List<String> emailsPrd) throws Exception {
-        List<String> correos;
+        List<String> correos = new ArrayList<>();
         try {
             String[] fields = {"CDCNS", "DESCR", "VAL01", "VAL02", "VAL03", "VAL04"};
             MaestroImportsKey importsReadTabla = new MaestroImportsKey();
@@ -245,11 +243,15 @@ public class CorreoImpl implements CorreoService {
             String enviarCorreosPrueba = constanteEnviarCorreosPrueba != null ? constanteEnviarCorreosPrueba.get("VAL01").toString() : "";
             String enviarCorreoPrd = constanteEnviarCorreosPrd != null ? constanteEnviarCorreosPrd.get("VAL01").toString() : "";
 
+            if (enviosPrd.equalsIgnoreCase("X") && enviarCorreoPrd.equalsIgnoreCase("X")) {
+                //Añadir los correos de PRD
+                correos = new ArrayList<>(emailsPrd);
+            }
+
             if (enviarCorreosPrueba.equalsIgnoreCase("X")) {
-                //Mandar los correos de prueba
+                //Añadir los correos de prueba
 
                 //Obtener correos de prueba
-                correos = new ArrayList<>();
                 HashMap<String, Object> constanteCorreos = constantes.stream().filter(constante -> constante.get("CDCNS").toString().equals("85")).findFirst().orElse(null);
                 if (constanteCorreos != null) {
                     String correo1 = constanteCorreos.get("VAL01").toString();
@@ -270,14 +272,9 @@ public class CorreoImpl implements CorreoService {
                         correos.add(correo4);
                     }
                 }
-            } else if (enviosPrd.equalsIgnoreCase("X") && enviarCorreoPrd.equalsIgnoreCase("X")) {
-                //Mandar los correos de PRD
-                correos = emailsPrd;
-            } else {
-                correos = new ArrayList<>();
             }
         } catch (Exception ex) {
-            correos = new ArrayList<>();
+            throw new Exception(ex.getMessage());
         }
 
         return correos;

@@ -3657,6 +3657,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         ListaRegistros.add(cabecera);
 
+
         for(int i=0; i<dto.getDetalle().size();i++){
 
             TrabajoFFDetalleDto detalle=dto.getDetalle().get(i);
@@ -3664,7 +3665,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[]registro=new String[13];
             registro[0]=detalle.getNroPersona();
             registro[1]=detalle.getNombre();
-            registro[2]=detalle.getCargo();
+           // registro[2]=detalle.getCargo();
+            registro[2]="TRIPULANTE EP";
             registro[10]=detalle.getOrigen();
             registro[11]=detalle.getCentro();
             registro[12]=detalle.getDestino();
@@ -3673,51 +3675,89 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 String key=entry.getKey();
                 String valor=entry.getValue().toString();
 
+
                 logger.error("REGISTRO "+key+" : "+valor);
 
-                if(key.equals(dto.getFechas()[0])){
-                    registro[3]=valor;
-                }else {
-                    registro[3]="";
+                if(registro[3]==null){
+                    if(key.trim().equals(dto.getFechas()[0].trim())){
+                        registro[3]=valor;
+                        logger.error("registro[3]=valor "+registro[3]+" : "+valor);
+                    }
                 }
-                if(key.equals(dto.getFechas()[1])){
-                    registro[4]=valor;
-                }else {
-                    registro[4]="";
+                if(registro[4]==null) {
+                    if (key.trim().equals(dto.getFechas()[1].trim())) {
+                        registro[4] = valor;
+                        logger.error("registro[4]=valor " + registro[4] + " : " + valor);
+                    }
+                }
+                if(registro[5]==null) {
+                    if (key.trim().equals(dto.getFechas()[2].trim())) {
+                        registro[5] = valor;
+                        logger.error("registro[5]=valor " + registro[5] + " : " + valor);
+
+                    }
+                }
+                if(registro[6]==null) {
+                    if (key.trim().equals(dto.getFechas()[3].trim())) {
+                        registro[6] = valor;
+                        logger.error("registro[6]=valor " + registro[6] + " : " + valor);
+
+                    }
+                }
+                if(registro[7]==null) {
+                    if (key.trim().equals(dto.getFechas()[4].trim())) {
+                        registro[7] = valor;
+                        logger.error("registro[7]=valor " + registro[7] + " : " + valor);
+
+                    }
+                }
+                if(registro[8]==null) {
+                    if (key.trim().equals(dto.getFechas()[5].trim())) {
+                        registro[8] = valor;
+                        logger.error("registro[8]=valor " + registro[8] + " : " + valor);
+
+                    }
+                }
+                if(registro[9]==null) {
+                    if (key.trim().equals(dto.getFechas()[6].trim())) {
+                        registro[9] = valor;
+                        logger.error("registro[9]=valor " + registro[9] + " : " + valor);
+
+                    }
                 }
 
-                if(key.equals(dto.getFechas()[2])){
-                    registro[5]=valor;
-                }else {
-                    registro[5]="";
-                }
-
-                if(key.equals(dto.getFechas()[3])){
-                    registro[6]=valor;
-                }else {
-                    registro[6]="";
-                }
-
-                if(key.equals(dto.getFechas()[4])){
-                    registro[7]=valor;
-                }else {
-                    registro[7]="";
-                }
-
-                if(key.equals(dto.getFechas()[5])){
-                    registro[8]=valor;
-                }else {
-                    registro[8]="";
-                }
-
-                if(key.equals(dto.getFechas()[6])){
-                    registro[9]=valor;
-                }else {
-                    registro[9]="";
-                }
+            }
+            if(registro[3]==null){
+                registro[3]="";
+            }
+            if(registro[4]==null){
+                registro[4]="";
+            }
+            if(registro[5]==null){
+                registro[5]="";
+            }
+            if(registro[6]==null){
+                registro[6]="";
+            }
+            if(registro[7]==null){
+                registro[7]="";
+            }
+            if(registro[8]==null){
+                registro[8]="";
+            }
+            if(registro[9]==null){
+                registro[9]="";
             }
             ListaRegistros.add(registro);
         }
+        logger.error("FECHAS[0]= "+dto.getFechas()[0]);
+        logger.error("FECHAS[1]= "+dto.getFechas()[1]);
+        logger.error("FECHAS[2]= "+dto.getFechas()[2]);
+        logger.error("FECHAS[3]= "+dto.getFechas()[3]);
+        logger.error("FECHAS[4]= "+dto.getFechas()[4]);
+        logger.error("FECHAS[5]= "+dto.getFechas()[5]);
+        logger.error("FECHAS[6]= "+dto.getFechas()[6]);
+
 
 
         PlantillaPDFTrabajoFF(path, dto, ListaRegistros);
@@ -3747,103 +3787,122 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 13);
-        contentStream.moveTextPositionByAmount(300, 520);
+        contentStream.moveTextPositionByAmount(300, 540);
         contentStream.drawString(PDFTrabajoFFConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 13);
-        contentStream.moveTextPositionByAmount(300, 520);
+        contentStream.moveTextPositionByAmount(300, 540);
         contentStream.drawString("___________________________________");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 470);
+        contentStream.moveTextPositionByAmount(50, 480);
         contentStream.drawString(PDFTrabajoFFConstantes.numeroTrabajo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 470);
+        contentStream.moveTextPositionByAmount(150, 480);
         contentStream.drawString(dto.getNrTrabajo());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 460);
+        contentStream.moveTextPositionByAmount(50, 470);
         contentStream.drawString(PDFTrabajoFFConstantes.tipoTrabajo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 460);
+        contentStream.moveTextPositionByAmount(150, 470);
         contentStream.drawString(dto.getTipoTrabajo());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 450);
+        contentStream.moveTextPositionByAmount(50, 460);
         contentStream.drawString(PDFTrabajoFFConstantes.semana);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 450);
+        contentStream.moveTextPositionByAmount(150, 460);
         contentStream.drawString(dto.getSemana());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 440);
+        contentStream.moveTextPositionByAmount(50, 450);
         contentStream.drawString(PDFTrabajoFFConstantes.fechaInicio);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 440);
+        contentStream.moveTextPositionByAmount(150, 450);
         contentStream.drawString(dto.getFechaInicio());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(200, 440);
+        contentStream.moveTextPositionByAmount(200, 450);
         contentStream.drawString(PDFTrabajoFFConstantes.fechaFin);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(250, 440);
+        contentStream.moveTextPositionByAmount(250, 450);
         contentStream.drawString(dto.getFechaFin());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 430);
+        contentStream.moveTextPositionByAmount(50, 440);
         contentStream.drawString(PDFTrabajoFFConstantes.descripcionTrabajo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 430);
+        contentStream.moveTextPositionByAmount(150, 440);
         contentStream.drawString(dto.getDescripcionTrabajo());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(50, 420);
+        contentStream.moveTextPositionByAmount(50, 430);
         contentStream.drawString(PDFTrabajoFFConstantes.observacion);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
-        contentStream.moveTextPositionByAmount(150, 420);
+        contentStream.moveTextPositionByAmount(150, 430);
         contentStream.drawString(dto.getObservacion());
         contentStream.endText();
 
-        drawCuadroDetalle(page,contentStream, 45, 400,750,content);
-
+        drawCuadroDetalle(page,contentStream, 45, 390,755,content);
         contentStream.close();
+
+        if(content.size()>20){
+            page = new PDPage(PDRectangle.A4);
+            page.setRotation(90);
+            document.addPage(page);
+
+
+             pageSize = page.getMediaBox();
+             pageWidth = pageSize.getWidth();
+             contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+// add the rotation using the current transformation matrix
+// including a translation of pageWidth to use the lower left corner as 0,0 reference
+            contentStream.transform(new Matrix(0, 1, -1, 0, pageWidth, 0));
+
+            drawCuadroDetalle2(page,contentStream, 45, 520,755,content);
+            contentStream.close();
+
+        }
+
+
         document.save(path);
         document.close();
     }
@@ -3851,20 +3910,26 @@ public class JCOPDFsImpl implements JCOPDFsService {
     public  int drawCuadroDetalle(PDPage page, PDPageContentStream contentStream,
                                   int x, int y, int ancho,List<String[]> content) throws IOException {
 
-        logger.error("drawTableRolTripulacion");
-        final int rows = content.size();
+        logger.error("drawCuadroDetalletrabajoff");
+        int cantidadRegistros;
+        if(content.size()<=20){
+            cantidadRegistros= content.size();
+        }else{
+            cantidadRegistros=20;
+        }
+        int rows=cantidadRegistros;
         final int cols = content.get(0).length;
-        float rowHeight = 15.0f;
-        final float tableHeight =15 * (float) rows;
+        float rowHeight = 30.0f;
+        final float tableHeight =(15 * (float) rows)+15;
 
 
         //draw the rows
         float nexty = y ;
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i <= rows; i++) {
 
-            //if(i!=0){
-            //    rowHeight = 15.0f;
-            //}
+            if(i!=0){
+                rowHeight = 15.0f;
+            }
             contentStream.moveTo(x, nexty);
             contentStream.lineTo(x + ancho, nexty);
             contentStream.stroke();
@@ -3881,12 +3946,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         for (int i = 0; i <= cols+2; i++) {
 
             if(i==1 ){
-                nextx+=50;
+                nextx+=70;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }else if(i==2){
-                nextx+=170f;
+                nextx+=185f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
@@ -3898,61 +3963,61 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 contentStream.stroke();
             }
             else if(i==4){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==5){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==6){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==7 ){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==8){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if( i==9){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if( i==10){
-                nextx+=45f;
+                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if( i==11){
-                nextx+=45f;
+                nextx+=43f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if( i==12){
-                nextx+=45f;
+                nextx+=43f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if( i==13){
-                nextx+=45f;
+                nextx+=43f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
@@ -3977,7 +4042,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         int texty=y-13;
-        for(int i=0; i<content.size(); i++) {
+        for(int i=0; i<cantidadRegistros; i++) {
 
             String[]fields=content.get(i);
             float textx=x+5;
@@ -3989,40 +4054,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         textx = 50;
                         break;
                     case 1:
-                        textx = 105;
+                        textx = 120;
                         break;
                     case 2:
-                        textx=275;
+                        textx=305;
                         break;
                     case 3:
-                        textx = 360;
+                        textx = 395;
                         break;
                     case 4:
-                        textx = 405;
+                        textx = 435;
                         break;
                     case 5:
-                        textx = 445;
+                        textx = 475;
                         break;
                     case 6:
-                        textx = 485;
+                        textx = 520;
                         break;
                     case 7:
-                        textx = 525;
+                        textx = 555;
                         break;
                     case 8:
-                        textx = 565;
+                        textx = 600;
                         break;
                     case 9:
-                        textx = 605;
+                        textx = 635;
                         break;
                     case 10:
-                        textx = 645;
+                        textx = 675;
                         break;
                     case 11:
-                        textx = 685;
+                        textx = 715;
                         break;
                     case 12:
-                        textx = 725;
+                        textx = 760;
                         break;
 
                 }
@@ -4031,9 +4096,224 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 }else{
                     font=PDType1Font.HELVETICA;
                 }
+                float tam=7.5f;
+
+
+                if(i==0){
+                    contentStream.beginText();
+                    contentStream.setFont(font, 9);
+                    contentStream.newLineAtOffset(textx, texty-5);
+                    contentStream.showText(fields[j]);
+                    contentStream.endText();
+                }else {
+                    contentStream.beginText();
+                    contentStream.setFont(font, tam);
+                    contentStream.newLineAtOffset(textx, texty);
+                    contentStream.showText(fields[j]);
+                    contentStream.endText();
+                }
+
+            }
+            if(i==0){
+                texty -= 30;
+            }else {
+
+                texty -= 15;
+            }
+
+        }
+
+
+
+        return texty;
+    }
+    public  int drawCuadroDetalle2(PDPage page, PDPageContentStream contentStream,
+                                  int x, int y, int ancho,List<String[]> content) throws IOException {
+
+        logger.error("drawCuadroDetalletrabajoff");
+
+        int cantidadRegistros= content.size()-20;
+
+        final int rows = content.size()-20;
+        final int cols = content.get(0).length;
+        float rowHeight = 15.0f;
+        final float tableHeight =15 * (float) rows;
+
+
+        //draw the rows
+        float nexty = y ;
+        for (int i = 0; i <= rows; i++) {
+
+            //if(i!=0){
+            //    rowHeight = 15.0f;
+            //}
+            contentStream.moveTo(x, nexty);
+            contentStream.lineTo(x + ancho, nexty);
+            contentStream.stroke();
+            nexty -= rowHeight;
+
+        }
+
+
+
+
+
+        //draw the columns
+        float nextx = x;
+        for (int i = 0; i <= cols+2; i++) {
+
+            if(i==1 ){
+                nextx+=70;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }else if(i==2){
+                nextx+=185f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }
+            else if(i==3){
+                nextx+=90;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+            }
+            else if(i==4){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==5){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==6){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==7 ){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==8){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==9){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==10){
+                nextx+=40f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==11){
+                nextx+=43f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==12){
+                nextx+=43f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if( i==13){
+                nextx+=43f;
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else if(i==0) {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }else {
+                contentStream.moveTo(nextx, y);
+                contentStream.lineTo(nextx, y - tableHeight);
+                contentStream.stroke();
+
+            }
+
+        }
+
+
+        //now add the text
+        PDFont font;
+
+
+        int texty=y-13;
+        for(int i=21; i<content.size(); i++) {
+
+            String[]fields=content.get(i);
+            float textx=x+5;
+
+            for (int j = 0; j < fields.length; j++) {
+
+                switch (j) {
+                    case 0:
+                        textx = 50;
+                        break;
+                    case 1:
+                        textx = 120;
+                        break;
+                    case 2:
+                        textx=305;
+                        break;
+                    case 3:
+                        textx = 395;
+                        break;
+                    case 4:
+                        textx = 435;
+                        break;
+                    case 5:
+                        textx = 475;
+                        break;
+                    case 6:
+                        textx = 520;
+                        break;
+                    case 7:
+                        textx = 555;
+                        break;
+                    case 8:
+                        textx = 600;
+                        break;
+                    case 9:
+                        textx = 635;
+                        break;
+                    case 10:
+                        textx = 675;
+                        break;
+                    case 11:
+                        textx = 715;
+                        break;
+                    case 12:
+                        textx = 760;
+                        break;
+
+                }
+
+                font=PDType1Font.HELVETICA;
+
 
                 contentStream.beginText();
-                contentStream.setFont(font, 6.5f);
+                contentStream.setFont(font, 7.5f);
                 contentStream.newLineAtOffset(textx, texty);
                 contentStream.showText(fields[j]);
                 contentStream.endText();
@@ -5518,16 +5798,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             if(key.equals("NMEMB")){
                 dto.setEmbarcacion(value.toString());
-                logger.error("NMEMB= "+dto.getEmbarcacion());
             }else if(key.equals("MREMB")){
                 dto.setMatricula(value.toString());
-                logger.error("MREMB= "+dto.getMatricula());
             }else if(key.equals("CNPDS")){
                 dto.setPescaDescargada(value.toString());
-                logger.error("CNPDS= "+dto.getPescaDescargada());
             }else if(key.equals("CNDES")){
                 dto.setCantidadDescargada(value.toString());
-                logger.error("CNDES= "+dto.getCantidadDescargada());
             }
 
         }

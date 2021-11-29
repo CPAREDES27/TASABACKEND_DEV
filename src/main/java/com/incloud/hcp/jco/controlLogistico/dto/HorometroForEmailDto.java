@@ -1,6 +1,6 @@
 package com.incloud.hcp.jco.controlLogistico.dto;
 
-public class HorometroDto {
+public class HorometroForEmailDto {
     private String nombre;
 
     public String getNombre() {

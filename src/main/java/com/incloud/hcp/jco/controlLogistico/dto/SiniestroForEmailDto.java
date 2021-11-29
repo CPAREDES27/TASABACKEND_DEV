@@ -2,7 +2,7 @@ package com.incloud.hcp.jco.controlLogistico.dto;
 
 import java.util.ArrayList;
 
-public class SiniestroImports {
+public class SiniestroForEmailDto {
     private String codIncidente;
     private String descCodIncidente;
     private String descripcion;
