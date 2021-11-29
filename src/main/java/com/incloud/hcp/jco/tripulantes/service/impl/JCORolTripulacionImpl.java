@@ -34,7 +34,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
             //ZFL_RFC_REGROL_ADM_REGROL_BTP
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGROL_ADM_REGROL);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGROL_ADM_REGROL_BTP);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_TOPE", imports.getP_tope());

@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.maestro.dto;
 public class AyudaBusquedaTablas {
 
     public static String BSQPLANTAS="ZV_FLPL";
+    public static String BSQALMACEN="ZFLALM";
     public static String BSQALMACENES="T001L";
     public static String BSQEMPRESA="LFA1";
     public static String BSQCENTRO="ZFLPTA";
