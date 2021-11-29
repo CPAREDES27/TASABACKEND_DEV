@@ -152,7 +152,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
             String[] fieldfechas= {"WERKS","PERNR","FETRA"};
             String[] fieldtextos= {"TDLINE","TDFORMAT"};
-            String[] fieldtrabaj= {"PERNR","NOMBR"};
+            String[] fieldtrabaj= {"PERNR","NOMBR","STELL"};
             String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
@@ -250,6 +250,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                         detalle.setNroPersona(valor);
                     }else if(key.equals("NOMBR")){
                         detalle.setNombre(valor);
+                    }else if(key.equals("STELL")){
+                        valor=me.ObtenerDominio("CARGOTRIPU",valor);
+                        detalle.setCargo(valor);
                     }
                     HashMap<String, Object>fechas= new HashMap<>();
                     for(int j=0; j<tffde.getT_fechas().size(); j++){
@@ -279,7 +282,6 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     }
 
                     detalle.setFechas(fechas);
-                    detalle.setCargo("");
                     detalle.setCentro("");
                     detalle.setDestino("");
                     detalle.setOrigen("");
