@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.tripulantes.dto;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class RegistrosZarpeImports {
@@ -16,6 +17,33 @@ public class RegistrosZarpeImports {
     private String p_pernr;
     private List<MaestroOptions> t_opciones;
     private List<MaestroOptionsKey> p_options;
+    private List<HashMap<String, Object>> t_zatrp;
+    private List<HashMap<String, Object>> t_dzatr;
+    private List<HashMap<String, Object>> t_nzatr;
+
+    public List<HashMap<String, Object>> getT_nzatr() {
+        return t_nzatr;
+    }
+
+    public void setT_nzatr(List<HashMap<String, Object>> t_nzatr) {
+        this.t_nzatr = t_nzatr;
+    }
+
+    public List<HashMap<String, Object>> getT_zatrp() {
+        return t_zatrp;
+    }
+
+    public void setT_zatrp(List<HashMap<String, Object>> t_zatrp) {
+        this.t_zatrp = t_zatrp;
+    }
+
+    public List<HashMap<String, Object>> getT_dzatr() {
+        return t_dzatr;
+    }
+
+    public void setT_dzatr(List<HashMap<String, Object>> t_dzatr) {
+        this.t_dzatr = t_dzatr;
+    }
 
     public List<MaestroOptionsKey> getP_options() {
         return p_options;

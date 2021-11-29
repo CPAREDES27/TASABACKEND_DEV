@@ -10,6 +10,15 @@ public class RegistrosZarpeExports {
     private List<HashMap<String, Object>> t_dzatr;
     private List<HashMap<String, Object>> t_vgcer;
     private String mensaje;
+    private List<HashMap<String, Object>> t_mensaje;
+
+    public List<HashMap<String, Object>> getT_mensaje() {
+        return t_mensaje;
+    }
+
+    public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
+        this.t_mensaje = t_mensaje;
+    }
 
     public List<HashMap<String, Object>> getT_zatrp() {
         return t_zatrp;

@@ -58,12 +58,19 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
              JCoTable T_NZATR = tables.getTable(Tablas.T_NZATR);
 
+             if(imports.getP_tope().equals("A")){
+                 exec.setTable(tables, Tablas.T_ZATRP,imports.getT_zatrp());
+                 exec.setTable(tables, Tablas.T_DZART,imports.getT_dzatr());
+                 exec.setTable(tables, Tablas.T_NZATR,imports.getT_nzatr());
+             }
 
              List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
              List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
              List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());
              List<HashMap<String, Object>>  t_nzatr = metodo.ObtenerListObjetos(T_NZATR, imports.getFieldst_nzatr());
-
+             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+             rz.setT_mensaje(t_mensaje);
              rz.setT_zatrp(t_zatrp);
              rz.setT_dzatr(t_dzatr);
              rz.setT_vgcer(t_vgcer);
