@@ -190,7 +190,7 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/PDFTrimestral", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<PDFExports> PDFTrimestral(@RequestBody PDFZarpeImports imports) {
+    public ResponseEntity<PDFExports> PDFTrimestral(@RequestBody PDFTrimestralImports imports) {
 
         try {
             return Optional.ofNullable(this.JCOPDFsService.GenerarPDFTrimestral( imports))

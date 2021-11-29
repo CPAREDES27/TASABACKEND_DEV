@@ -10,6 +10,8 @@ public class Constantes {
     public static String ZFL_RFC_CONS_COMB_FASE="ZFL_RFC_CONS_COMB_FASE";
     public static String ZFL_RFC_MAES_PUNT_DESCA="ZFL_RFC_MAES_PUNT_DESCA";
     public static String ZFL_RFC_UPDATE_TABLE="ZFL_RFC_UPDATE_TABLE";
+    public static String ZFL_RFC_REGROL_ADM_REGROL_BTP="ZFL_RFC_REGROL_ADM_REGROL_BTP";
+    public static String ZFL_RFC_REGZAR_ADM_REGZAR_BTP="ZFL_RFC_REGZAR_ADM_REGZAR_BTP";
     public static String ZFL_RFC_CONS_EMPRESAS="ZFL_RFC_CONS_EMPRESAS";
     public static String ZFL_RFC_ANALIS_COMB_FASE="ZFL_RFC_ANALIS_COMB_FASE";
     public static String ZFL_RFC_LECT_MAES_EMBAR="ZFL_RFC_LECT_MAES_EMBAR";

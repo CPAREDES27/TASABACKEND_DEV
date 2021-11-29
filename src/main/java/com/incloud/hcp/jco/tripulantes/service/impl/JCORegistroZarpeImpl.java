@@ -51,7 +51,7 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              EjecutarRFC exec= new EjecutarRFC();
              exec.setTable(tables, Tablas.T_OPCIONES,tmpOptions);
 
-             stfcConnection.execute(destination);
+
 
              JCoTable T_ZATRP = tables.getTable(Tablas.T_ZATRP);
              JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
@@ -60,10 +60,10 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
 
              if(imports.getP_tope().equals("A")){
                  exec.setTable(tables, Tablas.T_ZATRP,imports.getT_zatrp());
-                 exec.setTable(tables, Tablas.T_DZART,imports.getT_dzatr());
+                 exec.setTable(tables, Tablas.T_DZATR,imports.getT_dzatr());
                  exec.setTable(tables, Tablas.T_NZATR,imports.getT_nzatr());
              }
-
+             stfcConnection.execute(destination);
              List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
              List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
              List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());
