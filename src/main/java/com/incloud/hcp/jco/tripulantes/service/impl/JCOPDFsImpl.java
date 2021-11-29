@@ -2989,7 +2989,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         return hora;
     }
 
-    public PDFExports GenerarPDFTrimestral(PDFZarpeImports imports)throws Exception{
+    public PDFExports GenerarPDFTrimestral(PDFTrimestralImports imports)throws Exception{
 
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
@@ -3039,7 +3039,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
             }
-            logger.error("RolTripulacion");
+            logger.error("TIMESTRAL RolTripulacion");
             String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
                     PDFZarpeConstantes.NRLIB,
                     PDFZarpeConstantes.FEFVG,
@@ -3058,13 +3058,18 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     dto.setDni(T_DZATR.getString(PDFZarpeConstantes.NRDNI));
                 }
             }
-
+            if(dto.getNombreCapitanPatron()==null){
+                dto.setNombreCapitanPatron("");
+            }
+            if(dto.getDni()==null){
+                dto.setDni("");
+            }
             String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
                     PDFZarpeConstantes.FECCF};
 
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFTrimestralConstantes.certificadosCabecera;
-            logger.error("Certificados_1");
+            logger.error("TIMESTRAL Certificados");
             int con=1;
             String guion="-     ";
             for(int i=0; i<T_VGCER.getNumRows(); i++){
@@ -3101,8 +3106,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 Certificados[con]=registros;
                 con++;
             }
+            if(!imports.getFlag().toUpperCase().equals("X")){
+                dto.setNombreCapitanPatron(imports.getPatron());
+                dto.setRepresentanteAcreditado(imports.getRepresentante());
+                dto.setTelefono(imports.getTelefono());
+                dto.setDni("");
+            }
 
-
+            logger.error("TIMESTRAL PDF");
             PlantillaPDFTrimestral(path, dto,  Certificados);
 
             Metodos exec = new Metodos();
@@ -3117,7 +3128,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
     }
 
     public void PlantillaPDFTrimestral(String path, PDFZarpeTravesiaDto dto, String[][] certificados)throws Exception{
-
+        logger.error("PlantillaPDFTrimestral");
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
 
@@ -3125,7 +3136,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDFont bold = PDType1Font.HELVETICA_BOLD;
         PDFont font = PDType1Font.HELVETICA;
-
+        logger.error("PlantillaPDFTrimestral_2");
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         contentStream.beginText();
@@ -3213,7 +3224,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.drawString(PDFTrimestralConstantes.cuatro);
         contentStream.endText();
 
-        //insertando zona de pesca
+        logger.error("PlantillaPDFTrimestral_3");
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(145, 670);
@@ -3249,7 +3260,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.moveTextPositionByAmount(40, 650);
         contentStream.drawString(PDFTrimestralConstantes.cinco);
         contentStream.endText();
-
+        logger.error("PlantillaPDFTrimestral_4");
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(145, 650);
@@ -3279,7 +3290,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.moveTextPositionByAmount(145, 629);
         contentStream.drawString("____________________________________________________________________________________________");
         contentStream.endText();
-
+        logger.error("PlantillaPDFTrimestral_5");
         contentStream.beginText();
         contentStream.setFont(bold, 8);
         contentStream.moveTextPositionByAmount(40, 610);
@@ -3359,7 +3370,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.moveTextPositionByAmount(430, 570);
         contentStream.drawString("___________________________");
         contentStream.endText();
-
+        logger.error("PlantillaPDFTrimestral_6");
         contentStream.beginText();
         contentStream.setFont(bold, 13);
         contentStream.moveTextPositionByAmount(250, 545);
@@ -3437,7 +3448,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.moveTextPositionByAmount(50, 215);
         contentStream.drawString(PDFTrimestralConstantes.dni);
         contentStream.endText();
-
+        logger.error("PlantillaPDFTrimestral_7");
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(80, 215);
@@ -3533,7 +3544,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.moveTextPositionByAmount(40, 49);
         contentStream.drawString(PDFTrimestralConstantes.nota4);
         contentStream.endText();
-
+        logger.error("PlantillaPDFTrimestral_8");
 
         drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
         logger.error("PlantillaPDF_3");
