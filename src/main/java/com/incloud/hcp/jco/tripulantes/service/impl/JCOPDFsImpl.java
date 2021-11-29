@@ -3666,7 +3666,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             registro[0]=detalle.getNroPersona();
             registro[1]=detalle.getNombre();
            // registro[2]=detalle.getCargo();
-            registro[2]="TRIPULANTE EP";
+            registro[2]=detalle.getCargo();
             registro[10]=detalle.getOrigen();
             registro[11]=detalle.getCentro();
             registro[12]=detalle.getDestino();

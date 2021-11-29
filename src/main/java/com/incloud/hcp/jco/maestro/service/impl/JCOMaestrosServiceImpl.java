@@ -1197,7 +1197,26 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         return  dto;
 
+    }
 
+    @Override
+    public EstructurasRfc obtenerEstructurasRfc(String funcion)throws Exception{
+        EstructurasRfc eRfc = new EstructurasRfc();
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction rfc = repo.getFunction(funcion);
+        JCoParameterList jcoTables = rfc.getTableParameterList();
+
+        //jcoTables.getParameterFieldIterator()
+        //jcoTables.getListMetaData().get
+        JCoParameterFieldIterator iterator = jcoTables.getParameterFieldIterator();
+        while (iterator.hasNextField()){
+            JCoParameterField field = iterator.nextParameterField();
+            //field.getRecordMetaData().get
+            //field.
+
+        }
+        return  eRfc;
     }
 
 

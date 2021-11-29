@@ -1221,6 +1221,10 @@ public class Metodos {
                 dom="ZCDTEV";
                 campo="DESC_"+campo;
             }
+            if(campo.equals("STELL")){
+                dom="CARGOTRIPU";
+                campo="DESC_"+campo;
+            }
 
             descripcion=ObtenerDominio(dom,valor);
        }

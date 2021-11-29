@@ -321,8 +321,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             importsSap.put("P_NAME1",imports.getP_name1());
             importsSap.put("P_STCD1",imports.getP_stcd1());
             importsSap.put("P_STRAS",imports.getP_stras());
-            importsSap.put("P_ORTO2",imports.getP_orto2());
-            importsSap.put("P_ORTO1",imports.getP_orto1());
+            importsSap.put("P_ORT02",imports.getP_orto2());
+            importsSap.put("P_ORT01",imports.getP_orto1());
             importsSap.put("P_REGIO",imports.getP_regio());
             importsSap.put("P_DSMMA",imports.getP_dsmma());
 
@@ -330,6 +330,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             List<HashMap<String, Object>> str_marea = imports.getStr_marea();
             List<HashMap<String, Object>> str_event = imports.getStr_evento();
             List<HashMap<String, Object>> str_horom = imports.getStr_horom();
+            List<HashMap<String, Object>> str_flbsp_c = imports.getStr_flbsp_c();
+            List<HashMap<String, Object>> str_flbsp_e = imports.getStr_flbsp_e();
+            List<HashMap<String, Object>> str_pscinc = imports.getStr_pscinc();
 
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -342,6 +345,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             exec.setTable(jcoTables, "STR_MAREA",str_marea );
             exec.setTable(jcoTables, "STR_EVENT", str_event);
             exec.setTable(jcoTables, "STR_HOROM", str_horom);
+            exec.setTable(jcoTables, "STR_FLBSP_C", str_flbsp_c);
+            exec.setTable(jcoTables, "STR_FLBSP_E", str_flbsp_e);
+            exec.setTable(jcoTables, "STR_PSCINC", str_pscinc);
 
             function.execute(destination);
 

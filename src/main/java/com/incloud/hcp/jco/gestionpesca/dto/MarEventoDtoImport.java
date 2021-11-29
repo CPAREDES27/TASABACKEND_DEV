@@ -18,6 +18,34 @@ public class MarEventoDtoImport {
     private List<HashMap<String, Object>> str_evento;
     private List<HashMap<String, Object>> str_horom;
 
+    public List<HashMap<String, Object>> getStr_flbsp_c() {
+        return str_flbsp_c;
+    }
+
+    public void setStr_flbsp_c(List<HashMap<String, Object>> str_flbsp_c) {
+        this.str_flbsp_c = str_flbsp_c;
+    }
+
+    public List<HashMap<String, Object>> getStr_flbsp_e() {
+        return str_flbsp_e;
+    }
+
+    public void setStr_flbsp_e(List<HashMap<String, Object>> str_flbsp_e) {
+        this.str_flbsp_e = str_flbsp_e;
+    }
+
+    public List<HashMap<String, Object>> getStr_pscinc() {
+        return str_pscinc;
+    }
+
+    public void setStr_pscinc(List<HashMap<String, Object>> str_pscinc) {
+        this.str_pscinc = str_pscinc;
+    }
+
+    private List<HashMap<String, Object>> str_flbsp_c;
+    private List<HashMap<String, Object>> str_flbsp_e;
+    private List<HashMap<String, Object>> str_pscinc;
+
     public String getP_user() {
         return p_user;
     }
