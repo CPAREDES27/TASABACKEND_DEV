@@ -33,6 +33,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
+            //ZFL_RFC_REGROL_ADM_REGROL_BTP
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGROL_ADM_REGROL);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
@@ -54,21 +55,16 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             exec.setTable(tables, Tablas.T_OPCIONES,tmpOptions);
 
             if(imports.getP_tope().equals("C")){
-
                 exec.setTable(tables, Tablas.T_ZARTR,imports.getT_zartr());
                 exec.setTable(tables, Tablas.T_DZART,imports.getT_dzart());
             }
 
             stfcConnection.execute(destination);
             if(imports.getP_tope().equals("L")) {
-
                 JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
                 JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
-
-
                 List<HashMap<String, Object>> t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
                 List<HashMap<String, Object>> t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
-
                 rt.setT_dzart(t_dzart);
                 rt.setT_zartr(t_zartr);
             }
@@ -82,8 +78,6 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
         }catch (Exception e){
             rt.setMensaje(e.getMessage());
         }
-
-
         return rt;
     }
 
@@ -91,9 +85,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
     public RolTripulacionExports PersonalRol(PersonalDtoImport imports) throws Exception {
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         //JCo
-
         JCoRepository repo = destination.getRepository();
-
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
         JCoParameterList importx = stfcConnection.getImportParameterList();
         //stfcConnection.getImportParameterList().setValue("P_USER","FGARCIA");
@@ -104,17 +96,11 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
         JCoParameterList tables = stfcConnection.getTableParameterList();
         JCoTable tableImport = tables.getTable("OPTIONS");
         tableImport.appendRow();
-
         tableImport.setValue("WA", "WERKS EQ '"+imports.getEmbarcacion()+"'");
-
-
         //Ejecutar Funcion
         stfcConnection.execute(destination);
-
         //DestinationAcce
-
         //Recuperar Datos de SAP
-
         JCoTable tableExport = tables.getTable("DATA");
 
 
