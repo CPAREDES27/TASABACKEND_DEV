@@ -132,7 +132,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                                 registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
                             }
                             String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
-                            if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                            if (registros[j].trim().compareTo("PATRON EP") == 0|| registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0) {
                                 dto.setNombrePatron(registros[1]);
                                 dto.setDni(dni);
                             }
@@ -1862,9 +1862,18 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setDomicilioFiscal(T_ZATRP.getString(PDFZarpeConstantes.DFEMP));
                 dto.setRepresentanteAcreditado(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
                 dto.setTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
-                dto.setDiaHoraArriboPuerto(fechaArribo+"   "+ horaArribo);
-                dto.setDiaHoraZarpe(fechaZarpe+"   "+ horaZarpe);
 
+                if(fechaArribo.equals(null) || fechaArribo==""){
+                    dto.setDiaHoraArriboPuerto("");
+                }else{
+                    dto.setDiaHoraArriboPuerto(fechaArribo+"   "+ horaArribo);
+                }
+
+                if(fechaZarpe.equals(null) || fechaZarpe==""){
+                    dto.setDiaHoraZarpe("");
+                }else {
+                    dto.setDiaHoraZarpe(fechaZarpe + "   " + horaZarpe);
+                }
 
             }
             logger.error("RolTripulacion");
@@ -1901,7 +1910,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         }else {
                             registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
                         }
-                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                        if (registros[j].trim().compareTo("PATRON EP") == 0 || registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0 ) {
                             dto.setNombreCapitanPatron(registros[1]);
 
                         }
@@ -2538,7 +2547,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                             registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
                         }
 
-                        if (registros[j].trim().compareTo("PATRON EP") == 0) {
+                        if (registros[j].trim().compareTo("PATRON EP") == 0|| registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0) {
                             dto.setNombrePatron(registros[1]);
 
                         }
