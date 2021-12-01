@@ -546,6 +546,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }else {
                 String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
+                String rowcount="200";
+                if(importsParam.getNombreAyuda().equals("BSQCOCINERO")){
+                    rowcount="";
+                }
                 logger.error("AyudasBusqueda TABLA= " + tabla);
                 //setear mapeo de parametros import
                 HashMap<String, Object> imports = new HashMap<String, Object>();
@@ -553,7 +557,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 imports.put("DELIMITER", "|");
                 imports.put("NO_DATA", "");
                 imports.put("ROWSKIPS", "");
-                imports.put("ROWCOUNT", "200");
+                imports.put("ROWCOUNT", rowcount);
                 imports.put("P_USER", importsParam.getP_user());
                 imports.put("P_ORDER", "");
                 logger.error("AyudasBusqueda_2");
