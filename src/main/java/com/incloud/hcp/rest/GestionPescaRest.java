@@ -1,5 +1,7 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.gestionpesca.dto.AnularMareaExports;
+import com.incloud.hcp.jco.gestionpesca.dto.AnularMareaImports;
 import com.incloud.hcp.jco.gestionpesca.dto.ReabrirMareaImports;
 import com.incloud.hcp.jco.gestionpesca.service.JCOConsultaMareasService;
 import com.incloud.hcp.jco.maestro.dto.CampoTablaExports;
@@ -20,10 +22,22 @@ public class GestionPescaRest {
     private JCOConsultaMareasService jcoConsultaMareasService;
 
     @PostMapping(value = "/reabrir-marea/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<CampoTablaExports> ConsultarMaestro(@RequestBody ReabrirMareaImports imports) {
+    public ResponseEntity<CampoTablaExports> ReabrirMarea(@RequestBody ReabrirMareaImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoConsultaMareasService.reabrirMarea(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/anular-marea/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnularMareaExports> AnularMarea(@RequestBody AnularMareaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoConsultaMareasService.anularMarea(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
