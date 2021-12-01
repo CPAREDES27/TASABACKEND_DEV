@@ -24,5 +24,6 @@ public class AyudaBusquedaTablas {
     public static String BSQEMPLANTA="ZFLEMP";
     public static String BSQTEMPORADA="ZV_FLTZ";
     public static String BSQEQUIPO="EQKT";
+    public static String BSQCOCINERO="ZHRP_BD_PERSONAL";
 
 }
