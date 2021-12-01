@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.gestionpesca.dto.*;
 import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 import com.incloud.hcp.util.Constantes;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
     @Autowired
     JCOMaestrosService MaestroService;
+
+    @Autowired
+    private JCOCampoTablaService jcoCampoTablaService;
 
     public List<EmbarcacionDto> listaEmbarcacion(String condicion) throws Exception {
 
@@ -744,5 +749,73 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return  me;
     }
 
+    @Override
+    public CampoTablaExports reabrirMarea(ReabrirMareaImports imports) throws Exception {
+        try {
+            CampoTablaExports dto = new CampoTablaExports();
+
+            CampoTablaImports params = new CampoTablaImports();
+            params.setP_user(imports.getUser());
+
+
+            SimpleDateFormat dtf = new SimpleDateFormat("yyyyMMdd HHmmss");
+            dtf.setTimeZone(TimeZone.getTimeZone("America/Lima"));
+
+            Date now = new Date();
+            String dateTimeNow = dtf.format(now);
+            String date = dateTimeNow.substring(0, 8);
+            String time = dateTimeNow.substring(9);
+
+            String setStr = "ATMOD = '" + imports.getUser() + "' ";
+            setStr += "FCMOD = '" + date + "' ";
+            setStr += "HRMOD = '" + time + "' ";
+            setStr += "ESMAR = 'A'";
+
+            String opt = "NRMAR = " + imports.getNrmar();
+
+            List<SetDto> listSets = new ArrayList<>();
+            SetDto set = new SetDto();
+            set.setCmopt(opt);
+            set.setCmset(setStr);
+            set.setNmtab("ZFLMAR");
+
+            listSets.add(set);
+            params.setStr_set(listSets);
+
+            dto = this.jcoCampoTablaService.Actualizar(params);
+
+            return dto;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
+
+    @Override
+    public AnularMareaExports anularMarea(AnularMareaImports imports) throws Exception {
+        try {
+            AnularMareaExports dto = new AnularMareaExports();
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ANULA_MAREA);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_MAREA", imports.getP_marea());
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            stfcConnection.execute(destination);
+
+            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
+
+            dto.setT_mensaje(t_mensaje);
+            dto.setMensaje("Ok");
+
+            return dto;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
 
 }

@@ -1,10 +1,7 @@
 package com.incloud.hcp.jco.gestionpesca.service;
 
 import com.incloud.hcp.jco.gestionpesca.dto.*;
-import com.incloud.hcp.jco.maestro.dto.AnularDescargaExports;
-import com.incloud.hcp.jco.maestro.dto.AnularDescargaImports;
-import com.incloud.hcp.jco.maestro.dto.MaestroExport;
-import com.incloud.hcp.jco.maestro.dto.MensajeDto;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 
 import java.util.List;
@@ -29,5 +26,9 @@ public interface JCOEmbarcacionService {
     ConfigReservas obtenerConfigReservas(String usuario)throws Exception;
 
     MaestroExport obtenerSuministros(SuministroImport si)throws Exception;
+
+    CampoTablaExports reabrirMarea(ReabrirMareaImports imports) throws Exception;
+
+    AnularMareaExports anularMarea(AnularMareaImports imports) throws Exception;
 
 }
