@@ -21,23 +21,44 @@ public class JCOConsultaMareasServiceImpl implements JCOConsultaMareasService {
     private JCOCampoTablaService jcoCampoTablaService;
 
     @Override
-    public CampoTablaExports reabrirMarea(ReabrirMareaImports imports) {
-        CampoTablaImports params = new CampoTablaImports();
-        params.setP_user(imports.getUser());
-
+    public CampoTablaExports reabrirMarea(ReabrirMareaImports imports) throws Exception {
         CampoTablaExports dto = new CampoTablaExports();
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String dateTimeNow = dtf.format(now);
+        try {
+            CampoTablaImports params = new CampoTablaImports();
+            params.setP_user(imports.getUser());
 
-        String setStr = "ATMOD = '" + imports.getUser() + "' ";
 
-        List<SetDto> listSets = new ArrayList<>();
-        SetDto set = new SetDto();
-        set.setCmopt("");
-        //params.getStr_set()
-        dto.setMensaje(dateTimeNow);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            String dateTimeNow = dtf.format(now);
+            String date = dateTimeNow.substring(0, 9);
+            String time = dateTimeNow.substring(11);
+
+            date.replace("/", "");
+            time.replace(":", "");
+
+            String setStr = "ATMOD = '" + imports.getUser() + "' ";
+            setStr += "FCMOD = '" + date + "' ";
+            setStr += "HRMOD = '" + time + "' ";
+            setStr += "ESMAR = 'A'";
+
+            String opt = "NRMAR = " + imports.getNrmar();
+
+            List<SetDto> listSets = new ArrayList<>();
+            SetDto set = new SetDto();
+            set.setCmopt(opt);
+            set.setCmset(setStr);
+            set.setNmtab("ZFLMAR");
+
+            listSets.add(set);
+            params.setStr_set(listSets);
+
+            dto = this.jcoCampoTablaService.Actualizar(params);
+        } catch (Exception ex) {
+            dto.setMensaje(ex.getMessage());
+        }
+
         return dto;
     }
 }

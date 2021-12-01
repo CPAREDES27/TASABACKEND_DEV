@@ -14,19 +14,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
-@RequestMapping(value = "/api/General")
+@RequestMapping(value = "/api/gestionpesca")
 public class GestionPescaRest {
     @Autowired
     private JCOConsultaMareasService jcoConsultaMareasService;
 
-    @PostMapping(value = "/Read_Table2/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/reabrir-marea/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CampoTablaExports> ConsultarMaestro(@RequestBody ReabrirMareaImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoConsultaMareasService.reabrirMarea(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
-            //String error = Utils.obtieneMensajeErrorException(e);
             throw new RuntimeException(e.toString());
         }
 
