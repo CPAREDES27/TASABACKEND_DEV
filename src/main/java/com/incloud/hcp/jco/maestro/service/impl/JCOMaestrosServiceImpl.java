@@ -1200,23 +1200,35 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
     @Override
-    public EstructurasRfc obtenerEstructurasRfc(String funcion)throws Exception{
-        EstructurasRfc eRfc = new EstructurasRfc();
+    public ArrayList<EstructurasRfc> obtenerEstructurasRfc(String funcion)throws Exception{
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
         JCoFunction rfc = repo.getFunction(funcion);
         JCoParameterList jcoTables = rfc.getTableParameterList();
-
-        //jcoTables.getParameterFieldIterator()
-        //jcoTables.getListMetaData().get
         JCoParameterFieldIterator iterator = jcoTables.getParameterFieldIterator();
+        ArrayList<EstructurasRfc> eRfcLista = new ArrayList<EstructurasRfc>();
         while (iterator.hasNextField()){
+            EstructurasRfc eRfc = new EstructurasRfc();
             JCoParameterField field = iterator.nextParameterField();
-            //field.getRecordMetaData().get
-            //field.
-
+            String NombreTabla = field.getName();
+            eRfc.setNombreTabla(NombreTabla);
+            JCoTable tabla = jcoTables.getTable(NombreTabla);
+            JCoFieldIterator fields = tabla.getFieldIterator();
+            ArrayList<CamposEstructuraRfc> ceRfcLista = new ArrayList<CamposEstructuraRfc>();
+            while (fields.hasNextField()){
+                JCoField fieldTable = fields.nextField();
+                CamposEstructuraRfc  ceRfc = new CamposEstructuraRfc();
+                ceRfc.setNombreCampo(fieldTable.getName());
+                ceRfc.setDescripcion(fieldTable.getDescription());
+                ceRfc.setTipoDato(fieldTable.getTypeAsString());
+                ceRfc.setDecimales(fieldTable.getDecimals());
+                ceRfc.setLongitud(fieldTable.getLength());
+                ceRfcLista.add(ceRfc);
+            }
+            eRfc.setCampos(ceRfcLista);
+            eRfcLista.add(eRfc);
         }
-        return  eRfc;
+        return  eRfcLista;
     }
 
 

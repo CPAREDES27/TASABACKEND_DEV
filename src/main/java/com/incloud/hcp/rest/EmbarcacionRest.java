@@ -249,5 +249,31 @@ public class EmbarcacionRest {
 
     }
 
+    @PostMapping(value = "/ObtenerConfigReservas/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ConfigReservas> ObtenerConfigReservas(@RequestBody String usuario){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.obtenerConfigReservas(usuario))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/ObtenerSuministro/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ObtenerSuministro(@RequestBody SuministroImport si){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.obtenerSuministros(si))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
 
 }

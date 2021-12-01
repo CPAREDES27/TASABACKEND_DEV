@@ -26,4 +26,8 @@ public interface JCOEmbarcacionService {
 
     ConsultaReservaExport consultarReserva(ConsultaReservaImport imports)throws Exception;
 
+    ConfigReservas obtenerConfigReservas(String usuario)throws Exception;
+
+    MaestroExport obtenerSuministros(SuministroImport si)throws Exception;
+
 }

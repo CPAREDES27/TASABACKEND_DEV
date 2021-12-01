@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -223,7 +224,7 @@ public class GeneralRest {
     }
 
     @PostMapping(value = "/ObtenerEstructurasRfc/", produces = APPLICATION_JSON_VALUE)
-    public  ResponseEntity<EstructurasRfc> obtenerEstructurasRfc(@RequestBody String nombreRfc){
+    public  ResponseEntity<ArrayList<EstructurasRfc>> obtenerEstructurasRfc(@RequestBody String nombreRfc){
         try {
             return Optional.ofNullable(this.MaestroService.obtenerEstructurasRfc(nombreRfc))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

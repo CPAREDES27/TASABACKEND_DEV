@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.maestro.service;
 
 import com.incloud.hcp.jco.maestro.dto.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface JCOMaestrosService {
@@ -20,5 +21,5 @@ public interface JCOMaestrosService {
     CampoTablaExports UpdateTripulantesMasivo(UpdateTripuMasivoImports imports)throws Exception;
     CampoTablaExports UpdateMasivo(UpdateMasivoImports imports)throws Exception;
     UpdateTableExports Update_Table_Maestro(HiscomDTOImport imports) throws Exception;
-    EstructurasRfc obtenerEstructurasRfc(String funcion)throws  Exception;
+    ArrayList<EstructurasRfc> obtenerEstructurasRfc(String funcion)throws  Exception;
 }

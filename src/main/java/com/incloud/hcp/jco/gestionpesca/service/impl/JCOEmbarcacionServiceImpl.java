@@ -384,17 +384,17 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         //consulta ZFLPTA
         MaestroImportsKey imports1 = new MaestroImportsKey();
-        imports1.setTabla(Tablas.ZFLPTA);
         MaestroOptions mo1 = new MaestroOptions();
         String wa1 = "CDPTA = '" + codPlanta + "'";
         mo1.setWa(wa1);
         List<MaestroOptions> listOptions1 = new ArrayList<MaestroOptions>();
         listOptions1.add(mo1);
+        String[] fields = {"WERKS"};
+        List<MaestroOptionsKey> listOptKey1 = new ArrayList<MaestroOptionsKey>();
+        imports1.setTabla(Tablas.ZFLPTA);
         imports1.setDelimitador("|");
         imports1.setOption(listOptions1);
-        String[] fields = {"WERKS"};
         imports1.setFields(fields);
-        List<MaestroOptionsKey> listOptKey1 = new ArrayList<MaestroOptionsKey>();
         imports1.setOptions(listOptKey1);
         imports1.setOrder("");
         imports1.setRowcount(0);
@@ -645,6 +645,103 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             cre.setMensaje(e.getMessage());
         }
         return cre;
+    }
+
+    public ConfigReservas obtenerConfigReservas(String usuario){
+        ConfigReservas cr = new ConfigReservas();
+        try{
+            String tabla = Tablas.ZFLCCC;
+            String[] fields = {"BWART", "MATNR", "WERKS"};
+            String wa = "CLSIS = '01'";
+            List<MaestroOptionsKey> listOptKey1 = new ArrayList<MaestroOptionsKey>();
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(wa);
+            List<MaestroOptions> listOptions1 = new ArrayList<MaestroOptions>();
+            listOptions1.add(mo1);
+            MaestroImportsKey imports1 = new MaestroImportsKey();
+            imports1.setTabla(tabla);
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions1);
+            imports1.setFields(fields);
+            imports1.setOptions(listOptKey1);
+            imports1.setOrder("");
+            imports1.setRowcount(1);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            MaestroExport me1 = MaestroService.obtenerMaestro2(imports1);
+            if(me1.getData().size() > 0){
+                List<HashMap<String, Object>> data = me1.getData();
+                HashMap<String, Object> obj = data.get(0);
+                Object objWerk = obj.get("WERKS");
+                String strWerk = String.valueOf(objWerk);
+                Object objBwart = obj.get("BWART");
+                String strBwart = String.valueOf(objBwart);
+                Object objMatnr = obj.get("MATNR");
+                String strMatnr = String.valueOf(objMatnr);
+                cr.setBWART(strBwart);
+                cr.setMATNR(strMatnr);
+                cr.setWERKS(strWerk);
+                tabla = Tablas.ZV_FLAL;
+                String[] fields1 = {"CDALE", "DSALM", "CDALM"};
+                String wa1 = "ESREG = 'S'";
+                String wa2 = "AND WERKS = '" + strWerk + "'";
+                MaestroOptions mo2 = new MaestroOptions();
+                mo2.setWa(wa1);
+                MaestroOptions mo3 = new MaestroOptions();
+                mo3.setWa(wa2);
+                List<MaestroOptions> listOptions2 = new ArrayList<MaestroOptions>();
+                listOptions2.add(mo2);
+                listOptions2.add(mo3);
+                imports1.setTabla(tabla);
+                imports1.setOption(listOptions2);
+                imports1.setFields(fields1);
+                imports1.setRowcount(0);
+                MaestroExport me2 = MaestroService.obtenerMaestro2(imports1);
+                cr.setAlmacenes(me2.getData());
+            }
+
+        }catch(Exception e){
+            cr.setMensaje(e.getMessage());
+        }
+        return cr;
+    }
+
+    public MaestroExport obtenerSuministros(SuministroImport si){
+        MaestroExport me = new MaestroExport();
+        try {
+            String Usuario = si.getUsuario();
+            String Material = si.getMaterial();
+            String[] fields = {"CDSUM", "MAKTX", "CDUMD", "DSUMD"};
+            String wa1 = "ESREG = 'S'";
+            String wa2 = "AND MATNR = '" + Material + "'";
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(wa1);
+            MaestroOptions mo2 = new MaestroOptions();
+            mo2.setWa(wa2);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+            listOptions.add(mo2);
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+            MaestroImportsKey imports = new MaestroImportsKey();
+            imports.setTabla(Tablas.ZV_FLSM);
+            imports.setDelimitador("|");
+            imports.setOption(listOptions);
+            String mssg = "FIELDS: " + fields.length;
+            logger.error(mssg);
+            imports.setFields(fields);
+            imports.setOptions(listOptKey);
+            imports.setOrder("");
+            imports.setRowcount(1);
+            imports.setRowskips(0);
+            imports.setP_user(Usuario);
+            MaestroExport me2 = MaestroService.obtenerMaestro2(imports);
+            me.setFields(me2.getFields());
+            me.setData(me2.getData());
+            me.setMensaje(me2.getMensaje());
+        }catch (Exception e){
+            me.setMensaje(e.getMessage());
+        }
+        return  me;
     }
 
 
