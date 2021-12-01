@@ -15,12 +15,10 @@ import com.sap.conn.jco.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class JCOConsultaMareasServiceImpl implements JCOConsultaMareasService {
@@ -36,14 +34,13 @@ public class JCOConsultaMareasServiceImpl implements JCOConsultaMareasService {
             params.setP_user(imports.getUser());
 
 
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-            String dateTimeNow = dtf.format(now);
-            String date = dateTimeNow.substring(0, 9);
-            String time = dateTimeNow.substring(11);
+            SimpleDateFormat dtf = new SimpleDateFormat("yyyyMMdd HHmmss");
+            dtf.setTimeZone(TimeZone.getTimeZone("America/Lima"));
 
-            date.replace("/", "");
-            time.replace(":", "");
+            Date now = new Date();
+            String dateTimeNow = dtf.format(now);
+            String date = dateTimeNow.substring(0, 8);
+            String time = dateTimeNow.substring(9);
 
             String setStr = "ATMOD = '" + imports.getUser() + "' ";
             setStr += "FCMOD = '" + date + "' ";

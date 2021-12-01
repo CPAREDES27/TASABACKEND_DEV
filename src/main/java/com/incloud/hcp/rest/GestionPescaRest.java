@@ -21,7 +21,7 @@ public class GestionPescaRest {
     @Autowired
     private JCOConsultaMareasService jcoConsultaMareasService;
 
-    @PostMapping(value = "/reabrir-marea/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/reabrirMarea/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CampoTablaExports> ReabrirMarea(@RequestBody ReabrirMareaImports imports) {
 
         try {
@@ -33,7 +33,7 @@ public class GestionPescaRest {
 
     }
 
-    @PostMapping(value = "/anular-marea/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/anularMarea/", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<AnularMareaExports> AnularMarea(@RequestBody AnularMareaImports imports) {
 
         try {
