@@ -659,6 +659,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQALMACEN":
                 tabla=AyudaBusquedaTablas.BSQALMACEN;
                 break;
+            case "BSQCOCINERO":
+                tabla=AyudaBusquedaTablas.BSQCOCINERO;
+                break;
         }
 
         return tabla;
@@ -735,6 +738,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQALMACEN":
                 fields = AyudaBusquedaFields.BSQALMACEN;
                 break;
+            case "BSQCOCINERO":
+                fields = AyudaBusquedaFields.BSQCOCINERO;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -780,6 +786,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQALMACEN":
                 opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
+                break;
+            case "BSQCOCINERO":
+                opt.setWa(AyudaBusquedaOptions.BSQCOCINERO);
                 break;
             default:
                 noExists=true;
