@@ -70,7 +70,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
                 List<HashMap<String, Object>> t_archivo = metodo.ObtenerListObjetos(T_ARCHIVO, imports.getFieldsT_archivo());
                 rt.setT_dzart(t_dzart);
                 rt.setT_zartr(t_zartr);
-                rt.setT_zartr(t_archivo);
+                rt.setT_archivo(t_archivo);
             }
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
