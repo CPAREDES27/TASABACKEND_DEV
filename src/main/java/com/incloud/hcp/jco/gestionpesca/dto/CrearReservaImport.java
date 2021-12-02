@@ -8,7 +8,16 @@ public class CrearReservaImport {
     public String p_user;
     public String p_cdemb;
     public String p_lgort;
-    public String p_nrevn;
+
+    public int getP_nrevn() {
+        return p_nrevn;
+    }
+
+    public void setP_nrevn(int p_nrevn) {
+        this.p_nrevn = p_nrevn;
+    }
+
+    public int p_nrevn;
 
     public String getP_user() {
         return p_user;
@@ -32,14 +41,6 @@ public class CrearReservaImport {
 
     public void setP_lgort(String p_lgort) {
         this.p_lgort = p_lgort;
-    }
-
-    public String getP_nrevn() {
-        return p_nrevn;
-    }
-
-    public void setP_nrevn(String p_nrevn) {
-        this.p_nrevn = p_nrevn;
     }
 
     public String getP_fhrsv() {

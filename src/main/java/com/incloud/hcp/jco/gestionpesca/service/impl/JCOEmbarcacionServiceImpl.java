@@ -892,8 +892,12 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             String p_user = imports.getP_user();
             String p_cdemb = imports.getP_cdemb();
             String p_lgort = imports.getP_lgort();
-            int p_nrevn = Integer.parseInt(imports.getP_nrevn());
-            String p_fhrsv = imports.getP_fhrsv();
+            int p_nrevn = imports.getP_nrevn();
+            String p_fhrsv = imports.getP_fhrsv();//'24092021'
+            int year = Integer.parseInt(p_fhrsv.substring(4,8));
+            int mes = Integer.parseInt(p_fhrsv.substring(2,3));
+            int dia = Integer.parseInt(p_fhrsv.substring(0,0));
+            Date dateFhrsv = new Date(year, mes, dia);
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
 
             //RFC
@@ -908,7 +912,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             importsSap.put("P_CDEMB", p_cdemb);
             importsSap.put("P_LGORT", p_lgort);
             importsSap.put("P_NREVN", p_nrevn);
-            importsSap.put("p_fhrsv", p_fhrsv);
+            importsSap.put("P_FHRSV", dateFhrsv);
 
             //send params
             EjecutarRFC exec = new EjecutarRFC();
