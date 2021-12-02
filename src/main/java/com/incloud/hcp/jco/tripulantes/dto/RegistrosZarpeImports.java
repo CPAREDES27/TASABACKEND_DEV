@@ -20,6 +20,7 @@ public class RegistrosZarpeImports {
     private List<HashMap<String, Object>> t_zatrp;
     private List<HashMap<String, Object>> t_dzatr;
     private List<HashMap<String, Object>> t_nzatr;
+    private List<HashMap<String, Object>> t_archivo;
 
     public List<HashMap<String, Object>> getT_nzatr() {
         return t_nzatr;
@@ -57,6 +58,23 @@ public class RegistrosZarpeImports {
     private String[] fieldst_nzatr;
     private String[] fieldst_dzatr;
     private String[] fieldst_vgcer;
+    private String[] fieldst_archivo;
+
+    public String[] getFieldst_archivo() {
+        return fieldst_archivo;
+    }
+
+    public void setFieldst_archivo(String[] fieldst_archivo) {
+        this.fieldst_archivo = fieldst_archivo;
+    }
+
+    public List<HashMap<String, Object>> getT_archivo() {
+        return t_archivo;
+    }
+
+    public void setT_archivo(List<HashMap<String, Object>> t_archivo) {
+        this.t_archivo = t_archivo;
+    }
 
     public String getP_tope() {
         return p_tope;

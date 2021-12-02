@@ -8,7 +8,7 @@ public class SeguimientoTripuImports {
    private String ip_cdpcn;
    private String ip_tired;
    private String[] fieldst_dstrip;
-   private List<Options> t_opcion;
+   private List<com.incloud.hcp.jco.controlLogistico.dto.Options> t_opcion;
 
     public String getIp_perner() {
         return ip_perner;
@@ -42,11 +42,11 @@ public class SeguimientoTripuImports {
         this.fieldst_dstrip = fieldst_dstrip;
     }
 
-    public List<Options> getT_opcion() {
+    public List<com.incloud.hcp.jco.controlLogistico.dto.Options> getT_opcion() {
         return t_opcion;
     }
 
-    public void setT_opcion(List<Options> t_opcion) {
+    public void setT_opcion(List<com.incloud.hcp.jco.controlLogistico.dto.Options> t_opcion) {
         this.t_opcion = t_opcion;
     }
 }

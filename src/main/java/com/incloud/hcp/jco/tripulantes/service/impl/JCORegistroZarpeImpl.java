@@ -30,7 +30,7 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
 
              JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
              JCoRepository repo = destination.getRepository();
-             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGZAR_ADM_REGZAR);
+             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGZAR_ADM_REGZAR_BTP);
 
              JCoParameterList importx = stfcConnection.getImportParameterList();
              importx.setValue("P_TOPE", imports.getP_tope());
@@ -57,17 +57,20 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
              JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
              JCoTable T_NZATR = tables.getTable(Tablas.T_NZATR);
+             JCoTable T_ARCHIVO = tables.getTable(Tablas.T_ARCHIVO);
 
              if(imports.getP_tope().equals("A")){
                  exec.setTable(tables, Tablas.T_ZATRP,imports.getT_zatrp());
                  exec.setTable(tables, Tablas.T_DZATR,imports.getT_dzatr());
                  exec.setTable(tables, Tablas.T_NZATR,imports.getT_nzatr());
+                 exec.setTable(tables, Tablas.T_ARCHIVO,imports.getT_archivo());
              }
              stfcConnection.execute(destination);
              List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
              List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
              List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());
              List<HashMap<String, Object>>  t_nzatr = metodo.ObtenerListObjetos(T_NZATR, imports.getFieldst_nzatr());
+             List<HashMap<String, Object>>  t_archivo = metodo.ObtenerListObjetos(T_ARCHIVO, imports.getFieldst_archivo());
              JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
              List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
              rz.setT_mensaje(t_mensaje);
@@ -75,6 +78,7 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              rz.setT_dzatr(t_dzatr);
              rz.setT_vgcer(t_vgcer);
              rz.setT_nzatr(t_nzatr);
+             rz.setT_archivo(t_archivo);
              rz.setMensaje("Ok");
 
          }catch (Exception e){

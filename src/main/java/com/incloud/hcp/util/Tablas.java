@@ -122,6 +122,7 @@ public class Tablas {
     public static String T_NZATR="T_NZATR";
     public static String T_ZARTR="T_ZARTR";
     public static String T_DZART="T_DZART";
+    public static String T_ARCHIVO = "T_ARCHIVOS";
     public static String T_OPCION="T_OPCION";
     public static String T_DSTRIP="T_DSTRIP";
     public static String T_MENSAJ="T_MENSAJ";
