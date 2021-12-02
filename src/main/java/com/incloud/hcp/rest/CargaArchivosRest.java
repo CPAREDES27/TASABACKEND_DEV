@@ -1,9 +1,7 @@
 package com.incloud.hcp.rest;
 
 
-import com.incloud.hcp.jco.maestro.dto.CargaArchivoImports;
-import com.incloud.hcp.jco.maestro.dto.CargaDescargaArchivosExports;
-import com.incloud.hcp.jco.maestro.dto.CargaDescargaArchivosImports;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCargaArchivosService;
 import com.incloud.hcp.util.Ftp.FtpExports;
 import com.incloud.hcp.util.Ftp.FtpImports;
@@ -67,6 +65,17 @@ public class CargaArchivosRest {
 
         try {
             return Optional.ofNullable(this.jcoCargaArchivosService.CargaDescargaArchivos(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/CargaDinamicaArchivos", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ImpoBtpExports> CargaDinamicaArchivos(@RequestBody ImpoBtpImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoCargaArchivosService.CargaDinamicaArchivos(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

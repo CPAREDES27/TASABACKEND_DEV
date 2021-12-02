@@ -45,6 +45,7 @@ public class Constantes {
     public static String ZFL_RFC_ANULA_DESCA="ZFL_RFC_ANULA_DESCA";
     public static String ZFL_RFC_CALEN_TEMP_PESC="ZFL_RFC_CALEN_TEMP_PESC";
     public static String ZFL_RFC_ANULA_MAREA="ZFL_RFC_ANULA_MAREA";
+    public static String ZFL_RFC_IMPO_BTP="ZFL_RFC_IMPO_BTP";
 
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";
