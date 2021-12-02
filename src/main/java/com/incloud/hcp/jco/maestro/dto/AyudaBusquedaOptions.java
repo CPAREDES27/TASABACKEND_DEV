@@ -16,5 +16,7 @@ public class AyudaBusquedaOptions {
     public static String BSQEMBARCA="";
     public static String BSQTEMPORADA="ESPCN = 'S'";
     public static String BSQCOCINERO="ABKRS = 'TT'";
+    public static String BSQTRIPULANTES="ABKRS = 'TT'";
+
 
 }
