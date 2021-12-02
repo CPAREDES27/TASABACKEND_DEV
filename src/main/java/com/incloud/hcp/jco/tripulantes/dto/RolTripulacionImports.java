@@ -15,8 +15,26 @@ public class RolTripulacionImports {
     private List<MaestroOptionsKey> p_options;
     private String[] fieldsT_zartr;
     private String[] fieldsT_dzart;
+    private String[] fieldsT_archivo;
     private List<HashMap<String, Object>> t_zartr;
     private List<HashMap<String, Object>> t_dzart;
+    private List<HashMap<String, Object>> t_archivo;
+
+    public String[] getFieldsT_archivo() {
+        return fieldsT_archivo;
+    }
+
+    public void setFieldsT_archivo(String[] fieldsT_archivo) {
+        this.fieldsT_archivo = fieldsT_archivo;
+    }
+
+    public List<HashMap<String, Object>> getT_archivo() {
+        return t_archivo;
+    }
+
+    public void setT_archivo(List<HashMap<String, Object>> t_archivo) {
+        this.t_archivo = t_archivo;
+    }
 
     public List<HashMap<String, Object>> getT_zartr() {
         return t_zartr;
