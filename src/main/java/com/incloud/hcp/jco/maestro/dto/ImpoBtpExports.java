@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ImpoBtpExports {
     private List<HashMap<String, Object>> t_mensaje;
+    private String mensaje;
 
     public List<HashMap<String, Object>> getT_mensaje() {
         return t_mensaje;
@@ -12,5 +13,13 @@ public class ImpoBtpExports {
 
     public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
         this.t_mensaje = t_mensaje;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
 }
