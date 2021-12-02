@@ -165,6 +165,7 @@ public class Tablas {
     public static String ZFLCCC="ZFLCCC";
     public static String ZV_FLAL="ZV_FLAL";
     public static String ZV_FLSM="ZV_FLSM";
+    public static String ZV_FLCO="ZV_FLCO";
 
 
 

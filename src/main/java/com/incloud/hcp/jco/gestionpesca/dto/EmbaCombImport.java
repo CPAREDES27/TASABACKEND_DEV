@@ -3,21 +3,21 @@ package com.incloud.hcp.jco.gestionpesca.dto;
 public class EmbaCombImport {
 
     public String getEmbarcacion() {
-        return Embarcacion;
+        return embarcacion;
     }
 
     public void setEmbarcacion(String embarcacion) {
-        Embarcacion = embarcacion;
+        this.embarcacion = embarcacion;
     }
 
     public String getUsuario() {
-        return Usuario;
+        return usuario;
     }
 
     public void setUsuario(String usuario) {
-        Usuario = usuario;
+        this.usuario = usuario;
     }
 
-    public String Embarcacion;
-    public String Usuario;
+    public String embarcacion;
+    public String usuario;
 }
