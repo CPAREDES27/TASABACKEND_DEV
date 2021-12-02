@@ -78,7 +78,7 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
-
+    /*
     @PostMapping(value = "/PDFTravesia", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PDFExports> GenerarPdfTravesia(@RequestBody PDFZarpeImports imports) {
 
@@ -88,7 +88,7 @@ public class TripulantesRest {
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
         }
-    }
+    }*/
 
     @PostMapping(value = "/SeguimientoTripulantes", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<SeguimientoTripuExports> SeguimientoTripulantes(@RequestBody SeguimientoTripuImports imports) {

@@ -546,6 +546,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             }else {
                 String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
+                String rowcount="200";
+                if(importsParam.getNombreAyuda().equals("BSQCOCINERO")){
+                    rowcount="";
+                }
                 logger.error("AyudasBusqueda TABLA= " + tabla);
                 //setear mapeo de parametros import
                 HashMap<String, Object> imports = new HashMap<String, Object>();
@@ -553,7 +557,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 imports.put("DELIMITER", "|");
                 imports.put("NO_DATA", "");
                 imports.put("ROWSKIPS", "");
-                imports.put("ROWCOUNT", "200");
+                imports.put("ROWCOUNT", rowcount);
                 imports.put("P_USER", importsParam.getP_user());
                 imports.put("P_ORDER", "");
                 logger.error("AyudasBusqueda_2");
@@ -659,6 +663,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQALMACEN":
                 tabla=AyudaBusquedaTablas.BSQALMACEN;
                 break;
+            case "BSQCOCINERO":
+                tabla=AyudaBusquedaTablas.BSQCOCINERO;
+                break;
         }
 
         return tabla;
@@ -735,6 +742,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQALMACEN":
                 fields = AyudaBusquedaFields.BSQALMACEN;
                 break;
+            case "BSQCOCINERO":
+                fields = AyudaBusquedaFields.BSQCOCINERO;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -780,6 +790,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQALMACEN":
                 opt.setWa(AyudaBusquedaOptions.BSQPLANTAS);
+                break;
+            case "BSQCOCINERO":
+                opt.setWa(AyudaBusquedaOptions.BSQCOCINERO);
                 break;
             default:
                 noExists=true;
@@ -1200,23 +1213,35 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     }
 
     @Override
-    public EstructurasRfc obtenerEstructurasRfc(String funcion)throws Exception{
-        EstructurasRfc eRfc = new EstructurasRfc();
+    public ArrayList<EstructurasRfc> obtenerEstructurasRfc(String funcion)throws Exception{
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
         JCoFunction rfc = repo.getFunction(funcion);
         JCoParameterList jcoTables = rfc.getTableParameterList();
-
-        //jcoTables.getParameterFieldIterator()
-        //jcoTables.getListMetaData().get
         JCoParameterFieldIterator iterator = jcoTables.getParameterFieldIterator();
+        ArrayList<EstructurasRfc> eRfcLista = new ArrayList<EstructurasRfc>();
         while (iterator.hasNextField()){
+            EstructurasRfc eRfc = new EstructurasRfc();
             JCoParameterField field = iterator.nextParameterField();
-            //field.getRecordMetaData().get
-            //field.
-
+            String NombreTabla = field.getName();
+            eRfc.setNombreTabla(NombreTabla);
+            JCoTable tabla = jcoTables.getTable(NombreTabla);
+            JCoFieldIterator fields = tabla.getFieldIterator();
+            ArrayList<CamposEstructuraRfc> ceRfcLista = new ArrayList<CamposEstructuraRfc>();
+            while (fields.hasNextField()){
+                JCoField fieldTable = fields.nextField();
+                CamposEstructuraRfc  ceRfc = new CamposEstructuraRfc();
+                ceRfc.setNombreCampo(fieldTable.getName());
+                ceRfc.setDescripcion(fieldTable.getDescription());
+                ceRfc.setTipoDato(fieldTable.getTypeAsString());
+                ceRfc.setDecimales(fieldTable.getDecimals());
+                ceRfc.setLongitud(fieldTable.getLength());
+                ceRfcLista.add(ceRfc);
+            }
+            eRfc.setCampos(ceRfcLista);
+            eRfcLista.add(eRfc);
         }
-        return  eRfc;
+        return  eRfcLista;
     }
 
 

@@ -31,4 +31,5 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENBSQTRIPU={"CDRTR"};
     public static String[] CONSGENBSQTRIPU1={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
     public static String[] CONSGENBSQTRIPU2={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
+    public static String[] CONSGENPROVEEDORES={"LIFNR", "NAME1"};
 }

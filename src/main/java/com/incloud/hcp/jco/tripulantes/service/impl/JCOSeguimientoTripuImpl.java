@@ -38,13 +38,14 @@ public class JCOSeguimientoTripuImpl implements JCOSeguimientoTripuService {
             importx.setValue("IP_CDPCN", imports.getIp_cdpcn());
             importx.setValue("IP_TIREP", imports.getIp_tired());
 
-            List<Options> options = imports.getT_opcion();
+            //List<Options> options = imports.getT_opcion();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
+            for (int i = 0; i < imports.getT_opcion().size(); i++) {
+                //Options o = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
 
-                record.put("DATA", o.getData());
+                record.put("DATA", imports.getT_opcion().get(i).getText());
+                logger.error("DATA: "+imports.getT_opcion().get(i).getText());
                 tmpOptions.add(record);
             }
 

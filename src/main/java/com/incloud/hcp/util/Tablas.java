@@ -162,5 +162,11 @@ public class Tablas {
     public static String T_RESERVAS="T_RESERVAS";
     public static String T_DETALLE="T_DETALLE";
 
+    public static String ZFLCCC="ZFLCCC";
+    public static String ZV_FLAL="ZV_FLAL";
+    public static String ZV_FLSM="ZV_FLSM";
+
+
+
 
 }

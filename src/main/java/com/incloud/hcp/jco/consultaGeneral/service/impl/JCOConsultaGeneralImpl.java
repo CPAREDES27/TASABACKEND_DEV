@@ -337,6 +337,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENBSQTRIPU2":
                 tabla = ConsultaGeneralTablas.CONSGENBSQTRIPU2;
                 break;
+            case "CONSGENPROVEEDORES":
+                tabla = ConsultaGeneralTablas.CONSGENPROVEEDORES;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -426,7 +429,10 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 fields = ConsultaGeneralFields.CONSGENBSQTRIPU1;
                 break;
             case "CONSGENBSQTRIPU2":
-                fields = ConsultaGeneralFields.CONSGENBSQTRIPU2;
+                fields = ConsultaGeneralFields.CONSGENBSQTRIPU2;//
+                break;
+            case "CONSGENPROVEEDORES":
+                fields = ConsultaGeneralFields.CONSGENPROVEEDORES;//
                 break;
         }
 
@@ -581,6 +587,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENBSQTRIPU2":
                 condicion = ConsultaGeneralOptions.CONSGENBSQTRIPU2 + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENPROVEEDORES":
+                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + parametro2 + "'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
