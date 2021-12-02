@@ -31,4 +31,6 @@ public interface JCOEmbarcacionService {
 
     AnularMareaExports anularMarea(AnularMareaImports imports) throws Exception;
 
+    MaestroExport obtenerEmbaComb(EmbaCombImport imports) throws Exception;
+
 }

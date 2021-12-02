@@ -397,7 +397,7 @@ public class EjecutarRFC {
 
                             newRecord.put(key, value);
                            Metodos me=new Metodos();
-                            if(key.equals("INPRP") || key.equals("ESREG") || key.equals("CDMMA") || key.equals("CDTEV")){
+                            if(key.equals("INPRP") || key.equals("ESREG") || key.equals("CDMMA") || key.equals("CDTEV")|| key.equals("STELL")){
                                 HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -483,7 +483,7 @@ public class EjecutarRFC {
 
                     newRecord.put(key, value);
                     Metodos me=new Metodos();
-                    if(key.equals("INPRP") || key.equals("ESREG")){
+                    if(key.equals("INPRP") || key.equals("ESREG") || key.equals("STELL")){
                         HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
                         for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                             String campo=entry.getKey();

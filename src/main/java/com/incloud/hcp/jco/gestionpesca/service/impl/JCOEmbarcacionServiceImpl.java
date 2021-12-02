@@ -818,4 +818,70 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
     }
 
+    @Override
+    public MaestroExport obtenerEmbaComb(EmbaCombImport imports) throws Exception{
+        MaestroExport me = new MaestroExport();
+        try{
+            String cdemb = imports.getEmbarcacion();
+            String usuario = imports.getUsuario();
+            String[] fields = {"CVADM", "CPSDM", "CVPMS", "CPPMS", "CDTAN", "CDEMB", "MANDT"};
+            String wa = "CDEMB EQ '" + cdemb + "'";
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(wa);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+            MaestroImportsKey imports1 = new MaestroImportsKey();
+            imports1.setTabla(Tablas.ZFLEMB);
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions);
+            imports1.setFields(fields);
+            imports1.setOptions(listOptKey);
+            imports1.setOrder("");
+            imports1.setRowcount(1);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            me = MaestroService.obtenerMaestro2(imports1);
+            if(me.getData().size() > 0){
+                List<HashMap<String, Object>> data1 = me.getData();
+                HashMap<String, Object> obj1 = data1.get(0);
+                String[] fields1 = {"STCMB"};
+                String wa1 = "CDEMB EQ '" + cdemb + "'";
+                String wa2 = "AND (CDTEV EQ '1' OR CDTEV EQ '5' OR CDTEV EQ '6' OR CDTEV EQ 'H') ";
+                String wa3 = "AND (STCMB IS NOT NULL OR STCMB > 0)";
+                MaestroOptions mo2 = new MaestroOptions();
+                mo2.setWa(wa1);
+                MaestroOptions mo3 = new MaestroOptions();
+                mo3.setWa(wa2);
+                MaestroOptions mo4 = new MaestroOptions();
+                mo4.setWa(wa3);
+                List<MaestroOptions> listOptions1 = new ArrayList<MaestroOptions>();
+                listOptions1.add(mo2);
+                listOptions1.add(mo3);
+                listOptions1.add(mo4);
+                MaestroImportsKey imports2 = new MaestroImportsKey();
+                imports2.setTabla(Tablas.ZV_FLCO);
+                imports2.setDelimitador("|");
+                imports2.setOption(listOptions1);
+                imports2.setFields(fields1);
+                imports2.setOptions(listOptKey);
+                imports2.setOrder("NRMAR DESCENDING NREVN DESCENDING");
+                imports2.setRowcount(1);
+                imports2.setRowskips(0);
+                imports2.setP_user(usuario);
+                MaestroExport me1 = MaestroService.obtenerMaestro2(imports2);
+                if(me1.getData().size() > 0){
+                    List<HashMap<String, Object>> data = me1.getData();
+                    HashMap<String, Object> obj = data.get(0);
+                    Object objStcmb = obj.get("STCMB");
+                    String strStcmb = String.valueOf(objStcmb);
+                    obj1.put("STCMB", strStcmb);
+                }
+            }
+        }catch (Exception e){
+            me.setMensaje(e.getMessage());
+        }
+        return  me;
+    }
+
 }
