@@ -818,4 +818,34 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
     }
 
+    @Override
+    public MaestroExport obtenerEmbaComb(EmbaCombImport imports) throws Exception{
+        MaestroExport me = new MaestroExport();
+        try{
+            String cdemb = imports.getEmbarcacion();
+            String usuario = imports.getUsuario();
+            String[] fields = {"CVADM", "CPSDM", "CVPMS", "CPPMS", "CDTAN", "CDEMB", "MANDT"};
+            String wa = "CDEMB EQ '" + cdemb + "'";
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(wa);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+            MaestroImportsKey imports1 = new MaestroImportsKey();
+            imports1.setTabla(Tablas.ZV_FLSM);
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions);
+            imports1.setFields(fields);
+            imports1.setOptions(listOptKey);
+            imports1.setOrder("");
+            imports1.setRowcount(1);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            me = MaestroService.obtenerMaestro2(imports1);
+        }catch (Exception e){
+            me.setMensaje(e.getMessage());
+        }
+        return  me;
+    }
+
 }
