@@ -148,14 +148,58 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     // Mapeo condicional de algunas consultas
                     switch (importsParam.getNombreConsulta()){
                         case "CONSGENBSQTRIPU": // Búsqueda de tripulación
+                            if(!dto.getData().isEmpty()){
 
-                            break;
-                        case "CONSGENERRDSCG": // Validación de errores de descarga
-                            if (!dto.getData().isEmpty()) {
+                                String value="";
+                                for(Map.Entry<String, Object> entry:dto.getData().get(0).entrySet()){
+                                    String key=entry.getKey();
+                                    value=entry.getValue().toString();
+
+                                }
+                                logger.error("CONSGENBSQTRIPU= 1");
+                                String CONSGENBSQTRIPU1="CONSGENBSQTRIPU1";
+                                rowcount=BuscarRowcount(CONSGENBSQTRIPU1);
+                                order=BuscarOrder(CONSGENBSQTRIPU1);
+                                tabla = Buscartabla(CONSGENBSQTRIPU1);
+                                options = BuscarOption(CONSGENBSQTRIPU1, value, importsParam.getParametro2()
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                                optionsKeys = BuscarOptions(CONSGENBSQTRIPU1, importsParam.getParametro1(), importsParam.getParametro2()
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                                fields = BuscarFields(CONSGENBSQTRIPU1);
+                                dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
+
+                            }else{
+                                logger.error("CONSGENBSQTRIPU= 2");
+                                String CONSGENBSQTRIPU2="CONSGENBSQTRIPU2";
+                                rowcount=BuscarRowcount(CONSGENBSQTRIPU2);
+                                order=BuscarOrder(CONSGENBSQTRIPU2);
+                                tabla = Buscartabla(CONSGENBSQTRIPU2);
+                                options = BuscarOption(CONSGENBSQTRIPU2, importsParam.getParametro1(), importsParam.getParametro2()
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                                optionsKeys = BuscarOptions(CONSGENBSQTRIPU2, importsParam.getParametro1(), importsParam.getParametro2()
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                                fields = BuscarFields(CONSGENBSQTRIPU2);
+                                dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
                             }
                             break;
+                        case "CONSGENERRDSCG": // Validación de errores de descarga
+                            if (!dto.getData().isEmpty()) {
+                                String mensajeErrDesc = "";
+                                HashMap<String, Object> dataErrDesc = dto.getData().get(0);
+                                switch (dataErrDesc.get("TPROG").toString()) {
+                                    case "A":
+                                        mensajeErrDesc = "Programa de anulación: " + dataErrDesc.get("DSMEN").toString();
+                                        break;
+                                    case "E":
+                                        mensajeErrDesc = "Programa de generación: " + dataErrDesc.get("DSMEN").toString();
+                                        break;
+                                }
+                                dataErrDesc.put("MENSAJE", mensajeErrDesc);
+                            }
+                            break;
                     }
+                    /*
                     if(importsParam.getNombreConsulta().equals("CONSGENBSQTRIPU")){
 
 
@@ -194,6 +238,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
                         }
                     }
+
+                     */
 
 
                     break;
@@ -447,6 +493,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENPROVEEDORES":
                 fields = ConsultaGeneralFields.CONSGENPROVEEDORES;//
                 break;
+            case "CONSGENERRDSCG":
+                fields = ConsultaGeneralFields.CONSGENERRDSCG;
+                break;
         }
 
 
@@ -609,7 +658,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 options.add(opt);
                 break;
             case "CONSGENERRDSCG":
-                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + parametro2 + "'";
+                condicion = ConsultaGeneralOptions.CONSGENERRDSCG + parametro1 + "'" + ConsultaGeneralOptions.CONSGENERRDSCG2;
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
