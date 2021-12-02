@@ -4,18 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ImpoBtpImports {
-    private String ip_toper;
     private String ip_tpcarga;
     private List<HashMap<String, Object>> cuotas_armadores;
     private List<HashMap<String, Object>> embarcaciones;
-
-    public String getIp_toper() {
-        return ip_toper;
-    }
-
-    public void setIp_toper(String ip_toper) {
-        this.ip_toper = ip_toper;
-    }
 
     public String getIp_tpcarga() {
         return ip_tpcarga;

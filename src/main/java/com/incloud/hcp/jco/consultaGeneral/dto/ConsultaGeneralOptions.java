@@ -48,5 +48,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENBSQTRIPU2="ABKRS EQ 'TT' AND CENTRO EQ '";
     public static String CONSGENPROVEEDORES="CDPTA = '";
     public static String CONSGENPROVEEDORES2="' AND CDALM = ";
+    public static String CONSGENERRDSCG="NRDES = '";
+    public static String CONSGENERRDSCG2=" AND INDTR = 'P' AND ESREG = 'S' AND NRDES NE '' AND CMIN EQ 'E'";
 
 }

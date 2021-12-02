@@ -145,6 +145,17 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     fields = BuscarFields(importsParam.getNombreConsulta());
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
+                    // Mapeo condicional de algunas consultas
+                    switch (importsParam.getNombreConsulta()){
+                        case "CONSGENBSQTRIPU": // Búsqueda de tripulación
+
+                            break;
+                        case "CONSGENERRDSCG": // Validación de errores de descarga
+                            if (!dto.getData().isEmpty()) {
+
+                            }
+                            break;
+                    }
                     if(importsParam.getNombreConsulta().equals("CONSGENBSQTRIPU")){
 
 
@@ -340,6 +351,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENPROVEEDORES":
                 tabla = ConsultaGeneralTablas.CONSGENPROVEEDORES;
                 break;
+            case "CONSGENERRDSCG":
+                tabla = ConsultaGeneralTablas.CONSGENERRDSCG;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -595,6 +608,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
+            case "CONSGENERRDSCG":
+                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + parametro2 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
             default:
                 inList = false;
                 break;
@@ -777,8 +795,13 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     public String BuscarRowcount(String nomConsulta)throws Exception{
         String rowcount="200";
 
-        if(nomConsulta.equals("CONSGENBSQTRIPU")){
-           rowcount="1";
+        switch (nomConsulta){
+            case "CONSGENBSQTRIPU":
+                rowcount="1";
+                break;
+            case "CONSGENMAREAANT":
+                rowcount = "1";
+                break;
         }
 
         return rowcount;

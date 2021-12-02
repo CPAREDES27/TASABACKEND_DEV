@@ -140,38 +140,38 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
                 String index = String.valueOf(i + 1);
                 HashMap<String, Object> embarcacionMatch = new HashMap<>();
-                String nombreEmbarcacion = embarcacion.get("EMBARCACION").toString();
-                String matricula = embarcacion.get("MATRICULA").toString();
-                String casco = embarcacion.get("CASCO").toString();
-                String regimen = embarcacion.get("REGIMEN").toString();
-                String tipoPreservacion = embarcacion.get("TIPO PRESEVACION").toString();
+                String nombreEmbarcacion = embarcacion.get("EMBARCACION") != null ? embarcacion.get("EMBARCACION").toString() : "";
+                String matricula = embarcacion.get("MATRICULA") != null ? embarcacion.get("MATRICULA").toString() : "";
+                String casco = embarcacion.get("CASCO") != null ? embarcacion.get("CASCO").toString() : "";
+                String regimen = embarcacion.get("REGIMEN") != null ? embarcacion.get("REGIMEN").toString() : "";
+                String tipoPreservacion = embarcacion.get("TIPO PRESEVACION") != null ? embarcacion.get("TIPO PRESEVACION").toString() : "";
 
-                Double eslora = Double.parseDouble(embarcacion.get("ESLORA").toString());
+                Double eslora = embarcacion.get("ESLORA") != null ? Double.parseDouble(embarcacion.get("ESLORA").toString()) : 0;
                 String esloraFormat = decimalFormat.format(eslora);
 
-                Double manga = Double.parseDouble(embarcacion.get("MANGA").toString());
+                Double manga = embarcacion.get("MANGA") != null ? Double.parseDouble(embarcacion.get("MANGA").toString()) : 0;
                 String mangaFormat = decimalFormat.format(manga);
 
-                Double puntual = Double.parseDouble(embarcacion.get("PUNTAL").toString());
+                Double puntual = embarcacion.get("PUNTAL") != null ? Double.parseDouble(embarcacion.get("PUNTAL").toString()) : 0;
                 String puntualFormat = decimalFormat.format(puntual);
 
-                String marcaMotor = embarcacion.get("MARCA MOTOR").toString();
-                String modeloMotor = embarcacion.get("MODELO MOTOR").toString();
-                String nroSerieMotor = embarcacion.get("NRO SERIE MOTOR").toString();
-                String potenciaMotor = embarcacion.get("POTENCIA MOTOR").toString();
-                String arqueoNeto = embarcacion.get("ARQUEO NETO").toString();
-                String arqueoBruto = embarcacion.get("ARQUEO BRUTO").toString();
-                String capbodM3 = embarcacion.get("CAPBOD_M3").toString();
-                String capbodTM = embarcacion.get("CAPBOD_TM").toString();
-                String resolucion = embarcacion.get("RESOLUCION").toString();
-                String permisoPesca = embarcacion.get("PERMISO PESCA").toString();
-                String permisoZarpe = embarcacion.get("PERMISO ZARPE").toString();
-                String codigoPago = embarcacion.get("CODIGO PAGO").toString();
-                String transmisor = embarcacion.get("TRANSMISOR").toString();
-                String armador = embarcacion.get("ARMADOR").toString();
-                String ruc = embarcacion.get("RUC").toString();
-                String precinto = embarcacion.get("PRECINTO").toString();
-                String aparejo = embarcacion.get("APAREJO").toString();
+                String marcaMotor = embarcacion.get("MARCA MOTOR") != null ? embarcacion.get("MARCA MOTOR").toString() : "";
+                String modeloMotor = embarcacion.get("MODELO MOTOR") != null ? embarcacion.get("MODELO MOTOR").toString() : "";
+                String nroSerieMotor = embarcacion.get("NRO SERIE MOTOR") != null ? embarcacion.get("NRO SERIE MOTOR").toString() : "";
+                String potenciaMotor = embarcacion.get("POTENCIA MOTOR") != null ? embarcacion.get("POTENCIA MOTOR").toString() : "0";
+                String arqueoNeto = embarcacion.get("ARQUEO NETO") != null ? embarcacion.get("ARQUEO NETO").toString() : "0";
+                String arqueoBruto = embarcacion.get("ARQUEO BRUTO") != null ? embarcacion.get("ARQUEO BRUTO").toString() : "0";
+                String capbodM3 = embarcacion.get("CAPBOD_M3") != null ? embarcacion.get("CAPBOD_M3").toString() : "0";
+                String capbodTM = embarcacion.get("CAPBOD_TM") != null ? embarcacion.get("CAPBOD_TM").toString() : "0";
+                String resolucion = embarcacion.get("RESOLUCION") != null ? embarcacion.get("RESOLUCION").toString() : "";
+                String permisoPesca = embarcacion.get("PERMISO PESCA") != null ? embarcacion.get("PERMISO PESCA").toString() : "";
+                String permisoZarpe = embarcacion.get("PERMISO ZARPE") != null ? embarcacion.get("PERMISO ZARPE").toString() : "";
+                String codigoPago = embarcacion.get("CODIGO PAGO") != null ? embarcacion.get("CODIGO PAGO").toString() : "0";
+                String transmisor = embarcacion.get("TRANSMISOR") != null ? embarcacion.get("TRANSMISOR").toString() : "0";
+                String armador = embarcacion.get("ARMADOR") != null ? embarcacion.get("ARMADOR").toString() : "";
+                String ruc = embarcacion.get("RUC") != null ? embarcacion.get("RUC").toString() : "";
+                String precinto = embarcacion.get("PRECINTO") != null ? embarcacion.get("PRECINTO").toString() : "";
+                String aparejo = embarcacion.get("APAREJO") != null ? embarcacion.get("APAREJO").toString() : "";
                 String especieChi = embarcacion.get("ESPECIE CHI").toString();
                 String especieChd = embarcacion.get("ESPECIE CHD").toString();
                 String especieChiVigentes = embarcacion.get("ESPECIE CHI-VIGENTES").toString();
