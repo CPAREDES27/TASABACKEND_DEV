@@ -111,6 +111,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             DecimalFormatSymbols symbols = new DecimalFormatSymbols();
             symbols.setDecimalSeparator('.');
             DecimalFormat decimalFormat = new DecimalFormat("#.###", symbols);
+            DecimalFormat decimalFormat2 = new DecimalFormat("#.##########", symbols);
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
@@ -121,19 +122,15 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
             importx.setValue("IP_TOPER", "C");
             importx.setValue("IP_TPCARGA", imports.getIp_tpcarga());
-            //mportx.setTa("IT_CUOTAARM", imports.getIt_cuotaarm());
-            //importx.setValue("IT_ZFLEMB", imports.getIt_zflemb());
 
             List<HashMap<String, Object>> listEmbarcaciones = new ArrayList<>();
+            List<HashMap<String, Object>> listCuotasArmadores = new ArrayList<>();
 
             EjecutarRFC exec = new EjecutarRFC();
 
             switch (imports.getIp_tpcarga()) {
                 case "E": //Mapear la lista de embarcaciones
-                    for (int i = 0; i < imports.getListData().size(); i++) {
-                        HashMap<String,Object> embarcacion = imports.getListData().get(i);
-
-                        String index = String.valueOf(i + 1);
+                    for (HashMap<String,Object> embarcacion : imports.getListData()) {
                         HashMap<String, Object> embarcacionMatch = new HashMap<>();
                         String nombreEmbarcacion = embarcacion.get("EMBARCACION") != null ? embarcacion.get("EMBARCACION").toString() : "";
                         String matricula = embarcacion.get("MATRICULA") != null ? embarcacion.get("MATRICULA").toString() : "";
@@ -153,11 +150,22 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         String marcaMotor = embarcacion.get("MARCA MOTOR") != null ? embarcacion.get("MARCA MOTOR").toString() : "";
                         String modeloMotor = embarcacion.get("MODELO MOTOR") != null ? embarcacion.get("MODELO MOTOR").toString() : "";
                         String nroSerieMotor = embarcacion.get("NRO SERIE MOTOR") != null ? embarcacion.get("NRO SERIE MOTOR").toString() : "";
-                        String potenciaMotor = embarcacion.get("POTENCIA MOTOR") != null ? embarcacion.get("POTENCIA MOTOR").toString() : "0";
-                        String arqueoNeto = embarcacion.get("ARQUEO NETO") != null ? embarcacion.get("ARQUEO NETO").toString() : "0";
-                        String arqueoBruto = embarcacion.get("ARQUEO BRUTO") != null ? embarcacion.get("ARQUEO BRUTO").toString() : "0";
-                        String capbodM3 = embarcacion.get("CAPBOD_M3") != null ? embarcacion.get("CAPBOD_M3").toString() : "0";
-                        String capbodTM = embarcacion.get("CAPBOD_TM") != null ? embarcacion.get("CAPBOD_TM").toString() : "0";
+
+                        Double potenciaMotor = embarcacion.get("POTENCIA MOTOR") != null ? Double.parseDouble(embarcacion.get("POTENCIA MOTOR").toString()) : 0;
+                        String potenciaMotorFormat = decimalFormat.format(potenciaMotor);
+
+                        Double arqueoNeto = embarcacion.get("ARQUEO NETO") != null ? Double.parseDouble(embarcacion.get("ARQUEO NETO").toString()) : 0;
+                        String arqueoNetoFormat = decimalFormat.format(arqueoNeto);
+
+                        Double arqueoBruto = embarcacion.get("ARQUEO BRUTO") != null ? Double.parseDouble(embarcacion.get("ARQUEO BRUTO").toString()) : 0;
+                        String arqueoBrutoFormat = decimalFormat.format(arqueoBruto);
+
+                        Double capbodM3 = embarcacion.get("CAPBOD_M3") != null ? Double.parseDouble(embarcacion.get("CAPBOD_M3").toString()) : 0;
+                        String capbodM3Format = decimalFormat.format(capbodM3);
+
+                        Double capbodTM = embarcacion.get("CAPBOD_TM") != null ? Double.parseDouble(embarcacion.get("CAPBOD_TM").toString()) : 0;
+                        String capbodTMFormat = decimalFormat.format(capbodTM);
+
                         String resolucion = embarcacion.get("RESOLUCION") != null ? embarcacion.get("RESOLUCION").toString() : "";
                         String permisoPesca = embarcacion.get("PERMISO PESCA") != null ? embarcacion.get("PERMISO PESCA").toString() : "";
                         String permisoZarpe = embarcacion.get("PERMISO ZARPE") != null ? embarcacion.get("PERMISO ZARPE").toString() : "";
@@ -180,7 +188,6 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         String grupoNorteCentro = embarcacion.get("GRUPO NORTE-CENTRO") != null ? embarcacion.get("GRUPO NORTE-CENTRO").toString() : "";
                         String grupoSur = embarcacion.get("GRUPO SUR") != null ? embarcacion.get("GRUPO SUR").toString() : "";
 
-                        embarcacionMatch.put("INDEX", index);
                         embarcacionMatch.put("NMEMB", nombreEmbarcacion);
                         embarcacionMatch.put("MATRI", matricula);
                         embarcacionMatch.put("CASCO", casco);
@@ -192,11 +199,11 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         embarcacionMatch.put("MAMOTR", marcaMotor);
                         embarcacionMatch.put("MOMOTR", modeloMotor);
                         embarcacionMatch.put("SEMOTR", nroSerieMotor);
-                        embarcacionMatch.put("POMOTR", potenciaMotor);
-                        embarcacionMatch.put("ARNETO", arqueoNeto);
-                        embarcacionMatch.put("ARBRUTO", arqueoBruto);
-                        embarcacionMatch.put("CAPBOM3", capbodM3);
-                        embarcacionMatch.put("CAPBOTM", capbodTM);
+                        embarcacionMatch.put("POMOTR", potenciaMotorFormat);
+                        embarcacionMatch.put("ARNETO", arqueoNetoFormat);
+                        embarcacionMatch.put("ARBRUTO", arqueoBrutoFormat);
+                        embarcacionMatch.put("CAPBOM3", capbodM3Format);
+                        embarcacionMatch.put("CAPBOTM", capbodTMFormat);
                         embarcacionMatch.put("RESOL", resolucion);
                         embarcacionMatch.put("PERPESC", permisoPesca);
                         embarcacionMatch.put("PERZARP", permisoZarpe);
@@ -219,13 +226,46 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         listEmbarcaciones.add(embarcacionMatch);
                     }
 
-                    //exec.setTable(tables, Tablas.IT_ZFLEMB, listEmbarcaciones);
+                    exec.setTable(tables, Tablas.IT_ZFLEMB, listEmbarcaciones);
                     break;
                 case "C": // Mapear cuotas armadores
-                    //exec.setTable(tables, Tablas.IT_CUOTAARM, imports.getCuotas_armadores());
+                    for (HashMap<String, Object> cuotaArmador: imports.getListData()) {
+                        HashMap<String, Object> cuotaArmadorMatch = new HashMap<>();
+
+                        String matricula = cuotaArmador.get("Matricula") != null ? cuotaArmador.get("Matricula").toString() : "";
+                        String nombreEP = cuotaArmador.get("Nombre EP") != null ? cuotaArmador.get("Nombre EP").toString() : "";
+
+                        Double capacidadBodega = cuotaArmador.get("C.Bod") != null ? Double.parseDouble(cuotaArmador.get("C.Bod").toString()) : 0;
+                        String capacidadBodegaFormat = decimalFormat2.format(capacidadBodega);
+
+                        String grupoEmpresa = cuotaArmador.get("Grupo Empresa") != null ? cuotaArmador.get("Grupo Empresa").toString() : "";
+
+                        Double pmce = cuotaArmador.get("PMCE") != null ? Double.parseDouble(cuotaArmador.get("PMCE").toString()) : 0;
+                        String pmceFormat = decimalFormat2.format(pmce);
+
+                        Double lmce = cuotaArmador.get("LMCE") != null ? Double.parseDouble(cuotaArmador.get("LMCE").toString()) : 0;
+                        String lmceFormat = decimalFormat2.format(lmce);
+
+                        String claseEPCBod = cuotaArmador.get("Clase EP C.Bod") != null ? cuotaArmador.get("Clase EP C.Bod").toString() : "";
+                        String temporada = cuotaArmador.get("Temporada") != null ? cuotaArmador.get("Temporada").toString() : "";
+                        String codArmador = cuotaArmador.get("Cod_Armador") != null ? cuotaArmador.get("Cod_Armador").toString() : "";
+
+                        cuotaArmadorMatch.put("MATRICULA", matricula);
+                        cuotaArmadorMatch.put("TEMPORADA", temporada);
+                        cuotaArmadorMatch.put("NOMBEP", nombreEP);
+                        cuotaArmadorMatch.put("CAPBOD", capacidadBodegaFormat);
+                        cuotaArmadorMatch.put("GPOEMPRESA", grupoEmpresa);
+                        cuotaArmadorMatch.put("PMCE", pmceFormat);
+                        cuotaArmadorMatch.put("LMCE", lmceFormat);
+                        cuotaArmadorMatch.put("CLEP", claseEPCBod);
+                        cuotaArmadorMatch.put("CODARMD", codArmador);
+
+                        listCuotasArmadores.add(cuotaArmadorMatch);
+                    }
+                    exec.setTable(tables, Tablas.IT_CUOTAARM, listCuotasArmadores);
                     break;
             }
-            /*
+
             stfcConnection.execute(destination);
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
@@ -234,9 +274,6 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
             dto.setT_mensaje(t_mensaje);
 
-             */
-
-            dto.setT_mensaje(listEmbarcaciones);
             dto.setMensaje("Ok");
 
             return dto;
