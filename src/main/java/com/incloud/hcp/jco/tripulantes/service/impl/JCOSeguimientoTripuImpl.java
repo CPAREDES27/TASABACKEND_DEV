@@ -38,16 +38,25 @@ public class JCOSeguimientoTripuImpl implements JCOSeguimientoTripuService {
             importx.setValue("IP_CDPCN", imports.getIp_cdpcn());
             importx.setValue("IP_TIREP", imports.getIp_tired());
 
-            //List<Options> options = imports.getT_opcion();
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < imports.getT_opcion().size(); i++) {
-                //Options o = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
 
-                record.put("DATA", imports.getT_opcion().get(i).getText());
-                logger.error("DATA: "+imports.getT_opcion().get(i).getText());
-                tmpOptions.add(record);
-            }
+            HashMap<String, Object> record = new HashMap<String, Object>();
+            record.put("DATA", imports.getFechaInicio());
+            tmpOptions.add(record);
+            record = new HashMap<String, Object>();
+            record.put("DATA", imports.getFechaFin());
+            tmpOptions.add(record);
+            record = new HashMap<String, Object>();
+            record.put("DATA", imports.getZona());
+            tmpOptions.add(record);
+            record = new HashMap<String, Object>();
+            record.put("DATA", imports.getCargo());
+            tmpOptions.add(record);
+            record = new HashMap<String, Object>();
+            record.put("DATA", imports.getRotantes());
+            tmpOptions.add(record);
+            // logger.error("DATA: "+imports.getFechaInicio());
+
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 

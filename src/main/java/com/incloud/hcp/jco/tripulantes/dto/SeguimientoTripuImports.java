@@ -8,7 +8,51 @@ public class SeguimientoTripuImports {
    private String ip_cdpcn;
    private String ip_tired;
    private String[] fieldst_dstrip;
-   private List<com.incloud.hcp.jco.controlLogistico.dto.Options> t_opcion;
+   private String fechaInicio;
+   private String fechaFin;
+   private String zona;
+   private String cargo;
+   private String rotantes;
+
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getRotantes() {
+        return rotantes;
+    }
+
+    public void setRotantes(String rotantes) {
+        this.rotantes = rotantes;
+    }
 
     public String getIp_perner() {
         return ip_perner;
@@ -42,11 +86,6 @@ public class SeguimientoTripuImports {
         this.fieldst_dstrip = fieldst_dstrip;
     }
 
-    public List<com.incloud.hcp.jco.controlLogistico.dto.Options> getT_opcion() {
-        return t_opcion;
-    }
 
-    public void setT_opcion(List<com.incloud.hcp.jco.controlLogistico.dto.Options> t_opcion) {
-        this.t_opcion = t_opcion;
-    }
+
 }

@@ -399,6 +399,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENERRDSCG":
                 tabla = ConsultaGeneralTablas.CONSGENERRDSCG;
+            case "CONSGENTRIPULANTES":
+                tabla = ConsultaGeneralTablas.CONSGENTRIPULANTES;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -495,6 +497,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENERRDSCG":
                 fields = ConsultaGeneralFields.CONSGENERRDSCG;
+                break;
+            case "CONSGENTRIPULANTES":
+                fields = ConsultaGeneralFields.CONSGENTRIPULANTES;
                 break;
         }
 
@@ -653,12 +658,37 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 options.add(opt);
                 break;
             case "CONSGENPROVEEDORES":
-                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + parametro2 + "'";
+                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 +ConsultaGeneralOptions.CONSGENPROVEEDORES2 + parametro2 + "'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
             case "CONSGENERRDSCG":
                 condicion = ConsultaGeneralOptions.CONSGENERRDSCG + parametro1 + "'" + ConsultaGeneralOptions.CONSGENERRDSCG2;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENTRIPULANTES":
+                condicion = ConsultaGeneralOptions.CONSGENTRIPULANTES;
+                if(!parametro1.equals("")){
+                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES2 + parametro1+"'";
+                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                }
+                if(!parametro2.equals("")){
+                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES3 + parametro2+"'";
+                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                }
+                if(!parametro3.equals("")){
+                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES4 + parametro3+"'";
+                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                }
+                if(!parametro4.equals("")){
+                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES5 + parametro4+"'";
+                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                }
+                if(!parametro5.equals("")){
+                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES6 + parametro5+"'";
+                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                }
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
