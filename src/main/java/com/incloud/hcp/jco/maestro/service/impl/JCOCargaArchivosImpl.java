@@ -130,8 +130,8 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
             switch (imports.getIp_tpcarga()) {
                 case "E": //Mapear la lista de embarcaciones
-                    for (int i = 0; i < imports.getEmbarcaciones().size(); i++) {
-                        HashMap<String,Object> embarcacion = imports.getEmbarcaciones().get(i);
+                    for (int i = 0; i < imports.getListData().size(); i++) {
+                        HashMap<String,Object> embarcacion = imports.getListData().get(i);
 
                         String index = String.valueOf(i + 1);
                         HashMap<String, Object> embarcacionMatch = new HashMap<>();
