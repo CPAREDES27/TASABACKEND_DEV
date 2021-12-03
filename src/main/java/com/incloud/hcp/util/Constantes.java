@@ -130,5 +130,7 @@ public class Constantes {
     //CENTRO TASA FLOTA
     public static int CENTRO_TASA_FLOTA = 42;
 
+    public static String ZFL_RFC_CREAR_RESERV_COMBU="ZFL_RFC_CREAR_RESERV_COMBU";
+
 
 }

@@ -884,4 +884,58 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return  me;
     }
 
+    @Override
+    public CrearReservaExport crearReserva(CrearReservaImport imports) throws Exception{
+        CrearReservaExport cre = new CrearReservaExport();
+        try{
+            //Parametros
+            String p_user = imports.getP_user();
+            String p_cdemb = imports.getP_cdemb();
+            String p_lgort = imports.getP_lgort();
+            int p_nrevn = imports.getP_nrevn();
+            String p_fhrsv = imports.getP_fhrsv();//'24092021'
+            int year = Integer.parseInt(p_fhrsv.substring(4,8));
+            int mes = Integer.parseInt(p_fhrsv.substring(2,3));
+            int dia = Integer.parseInt(p_fhrsv.substring(0,0));
+            Date dateFhrsv = new Date(year, mes, dia);
+            List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
+
+            //RFC
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CREAR_RESERV_COMBU);
+            JCoParameterList tables = function.getTableParameterList();
+
+            //imports
+            HashMap<String, Object> importsSap = new HashMap<String, Object>();
+            importsSap.put("P_USER", p_user);
+            importsSap.put("P_CDEMB", p_cdemb);
+            importsSap.put("P_LGORT", p_lgort);
+            importsSap.put("P_NREVN", p_nrevn);
+            importsSap.put("P_FHRSV", dateFhrsv);
+
+            //send params
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, importsSap);
+            exec.setTable(tables, "STR_RCB", str_rcb);
+
+            //exec rfc
+            function.execute(destination);
+
+            //get resultados
+            JCoTable t_mensaje = tables.getTable(Tablas.T_MENSAJE);
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> mensajes = me.ListarObjetos(t_mensaje);
+            JCoParameterList export = function.getExportParameterList();
+            Object p_reserva = export.getValue("P_RESERVA");
+            String strReserva = String.valueOf(p_reserva);
+            cre.setT_mensaje(mensajes);
+            cre.setP_reserva(strReserva);
+
+        }catch (Exception e){
+            cre.setMensaje(e.getMessage());
+        }
+        return  cre;
+    }
+
 }

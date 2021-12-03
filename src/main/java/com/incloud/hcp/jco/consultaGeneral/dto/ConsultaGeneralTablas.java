@@ -32,5 +32,6 @@ public class ConsultaGeneralTablas {
     public static String CONSGENBSQTRIPU2="ZHRP_BD_PERSONAL";
     public static String CONSGENPROVEEDORES="ZV_FLPD";
     public static String CONSGENERRDSCG="ZFLLOG";
+    public static String CONSGENTRIPULANTES="ZHRP_BD_PERSONAL";
 
 }

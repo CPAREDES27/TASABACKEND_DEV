@@ -33,4 +33,7 @@ public interface JCOEmbarcacionService {
 
     MaestroExport obtenerEmbaComb(EmbaCombImport imports) throws Exception;
 
+    CrearReservaExport crearReserva(CrearReservaImport imports) throws Exception;
+
+
 }
