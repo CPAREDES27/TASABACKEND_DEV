@@ -226,7 +226,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         listEmbarcaciones.add(embarcacionMatch);
                     }
 
-                    exec.setTable(tables, Tablas.IT_ZFLEMB, listEmbarcaciones);
+                    exec.setTable(importx, Tablas.IT_ZFLEMB, listEmbarcaciones);
                     break;
                 case "C": // Mapear cuotas armadores
                     for (HashMap<String, Object> cuotaArmador: imports.getListData()) {
@@ -262,7 +262,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
                         listCuotasArmadores.add(cuotaArmadorMatch);
                     }
-                    exec.setTable(tables, Tablas.IT_CUOTAARM, listCuotasArmadores);
+                    exec.setTable(importx, Tablas.IT_CUOTAARM, listCuotasArmadores);
                     break;
             }
 
