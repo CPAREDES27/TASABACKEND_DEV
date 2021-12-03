@@ -399,8 +399,10 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENERRDSCG":
                 tabla = ConsultaGeneralTablas.CONSGENERRDSCG;
+                break;
             case "CONSGENTRIPULANTES":
                 tabla = ConsultaGeneralTablas.CONSGENTRIPULANTES;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
