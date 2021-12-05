@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOTrabajoFueraFaenaService;
 import com.incloud.hcp.util.Constantes;
@@ -43,16 +45,12 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             importx.setValue("IP_ESREG", imports.getIp_esreg());
             importx.setValue("IP_FECIN", imports.getIp_fecin());
             importx.setValue("IP_FECFN", imports.getIp_fecfn());
+            Metodos metodo= new Metodos();
+            List<MaestroOptions> option = imports.getOption();
+            List<MaestroOptionsKey> options2 = imports.getOptions();
+            List<HashMap<String, Object>> tmpOptions =metodo.ValidarOptions(option,options2,"DATA");
 
-            List<Options> options = imports.getT_opcion();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
 
-                record.put("DATA", o.getData());
-                tmpOptions.add(record);
-            }
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
@@ -68,7 +66,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
             JCoTable T_MENSAJES = tables.getTable(Tablas.T_MENSAJES);
 
-            Metodos metodo = new Metodos();
+
             List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos(T_TRABFF, imports.getFieldst_trabff());
             List<HashMap<String, Object>> t_trabaj = metodo.ObtenerListObjetos(T_TRABAJ, imports.getFieldst_trabaj());
             List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());

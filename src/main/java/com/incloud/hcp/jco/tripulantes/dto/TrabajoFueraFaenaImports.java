@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+
 import java.util.List;
 
 public class TrabajoFueraFaenaImports {
@@ -19,7 +22,24 @@ public class TrabajoFueraFaenaImports {
     private String[] fieldst_fechas;
     private String[] fieldst_textos;
     private List<Options> t_opcion;
+    private List<MaestroOptions> option;
+    private List<MaestroOptionsKey> options;
 
+    public List<MaestroOptions> getOption() {
+        return option;
+    }
+
+    public void setOption(List<MaestroOptions> option) {
+        this.option = option;
+    }
+
+    public List<MaestroOptionsKey> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<MaestroOptionsKey> options) {
+        this.options = options;
+    }
 
     public String getIp_nrtff() {
         return ip_nrtff;
