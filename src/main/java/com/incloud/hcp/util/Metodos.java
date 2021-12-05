@@ -330,6 +330,8 @@ public class Metodos {
             tablita = "ZTFL_ZACIU";
         }else if(table.equals("GRUPOFLOTA")){
             tablita = "ZFLGFL";
+        }else if(table.equals("PLANTA")){
+            tablita = "ZV_FLPL";
         }
         return tablita;
     }
@@ -371,6 +373,8 @@ public class Metodos {
             wa = "CODIG EQ 'PH' AND STATU EQ '1'";
         }else if(table.equals("SITUACIONTRIPU")){
             wa="CODIG EQ 'PI' AND STATU EQ '1'";
+        }else if(table.equals("PLANTA")){
+            wa="ESREG = 'S'";
         }
 
         return wa;
@@ -479,6 +483,8 @@ public class Metodos {
             fields= new String[] {"CDCIU", "DESCR"};
         }else if(table.equals("GRUPOFLOTA")){
             fields= new String[] {"CDGFL", "DSGFL"};
+        }else if(table.equals("PLANTA")){
+            fields= new String[] {"CDZLT", "DSZLT"};
         }
 
         return fields;
@@ -792,11 +798,15 @@ public class Metodos {
                             }
                             try {
                                 if (field.getTypeAsString().equals("DATE")) {
-                                    String date = String.valueOf(value);
+
+                                    if(!value.toString().contains("/")){
+                                        String date = String.valueOf(value);
 
                                         SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
                                         String fecha = dia.format(value);
                                         value = fecha;
+                                    }
+
 
                                 }
 
@@ -913,10 +923,13 @@ public class Metodos {
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
 
-                        String date = String.valueOf(value);
-                        SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
-                        String fecha = dia.format(value);
-                        value = fecha;
+                        if(!value.toString().contains("/")){
+                            String date = String.valueOf(value);
+
+                            SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                            String fecha = dia.format(value);
+                            value = fecha;
+                        }
 
                     }
 
