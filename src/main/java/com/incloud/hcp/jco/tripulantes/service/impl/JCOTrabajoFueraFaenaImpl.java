@@ -159,6 +159,10 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             tfi.setFieldst_textos(fieldtextos);
             tfi.setFieldst_trabaj(fieldtrabaj);
             List<Options>options= new ArrayList<>();
+            List<MaestroOptions> optionz = new ArrayList<>();
+            List<MaestroOptionsKey> options2 = new ArrayList<>();
+            tfi.setOption(optionz);
+            tfi.setOptions(options2);
             tfi.setT_opcion(options);
 
             tffde=TrabajoFueraFaenaTransporte(tfi);
