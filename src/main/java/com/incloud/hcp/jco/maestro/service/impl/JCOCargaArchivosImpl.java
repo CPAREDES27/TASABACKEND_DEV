@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
     @Override
     public Mensaje CargaArchivo(CargaArchivoImports importsParam) throws Exception {
 
-        Mensaje msj= new Mensaje();
+        Mensaje msj = new Mensaje();
 
         try {
 
@@ -44,11 +45,11 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             exec.setImports(function, imports);
 
             function.execute(destination);
-           String value= jcoTablesExport.getValue(0).toString();
+            String value = jcoTablesExport.getValue(0).toString();
             msj.setMensaje(value);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             msj.setMensaje(e.getMessage());
         }
 
@@ -59,7 +60,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
     @Override
     public CargaDescargaArchivosExports CargaDescargaArchivos(CargaDescargaArchivosImports importsParam) throws Exception {
 
-        CargaDescargaArchivosExports cda=new CargaDescargaArchivosExports();
+        CargaDescargaArchivosExports cda = new CargaDescargaArchivosExports();
 
 
         try {
@@ -71,8 +72,8 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             imports.put("I_DIRECTORIO", importsParam.getI_directorio());
             imports.put("I_FILENAME", importsParam.getI_filename());
             imports.put("I_ACCION", importsParam.getI_accion());
-            imports.put("I_PROCESOBTP",importsParam.getI_procesobtp());
-            imports.put("I_USER",importsParam.getI_user());
+            imports.put("I_PROCESOBTP", importsParam.getI_procesobtp());
+            imports.put("I_USER", importsParam.getI_user());
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
@@ -86,17 +87,17 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             exec.setImports(function, imports);
 
             function.execute(destination);
-            JCoTable T_MENSAJE= tablas.getTable(Tablas.T_MENSAJE);
+            JCoTable T_MENSAJE = tablas.getTable(Tablas.T_MENSAJE);
 
-            Metodos me=new Metodos();
-            List<HashMap<String, Object>> t_mensaje= me.ListarObjetos(T_MENSAJE);
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
 
             cda.setT_mensaje(t_mensaje);
             cda.setE_trama(export.getValue(Tablas.E_TRAMA).toString());
             cda.setMensaje("Ok");
 
             logger.error("base64fin");
-        }catch (Exception e){
+        } catch (Exception e) {
             cda.setMensaje(e.getMessage());
         }
 
@@ -120,17 +121,126 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             JCoParameterList importx = stfcConnection.getImportParameterList();
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
-            importx.setValue("IP_TOPER", "C");
+            importx.setValue("IP_TOPER", "T"); // Leer tablas
             importx.setValue("IP_TPCARGA", imports.getIp_tpcarga());
-
-            List<HashMap<String, Object>> listEmbarcaciones = new ArrayList<>();
-            List<HashMap<String, Object>> listCuotasArmadores = new ArrayList<>();
 
             EjecutarRFC exec = new EjecutarRFC();
 
+            // Obtener los nombre de los campos
+            stfcConnection.execute(destination);
+            JCoParameterList exports = stfcConnection.getExportParameterList();
+
+            String fieldNames = exports.getValue("E_FIELDNAME").toString();
+            ArrayList<String> fieldsToCompare = new ArrayList<>(Arrays.asList(fieldNames.split("\\|")));
+
+            // Guardar datos
+            HashMap<String, Object> dataFieldsFile = imports.getListData().remove(0); // Se elimina el primer elemento que contiene los títulos, pero se utilizará para validar los campos
+            ArrayList<String> fields = new ArrayList<>(dataFieldsFile.keySet());
+            importx.setValue("IP_TOPER", "C");
+
+
+            String nombreLista = "";
+
+            // Mapear los campos
+            switch (imports.getIp_tpcarga()) {
+                case "E":
+                    nombreLista = "Embarcaciones";
+                    break;
+                case "C":
+                    nombreLista = "Cuotas por armadores";
+                    break;
+            }
+
+            //Evaluar que todos los campos indicados por el RFC existan en el import
+            boolean fieldsAreCorrect = true;
+            for (String fieldToCompare : fieldsToCompare) {
+                if (!dataFieldsFile.containsKey(fieldToCompare)) {
+                    fieldsAreCorrect = false;
+                    break;
+                }
+            }
+
+            if (fieldsAreCorrect) {
+                for (HashMap<String, Object> data : imports.getListData()) {
+                    // Borrar los campos de los imports que no pertenezcan a la tabla
+                    for (String key : data.keySet()) {
+                        if (!fieldsToCompare.contains(key)) {
+                            data.remove(key);
+                        }
+                    }
+
+                    // Mapear campos vacíos
+                    for (String fieldToCompare : fieldsToCompare) {
+                        if (!data.containsKey(fieldToCompare)) {
+                            data.put(fieldToCompare, "");
+                        }
+                    }
+
+                    // Mapear algunos campos específicos
+                    switch (imports.getIp_tpcarga()) {
+                        case "E":
+                            Double eslora = data.get("ESLOR").toString().equals("") ? Double.parseDouble(data.get("ESLOR").toString()) : 0;
+                            Double manga = data.get("MANGA").toString().equals("") ? Double.parseDouble(data.get("MANGA").toString()) : 0;
+                            Double puntual = data.get("PNTAL").toString().equals("") ? Double.parseDouble(data.get("PNTAL").toString()) : 0;
+                            Double potenciaMotor = data.get("POMOTR").toString().equals("") ? Double.parseDouble(data.get("POMOTR").toString()) : 0;
+                            Double arqueoNeto = data.get("ARNETO").toString().equals("") ? Double.parseDouble(data.get("ARNETO").toString()) : 0;
+                            Double arqueoBruto = data.get("ARBRUTO").toString().equals("") ? Double.parseDouble(data.get("ARBRUTO").toString()) : 0;
+                            Double capbodM3 = data.get("CAPBOM3").toString().equals("") ? Double.parseDouble(data.get("CAPBOM3").toString()) : 0;
+                            Double capbodTM = data.get("CAPBOTM").toString().equals("") ? Double.parseDouble(data.get("CAPBOTM").toString()) : 0;
+
+                            data.replace("ESLOR", decimalFormat.format(eslora));
+                            data.replace("MANGA", decimalFormat.format(manga));
+                            data.replace("PNTAL", decimalFormat.format(puntual));
+                            data.replace("POMOTR", decimalFormat.format(potenciaMotor));
+                            data.replace("ARNETO", decimalFormat.format(arqueoNeto));
+                            data.replace("ARBRUTO", decimalFormat.format(arqueoBruto));
+                            data.replace("CAPBOM3", decimalFormat.format(capbodM3));
+                            data.replace("CAPBOTM", decimalFormat.format(capbodTM));
+
+                            break;
+                        case "C":
+                            Double capacidadBodega = data.get("CAPBOD").toString().equals("") ? Double.parseDouble(data.get("CAPBOD").toString()) : 0;
+                            Double pmce = data.get("PMCE").toString().equals("") ? Double.parseDouble(data.get("PMCE").toString()) : 0;
+                            Double lmce = data.get("LMCE").toString().equals("") ? Double.parseDouble(data.get("LMCE").toString()) : 0;
+
+                            data.replace("CAPBOD", decimalFormat2.format(capacidadBodega));
+                            data.replace("PMCE", decimalFormat2.format(pmce));
+                            data.replace("LMCE", decimalFormat2.format(lmce));
+                            break;
+                    }
+                }
+
+                //Establecer la lista para mandar
+                switch (imports.getIp_tpcarga()) {
+                    case "E":
+                        exec.setTable(importx, Tablas.IT_ZFLEMB, imports.getListData());
+                        break;
+                    case "C":
+                        exec.setTable(importx, Tablas.IT_CUOTAARM, imports.getListData());
+                        break;
+                }
+
+                /*
+                stfcConnection.execute(destination);
+
+                JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
+                Metodos me = new Metodos();
+                List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
+
+                dto.setT_mensaje(t_mensaje);
+
+                 */
+                dto.setT_mensaje(imports.getListData());
+
+                dto.setMensaje("Ok");
+            } else {
+                dto.setMensaje("Las columnas de " + nombreLista + " son incorrectas");
+            }
+
+            /*
             switch (imports.getIp_tpcarga()) {
                 case "E": //Mapear la lista de embarcaciones
-                    for (HashMap<String,Object> embarcacion : imports.getListData()) {
+                    for (HashMap<String, Object> embarcacion : imports.getListData()) {
                         HashMap<String, Object> embarcacionMatch = new HashMap<>();
                         String nombreEmbarcacion = embarcacion.get("EMBARCACION") != null ? embarcacion.get("EMBARCACION").toString() : "";
                         String matricula = embarcacion.get("MATRICULA") != null ? embarcacion.get("MATRICULA").toString() : "";
@@ -229,56 +339,64 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                     exec.setTable(importx, Tablas.IT_ZFLEMB, listEmbarcaciones);
                     break;
                 case "C": // Mapear cuotas armadores
-                    for (HashMap<String, Object> cuotaArmador: imports.getListData()) {
+                    for (HashMap<String, Object> cuotaArmador : imports.getListData()) {
                         HashMap<String, Object> cuotaArmadorMatch = new HashMap<>();
 
-                        String matricula = cuotaArmador.get("Matricula") != null ? cuotaArmador.get("Matricula").toString() : "";
-                        String nombreEP = cuotaArmador.get("Nombre EP") != null ? cuotaArmador.get("Nombre EP").toString() : "";
+                        if (!cuotaArmador.containsKey("MATRICULA")) {
+                            cuotaArmador.put("MATRICULA", "");
+                        }
 
-                        Double capacidadBodega = cuotaArmador.get("C.Bod") != null ? Double.parseDouble(cuotaArmador.get("C.Bod").toString()) : 0;
-                        String capacidadBodegaFormat = decimalFormat2.format(capacidadBodega);
+                        if (!cuotaArmador.containsKey("TEMPORADA")) {
+                            cuotaArmador.put("TEMPORADA", "");
+                        }
 
-                        String grupoEmpresa = cuotaArmador.get("Grupo Empresa") != null ? cuotaArmador.get("Grupo Empresa").toString() : "";
+                        if (!cuotaArmador.containsKey("NOMBEP")) {
+                            cuotaArmador.put("NOMBEP", "");
+                        }
 
-                        Double pmce = cuotaArmador.get("PMCE") != null ? Double.parseDouble(cuotaArmador.get("PMCE").toString()) : 0;
-                        String pmceFormat = decimalFormat2.format(pmce);
+                        if (cuotaArmador.containsKey("CAPBOD")) {
+                            Double capacidadBodega = Double.parseDouble(cuotaArmador.get("CAPBOD").toString());
+                            cuotaArmador.replace("CAPBOD", decimalFormat2.format(capacidadBodega));
+                        } else {
+                            cuotaArmador.put("CAPBOD", "0");
+                        }
 
-                        Double lmce = cuotaArmador.get("LMCE") != null ? Double.parseDouble(cuotaArmador.get("LMCE").toString()) : 0;
-                        String lmceFormat = decimalFormat2.format(lmce);
+                        if (!cuotaArmador.containsKey("GPOEMPRESA")) {
+                            cuotaArmador.put("GPOEMPRESA", "");
+                        }
 
-                        String claseEPCBod = cuotaArmador.get("Clase EP C.Bod") != null ? cuotaArmador.get("Clase EP C.Bod").toString() : "";
-                        String temporada = cuotaArmador.get("Temporada") != null ? cuotaArmador.get("Temporada").toString() : "";
-                        String codArmador = cuotaArmador.get("Cod_Armador") != null ? cuotaArmador.get("Cod_Armador").toString() : "";
+                        if (cuotaArmador.containsKey("PMCE")) {
+                            Double pmce = Double.parseDouble(cuotaArmador.get("PMCE").toString());
+                            cuotaArmador.replace("PMCE", decimalFormat2.format(pmce));
+                        } else {
+                            cuotaArmador.put("PMCE", "0");
+                        }
 
-                        cuotaArmadorMatch.put("MATRICULA", matricula);
-                        cuotaArmadorMatch.put("TEMPORADA", temporada);
-                        cuotaArmadorMatch.put("NOMBEP", nombreEP);
-                        cuotaArmadorMatch.put("CAPBOD", capacidadBodegaFormat);
-                        cuotaArmadorMatch.put("GPOEMPRESA", grupoEmpresa);
-                        cuotaArmadorMatch.put("PMCE", pmceFormat);
-                        cuotaArmadorMatch.put("LMCE", lmceFormat);
-                        cuotaArmadorMatch.put("CLEP", claseEPCBod);
-                        cuotaArmadorMatch.put("CODARMD", codArmador);
+                        if (cuotaArmador.containsKey("LMCE")) {
+                            Double lmce = Double.parseDouble(cuotaArmador.get("LMCE").toString());
+                            cuotaArmador.replace("LMCE", decimalFormat2.format(lmce));
+                        } else {
+                            cuotaArmador.put("LMCE", "0");
+                        }
 
-                        listCuotasArmadores.add(cuotaArmadorMatch);
+                        if (!cuotaArmador.containsKey("CLEP")) {
+                            cuotaArmador.put("CLEP", "");
+                        }
+
+                        if (!cuotaArmador.containsKey("CODARMD")) {
+                            cuotaArmador.put("CODARMD", "");
+                        }
                     }
                     exec.setTable(importx, Tablas.IT_CUOTAARM, listCuotasArmadores);
                     break;
             }
 
-            stfcConnection.execute(destination);
+             */
 
-            JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-            Metodos me = new Metodos();
-            List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
-
-            dto.setT_mensaje(t_mensaje);
-
-            dto.setMensaje("Ok");
 
             return dto;
         } catch (Exception ex) {
-            throw new  Exception(ex.getMessage());
+            throw new Exception(ex.getMessage());
         }
     }
 }
