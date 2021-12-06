@@ -895,8 +895,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             int p_nrevn = imports.getP_nrevn();
             String p_fhrsv = imports.getP_fhrsv();//'24092021'
             int year = Integer.parseInt(p_fhrsv.substring(4,8));
-            int mes = Integer.parseInt(p_fhrsv.substring(2,3));
-            int dia = Integer.parseInt(p_fhrsv.substring(0,0));
+            int mes = Integer.parseInt(p_fhrsv.substring(2,4));
+            int dia = Integer.parseInt(p_fhrsv.substring(0,2));
             Date dateFhrsv = new Date(year, mes, dia);
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
 
