@@ -151,7 +151,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             String[] fieldfechas= {"WERKS","PERNR","FETRA"};
             String[] fieldtextos= {"TDLINE","TDFORMAT"};
             String[] fieldtrabaj= {"PERNR","NOMBR","STELL"};
-            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD","ESREG"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
             tfi.setFieldst_trabff(fieldtrabaff);
@@ -222,6 +222,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     horaCrea=formateador.format(date);
                 }else if(key.equals("USMOD")){
                     dto.setUsuarioModif(valor);
+                }else if(key.equals("ESREG")){
+                    dto.setEstado(valor);
                 }else if(key.equals("FEMOD")){
                     fechaMod=valor;
                 }else if(key.equals("HOMOD")){

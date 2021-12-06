@@ -20,6 +20,15 @@ public class TrabajoFueraFaenaDetalleExports {
     private String[] fechas;
     private List<TrabajoFFDetalleDto> detalle;
     private String mensaje;
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public String[] getFechas() {
         return fechas;
