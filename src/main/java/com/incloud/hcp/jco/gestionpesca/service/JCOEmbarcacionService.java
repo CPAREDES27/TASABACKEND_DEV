@@ -35,5 +35,7 @@ public interface JCOEmbarcacionService {
 
     CrearReservaExport crearReserva(CrearReservaImport imports) throws Exception;
 
+    AnularRerservaExport anularReserva(AnularReservaImport imports) throws Exception;
+
 
 }

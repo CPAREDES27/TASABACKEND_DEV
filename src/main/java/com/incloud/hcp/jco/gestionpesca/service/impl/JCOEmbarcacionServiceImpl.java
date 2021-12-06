@@ -938,4 +938,46 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return  cre;
     }
 
+    @Override
+    public AnularRerservaExport anularReserva(AnularReservaImport imports) throws Exception{
+        AnularRerservaExport are = new AnularRerservaExport();
+        try{
+            //parametros
+            String p_user = imports.getP_user();
+            List<HashMap<String, Object>> str_rsc = imports.getStr_rsc();
+
+            //rfc
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_ANUL_RESERV_COMBUS);
+            JCoParameterList tables = function.getTableParameterList();
+
+            //imports
+            HashMap<String, Object> importsSap = new HashMap<String, Object>();
+            importsSap.put("P_USER", p_user);
+
+            //send params
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, importsSap);
+            exec.setTable(tables, "STR_RSC", str_rsc);
+
+            //exec rfc
+            function.execute(destination);
+
+            //get resultados
+            JCoTable t_mensaje = tables.getTable(Tablas.T_MENSAJE);
+            JCoTable tbl_str_rsc = tables.getTable(Tablas.STR_RSC);
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> mensajes = me.ListarObjetos(t_mensaje);
+            List<HashMap<String, Object>> e_str_rsc = me.ListarObjetos(tbl_str_rsc);
+
+            are.setT_mensaje(mensajes);
+            are.setStr_rsc(e_str_rsc);
+
+        }catch (Exception e){
+            are.setMensaje(e.getMessage());
+        }
+        return are;
+    }
+
 }

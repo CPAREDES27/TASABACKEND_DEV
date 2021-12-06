@@ -168,6 +168,8 @@ public class Tablas {
     public static String ZV_FLSM="ZV_FLSM";
     public static String ZV_FLCO="ZV_FLCO";
 
+    public static String STR_RSC="STR_RSC";
+
 
 
 
