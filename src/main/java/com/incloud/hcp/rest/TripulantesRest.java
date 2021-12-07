@@ -243,10 +243,10 @@ public class TripulantesRest {
     }
 
     @PostMapping(value = "/TrabajoFueraFaenaDetalle", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrabajoFueraFaenaDetalleExports> TrabajoFueraFaenaDetalle(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
+    public ResponseEntity<TrabajoDetalleDtoExports> TrabajoFueraFaenaDetalle(@RequestBody TrabajoFueraFaenaDetalleImports imports) {
 
         try {
-            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.DetalleTrabajoFueraFaenaTransporte(imports))
+            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.DetalleTrabajoFueraFaenaTransportez(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
