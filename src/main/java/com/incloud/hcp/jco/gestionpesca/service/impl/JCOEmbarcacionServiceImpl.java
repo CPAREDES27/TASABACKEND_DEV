@@ -902,11 +902,14 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             String diatest = "DIA: " + dia;
             String dateTest = aniotest + " " + mestest + " " + diatest;
             logger.error(dateTest);*/
-            Calendar c1 = Calendar.getInstance();
+            /*Calendar c1 = Calendar.getInstance();
             c1.set(Calendar.MONTH, (mes - 1));
             c1.set(Calendar.YEAR, year);
-            c1.set(Calendar.DATE, dia);
-            Date dateFhrsv = c1.getTime();
+            c1.set(Calendar.DATE, dia);*/
+
+            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+
+            Date dateFhrsv = sdf.parse(p_fhrsv);
 
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
 
