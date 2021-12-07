@@ -220,7 +220,6 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                         break;
                 }
 
-                /*
                 stfcConnection.execute(destination);
 
                 JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
@@ -228,9 +227,6 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                 List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
 
                 dto.setT_mensaje(t_mensaje);
-
-                 */
-                dto.setT_mensaje(imports.getListData());
 
                 dto.setMensaje("Ok");
             } else {
