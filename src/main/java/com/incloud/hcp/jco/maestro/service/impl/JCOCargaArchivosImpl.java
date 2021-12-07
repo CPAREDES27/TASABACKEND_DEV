@@ -176,14 +176,14 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                     // Mapear algunos campos específicos
                     switch (imports.getIp_tpcarga()) {
                         case "E":
-                            Double eslora = data.get("ESLOR").toString().equals("") ? Double.parseDouble(data.get("ESLOR").toString()) : 0;
-                            Double manga = data.get("MANGA").toString().equals("") ? Double.parseDouble(data.get("MANGA").toString()) : 0;
-                            Double puntual = data.get("PNTAL").toString().equals("") ? Double.parseDouble(data.get("PNTAL").toString()) : 0;
-                            Double potenciaMotor = data.get("POMOTR").toString().equals("") ? Double.parseDouble(data.get("POMOTR").toString()) : 0;
-                            Double arqueoNeto = data.get("ARNETO").toString().equals("") ? Double.parseDouble(data.get("ARNETO").toString()) : 0;
-                            Double arqueoBruto = data.get("ARBRUTO").toString().equals("") ? Double.parseDouble(data.get("ARBRUTO").toString()) : 0;
-                            Double capbodM3 = data.get("CAPBOM3").toString().equals("") ? Double.parseDouble(data.get("CAPBOM3").toString()) : 0;
-                            Double capbodTM = data.get("CAPBOTM").toString().equals("") ? Double.parseDouble(data.get("CAPBOTM").toString()) : 0;
+                            Double eslora = !data.get("ESLOR").toString().equals("") ? Double.parseDouble(data.get("ESLOR").toString()) : 0;
+                            Double manga = !data.get("MANGA").toString().equals("") ? Double.parseDouble(data.get("MANGA").toString()) : 0;
+                            Double puntual = !data.get("PNTAL").toString().equals("") ? Double.parseDouble(data.get("PNTAL").toString()) : 0;
+                            Double potenciaMotor = !data.get("POMOTR").toString().equals("") ? Double.parseDouble(data.get("POMOTR").toString()) : 0;
+                            Double arqueoNeto = !data.get("ARNETO").toString().equals("") ? Double.parseDouble(data.get("ARNETO").toString()) : 0;
+                            Double arqueoBruto = !data.get("ARBRUTO").toString().equals("") ? Double.parseDouble(data.get("ARBRUTO").toString()) : 0;
+                            Double capbodM3 = !data.get("CAPBOM3").toString().equals("") ? Double.parseDouble(data.get("CAPBOM3").toString()) : 0;
+                            Double capbodTM = !data.get("CAPBOTM").toString().equals("") ? Double.parseDouble(data.get("CAPBOTM").toString()) : 0;
 
                             data.replace("ESLOR", decimalFormat.format(eslora));
                             data.replace("MANGA", decimalFormat.format(manga));
@@ -196,9 +196,9 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
                             break;
                         case "C":
-                            Double capacidadBodega = data.get("CAPBOD").toString().equals("") ? Double.parseDouble(data.get("CAPBOD").toString()) : 0;
-                            Double pmce = data.get("PMCE").toString().equals("") ? Double.parseDouble(data.get("PMCE").toString()) : 0;
-                            Double lmce = data.get("LMCE").toString().equals("") ? Double.parseDouble(data.get("LMCE").toString()) : 0;
+                            Double capacidadBodega = !data.get("CAPBOD").toString().equals("") ? Double.parseDouble(data.get("CAPBOD").toString()) : 0;
+                            Double pmce = !data.get("PMCE").toString().equals("") ? Double.parseDouble(data.get("PMCE").toString()) : 0;
+                            Double lmce = !data.get("LMCE").toString().equals("") ? Double.parseDouble(data.get("LMCE").toString()) : 0;
 
                             data.replace("CAPBOD", decimalFormat2.format(capacidadBodega));
                             data.replace("PMCE", decimalFormat2.format(pmce));
