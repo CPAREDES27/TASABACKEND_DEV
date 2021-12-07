@@ -897,7 +897,17 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             int year = Integer.parseInt(p_fhrsv.substring(4,8));
             int mes = Integer.parseInt(p_fhrsv.substring(2,4));
             int dia = Integer.parseInt(p_fhrsv.substring(0,2));
-            Date dateFhrsv = new Date(year, mes, dia);
+            /*String aniotest = "ANIO: " + year;
+            String mestest = "MES: " + mes;
+            String diatest = "DIA: " + dia;
+            String dateTest = aniotest + " " + mestest + " " + diatest;
+            logger.error(dateTest);*/
+            Calendar c1 = Calendar.getInstance();
+            c1.set(Calendar.MONTH, (mes - 1));
+            c1.set(Calendar.YEAR, year);
+            c1.set(Calendar.DATE, dia);
+            Date dateFhrsv = c1.getTime();
+
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
 
             //RFC
