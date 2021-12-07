@@ -224,16 +224,10 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                 List<HashMap<String, Object>> t_mensaje = me.ListarObjetos(T_MENSAJE);
 
                 dto.setT_mensaje(t_mensaje);
-
+                dto.setMensaje("Ok");
             } else {
-                List<HashMap<String, Object>> t_mensaje = new ArrayList<>();
-                HashMap<String, Object> mensaje = new HashMap<>();
-                mensaje.put("DSMIN", "Las columnas de " + nombreLista + " son incorrectas");
-                t_mensaje.add(mensaje);
-                dto.setT_mensaje(t_mensaje);
+                dto.setMensaje("Las columnas de " + nombreLista + " son incorrectas");
             }
-
-            dto.setMensaje("Ok");
             return dto;
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
