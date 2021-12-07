@@ -225,11 +225,15 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
                 dto.setT_mensaje(t_mensaje);
 
-                dto.setMensaje("Ok");
             } else {
-                dto.setMensaje("Las columnas de " + nombreLista + " son incorrectas");
+                List<HashMap<String, Object>> t_mensaje = new ArrayList<>();
+                HashMap<String, Object> mensaje = new HashMap<>();
+                mensaje.put("DSMIN", "Las columnas de " + nombreLista + " son incorrectas");
+                t_mensaje.add(mensaje);
+                dto.setT_mensaje(t_mensaje);
             }
 
+            dto.setMensaje("Ok");
             return dto;
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
