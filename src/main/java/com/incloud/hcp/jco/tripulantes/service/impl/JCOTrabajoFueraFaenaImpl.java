@@ -167,28 +167,38 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
             tffde=TrabajoFueraFaenaTransporte(tfi);
 
+            if(tffde.getT_textos().size()>0){
+                String descripcion="";
+                String observacion="";
+                for (int i=0; i<tffde.getT_textos().size();i++){
+                    String format="";
+                    String line="";
 
-            for (int i=0; i<tffde.getT_textos().size();i++){
-                String format="";
-                String line="";
-                for(Map.Entry<String, Object> entry:tffde.getT_textos().get(i).entrySet()){
-                    String key=entry.getKey();
-                    String valor=entry.getValue().toString();
-                    if(key.equals("TDLINE")){
-                        line=valor;
-                    }else if(key.equals("TDFORMAT")){
-                        format=valor;
+                    for(Map.Entry<String, Object> entry:tffde.getT_textos().get(i).entrySet()){
+                        String key=entry.getKey();
+                        String valor=entry.getValue().toString();
+                        if(key.equals("TDLINE")){
+                            line=valor;
+                        }else if(key.equals("TDFORMAT")){
+                            format=valor;
+                        }
                     }
+                    dto.setObservacion("");
+                    if(format.equals("D")){
+                        descripcion=line;
+                    }else if(format.equals("O")){
+                        observacion=line;
+                    }
+
+
                 }
+                dto.setDescripcionTrabajo(descripcion);
+                dto.setObservacion(observacion);
+            }else {
+                dto.setDescripcionTrabajo("");
                 dto.setObservacion("");
-                if(format.equals("D")){
-                    dto.setDescripcionTrabajo(line);
-                }else if(format.equals("O")){
-                    dto.setObservacion(line);
-                }
-
-
             }
+
 
             String fechaCrea="";
             String horaCrea="";
