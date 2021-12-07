@@ -8,5 +8,6 @@ public interface JCOTrabajoFueraFaenaService {
     GuardaTrabajoExports GuardaTrabajo(GuardaTrabajoImports imports)throws Exception;
     TrabajoFueraFaenaDetalleExports DetalleTrabajoFueraFaenaTransporte(TrabajoFueraFaenaDetalleImports imports)throws Exception;
     TrabajoDetalleDtoExports DetalleTrabajoFueraFaenaTransportez(TrabajoFueraFaenaDetalleImports imports)throws Exception;
+    SemanaDto ObtenerSemanas()throws Exception;
 
     }

@@ -4,6 +4,7 @@ public class Constantes {
 
     //Nombres de RFC's
     public static String ZFL_RFC_READ_TABLE = "ZFL_RFC_READ_TABLE";
+    public static String ZHR_LEE_SEMANAS_TRIP="ZHR_LEE_SEMANAS_TRIP";
     public static String ZFL_RFC_QV_COMB_FASE = "ZFL_RFC_QV_COMB_FASE";
     public static String ZFL_RFC_ACT_CAMP_TAB="ZFL_RFC_ACT_CAMP_TAB";
     public static String ZFL_RFC_CONS_EMBARCA_BTP ="ZFL_RFC_CONS_EMBARCA_BTP";

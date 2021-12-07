@@ -515,6 +515,20 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         return dto;
     }
 
+    @Override
+    public SemanaDto ObtenerSemanas() throws Exception {
+        SemanaDto dto = new SemanaDto();
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+        JCoRepository repo = destination.getRepository();
+        JCoFunction function = repo.getFunction(Constantes.ZHR_LEE_SEMANAS_TRIP);
+        JCoParameterList tables = function.getTableParameterList();
+        function.execute(destination);
+        JCoTable tblSTR_APP = tables.getTable(Tablas.ZHR_STR_SEM_TRIP);
+        Metodos metodos= new Metodos();
+        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
+        dto.setListSTR_APP(listSTR_APP);
+        return dto;
+    }
 
 
     public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{

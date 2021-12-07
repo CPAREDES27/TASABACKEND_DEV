@@ -252,4 +252,13 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/ObtenerSemanas", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<SemanaDto> ObtenerSemanas() {
+        try {
+            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.ObtenerSemanas())
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

@@ -139,6 +139,7 @@ public class Tablas {
     public static String T_RSPRCE="T_RSPRCE";
     public static String T_DTPRCE="T_DTPRCE";
     public static String T_TRIOBS="T_TRIOBS";
+    public static String ZHR_STR_SEM_TRIP="ZHR_STR_SEM_TRIP";
 
     //Sistema Informacion Flota
     public static String STR_TP="STR_TP";
