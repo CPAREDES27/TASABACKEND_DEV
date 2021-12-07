@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
@@ -87,14 +88,54 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
             ReporObservaTripuExports re=  ReporteObservacionesTripulantes(imports);
 
 
-
-            for(int i=0; i<re.getT_triobs().size();i++){
-
-            }
-
             List<String[]> content=new ArrayList<>();
             String [] cabeceras={"Código","Nombres","Apellido Paterno","Apellido Materno","E/P","Flota","Fecha Obs."};
             content.add(cabeceras);
+
+            List<PDFReporteObsTripuDto> listRepor= new ArrayList<>();
+            for(int i=0; i<re.getT_triobs().size();i++){
+
+                HashMap<String, Object> t_triobs=re.getT_triobs().get(i);
+
+                PDFReporteObsTripuDto dto= new PDFReporteObsTripuDto();
+
+                for(Map.Entry<String, Object> entry: t_triobs.entrySet()){
+                    String key= entry.getKey();
+                    String valor=entry.getValue().toString();
+
+                    if(key.equals("PERNR")){
+                        dto.setCodigo(valor);
+                    }else if(key.equals("VORNA")){
+                        dto.setNombre(valor);
+                    }else if(key.equals("NACHN")){
+                        dto.setApellidoPaterno(valor);
+                    }else if(key.equals("NACH2")){
+                        dto.setApellidoMaterno(valor);
+                    }else if(key.equals("NMEMB")){
+                        dto.setEp(valor);
+                    }else if(key.equals("DSGFL")){
+                        dto.setFlota(valor);
+                    }else if(key.equals("FEOBS")){
+                        dto.setFecha(valor);
+                    }
+
+                }
+                listRepor.add(dto);
+
+            }
+
+            for (PDFReporteObsTripuDto dto : listRepor) {
+                String[]reg=new String[7];
+                reg[0]=dto.getCodigo();
+                reg[1]=dto.getNombre();
+                reg[2]=dto.getApellidoPaterno();
+                reg[3]=dto.getApellidoMaterno();
+                reg[4]=dto.getEp();
+                reg[5]=dto.getFlota();
+                reg[6]=dto.getFecha();
+                content.add(reg);
+            }
+
 
             PlantillaPDFReporteObsTripu(path, content);
 
@@ -124,11 +165,11 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 11);
-        contentStream.moveTextPositionByAmount(200, 790);
+        contentStream.moveTextPositionByAmount(185, 790);
         contentStream.drawString("REPORTE DE OBSERVACIÓN DE TRIPULANTES");
         contentStream.endText();
 
-        drawCuadroDetalle(page,contentStream, 40, 750,500,content);
+        drawCuadroDetalle(page,contentStream, 40, 750,530,content);
 
         contentStream.close();
 
@@ -181,51 +222,45 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
 
         //draw the columns
         float nextx = x;
-        for (int i = 0; i <= cols+2; i++) {
+        for (int i = 0; i <= cols+1; i++) {
 
             if(i==1 ){
-                nextx+=60;
+                nextx+=55;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }else if(i==2){
-                nextx+=100f;
+                nextx+=97f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
             else if(i==3){
-                nextx+=100;
+                nextx+=97;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
             else if(i==4){
-                nextx+=100f;
+                nextx+=97f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==5){
-                nextx+=40f;
+                nextx+=62f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==6){
-                nextx+=60f;
+                nextx+=62f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==7 ){
                 nextx+=60f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if(i==8){
-                nextx+=40f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
@@ -244,7 +279,7 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
         PDFont font;
 
 
-        int texty=y-13;
+        int texty=y-10;
         for(int i=0; i<cantidadRegistros; i++) {
 
             String[]fields=content.get(i);
@@ -254,55 +289,46 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
 
                 switch (j) {
                     case 0:
-                        textx = 50;
+                        textx = 45;
                         break;
                     case 1:
                         textx = 105;
                         break;
                     case 2:
-                        textx=210;
+                        textx=205;
                         break;
                     case 3:
-                        textx = 315;
+                        textx = 300;
                         break;
                     case 4:
-                        textx = 380;
+                        textx = 395;
                         break;
                     case 5:
-                        textx = 445;
+                        textx = 455;
                         break;
                     case 6:
-                        textx = 510;
-                        break;
-                    case 7:
-                        textx = 575;
-                        break;
-                    case 8:
-                        textx = 640;
+                        textx = 515;
                         break;
 
+
                 }
+                float tam;
                 if(i==0 ){
                     font=PDType1Font.HELVETICA_BOLD;
+                    tam=9f;
                 }else{
                     font=PDType1Font.HELVETICA;
+                    tam=7.5f;
                 }
-                float tam=7.5f;
 
 
-                if(i==0){
-                    contentStream.beginText();
-                    contentStream.setFont(font, 9);
-                    contentStream.newLineAtOffset(textx, texty-5);
-                    contentStream.showText(fields[j]);
-                    contentStream.endText();
-                }else {
+
                     contentStream.beginText();
                     contentStream.setFont(font, tam);
                     contentStream.newLineAtOffset(textx, texty);
                     contentStream.showText(fields[j]);
                     contentStream.endText();
-                }
+
 
             }
 
