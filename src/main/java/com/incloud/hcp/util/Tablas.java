@@ -58,11 +58,21 @@ public class Tablas {
     public static String LIST_OUT="LIST_OUT";
     public static String T_DATA="T_DATA";
     public static String S_POSICION="S_POSICION";
-    public static String IT_ZFLEMB="IT_ZFLEMB";
     public static String ET_ZFLEMB="ET_ZFLEMB";
     public static String T_CAL="T_CAL";
     public static String ZV_FLDC1="ZV_FLDC1";
+
+    // Carga dinamica de archivos
+    public static String IT_ZFLEMB="IT_ZFLEMB";
     public static String IT_CUOTAARM="IT_CUOTAARM";
+    public static String IT_SAC_ZONAPESCA="IT_SAC_ZONAPESCA";
+    public static String IT_SAC_PLANTA="IT_SAC_PLANTA";
+    public static String IT_SAC_ORDENGP="IT_SAC_ORDENGP";
+    public static String IT_SAC_BDEP="IT_SAC_BDEP";
+    public static String IT_SAC_ARMADORES="IT_SAC_ARMADORES";
+    public static String IT_SAC_ORDENGE="IT_SAC_ORDENGE";
+    public static String IT_SAC_FLOTATASA="IT_SAC_FLOTATASA";
+    public static String IT_SAC_PPESCAR_CN="IT_SAC_PPESCAR_CN";
 
 
 

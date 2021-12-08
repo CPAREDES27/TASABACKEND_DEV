@@ -209,11 +209,35 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
 
                 //Establecer la lista para mandar
                 switch (imports.getIp_tpcarga()) {
-                    case "E":
+                    case "E": // Embarcaciones
                         exec.setTable(importx, Tablas.IT_ZFLEMB, imports.getListData());
                         break;
-                    case "C":
+                    case "C": // Cuotas por armadores
                         exec.setTable(importx, Tablas.IT_CUOTAARM, imports.getListData());
+                        break;
+                    case "1": // SAC Zona pesca
+                        exec.setTable(importx, Tablas.IT_SAC_ZONAPESCA, imports.getListData());
+                        break;
+                    case "2": // SAC Planta
+                        exec.setTable(importx, Tablas.IT_SAC_PLANTA, imports.getListData());
+                        break;
+                    case "3": // SAC Orden GP
+                        exec.setTable(importx, Tablas.IT_SAC_ORDENGP, imports.getListData());
+                        break;
+                    case "4": // SAC BEDP
+                        exec.setTable(importx, Tablas.IT_SAC_BDEP, imports.getListData());
+                        break;
+                    case "5": // SAC Armadores
+                        exec.setTable(importx, Tablas.IT_SAC_ARMADORES, imports.getListData());
+                        break;
+                    case "6": // SAC Orden GE
+                        exec.setTable(importx, Tablas.IT_SAC_ORDENGE, imports.getListData());
+                        break;
+                    case "7": // SAC Flota tasa
+                        exec.setTable(importx, Tablas.IT_SAC_FLOTATASA, imports.getListData());
+                        break;
+                    case "8": // SAC Pesca CN
+                        exec.setTable(importx, Tablas.IT_SAC_PPESCAR_CN, imports.getListData());
                         break;
                 }
 
