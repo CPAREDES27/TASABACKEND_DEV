@@ -134,15 +134,39 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
             HashMap<String, Object> dataFieldsFile = imports.getListData().remove(0); // Se elimina el primer elemento que contiene los títulos, pero se utilizará para validar los campos
             importx.setValue("IP_TOPER", "C");
 
-            String nombreLista = "";
+            String nombreData = "";
 
-            // Mapear los campos
+            // Indicar el tipo de carga
             switch (imports.getIp_tpcarga()) {
-                case "E":
-                    nombreLista = "Embarcaciones";
+                case "E": // Embarcaciones
+                    nombreData = Tablas.IT_ZFLEMB;
                     break;
-                case "C":
-                    nombreLista = "Cuotas por armadores";
+                case "C": // Cuotas por armadores
+                    nombreData = Tablas.IT_CUOTAARM;
+                    break;
+                case "1": // SAC Zona pesca
+                    nombreData = Tablas.IT_SAC_ZONAPESCA;
+                    break;
+                case "2": // SAC Planta
+                    nombreData = Tablas.IT_SAC_PLANTA;
+                    break;
+                case "3": // SAC Orden GP
+                    nombreData = Tablas.IT_SAC_ORDENGP;
+                    break;
+                case "4": // SAC BEDP
+                    nombreData = Tablas.IT_SAC_BDEP;
+                    break;
+                case "5": // SAC Armadores
+                    nombreData = Tablas.IT_SAC_ARMADORES;
+                    break;
+                case "6": // SAC Orden GE
+                    nombreData = Tablas.IT_SAC_ORDENGE;
+                    break;
+                case "7": // SAC Flota tasa
+                    nombreData = Tablas.IT_SAC_FLOTATASA;
+                    break;
+                case "8": // SAC Pesca CN
+                    nombreData = Tablas.IT_SAC_PPESCAR_CN;
                     break;
             }
 
@@ -207,39 +231,8 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                     }
                 }
 
-                //Establecer la lista para mandar
-                switch (imports.getIp_tpcarga()) {
-                    case "E": // Embarcaciones
-                        exec.setTable(importx, Tablas.IT_ZFLEMB, imports.getListData());
-                        break;
-                    case "C": // Cuotas por armadores
-                        exec.setTable(importx, Tablas.IT_CUOTAARM, imports.getListData());
-                        break;
-                    case "1": // SAC Zona pesca
-                        exec.setTable(importx, Tablas.IT_SAC_ZONAPESCA, imports.getListData());
-                        break;
-                    case "2": // SAC Planta
-                        exec.setTable(importx, Tablas.IT_SAC_PLANTA, imports.getListData());
-                        break;
-                    case "3": // SAC Orden GP
-                        exec.setTable(importx, Tablas.IT_SAC_ORDENGP, imports.getListData());
-                        break;
-                    case "4": // SAC BEDP
-                        exec.setTable(importx, Tablas.IT_SAC_BDEP, imports.getListData());
-                        break;
-                    case "5": // SAC Armadores
-                        exec.setTable(importx, Tablas.IT_SAC_ARMADORES, imports.getListData());
-                        break;
-                    case "6": // SAC Orden GE
-                        exec.setTable(importx, Tablas.IT_SAC_ORDENGE, imports.getListData());
-                        break;
-                    case "7": // SAC Flota tasa
-                        exec.setTable(importx, Tablas.IT_SAC_FLOTATASA, imports.getListData());
-                        break;
-                    case "8": // SAC Pesca CN
-                        exec.setTable(importx, Tablas.IT_SAC_PPESCAR_CN, imports.getListData());
-                        break;
-                }
+                //Establecer la lista a mandar
+                exec.setTable(importx, nombreData, imports.getListData());
 
                 stfcConnection.execute(destination);
 
@@ -250,7 +243,7 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                 dto.setT_mensaje(t_mensaje);
                 dto.setMensaje("Ok");
             } else {
-                dto.setMensaje("Las columnas de " + nombreLista + " son incorrectas");
+                dto.setMensaje("Las columnas de " + nombreData + " son incorrectas");
             }
             return dto;
         } catch (Exception ex) {
