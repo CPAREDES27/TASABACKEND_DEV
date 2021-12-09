@@ -172,16 +172,16 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
         contentStream.beginText();
         contentStream.setFont(bold, 11);
         contentStream.moveTextPositionByAmount(184, 790);
-        contentStream.drawString("__________________________________");
+        contentStream.drawString("______________________________________");
         contentStream.endText();
 
         drawCuadroDetalle(page,contentStream, 40, 750,530,content);
 
         contentStream.close();
 
-        if(content.size()>20){
+        if(content.size()>50){
             page = new PDPage(PDRectangle.A4);
-            page.setRotation(90);
+
             document.addPage(page);
 
             contentStream = new PDPageContentStream(document, page);
@@ -199,10 +199,10 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
                                   int x, int y, int ancho,List<String[]> content) throws IOException {
 
         int cantidadRegistros;
-        if(content.size()<=20){
+        if(content.size()<=50){
             cantidadRegistros= content.size();
         }else{
-            cantidadRegistros=20;
+            cantidadRegistros=50;
         }
         int rows=cantidadRegistros;
         final int cols = content.get(0).length;
@@ -298,7 +298,7 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
                         textx = 45;
                         break;
                     case 1:
-                        textx = 105;
+                        textx = 100;
                         break;
                     case 2:
                         textx=205;
@@ -351,9 +351,9 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
                                    int x, int y, int ancho,List<String[]> content) throws IOException {
 
 
-        int cantidadRegistros= content.size()-20;
+        int cantidadRegistros= content.size()-50;
 
-        final int rows = content.size()-20;
+        final int rows = content.size()-50;
         final int cols = content.get(0).length;
         float rowHeight = 15.0f;
         final float tableHeight =15 * (float) rows;
@@ -382,88 +382,47 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
         for (int i = 0; i <= cols+2; i++) {
 
             if(i==1 ){
-                nextx+=70;
+                nextx+=55;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }else if(i==2){
-                nextx+=185f;
+                nextx+=97f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
             else if(i==3){
-                nextx+=90;
+                nextx+=97;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
             }
             else if(i==4){
-                nextx+=40f;
+                nextx+=97f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==5){
-                nextx+=40f;
+                nextx+=62f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==6){
-                nextx+=40f;
+                nextx+=62f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==7 ){
-                nextx+=40f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if(i==8){
-                nextx+=40f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if( i==9){
-                nextx+=40f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if( i==10){
-                nextx+=40f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if( i==11){
-                nextx+=43f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if( i==12){
-                nextx+=43f;
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else if( i==13){
-                nextx+=43f;
+                nextx+=60f;
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
 
             }else if(i==0) {
-                contentStream.moveTo(nextx, y);
-                contentStream.lineTo(nextx, y - tableHeight);
-                contentStream.stroke();
-
-            }else {
                 contentStream.moveTo(nextx, y);
                 contentStream.lineTo(nextx, y - tableHeight);
                 contentStream.stroke();
@@ -477,8 +436,8 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
         PDFont font;
 
 
-        int texty=y-13;
-        for(int i=21; i<content.size(); i++) {
+        int texty=y-10;
+        for(int i=0; i<cantidadRegistros; i++) {
 
             String[]fields=content.get(i);
             float textx=x+5;
@@ -487,44 +446,27 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
 
                 switch (j) {
                     case 0:
-                        textx = 50;
+                        textx = 45;
                         break;
                     case 1:
-                        textx = 120;
+                        textx = 100;
                         break;
                     case 2:
-                        textx=305;
+                        textx=205;
                         break;
                     case 3:
-                        textx = 395;
+                        textx = 300;
                         break;
                     case 4:
-                        textx = 435;
+                        textx = 395;
                         break;
                     case 5:
-                        textx = 475;
+                        textx = 455;
                         break;
                     case 6:
-                        textx = 520;
+                        textx = 515;
                         break;
-                    case 7:
-                        textx = 555;
-                        break;
-                    case 8:
-                        textx = 600;
-                        break;
-                    case 9:
-                        textx = 635;
-                        break;
-                    case 10:
-                        textx = 675;
-                        break;
-                    case 11:
-                        textx = 715;
-                        break;
-                    case 12:
-                        textx = 760;
-                        break;
+
 
                 }
 
