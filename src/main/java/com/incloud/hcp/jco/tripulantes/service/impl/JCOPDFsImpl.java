@@ -3678,131 +3678,140 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
     public PDFExports GenerarPDFTrabajoFF(TrabajoFueraFaenaDetalleImports imports)throws Exception{
         PDFExports pdf= new PDFExports();
-        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        try {
+            String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
 
-        TrabajoFueraFaenaImports tfi= new TrabajoFueraFaenaImports();
-        TrabajoFueraFaenaDetalleExports dto= jcoTrabajoFueraFaena.DetalleTrabajoFueraFaenaTransporte(imports);
+            TrabajoFueraFaenaImports tfi = new TrabajoFueraFaenaImports();
+            TrabajoFueraFaenaDetalleExports dto = jcoTrabajoFueraFaena.DetalleTrabajoFueraFaenaTransporte(imports);
 
-        if(dto.getObservacion().equals("")){
-            dto.setObservacion("-");
+            try {
+                if (dto.getObservacion() == null || dto.getObservacion().equals(null)) {
+                    dto.setObservacion("");
+
+                }
+            }catch (Exception e){
+                dto.setObservacion("");
+
+            }
+
+
+            List<String[]> ListaRegistros = new ArrayList<>();
+
+            String[] cabecera = {"Nro. Personal", "Nombre", "Cargo", dto.getFechas()[0], dto.getFechas()[1], dto.getFechas()[2],
+                    dto.getFechas()[3], dto.getFechas()[4], dto.getFechas()[5], dto.getFechas()[6], "Origen", "Centro", "Destino"};
+
+            ListaRegistros.add(cabecera);
+
+
+            for (int i = 0; i < dto.getDetalle().size(); i++) {
+
+                TrabajoFFDetalleDto detalle = dto.getDetalle().get(i);
+
+                String[] registro = new String[13];
+                registro[0] = detalle.getNroPersona();
+                registro[1] = detalle.getNombre();
+                // registro[2]=detalle.getCargo();
+                registro[2] = detalle.getCargo();
+                registro[10] = detalle.getOrigen();
+                registro[11] = detalle.getCentro();
+                registro[12] = detalle.getDestino();
+
+                for (Map.Entry<String, Object> entry : detalle.getFechas().entrySet()) {
+                    String key = entry.getKey();
+                    String valor = entry.getValue().toString();
+
+
+                    logger.error("REGISTRO " + key + " : " + valor);
+
+                    if (registro[3] == null) {
+                        if (key.trim().equals(dto.getFechas()[0].trim())) {
+                            registro[3] = valor;
+                            logger.error("registro[3]=valor " + registro[3] + " : " + valor);
+                        }
+                    }
+                    if (registro[4] == null) {
+                        if (key.trim().equals(dto.getFechas()[1].trim())) {
+                            registro[4] = valor;
+                            logger.error("registro[4]=valor " + registro[4] + " : " + valor);
+                        }
+                    }
+                    if (registro[5] == null) {
+                        if (key.trim().equals(dto.getFechas()[2].trim())) {
+                            registro[5] = valor;
+                            logger.error("registro[5]=valor " + registro[5] + " : " + valor);
+
+                        }
+                    }
+                    if (registro[6] == null) {
+                        if (key.trim().equals(dto.getFechas()[3].trim())) {
+                            registro[6] = valor;
+                            logger.error("registro[6]=valor " + registro[6] + " : " + valor);
+
+                        }
+                    }
+                    if (registro[7] == null) {
+                        if (key.trim().equals(dto.getFechas()[4].trim())) {
+                            registro[7] = valor;
+                            logger.error("registro[7]=valor " + registro[7] + " : " + valor);
+
+                        }
+                    }
+                    if (registro[8] == null) {
+                        if (key.trim().equals(dto.getFechas()[5].trim())) {
+                            registro[8] = valor;
+                            logger.error("registro[8]=valor " + registro[8] + " : " + valor);
+
+                        }
+                    }
+                    if (registro[9] == null) {
+                        if (key.trim().equals(dto.getFechas()[6].trim())) {
+                            registro[9] = valor;
+                            logger.error("registro[9]=valor " + registro[9] + " : " + valor);
+
+                        }
+                    }
+
+                }
+                if (registro[3] == null) {
+                    registro[3] = "";
+                }
+                if (registro[4] == null) {
+                    registro[4] = "";
+                }
+                if (registro[5] == null) {
+                    registro[5] = "";
+                }
+                if (registro[6] == null) {
+                    registro[6] = "";
+                }
+                if (registro[7] == null) {
+                    registro[7] = "";
+                }
+                if (registro[8] == null) {
+                    registro[8] = "";
+                }
+                if (registro[9] == null) {
+                    registro[9] = "";
+                }
+                ListaRegistros.add(registro);
+            }
+            logger.error("FECHAS[0]= " + dto.getFechas()[0]);
+            logger.error("FECHAS[1]= " + dto.getFechas()[1]);
+            logger.error("FECHAS[2]= " + dto.getFechas()[2]);
+            logger.error("FECHAS[3]= " + dto.getFechas()[3]);
+            logger.error("FECHAS[4]= " + dto.getFechas()[4]);
+            logger.error("FECHAS[5]= " + dto.getFechas()[5]);
+            logger.error("FECHAS[6]= " + dto.getFechas()[6]);
+
+
+            PlantillaPDFTrabajoFF(path, dto, ListaRegistros);
+            Metodos exec = new Metodos();
+            pdf.setBase64(exec.ConvertirABase64(path));
+            pdf.setMensaje("Ok");
+
+        }catch (Exception e){
+            pdf.setMensaje(e.getMessage());
         }
-
-
-        List<String[]> ListaRegistros=new ArrayList<>();
-
-        String[] cabecera={"Nro. Personal", "Nombre", "Cargo", dto.getFechas()[0], dto.getFechas()[1], dto.getFechas()[2],
-                dto.getFechas()[3], dto.getFechas()[4], dto.getFechas()[5], dto.getFechas()[6],"Origen","Centro","Destino"};
-
-        ListaRegistros.add(cabecera);
-
-
-        for(int i=0; i<dto.getDetalle().size();i++){
-
-            TrabajoFFDetalleDto detalle=dto.getDetalle().get(i);
-
-            String[]registro=new String[13];
-            registro[0]=detalle.getNroPersona();
-            registro[1]=detalle.getNombre();
-           // registro[2]=detalle.getCargo();
-            registro[2]=detalle.getCargo();
-            registro[10]=detalle.getOrigen();
-            registro[11]=detalle.getCentro();
-            registro[12]=detalle.getDestino();
-
-            for(Map.Entry<String, Object> entry:detalle.getFechas().entrySet()){
-                String key=entry.getKey();
-                String valor=entry.getValue().toString();
-
-
-                logger.error("REGISTRO "+key+" : "+valor);
-
-                if(registro[3]==null){
-                    if(key.trim().equals(dto.getFechas()[0].trim())){
-                        registro[3]=valor;
-                        logger.error("registro[3]=valor "+registro[3]+" : "+valor);
-                    }
-                }
-                if(registro[4]==null) {
-                    if (key.trim().equals(dto.getFechas()[1].trim())) {
-                        registro[4] = valor;
-                        logger.error("registro[4]=valor " + registro[4] + " : " + valor);
-                    }
-                }
-                if(registro[5]==null) {
-                    if (key.trim().equals(dto.getFechas()[2].trim())) {
-                        registro[5] = valor;
-                        logger.error("registro[5]=valor " + registro[5] + " : " + valor);
-
-                    }
-                }
-                if(registro[6]==null) {
-                    if (key.trim().equals(dto.getFechas()[3].trim())) {
-                        registro[6] = valor;
-                        logger.error("registro[6]=valor " + registro[6] + " : " + valor);
-
-                    }
-                }
-                if(registro[7]==null) {
-                    if (key.trim().equals(dto.getFechas()[4].trim())) {
-                        registro[7] = valor;
-                        logger.error("registro[7]=valor " + registro[7] + " : " + valor);
-
-                    }
-                }
-                if(registro[8]==null) {
-                    if (key.trim().equals(dto.getFechas()[5].trim())) {
-                        registro[8] = valor;
-                        logger.error("registro[8]=valor " + registro[8] + " : " + valor);
-
-                    }
-                }
-                if(registro[9]==null) {
-                    if (key.trim().equals(dto.getFechas()[6].trim())) {
-                        registro[9] = valor;
-                        logger.error("registro[9]=valor " + registro[9] + " : " + valor);
-
-                    }
-                }
-
-            }
-            if(registro[3]==null){
-                registro[3]="";
-            }
-            if(registro[4]==null){
-                registro[4]="";
-            }
-            if(registro[5]==null){
-                registro[5]="";
-            }
-            if(registro[6]==null){
-                registro[6]="";
-            }
-            if(registro[7]==null){
-                registro[7]="";
-            }
-            if(registro[8]==null){
-                registro[8]="";
-            }
-            if(registro[9]==null){
-                registro[9]="";
-            }
-            ListaRegistros.add(registro);
-        }
-        logger.error("FECHAS[0]= "+dto.getFechas()[0]);
-        logger.error("FECHAS[1]= "+dto.getFechas()[1]);
-        logger.error("FECHAS[2]= "+dto.getFechas()[2]);
-        logger.error("FECHAS[3]= "+dto.getFechas()[3]);
-        logger.error("FECHAS[4]= "+dto.getFechas()[4]);
-        logger.error("FECHAS[5]= "+dto.getFechas()[5]);
-        logger.error("FECHAS[6]= "+dto.getFechas()[6]);
-
-
-
-        PlantillaPDFTrabajoFF(path, dto, ListaRegistros);
-        Metodos exec = new Metodos();
-        pdf.setBase64(exec.ConvertirABase64(path));
-        pdf.setMensaje("Ok");
-
         return pdf;
     }
 

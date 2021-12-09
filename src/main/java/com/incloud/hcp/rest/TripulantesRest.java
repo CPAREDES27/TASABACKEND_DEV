@@ -261,4 +261,14 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/PDFReporteObsTripu", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFReporteObsTripu(@RequestBody ReporObservaTripuImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoReporObservaTripuService.PDFReporteObsTripu(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }
