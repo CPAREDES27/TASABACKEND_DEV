@@ -338,6 +338,32 @@ public class EmbarcacionRest {
 
     }
 
+    @PostMapping(value = "/CrearVenta/", produces = APPLICATION_JSON_VALUE)
+    public  ResponseEntity<CrearVentaExport> CrearVenta(@RequestBody CrearVentaImport imports){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.crearVenta(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/AnularVenta/", produces = APPLICATION_JSON_VALUE)
+    public  ResponseEntity<AnularVentaExport> AnularVenta(@RequestBody AnularVentaImport imports){
+
+        try {
+            return Optional.ofNullable(this.jcoEmbarcacionService.anularVenta(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
 
 
 }

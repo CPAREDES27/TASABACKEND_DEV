@@ -908,7 +908,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             c1.set(Calendar.DATE, dia);*/
 
             SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-
             Date dateFhrsv = sdf.parse(p_fhrsv);
 
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
@@ -992,5 +991,107 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
         return are;
     }
+
+    @Override
+    public CrearVentaExport crearVenta(CrearVentaImport imports) throws Exception{
+        CrearVentaExport cve = new CrearVentaExport();
+        try{
+            //DATOS
+            String p_user = imports.getP_user();
+            int p_nrmar = imports.getP_nrmar();
+            String p_cdemb = imports.getP_cdemb();
+            String p_werks = imports.getP_werks();
+            String p_lgort = imports.getP_lgort();
+            int p_nrevn = imports.getP_nrevn();
+            String p_fhrsv = imports.getP_fhrsv();
+            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+            Date dateFhrsv = sdf.parse(p_fhrsv);
+            List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
+
+            //rfc
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CREAR_VENTA_COMBU);
+            JCoParameterList tables = function.getTableParameterList();
+
+            //imports
+            HashMap<String, Object> importsSap = new HashMap<String, Object>();
+            importsSap.put("P_USER", p_user);
+            importsSap.put("P_NRMAR", p_nrmar);
+            importsSap.put("P_CDEMB", p_cdemb);
+            importsSap.put("P_WERKS", p_werks);
+            importsSap.put("P_LGORT", p_lgort);
+            importsSap.put("P_NREVN", p_nrevn);
+            importsSap.put("P_FHRSV", dateFhrsv);
+
+            EjecutarRFC exec = new EjecutarRFC();
+            exec.setImports(function, importsSap);
+            exec.setTable(tables, "STR_RCB", str_rcb);
+
+            //exec rfc
+            function.execute(destination);
+
+            //get resultados
+            JCoTable t_mensaje = tables.getTable(Tablas.T_MENSAJE);
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> mensajes = me.ListarObjetos(t_mensaje);
+            JCoParameterList export = function.getExportParameterList();
+            Object p_pedido = export.getValue("P_PEDIDO");
+            String strPedido = String.valueOf(p_pedido);
+            cve.setT_mensaje(mensajes);
+            cve.setP_pedido(strPedido);
+
+        }catch (Exception e){
+            cve.setMensaje(e.getMessage());
+        }
+        return cve;
+    }
+
+    @Override
+    public AnularVentaExport anularVenta(AnularVentaImport imports) throws Exception{
+        AnularVentaExport ave = new AnularVentaExport();
+        try{
+            //rfc
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_ANULA_VENTA_COMBU);
+            JCoParameterList tables = function.getTableParameterList();
+            List<HashMap<String, Object>> ventas = imports.getP_ventas();
+            List<HashMap<String, Object>> mensajesExport = new ArrayList<HashMap<String, Object>>();
+
+            for (int i = 0; i < ventas.size(); i++){
+                HashMap<String, Object> obj = ventas.get(i);
+                String p_usuario = (String) obj.get("p_user");
+                int p_nrmar = (int) obj.get("p_nrmar");
+                String p_vbeln = (String) obj.get("p_vbeln");
+
+                //imports
+                HashMap<String, Object> importsSap = new HashMap<String, Object>();
+                importsSap.put("P_USER", p_usuario);
+                importsSap.put("P_NRMAR", p_nrmar);
+                importsSap.put("P_VBELN", p_vbeln);
+
+                EjecutarRFC exec = new EjecutarRFC();
+                exec.setImports(function, importsSap);
+
+                //exec rfc
+                function.execute(destination);
+
+                JCoTable t_mensaje = tables.getTable(Tablas.T_MENSAJE);
+                Metodos me = new Metodos();
+                List<HashMap<String, Object>> mensajes = me.ListarObjetos(t_mensaje);
+                mensajesExport.addAll(mensajes);
+            }
+
+            if(mensajesExport.size() > 0){
+                ave.setT_mensaje(mensajesExport);
+            }
+        }catch (Exception e){
+            ave.setMensaje(e.getMessage());
+        }
+        return  ave;
+    }
+
+
 
 }

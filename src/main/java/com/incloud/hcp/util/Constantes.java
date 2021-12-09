@@ -133,6 +133,8 @@ public class Constantes {
 
     public static String ZFL_RFC_CREAR_RESERV_COMBU="ZFL_RFC_CREAR_RESERV_COMBU";
     public static String ZFL_RFC_ANUL_RESERV_COMBUS="ZFL_RFC_ANUL_RESERV_COMBUS";
+    public static String ZFL_RFC_CREAR_VENTA_COMBU="ZFL_RFC_CREAR_VENTA_COMBU";
+    public static String ZFL_RFC_ANULA_VENTA_COMBU="ZFL_RFC_ANULA_VENTA_COMBU";
 
 
 }
