@@ -89,7 +89,7 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
 
 
             List<String[]> content=new ArrayList<>();
-            String [] cabeceras={"Código","Nombres","Apellido Paterno","Apellido Materno","E/P","Flota","Fecha Obs."};
+            String [] cabeceras={"CÓDIGO","NOMBRE","AP PATERNO","AP MATERNO","E/P","FLOTA","FECHA OBS."};
             content.add(cabeceras);
 
             List<PDFReporteObsTripuDto> listRepor= new ArrayList<>();
@@ -166,7 +166,13 @@ public class JCOReporObservaTripuImpl implements JCOReporObservaTripuService {
         contentStream.beginText();
         contentStream.setFont(bold, 11);
         contentStream.moveTextPositionByAmount(185, 790);
-        contentStream.drawString("REPORTE DE OBSERVACIÓN DE TRIPULANTES");
+        contentStream.drawString("REPORTE DE TRIPULANTES OBSERVADOS");
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 11);
+        contentStream.moveTextPositionByAmount(184, 790);
+        contentStream.drawString("__________________________________");
         contentStream.endText();
 
         drawCuadroDetalle(page,contentStream, 40, 750,530,content);
