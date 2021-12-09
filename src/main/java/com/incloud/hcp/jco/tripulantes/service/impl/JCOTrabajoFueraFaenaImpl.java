@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.*;
 
 @Service
@@ -536,9 +537,116 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         JCoTable tblSTR_APP = tables.getTable(Tablas.ZHR_STR_SEM_TRIP);
         Metodos metodos= new Metodos();
         List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
-        dto.setListSTR_APP(listSTR_APP);
+
+
+        List<HashMap<String, Object>> listAñoActual= new ArrayList<>();
+        List<HashMap<String, Object>> listAñoAnterior= new ArrayList<>();
+
+        Date date= new Date();
+        SimpleDateFormat getYear = new SimpleDateFormat("yyyy");
+        String year = getYear.format(date);
+        String yearOld=String.valueOf(Integer.parseInt(year)-1);
+        String s=String.valueOf(Year.now());
+
+        logger.error("year = "+year);
+        logger.error("year = "+yearOld);
+        for(int i=0;i< listSTR_APP.size();i++){
+
+
+
+            String mandt="";
+            String begda="";
+            String vabrj="";
+            String permo="";
+            String endda="";
+            String pabrp="";
+            String pabrj="";
+            String vabrp="";
+
+            for(Map.Entry<String, Object> Entry: listSTR_APP.get(i).entrySet()){
+
+                String key=Entry.getKey();
+                String value=Entry.getValue().toString();
+
+                if(key.equals("MANDT")){
+                    mandt=value;
+                }
+                if(key.equals("BEGDA")){
+                    begda=value;
+
+                }
+                if(key.equals("VABRJ")){
+                    vabrj=value;
+                }
+                if(key.equals("PERMO")){
+                    permo=value;
+                }
+                if(key.equals("ENDDA")){
+                    endda=value;
+                }
+                if(key.equals("PABRP")){
+                    pabrp=value;
+                }
+                if(key.equals("PABRJ")){
+                    pabrj=value;
+                }
+                if(key.equals("VABRP")){
+                    vabrp=value;
+                }
+            }
+            HashMap<String, Object> registro=new HashMap<>();
+            logger.error("PERMO : "+permo);
+            logger.error("PABRJ : "+pabrj);
+
+            if(permo.equals("08") && pabrj.equals(year)){
+                logger.error("AÑO ACTUAL");
+
+                String mes=BuscarMes(begda);
+                String diferencia= DiferenciaDias(begda, endda);
+
+                registro.put("DIFER", diferencia);
+                registro.put("MES", mes);
+                registro.put("MANDT", mandt);
+                registro.put("BEGDA", begda);
+                registro.put("VABRJ", vabrj);
+                registro.put("PERMO", permo);
+                registro.put("ENDDA", endda);
+                registro.put("PABRP", pabrp);
+                registro.put("PABRJ", pabrj);
+                registro.put("VABRP", vabrp);
+
+                listAñoActual.add(registro);
+
+            }
+            if (permo.equals("08") && pabrj.equals(yearOld)){
+
+                logger.error("AÑO ANTERIOR");
+
+                String mes=BuscarMes(begda);
+                String diferencia= DiferenciaDias(begda, endda);
+
+                registro.put("DIFER", diferencia);
+                registro.put("MES", mes);
+                registro.put("MANDT", mandt);
+                registro.put("BEGDA", begda);
+                registro.put("VABRJ", vabrj);
+                registro.put("PERMO", permo);
+                registro.put("ENDDA", endda);
+                registro.put("PABRP", pabrp);
+                registro.put("PABRJ", pabrj);
+                registro.put("VABRP", vabrp);
+
+                listAñoAnterior.add(registro);
+            }
+        }
+
+
+
+        dto.setListAñoActual(listAñoActual);
+        dto.setListAñoAnterior(listAñoAnterior);
         return dto;
     }
+
 
 
     public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{
@@ -566,5 +674,69 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         }
 
         return fechas;
+    }
+
+    public String BuscarMes(String fecha)throws Exception{
+
+        SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("MM");
+        Date date = parseador.parse(fecha);
+        int numMes = Integer.parseInt(formateador.format(date));
+
+        String mes="";
+        switch(numMes){
+            case 1:
+                mes="Enero";
+                break;
+            case 2:
+                mes="Febrero";
+                break;
+            case 3:
+                mes="Marzo";
+                break;
+            case 4:
+                mes="Abril";
+                break;
+            case 5:
+                mes="Mayo";
+                break;
+            case 6:
+                mes="Junio";
+                break;
+            case 7:
+                mes="Julio";
+                break;
+            case 8:
+                mes="Agosto";
+                break;
+            case 9:
+                mes="Septiembre";
+                break;
+            case 10:
+                mes="Octubre";
+                break;
+            case 11:
+                mes="Noviembre";
+                break;
+            case 12:
+                mes="Diciembre";
+                break;
+
+        }
+
+        return  mes;
+    }
+
+    public String DiferenciaDias(String fechaUno, String fechaDos) throws Exception{
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date firstDate = sdf.parse(fechaUno);
+        Date secondDate = sdf.parse(fechaDos);
+
+        int dias=(int) ((secondDate.getTime()-firstDate.getTime())/86400000);
+        String diferencia=String.valueOf(dias);
+
+        return diferencia;
     }
 }
