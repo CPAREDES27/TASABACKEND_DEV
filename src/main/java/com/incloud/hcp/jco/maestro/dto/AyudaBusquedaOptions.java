@@ -15,7 +15,7 @@ public class AyudaBusquedaOptions {
     public static String BSQCENTRO="CDEMP = '0000000001'";
     public static String BSQEMBARCA="";
     public static String BSQTEMPORADA="ESPCN = 'S'";
-    public static String BSQCOCINERO="ABKRS = 'TT'";
+    public static String BSQCOCINERO="ABKRS = 'TT' AND STELL = '30000083'";
     public static String BSQTRIPULANTES="ABKRS = 'TT'";
 
 
