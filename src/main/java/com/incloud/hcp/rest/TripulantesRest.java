@@ -252,7 +252,7 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
-    @PostMapping(value = "/Zfl_Rfc_Tff_Con_Tra_Fue_Fae", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ObtenerSemanas", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<SemanaDto> ObtenerSemanas() {
         try {
             return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.ObtenerSemanas())

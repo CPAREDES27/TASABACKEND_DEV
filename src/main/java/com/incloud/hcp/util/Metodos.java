@@ -417,6 +417,9 @@ public class Metodos {
         }else if(table.equals("PLANTA")){
             tablita = "ZV_FLPL";
         }
+        else if(table.equals("TIPOPROTESTO")){
+            tablita = "ZTBC_DATA";
+        }
         return tablita;
     }
 
@@ -459,6 +462,8 @@ public class Metodos {
             wa="CODIG EQ 'PI' AND STATU EQ '1'";
         }else if(table.equals("PLANTA")){
             wa="ESREG = 'S'";
+        }else if(table.equals("TIPOPROTESTO")){
+            wa = "CODIG EQ 'PT' AND AEDAT EQ '20120320'";
         }
 
         return wa;

@@ -3,6 +3,7 @@ package com.incloud.hcp.jco.tripulantes.dto;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class TrabajoFueraFaenaImports {
@@ -24,6 +25,15 @@ public class TrabajoFueraFaenaImports {
     private List<Options> t_opcion;
     private List<MaestroOptions> option;
     private List<MaestroOptionsKey> options;
+    private List<HashMap<String, Object>> t_fechas;
+
+    public List<HashMap<String, Object>> getT_fechas() {
+        return t_fechas;
+    }
+
+    public void setT_fechas(List<HashMap<String, Object>> t_fechas) {
+        this.t_fechas = t_fechas;
+    }
 
     public List<MaestroOptions> getOption() {
         return option;

@@ -67,7 +67,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
             JCoTable T_MENSAJES = tables.getTable(Tablas.T_MENSAJES);
 
-
+            if(imports.getIp_tope().equals("A")){
+                exec.setTable(tables, Tablas.T_FECHAS,imports.getT_fechas());
+            }
 
             List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos(T_TRABFF, imports.getFieldst_trabff());
             List<HashMap<String, Object>> t_trabaj = metodo.ObtenerListObjetos(T_TRABAJ, imports.getFieldst_trabaj());
