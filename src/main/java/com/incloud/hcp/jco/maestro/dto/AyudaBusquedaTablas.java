@@ -26,6 +26,6 @@ public class AyudaBusquedaTablas {
     public static String BSQEQUIPO="EQKT";
     public static String BSQCOCINERO="ZHRP_BD_PERSONAL";
     public static String BSQTRIPULANTES="ZHRP_BD_PERSONAL";
-
+    public static String BSQGRPEMPR="ZFLGRE";
 
 }
