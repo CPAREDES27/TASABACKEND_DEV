@@ -21,6 +21,69 @@ public class TrabajoFueraFaenaDetalleExports {
     private List<TrabajoFFDetalleDto> detalle;
     private String mensaje;
     private String estado;
+    private String codEmbarcacion;
+    private String embarcacion;
+    private List<HashMap<String, Object>>t_trabaff;
+    private List<HashMap<String, Object>>t_textos;
+    private List<HashMap<String, Object>>t_trabaj;
+    private List<HashMap<String, Object>>t_mensaje;
+    private List<HashMap<String, Object>>t_fechas;
+
+    public List<HashMap<String, Object>> getT_fechas() {
+        return t_fechas;
+    }
+
+    public void setT_fechas(List<HashMap<String, Object>> t_fechas) {
+        this.t_fechas = t_fechas;
+    }
+
+    public List<HashMap<String, Object>> getT_textos() {
+        return t_textos;
+    }
+
+    public void setT_textos(List<HashMap<String, Object>> t_textos) {
+        this.t_textos = t_textos;
+    }
+
+    public List<HashMap<String, Object>> getT_trabaj() {
+        return t_trabaj;
+    }
+
+    public void setT_trabaj(List<HashMap<String, Object>> t_trabaj) {
+        this.t_trabaj = t_trabaj;
+    }
+
+    public List<HashMap<String, Object>> getT_mensaje() {
+        return t_mensaje;
+    }
+
+    public void setT_mensaje(List<HashMap<String, Object>> t_mensaje) {
+        this.t_mensaje = t_mensaje;
+    }
+
+    public List<HashMap<String, Object>> getT_trabaff() {
+        return t_trabaff;
+    }
+
+    public void setT_trabaff(List<HashMap<String, Object>> t_trabaff) {
+        this.t_trabaff = t_trabaff;
+    }
+
+    public String getCodEmbarcacion() {
+        return codEmbarcacion;
+    }
+
+    public void setCodEmbarcacion(String codEmbarcacion) {
+        this.codEmbarcacion = codEmbarcacion;
+    }
+
+    public String getEmbarcacion() {
+        return embarcacion;
+    }
+
+    public void setEmbarcacion(String embarcacion) {
+        this.embarcacion = embarcacion;
+    }
 
     public String getEstado() {
         return estado;

@@ -914,7 +914,8 @@ public class Metodos {
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                                     || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")||key.equals("STELL")){
+                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")||key.equals("STELL")
+                                    ||key.equals("TIPTR")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -1041,7 +1042,7 @@ public class Metodos {
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
                         || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV") || key.equals("ESVVI")|| key.equals("CDTEV")
-                        ||key.equals("STELL")){
+                        ||key.equals("STELL")||key.equals("TIPTR")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -1339,7 +1340,10 @@ public class Metodos {
                 dom="ZESRSV";
                 campo="DESC_"+campo;
             }
-
+            if(campo.equals("TIPTR")){
+                dom="ZDO_TIPOTRABAJO";
+                campo="DESC_"+campo;
+            }
             descripcion=ObtenerDominio(dom,valor);
        }
 
@@ -1625,7 +1629,7 @@ public class Metodos {
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
                         || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV") || key.equals("ESVVI")|| key.equals("CDTEV")
-                        ||key.equals("STELL")){
+                        ||key.equals("STELL")||key.equals("TIPTR")){
                     HashMap<String, Object>dominio=BuscarNombreDominio2(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -1683,7 +1687,8 @@ public class Metodos {
                             newRecord.put(key, value);
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                                     || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
-                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")||key.equals("STELL")){
+                                    || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")||key.equals("STELL")
+                            ||key.equals("TIPTR")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio2(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -1788,6 +1793,10 @@ public class Metodos {
             }
             if(campo.equals("ESRSV")){
                 dom="ZESRSV";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("TIPTR")){
+                dom="ZDO_TIPOTRABAJO";
                 campo="DESC_"+campo;
             }
 
