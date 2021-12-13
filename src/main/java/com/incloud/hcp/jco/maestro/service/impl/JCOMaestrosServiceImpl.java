@@ -669,6 +669,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQTRIPULANTES":
                 tabla=AyudaBusquedaTablas.BSQTRIPULANTES;
                 break;
+            case "BSQGRPEMPR":
+                tabla=AyudaBusquedaTablas.BSQGRPEMPR;
+                break;
         }
 
         return tabla;
@@ -751,6 +754,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQTRIPULANTES":
                 fields = AyudaBusquedaFields.BSQTRIPULANTES;
                 break;
+            case "BSQGRPEMPR":
+                fields = AyudaBusquedaFields.BSQGRPEMPR;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -802,6 +808,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQTRIPULANTES":
                 opt.setWa(AyudaBusquedaOptions.BSQTRIPULANTES);//
+                break;
+            case "BSQGRPEMPR":
+                opt.setWa(AyudaBusquedaOptions.BSQGRPEMPR);//
                 break;
             default:
                 noExists=true;
