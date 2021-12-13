@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
 import com.incloud.hcp.jco.tripulantes.dto.Options;
+import com.incloud.hcp.jco.tripulantes.dto.ProtestoNuevoImport;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosExports;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosImports;
 import com.incloud.hcp.jco.tripulantes.service.JCOProtestosService;
@@ -43,12 +44,16 @@ public class JCOProtestosImpl implements JCOProtestosService {
                 record.put("DATA", o.getData());
                 tmpOptions.add(record);
             }
+
             JCoParameterList export = stfcConnection.getExportParameterList();
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
             exec.setTable(tables, Tablas.T_OPCION,tmpOptions);
-
+            if(imports.getIp_tope().equals("C")){
+                exec.setTable(tables, Tablas.T_BAPRT,imports.getT_baprt());
+                exec.setTable(tables, Tablas.T_TEXTOS,imports.getT_textos());
+            }
             stfcConnection.execute(destination);
 
             pe.setEp_cdprt(export.getValue(Tablas.EP_CDPRT).toString());
@@ -66,6 +71,47 @@ public class JCOProtestosImpl implements JCOProtestosService {
             pe.setT_baprt(t_baprt);
             pe.setT_textos(t_textos);
             pe.setT_mensaj(t_mensaj);
+            pe.setMensaje("Ok");
+
+        }catch (Exception e){
+            pe.setMensaje(e.getMessage());
+        }
+
+        return pe;
+    }
+
+    @Override
+    public ProtestosExports ProtestosNuevo(ProtestoNuevoImport imports) throws Exception {
+
+        ProtestosExports pe=new ProtestosExports();
+
+        try {
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REGPRT_ADM_REGPRT);
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("IP_TOPE", imports.getIp_tope());
+            importx.setValue("IP_CDPRT", imports.getIp_cdprt());
+            importx.setValue("IP_CANTI", imports.getIp_canti());
+            importx.setValue("IP_PERNR", imports.getIp_pernr());
+
+            JCoParameterList export = stfcConnection.getExportParameterList();
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            EjecutarRFC exec= new EjecutarRFC();
+            JCoTable T_BAPRT = tables.getTable(Tablas.T_BAPRT);
+            JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
+            exec.setTable(tables, Tablas.T_BAPRT,imports.getT_baprt());
+            exec.setTable(tables, Tablas.T_TEXTOS,imports.getT_textos());
+            stfcConnection.execute(destination);
+
+
+            pe.setEp_cdprt(export.getValue(Tablas.EP_CDPRT).toString());
+            pe.setEp_drpta(export.getValue(Tablas.EP_DRPTA).toString());
+            Metodos metodo = new Metodos();
+
             pe.setMensaje("Ok");
 
         }catch (Exception e){

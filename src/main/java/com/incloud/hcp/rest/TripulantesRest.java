@@ -111,7 +111,16 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/ProtestosNuevo", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProtestosExports> ProtestosNuevo(@RequestBody ProtestoNuevoImport imports) {
 
+        try {
+            return Optional.ofNullable(this.jcoProtestosService.ProtestosNuevo(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
     @PostMapping(value = "/TrabajoFueraFaenaTransporte", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<TrabajoFueraFaenaExports> TrabajoFueraFaenaTransporte(@RequestBody TrabajoFueraFaenaImports imports) {
 

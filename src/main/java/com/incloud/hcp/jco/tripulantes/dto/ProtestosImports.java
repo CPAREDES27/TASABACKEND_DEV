@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ProtestosImports {
@@ -11,6 +12,24 @@ public class ProtestosImports {
     private String[] fieldst_baprt;
     private String[] fieldst_textos;
     private List<Options> t_opcion;
+    private List<HashMap<String, Object>> t_baprt;
+    private List<HashMap<String, Object>> t_textos;
+
+    public List<HashMap<String, Object>> getT_baprt() {
+        return t_baprt;
+    }
+
+    public void setT_baprt(List<HashMap<String, Object>> t_baprt) {
+        this.t_baprt = t_baprt;
+    }
+
+    public List<HashMap<String, Object>> getT_textos() {
+        return t_textos;
+    }
+
+    public void setT_textos(List<HashMap<String, Object>> t_textos) {
+        this.t_textos = t_textos;
+    }
 
     public String getIp_tope() {
         return ip_tope;

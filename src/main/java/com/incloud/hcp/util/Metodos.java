@@ -419,6 +419,8 @@ public class Metodos {
         }
         else if(table.equals("TIPOPROTESTO")){
             tablita = "ZTBC_DATA";
+        }else if(table.equals("CLASEPROTESTO")){
+            tablita = "ZTBC_DATA";
         }
         return tablita;
     }
@@ -464,6 +466,8 @@ public class Metodos {
             wa="ESREG = 'S'";
         }else if(table.equals("TIPOPROTESTO")){
             wa = "CODIG EQ 'PT' AND AEDAT EQ '20120320'";
+        }else if(table.equals("CLASEPROTESTO")){
+            wa = "CODIG EQ 'PU' AND AEDAT EQ '20120320'";
         }
 
         return wa;
@@ -574,6 +578,10 @@ public class Metodos {
             fields= new String[] {"CDGFL", "DSGFL"};
         }else if(table.equals("PLANTA")){
             fields= new String[] {"CDZLT", "DSZLT"};
+        }else if(table.equals("TIPOPROTESTO")){
+            fields = new String[]{"ARGUM", "DESCR"};
+        }else if(table.equals("CLASEPROTESTO")){
+            fields = new String[]{"ARGUM", "DESCR"};
         }
 
         return fields;
