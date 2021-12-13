@@ -64,13 +64,11 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             if(imports.getP_tope().equals("L")) {
                 JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
                 JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
-                JCoTable T_ARCHIVO = tables.getTable(Tablas.T_ARCHIVO);
+
                 List<HashMap<String, Object>> t_zartr = metodo.ObtenerListObjetos(T_ZARTR, imports.getFieldsT_zartr());
                 List<HashMap<String, Object>> t_dzart = metodo.ObtenerListObjetos(T_DZART, imports.getFieldsT_dzart());
-                List<HashMap<String, Object>> t_archivo = metodo.ObtenerListObjetos(T_ARCHIVO, imports.getFieldsT_archivo());
                 rt.setT_dzart(t_dzart);
                 rt.setT_zartr(t_zartr);
-                rt.setT_archivo(t_archivo);
             }
 
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);

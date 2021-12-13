@@ -1,11 +1,14 @@
 package com.incloud.hcp.jco.sistemainformacionflota.service.impl;
 
+import com.incloud.hcp.CallBAPI;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaDeclaradaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
-
+    private Logger logger = LoggerFactory.getLogger(CallBAPI.class);
     @Override
     public PescaDeclaradaExports PescaDeclarada(PescaDeclaradaImports imports) throws Exception {
 
@@ -239,10 +242,10 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 double pescDescChi = Double.parseDouble(s.get("PSPRO").toString()) + Double.parseDouble(s.get("PSTER").toString());
                 double porcDeclChiProp = Double.parseDouble(s.get("PPCHI").toString()) * 100 / pescDeclChi;
                 double porcDeclChiTerc = Double.parseDouble(s.get("PTCHI").toString()) * 100 / pescDeclChi;
-
+                logger.error("PescaDELCHI"+pescDeclChi);
                 double eficProp = pescDeclChi / Double.parseDouble(s.get("CNEMP").toString());
                 double eficTerc = pescDeclChi / Double.parseDouble(s.get("CNEMT").toString());
-
+                logger.error("division PescacCHi"+eficTerc);
                 double porcDifer = (pescDeclChi - pescDescChi) * 100 / (pescDeclChi);
 
                 s.put("PESC_DECL_CHI", Math.round(pescDeclChi * 100.00) / 100.00);
