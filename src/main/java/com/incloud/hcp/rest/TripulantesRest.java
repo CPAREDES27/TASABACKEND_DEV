@@ -271,4 +271,14 @@ public class TripulantesRest {
             throw new RuntimeException(e.toString());
         }
     }
+    @PostMapping(value = "/TrabajoFFDetalle", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrabajoFueraFaenaDetalleExports> TrabajoFFDetalle(@RequestBody TrabajoFueraFaenaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoTrabajoFueraFaenaService.DetalleTrabajoFFTransporte(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

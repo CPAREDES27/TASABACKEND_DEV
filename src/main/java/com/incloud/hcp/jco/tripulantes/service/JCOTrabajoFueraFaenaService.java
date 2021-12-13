@@ -9,5 +9,6 @@ public interface JCOTrabajoFueraFaenaService {
     TrabajoFueraFaenaDetalleExports DetalleTrabajoFueraFaenaTransporte(TrabajoFueraFaenaDetalleImports imports)throws Exception;
     TrabajoDetalleDtoExports DetalleTrabajoFueraFaenaTransportez(TrabajoFueraFaenaDetalleImports imports)throws Exception;
     SemanaDto ObtenerSemanas()throws Exception;
+    TrabajoFueraFaenaDetalleExports DetalleTrabajoFFTransporte(TrabajoFueraFaenaImports imports)throws Exception;
 
     }

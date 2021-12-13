@@ -58,6 +58,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             EjecutarRFC exec= new EjecutarRFC();
             exec.setTable(tables, Tablas.T_OPCION,tmpOptions);
 
+            if(imports.getIp_tope().equals("A")){
+                exec.setTable(tables, Tablas.T_FECHAS,imports.getT_fechas());
+
+            }
+
             stfcConnection.execute(destination);
 
             JCoTable T_TRABFF = tables.getTable(Tablas.T_TRABFF);
@@ -85,6 +90,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
         }catch (Exception e){
             tff.setMensaje(e.getMessage());
+            logger.error("trabajoff: "+e.getMessage());
         }
 
         return tff;
@@ -152,7 +158,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             String[] fieldfechas= {"WERKS","PERNR","FETRA"};
             String[] fieldtextos= {"TDLINE","TDFORMAT"};
             String[] fieldtrabaj= {"PERNR","NOMBR","STELL"};
-            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD","ESREG"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD","ESREG","DSWKS","WERKS"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
             tfi.setIp_canti("200");
             tfi.setFieldst_trabff(fieldtrabaff);
@@ -242,7 +248,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
                     Date date = parseador.parse(valor);
                     horaMod=formateador.format(date);
-                }
+                } else if(key.equals("DSWKS")){
+                dto.setEmbarcacion(valor);
+                 }else if(key.equals("WERKS")){
+                dto.setCodEmbarcacion(valor);
+            }
             }
             dto.setFechaHoraCreacion(fechaCrea+" "+horaCrea);
             if(!dto.getUsuarioModif().equals("")) {
@@ -739,4 +749,202 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
         return diferencia;
     }
+
+    public TrabajoFueraFaenaDetalleExports DetalleTrabajoFFTransporte(TrabajoFueraFaenaImports imports)throws Exception{
+
+        TrabajoFueraFaenaExports tffde= new TrabajoFueraFaenaExports();
+
+        TrabajoFueraFaenaDetalleExports dto= new TrabajoFueraFaenaDetalleExports();
+
+        try{
+            TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
+
+            String[] fieldfechas= {"WERKS","PERNR","FETRA"};
+            String[] fieldtextos= {"TDLINE","TDFORMAT"};
+            String[] fieldtrabaj= {"PERNR","NOMBR","STELL"};
+            String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD","ESREG","DSWKS","WERKS"};
+
+            tfi.setFieldst_trabff(fieldtrabaff);
+            tfi.setFieldst_fechas(fieldfechas);
+            tfi.setFieldst_textos(fieldtextos);
+            tfi.setFieldst_trabaj(fieldtrabaj);
+
+            tfi.setIp_nrtff(imports.getIp_nrtff());
+            tfi.setIp_canti(imports.getIp_canti());
+            tfi.setIp_cdgfl(imports.getIp_cdgfl());
+            tfi.setIp_esreg(imports.getIp_esreg());
+            tfi.setIp_fecin(imports.getIp_fecin());
+            tfi.setIp_fecfn(imports.getIp_fecfn());
+            tfi.setIp_tiptr(imports.getIp_tiptr());
+            tfi.setIp_tope(imports.getIp_tope());
+            tfi.setIp_werks(imports.getIp_werks());
+            tfi.setIp_sepes(imports.getIp_sepes());
+
+
+            //List<Options>options= new ArrayList<>();
+            //List<MaestroOptions> optionz = new ArrayList<>();
+            //List<MaestroOptionsKey> options2 = new ArrayList<>();
+            tfi.setOption(imports.getOption());
+            tfi.setOptions(imports.getOptions());
+            tfi.setT_opcion(imports.getT_opcion());
+
+            tffde=TrabajoFueraFaenaTransporte(imports);
+
+            if(tffde.getT_textos().size()>0){
+                String descripcion="";
+                String observacion="";
+                for (int i=0; i<tffde.getT_textos().size();i++){
+                    String format="";
+                    String line="";
+
+                    for(Map.Entry<String, Object> entry:tffde.getT_textos().get(i).entrySet()){
+                        String key=entry.getKey();
+                        String valor=entry.getValue().toString();
+                        if(key.equals("TDLINE")){
+                            line=valor;
+                        }else if(key.equals("TDFORMAT")){
+                            format=valor;
+                        }
+                    }
+                    dto.setObservacion("");
+                    if(format.equals("D")){
+                        descripcion=line;
+                    }else if(format.equals("O")){
+                        observacion=line;
+                    }
+
+
+                }
+                dto.setDescripcionTrabajo(descripcion);
+                dto.setObservacion(observacion);
+            }else {
+                dto.setDescripcionTrabajo("");
+                dto.setObservacion("");
+            }
+
+
+            String fechaCrea="";
+            String horaCrea="";
+            String fechaMod="";
+            String horaMod="";
+
+            Metodos me=new Metodos();
+
+            for(Map.Entry<String, Object> entry:tffde.getT_trabff().get(0).entrySet()){
+                String key=entry.getKey();
+                String valor=entry.getValue().toString();
+                if(key.equals("NRTFF")){
+                    dto.setNrTrabajo(valor);
+                }else if(key.equals("FEINI")){
+                    dto.setFechaInicio(valor);
+                }else if(key.equals("FEFIN")){
+                    dto.setFechaFin(valor);
+                }else if(key.equals("TIPTR")){
+                    String dom=me.ObtenerDominio("ZDO_TIPOTRABAJO",valor);
+                    dto.setTipoTrabajo(dom);
+                }else if(key.equals("SEPES")){
+                    dto.setSemana(valor);
+                }else if(key.equals("USCRE")){
+                    dto.setUsuarioCreacion(valor);
+                }else if(key.equals("FECRE")){
+                    fechaCrea=valor;
+                }else if(key.equals("HOCRE")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaCrea=formateador.format(date);
+                }else if(key.equals("USMOD")){
+                    dto.setUsuarioModif(valor);
+                }else if(key.equals("ESREG")){
+                    dto.setEstado(valor);
+                }else if(key.equals("FEMOD")){
+                    fechaMod=valor;
+                }else if(key.equals("HOMOD")){
+                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                    Date date = parseador.parse(valor);
+                    horaMod=formateador.format(date);
+                }else if(key.equals("DSWKS")){
+                    dto.setEmbarcacion(valor);
+                }else if(key.equals("WERKS")){
+                    dto.setCodEmbarcacion(valor);
+                }
+            }
+            dto.setFechaHoraCreacion(fechaCrea+" "+horaCrea);
+            if(!dto.getUsuarioModif().equals("")) {
+                dto.setFechaHoraModif(fechaMod + " " + horaMod);
+            }else{
+                dto.setFechaHoraModif("");
+            }
+
+            String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
+            dto.setFechas(Listfechas);
+            List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
+
+            for (int i=0; i<tffde.getT_trabaj().size(); i++){
+                TrabajoFFDetalleDto detalle=new TrabajoFFDetalleDto();
+                for(Map.Entry<String, Object>entry: tffde.getT_trabaj().get(i).entrySet()){
+                    String key=entry.getKey();
+                    String valor=entry.getValue().toString();
+
+                    if(key.equals("PERNR")){
+                        detalle.setNroPersona(valor);
+                    }else if(key.equals("NOMBR")){
+                        detalle.setNombre(valor);
+                    }else if(key.equals("STELL")){
+                        valor=me.ObtenerDominio("CARGOTRIPU",valor);
+                        detalle.setCargo(valor);
+                    }
+                    HashMap<String, Object>fechas= new HashMap<>();
+                    for(int j=0; j<tffde.getT_fechas().size(); j++){
+
+                        String value=tffde.getT_fechas().get(j).get("PERNR").toString();
+
+                        if(value.equals(detalle.getNroPersona())){
+                            String fecha="";
+                            String centro="";
+                            for (Map.Entry<String, Object> entry1:tffde.getT_fechas().get(j).entrySet()){
+                                String key1=entry1.getKey();
+                                String valor1=entry1.getValue().toString();
+
+                                if(key1.equals("WERKS")){
+                                    centro=valor1;
+                                }else if(key1.equals("FETRA")){
+                                    SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+                                    SimpleDateFormat formateador = new SimpleDateFormat("dd");
+                                    Date date = parseador.parse(valor1);
+                                    fecha = formateador.format(date);
+
+                                }
+                            }
+
+                            fechas.put(fecha, centro);
+                        }
+                    }
+
+                    detalle.setFechas(fechas);
+                    detalle.setCentro("");
+                    detalle.setDestino("");
+                    detalle.setOrigen("");
+                }
+                ListDetalle.add(detalle);
+            }
+
+            dto.setT_trabaff(tffde.getT_trabff());
+            dto.setT_textos(tffde.getT_textos());
+            dto.setT_trabaj(tffde.getT_trabaj());
+            dto.setT_mensaje(tffde.getT_mensajes());
+            dto.setT_fechas(tffde.getT_fechas());
+            dto.setDetalle(ListDetalle);
+            dto.setMensaje("Ok");
+
+        }catch (Exception e){
+
+            dto.setMensaje(e.getMessage());
+
+        }
+
+        return dto;
+    }
+
 }
