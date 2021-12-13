@@ -22,6 +22,7 @@ public class RegistrosZarpeImports {
     private List<HashMap<String, Object>> t_nzatr;
     private List<HashMap<String, Object>> t_archivo;
 
+
     public List<HashMap<String, Object>> getT_nzatr() {
         return t_nzatr;
     }

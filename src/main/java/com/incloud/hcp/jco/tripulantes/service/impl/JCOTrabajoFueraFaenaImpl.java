@@ -72,8 +72,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             JCoTable T_TEXTOS = tables.getTable(Tablas.T_TEXTOS);
             JCoTable T_MENSAJES = tables.getTable(Tablas.T_MENSAJES);
 
+            if(imports.getIp_tope().equals("A")){
+                exec.setTable(tables, Tablas.T_FECHAS,imports.getT_fechas());
+            }
 
-            List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos2(T_TRABFF, imports.getFieldst_trabff());
+            List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos(T_TRABFF, imports.getFieldst_trabff());
             List<HashMap<String, Object>> t_trabaj = metodo.ObtenerListObjetos(T_TRABAJ, imports.getFieldst_trabaj());
             List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
             List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
@@ -546,7 +549,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         function.execute(destination);
         JCoTable tblSTR_APP = tables.getTable(Tablas.ZHR_STR_SEM_TRIP);
         Metodos metodos= new Metodos();
-        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
+        List<Semana> lista = new ArrayList<Semana>();
+        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetosSemana(tblSTR_APP);
+
 
 
         List<HashMap<String, Object>> listAñoActual= new ArrayList<>();

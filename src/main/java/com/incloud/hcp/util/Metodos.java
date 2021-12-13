@@ -43,6 +43,7 @@ public class Metodos {
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             while (iter.hasNextField()) {
                 JCoField field = iter.nextField();
+
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
 
@@ -112,6 +113,89 @@ public class Metodos {
 
         return data;
     }
+
+
+    public List<HashMap<String, Object>> ListarObjetosSemana(JCoTable tableExport) throws Exception {
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+            JCoFieldIterator iter = tableExport.getFieldIterator();
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            while (iter.hasNextField()) {
+                JCoField field = iter.nextField();
+
+                String key = (String) field.getName();
+                Object value = tableExport.getValue(key);
+
+
+                if (field.getTypeAsString().equals("TIME")) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                    value = dateFormat.format(value);
+                    if(String.valueOf(value).equalsIgnoreCase("00:00")){
+                        value = "";
+                    }
+                }
+                if(key.equals("DSMIN")) {
+                    value = value.toString();
+                }
+
+                try {
+
+                    if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
+                        String valor=value.toString();
+                        logger.error("valor= "+valor);
+                        valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                        logger.error("valor= "+valor);
+                        value=valor.substring(0,6)+"'";
+                        logger.error("value= "+value);
+                    }
+                    if (field.getTypeAsString().equals("DATE")) {
+
+                        String date = String.valueOf(value);
+                        SimpleDateFormat dia = new SimpleDateFormat("dd/MM/yyyy");
+                        String fecha = dia.format(value);
+                        value = fecha;
+                    }
+
+                    /*if(field.getTypeAsString().equals("BCD")){
+                        String strValue = String.valueOf(value);
+                        value = strValue;
+                    }*/
+
+
+                    /*if(field.getTypeAsString().equals("DEC")){
+                        BigDecimal val = new BigDecimal(String.valueOf(value));
+                        value = val.setScale(3, RoundingMode.HALF_UP);
+
+                    }*/
+
+
+                }catch (Exception e){
+                    // value=String.valueOf(value);
+                    value="";
+
+                }
+                newRecord.put(key, value);
+
+                if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
+                        || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")||
+                        key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV") || key.equals("ESRSV")){
+                    HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
+                    for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                        String campo=entry.getKey();
+                        Object valor=entry.getValue();
+                        newRecord.put(campo, valor);
+                    }
+                }
+            }
+            data.add(newRecord);
+        }
+
+        return data;
+    }
+
 
     public List<DominioExportsData> obtenerAlmacen() throws Exception{
 
@@ -333,6 +417,9 @@ public class Metodos {
         }else if(table.equals("PLANTA")){
             tablita = "ZV_FLPL";
         }
+        else if(table.equals("TIPOPROTESTO")){
+            tablita = "ZTBC_DATA";
+        }
         return tablita;
     }
 
@@ -375,6 +462,8 @@ public class Metodos {
             wa="CODIG EQ 'PI' AND STATU EQ '1'";
         }else if(table.equals("PLANTA")){
             wa="ESREG = 'S'";
+        }else if(table.equals("TIPOPROTESTO")){
+            wa = "CODIG EQ 'PT' AND AEDAT EQ '20120320'";
         }
 
         return wa;
