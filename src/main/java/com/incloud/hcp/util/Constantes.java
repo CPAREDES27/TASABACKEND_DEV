@@ -102,7 +102,7 @@ public class Constantes {
 
     //Sistema Informacion Flota
     public static String ZFL_RFC_PESCA_DECLA="ZFL_RFC_PESCA_DECLA";
-    public static String ZFL_RFC_PESCA_EMBARCA="ZFL_RFC_PESCA_EMBARCA";
+    public static String ZFL_RFC_PESCA_EMBARCA_BTP ="ZFL_RFC_PESCA_EMBARCA_BTP";
     public static String ZFL_RFC_PESCA_DECLARADA="ZFL_RFC_PESCA_DECLARADA";
     public static String ZFL_RFC_PESC_DECLA_DIFE2="ZFL_RFC_PESC_DECLA_DIFE2";
     public static String ZFL_RFC_PESCA_DESC_DIA="ZFL_RFC_PESCA_DESC_DIA";
