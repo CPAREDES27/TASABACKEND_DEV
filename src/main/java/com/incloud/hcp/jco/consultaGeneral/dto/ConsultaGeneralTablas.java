@@ -27,11 +27,14 @@ public class ConsultaGeneralTablas {
     public static String CONSGENARMADOR="ZV_FLMP";
     public static String CONSGENOBTTALLAMIN="ZFLSPC";
     public static String CONSGENTEMPVEDA="ZFLCLT";
-    public static String CONSGENBSQTRIPU="ZTFL_ZARTR";
-    public static String CONSGENBSQTRIPU1="ZVFL_DZAR2";
-    public static String CONSGENBSQTRIPU2="ZHRP_BD_PERSONAL";
+    public static String CONSGENBSQTRIPUROL ="ZTFL_ZARTR";
+    public static String CONSGENBSQTRIPUROL1 ="ZVFL_DZAR2";
+    public static String CONSGENBSQTRIPUROL2 ="ZHRP_BD_PERSONAL";
     public static String CONSGENPROVEEDORES="ZV_FLPD";
     public static String CONSGENERRDSCG="ZFLLOG";
     public static String CONSGENTRIPULANTES="ZHRP_BD_PERSONAL";
+    public static String CONSGENBSQTRIPUZARPE ="ZTFL_ZATRP";
+    public static String CONSGENBSQTRIPUZARPE1 ="ZVFL_DZAT2";
+    public static String CONSGENBSQTRIPUZARPE2 ="ZHRP_BD_PERSONAL";
 
 }

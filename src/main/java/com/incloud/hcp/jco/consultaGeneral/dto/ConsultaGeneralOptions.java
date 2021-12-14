@@ -43,9 +43,9 @@ public class ConsultaGeneralOptions {
     public static String CONSGENARMADOR2=" AND ESREG = 'S'";
     public static String CONSGENOBTTALLAMIN="CDSPC eq '";
     public static String CONSGENTEMPVEDA="CDTPC = 'V' AND FHCAL LIKE '";
-    public static String CONSGENBSQTRIPU="WERKS EQ '";
-    public static String CONSGENBSQTRIPU1="CDRTR EQ '" ;
-    public static String CONSGENBSQTRIPU2="ABKRS EQ 'TT' AND CENTRO EQ '";
+    public static String CONSGENBSQTRIPUROL ="WERKS EQ '";
+    public static String CONSGENBSQTRIPUROL1 ="CDRTR EQ '" ;
+    public static String CONSGENBSQTRIPUROL2 ="ABKRS EQ 'TT' AND CENTRO EQ '";
     public static String CONSGENPROVEEDORES="CDPTA = '";
     public static String CONSGENPROVEEDORES2="' AND CDALM = ";
     public static String CONSGENERRDSCG="NRDES = '";
@@ -56,6 +56,8 @@ public class ConsultaGeneralOptions {
     public static String CONSGENTRIPULANTES4=" AND NACHN = '";
     public static String CONSGENTRIPULANTES5=" AND NACH2 = '";
     public static String CONSGENTRIPULANTES6=" AND STELL = '";
-
+    public static String CONSGENBSQTRIPUZARPE ="WERKS EQ '";
+    public static String CONSGENBSQTRIPUZARPE1 ="CDAZT EQ '" ;
+    public static String CONSGENBSQTRIPUZARPE2 ="ABKRS EQ 'TT' AND CENTRO EQ '";
 
 }
