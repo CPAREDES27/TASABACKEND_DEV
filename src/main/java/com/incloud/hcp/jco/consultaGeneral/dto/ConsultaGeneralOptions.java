@@ -57,7 +57,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENTRIPULANTES5=" AND NACH2 = '";
     public static String CONSGENTRIPULANTES6=" AND STELL = '";
     public static String CONSGENBSQTRIPUZARPE ="WERKS EQ '";
-    public static String CONSGENBSQTRIPUZARPE1 ="CDAZT EQ '" ;
+    public static String CONSGENBSQTRIPUZARPE1 ="CDZAT EQ '" ;
     public static String CONSGENBSQTRIPUZARPE2 ="ABKRS EQ 'TT' AND CENTRO EQ '";
 
 }
