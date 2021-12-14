@@ -8,7 +8,6 @@ import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsDescarga;
 import com.sap.conn.jco.*;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -206,7 +203,7 @@ public class Metodos {
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         String[] fieldname = {"CDALM","DSALM"};
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
@@ -947,7 +944,7 @@ public class Metodos {
         ;
         JCoRepository repos3 = destinations3.getRepository();
         ;
-        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importxs3 = stfcConnections3.getImportParameterList();
         importxs3.setValue("DELIMITER","|");
         importxs3.setValue("QUERY_TABLE",tabla);
@@ -971,7 +968,7 @@ public class Metodos {
         ;
         JCoRepository repos3 = destinations3.getRepository();
         ;
-        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importxs3 = stfcConnections3.getImportParameterList();
         importxs3.setValue("DELIMITER","|");
         importxs3.setValue("QUERY_TABLE",tabla);
@@ -1470,7 +1467,7 @@ public class Metodos {
                      * Leer tablas en base al dominio
                      */
                     else {
-                        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+                        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
                         JCoParameterList importx = stfcConnection.getImportParameterList();
                         String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
                         String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());

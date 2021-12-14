@@ -19,7 +19,7 @@ public class EjecutarRFC {
     }
 
     public MaestroExport Execute_ZFL_RFC_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
-        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();
@@ -50,7 +50,7 @@ public class EjecutarRFC {
     }
 
     public MaestroExport Execute_ZFL_RFC_READ_TABLE2(HashMap<String, Object> imports, List<ListaWA> optionsParam, String[] fields) throws Exception{
-        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();

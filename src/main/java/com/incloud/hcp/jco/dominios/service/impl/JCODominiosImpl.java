@@ -2,7 +2,6 @@ package com.incloud.hcp.jco.dominios.service.impl;
 
 import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
-import com.incloud.hcp.jco.gestionpesca.dto.BodegaExport;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
@@ -128,7 +127,7 @@ public class JCODominiosImpl implements JCODominiosService {
                             /**
                              * Leer tablas en base al dominio
                              */
-                            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+                            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
                             JCoParameterList importx = stfcConnection.getImportParameterList();
                             String TABLE_READ_TABLE = metodo.returnTable(domParams.getDomname());
                             String WA_READ_TABLE = metodo.returnWA(domParams.getDomname());

@@ -134,6 +134,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importz.put("ROWCOUNT", imports.getRowcount());
         importz.put("P_USER", imports.getP_user());
         importz.put("P_ORDER", imports.getOrder());
+        importz.put("P_PAG", imports.getP_pag());
         logger.error("ARMADOR 5");
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
         tmpOptions=metodo.ValidarOptions(option,options);
@@ -155,7 +156,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         ;
         JCoRepository repo = destination.getRepository();
         ;
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importx = stfcConnection.getImportParameterList();
         importx.setValue("DELIMITER","|");
         importx.setValue("QUERY_TABLE","LFA1");

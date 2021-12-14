@@ -87,6 +87,15 @@ public class MaestroImportsKey {
         this.option = option;
     }
 
+    public String getP_pag() {
+        return p_pag;
+    }
+
+    public void setP_pag(String p_pag) {
+        this.p_pag = p_pag;
+    }
+
+    private String p_pag;
     private String no_data;
     private int rowskips;
     private int rowcount;
