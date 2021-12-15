@@ -165,7 +165,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             String[] fieldtrabaj= {"PERNR","NOMBR","STELL"};
             String[] fieldtrabaff= {"NRTFF","FEFIN","FEINI","TIPTR","SEPES","USCRE","HOCRE","FECRE","USMOD","FEMOD","HOMOD","ESREG","DSWKS","WERKS"};
             tfi.setIp_nrtff(imports.getNroTrabajo());
-            tfi.setIp_canti("200");
+            tfi.setIp_tope("");
             tfi.setFieldst_trabff(fieldtrabaff);
             tfi.setFieldst_fechas(fieldfechas);
             tfi.setFieldst_textos(fieldtextos);
@@ -267,6 +267,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             }
 
             String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
+
+            for(String f:Listfechas){
+                logger.error("fecha= "+f);
+            }
+
             dto.setFechas(Listfechas);
             List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
 

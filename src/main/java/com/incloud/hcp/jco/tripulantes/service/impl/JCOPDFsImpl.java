@@ -3684,6 +3684,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             TrabajoFueraFaenaImports tfi = new TrabajoFueraFaenaImports();
             TrabajoFueraFaenaDetalleExports dto = jcoTrabajoFueraFaena.DetalleTrabajoFueraFaenaTransporte(imports);
 
+
+
             try {
                 if (dto.getObservacion() == null || dto.getObservacion().equals(null)) {
                     dto.setObservacion("");
@@ -3807,7 +3809,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             PlantillaPDFTrabajoFF(path, dto, ListaRegistros);
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
-            pdf.setMensaje("Ok");
+            pdf.setMensaje(dto.getMensaje());
 
         }catch (Exception e){
             pdf.setMensaje(e.getMessage());
