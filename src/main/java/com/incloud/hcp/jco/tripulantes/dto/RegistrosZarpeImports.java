@@ -20,7 +20,7 @@ public class RegistrosZarpeImports {
     private List<HashMap<String, Object>> t_zatrp;
     private List<HashMap<String, Object>> t_dzatr;
     private List<HashMap<String, Object>> t_nzatr;
-    private List<HashMap<String, Object>> t_archivo;
+
 
 
     public List<HashMap<String, Object>> getT_nzatr() {
@@ -69,13 +69,7 @@ public class RegistrosZarpeImports {
         this.fieldst_archivo = fieldst_archivo;
     }
 
-    public List<HashMap<String, Object>> getT_archivo() {
-        return t_archivo;
-    }
 
-    public void setT_archivo(List<HashMap<String, Object>> t_archivo) {
-        this.t_archivo = t_archivo;
-    }
 
     public String getP_tope() {
         return p_tope;
