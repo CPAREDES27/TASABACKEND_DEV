@@ -3,7 +3,7 @@ package com.incloud.hcp.util;
 public class Constantes {
 
     //Nombres de RFC's
-    public static String ZFL_RFC_READ_TABLE = "ZFL_RFC_READ_TABLE";
+    public static String ZFL_RFC_READ_TABLE_BTP = "ZFL_RFC_READ_TABLE_BTP";
     public static String ZHR_LEE_SEMANAS_TRIP="ZHR_LEE_SEMANAS_TRIP";
     public static String ZFL_RFC_QV_COMB_FASE = "ZFL_RFC_QV_COMB_FASE";
     public static String ZFL_RFC_ACT_CAMP_TAB="ZFL_RFC_ACT_CAMP_TAB";
@@ -102,7 +102,7 @@ public class Constantes {
 
     //Sistema Informacion Flota
     public static String ZFL_RFC_PESCA_DECLA="ZFL_RFC_PESCA_DECLA";
-    public static String ZFL_RFC_PESCA_EMBARCA="ZFL_RFC_PESCA_EMBARCA";
+    public static String ZFL_RFC_PESCA_EMBARCA_BTP ="ZFL_RFC_PESCA_EMBARCA_BTP";
     public static String ZFL_RFC_PESCA_DECLARADA="ZFL_RFC_PESCA_DECLARADA";
     public static String ZFL_RFC_PESC_DECLA_DIFE2="ZFL_RFC_PESC_DECLA_DIFE2";
     public static String ZFL_RFC_PESCA_DESC_DIA="ZFL_RFC_PESCA_DESC_DIA";

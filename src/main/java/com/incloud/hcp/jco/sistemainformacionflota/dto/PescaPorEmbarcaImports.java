@@ -7,7 +7,25 @@ public class PescaPorEmbarcaImports {
     private String p_fcfin;
     private String p_cdtem;
     private String p_cdpcn;
+    private String p_cdemb;
+    private String p_pag;
     private String[] fieldstr_pem;
+
+    public String getP_cdemb() {
+        return p_cdemb;
+    }
+
+    public void setP_cdemb(String p_cdemb) {
+        this.p_cdemb = p_cdemb;
+    }
+
+    public String getP_pag() {
+        return p_pag;
+    }
+
+    public void setP_pag(String p_pag) {
+        this.p_pag = p_pag;
+    }
 
     public String getP_user() {
         return p_user;

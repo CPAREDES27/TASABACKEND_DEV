@@ -116,7 +116,7 @@ public class JCOPescaCompetenciaRImpl implements JCOPescaCompetenciaRService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getUsuario());
             importx.setValue("QUERY_TABLE", Tablas.ZV_FLDC1);

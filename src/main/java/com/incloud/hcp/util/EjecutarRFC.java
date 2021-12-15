@@ -19,7 +19,7 @@ public class EjecutarRFC {
     }
 
     public MaestroExport Execute_ZFL_RFC_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
-        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();
@@ -50,7 +50,7 @@ public class EjecutarRFC {
     }
 
     public MaestroExport Execute_ZFL_RFC_READ_TABLE2(HashMap<String, Object> imports, List<ListaWA> optionsParam, String[] fields) throws Exception{
-        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         setImports(function, imports);
         logger.error("Execute_ZFL_RFC_READ_TABLE_1");;
         JCoParameterList jcoTables = function.getTableParameterList();
@@ -380,7 +380,7 @@ public class EjecutarRFC {
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
                                        key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
-                                       key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM")){
+                                       key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM") || key.equals("LE_ENDDA")){
                                     if(value.toString().equals("00000000")){
                                         value="";
                                     }else{
@@ -464,7 +464,7 @@ public class EjecutarRFC {
                         }
                         if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
                                 key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")|| key.equals("FHIVG")
-                                || key.equals("FHFTM")|| key.equals("FHITM")) {
+                                || key.equals("FHFTM")|| key.equals("FHITM")|| key.equals("LE_ENDDA")) {
 
                             if(value.toString().equals("00000000")){
                                value="";

@@ -28,10 +28,14 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENARMADOR={"CDEMP", "DSEMP"};
     public static String[] CONSGENOBTTALLAMIN={"TMMIN"};
     public static String[] CONSGENTEMPVEDA={"LTINI", "LNINI", "LTFIN", "LGFIN", "MILLA"};
-    public static String[] CONSGENBSQTRIPU={"CDRTR"};
-    public static String[] CONSGENBSQTRIPU1={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
-    public static String[] CONSGENBSQTRIPU2={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
+    public static String[] CONSGENBSQTRIPUROL={"CDRTR"};
+    public static String[] CONSGENBSQTRIPUROL1 ={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
+    public static String[] CONSGENBSQTRIPUROL2 ={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
     public static String[] CONSGENPROVEEDORES={"LIFNR", "NAME1","STCD1"};
     public static String[] CONSGENERRDSCG={"CMIN", "DSMEN", "TPROG"};
     public static String[] CONSGENTRIPULANTES={"PERNR", "VORNA","NACHN","NACH2","STELL","DESC_STELL"};
+    public static String[] CONSGENBSQTRIPUZARPE={"CDZAT"};
+    public static String[] CONSGENBSQTRIPUZARPE1 ={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
+    public static String[] CONSGENBSQTRIPUZARPE2 ={"PERNR", "STELL", "VORNA", "NACHN", "NACH2", "ORGEH", "PERSG", "LIBEMBA", "LE_ENDDA", "MANDT"};
+
 }

@@ -5,8 +5,17 @@ import java.util.List;
 
 public class PescaPorEmbarcaExports {
 
+    private String p_totalpag;
     private List<HashMap<String, Object>> str_pem;
     private String mensaje;
+
+    public String getP_totalpag() {
+        return p_totalpag;
+    }
+
+    public void setP_totalpag(String p_totalpag) {
+        this.p_totalpag = p_totalpag;
+    }
 
     public List<HashMap<String, Object>> getStr_pem() {
         return str_pem;

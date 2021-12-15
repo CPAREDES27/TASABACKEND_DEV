@@ -24,7 +24,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_EMBARCA);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_EMBARCA_BTP);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user ());
@@ -32,14 +32,17 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             importx.setValue("P_FCFIN", imports.getP_fcfin());
             importx.setValue("P_CDTEM", imports.getP_cdtem());
             importx.setValue("P_CDPCN", imports.getP_cdpcn());
+            importx.setValue("P_CDEMB", imports.getP_cdemb());
+            importx.setValue("P_PAG", imports.getP_pag());
 
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoParameterList export    = stfcConnection.getExportParameterList();
 
             stfcConnection.execute(destination);
 
             JCoTable STR_PEM = tables.getTable(Tablas.STR_PEM);
-
+            ppe.setP_totalpag(export.getString("P_TOTALPAG"));
 
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_pem = metodo.ObtenerListObjetos(STR_PEM, imports.getFieldstr_pem());

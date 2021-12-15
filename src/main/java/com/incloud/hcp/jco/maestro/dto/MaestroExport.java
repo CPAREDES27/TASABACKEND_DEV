@@ -42,5 +42,13 @@ public class MaestroExport {
     private List<HashMap<String, Object>> data;
     private List<HashMap<String, Object>> fields;
     private String mensaje;
+    private String p_totalpag;
 
+    public String getP_totalpag() {
+        return p_totalpag;
+    }
+
+    public void setP_totalpag(String p_totalpag) {
+        this.p_totalpag = p_totalpag;
+    }
 }

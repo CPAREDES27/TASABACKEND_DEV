@@ -4,7 +4,6 @@ import com.incloud.hcp.jco.dominios.dto.DominioDto;
 import com.incloud.hcp.jco.dominios.dto.DominioParams;
 import com.incloud.hcp.jco.dominios.dto.DominiosImports;
 import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
-import com.incloud.hcp.jco.gestionpesca.dto.HorometroExport;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEventosPescaService;
 import com.incloud.hcp.util.*;
@@ -112,7 +111,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         ;
         JCoRepository repo = destination.getRepository();
         ;
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
         importx.setValue("DELIMITER","|");
@@ -142,7 +141,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         ;
         JCoRepository repos = destinations.getRepository();
         ;
-        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importxs = stfcConnections.getImportParameterList();
 
         importxs.setValue("DELIMITER","|");
@@ -332,7 +331,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         ;logger.error("PASO 02");
         JCoRepository repos = destinations.getRepository();
         ;logger.error("PASO 03");
-        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE);
+        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
         JCoParameterList importxs = stfcConnections.getImportParameterList();
         logger.error("PASO 04");
         importxs.setValue("DELIMITER","|");
