@@ -17,6 +17,52 @@ public class MarEventoDtoImport {
     private List<HashMap<String, Object>> str_marea;
     private List<HashMap<String, Object>> str_evento;
     private List<HashMap<String, Object>> str_horom;
+    private List<HashMap<String, Object>> str_equip;
+
+    public List<HashMap<String, Object>> getStr_equip() {
+        return str_equip;
+    }
+
+    public void setStr_equip(List<HashMap<String, Object>> str_equip) {
+        this.str_equip = str_equip;
+    }
+
+    public List<HashMap<String, Object>> getStr_psdec() {
+        return str_psdec;
+    }
+
+    public void setStr_psdec(List<HashMap<String, Object>> str_psdec) {
+        this.str_psdec = str_psdec;
+    }
+
+    public List<HashMap<String, Object>> getStr_psbod() {
+        return str_psbod;
+    }
+
+    public void setStr_psbod(List<HashMap<String, Object>> str_psbod) {
+        this.str_psbod = str_psbod;
+    }
+
+    public List<HashMap<String, Object>> getStr_desca() {
+        return str_desca;
+    }
+
+    public void setStr_desca(List<HashMap<String, Object>> str_desca) {
+        this.str_desca = str_desca;
+    }
+
+    public List<HashMap<String, Object>> getStr_simar() {
+        return str_simar;
+    }
+
+    public void setStr_simar(List<HashMap<String, Object>> str_simar) {
+        this.str_simar = str_simar;
+    }
+
+    private List<HashMap<String, Object>> str_psdec;
+    private List<HashMap<String, Object>> str_psbod;
+    private List<HashMap<String, Object>> str_desca;
+    private List<HashMap<String, Object>> str_simar;
 
     public List<HashMap<String, Object>> getStr_flbsp_c() {
         return str_flbsp_c;
