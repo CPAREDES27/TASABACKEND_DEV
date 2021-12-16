@@ -29,17 +29,17 @@ public class PDFValeViveresConstantes {
     public static String bahiaTasa="Bahía de TASA";
     public static String nombreMinus="Nombre:";
     public static String dni="DNI:";
-    public static String textoUno="Yo, .................................................., Cocinero de la embarcación ............................................... declaro";
+    public static String textoUno="Yo, ............................................................., Cocinero de la embarcación .................................... declaro";
     public static String textoDos="haber recibido a conformidad, los víveres que corresponden a la presente faena de pesca, en cantidad";
     public static String textoTres="suficiente para toda la tripulación, de acuerdo a lo indicado en la declaración diaria de zarpe.";
     public static String copia="COPIA";
-    public static String guion="_____________________";
+    public static String guion="________________________";
     public static String[] cabecerasTabla={"Fecha", "N° Raciones", "Costo Unit(S/.)", "Descripcion", "Total(S/.)", "Comentario"};
 
 
     //Tabla S_DATA RFC Zfl_Rfc_Lect_Maes_Viver
     public static String WERKS="WERKS";	//NOMBRE CENTRO
-    public static String LGORT="LGORT";	//NOMBRE ALMACEN
+    public static String CDALM ="CDALM";	//NOMBRE ALMACEN
     public static String NRVVI="NRVVI";	//numero de vale de vivere
     public static String FCVVI="FCVVI";	//FECHA CREACION VALE
     public static String STCD1="STCD1";  //RUC
@@ -54,6 +54,10 @@ public class PDFValeViveresConstantes {
     public static String NAME2="NAME2";	//RAZON SOCIAL 2
     public static String FITVS="FITVS";	//FECHA PRIMER VALE
     public static String FFTVS="FFTVS";	//FECHA SEGUNDO VALE
+    public static String NMPER="NMPER";	//NOMBRE DE PERSONAL
+    public static String OBVVI="OBVVI";	//COMENTARIOS
+
+
 
 
     //Tablas S_POSICION RFC Zfl_Rfc_Lect_Posi_Viver

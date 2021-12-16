@@ -18,11 +18,11 @@ import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -4398,8 +4398,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 totalCosto+=detalle.get(i).getTotal();
 
             }
+            DecimalFormat decimal = new DecimalFormat("#.00");
+            totalCosto=Float.parseFloat(decimal.format(totalCosto));
 
-             dto.setTotalRaciones(totalRaciones);
+            dto.setTotalRaciones(totalRaciones);
              dto.setTotalCosto(totalCosto);
 
 
@@ -4436,6 +4438,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(bold, 80);
         contentStream.setNonStrokingColor(Color.lightGray);
         contentStream.moveTextPositionByAmount(180, 640);
+        contentStream.showText(PDFValeViveresConstantes.copia);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 80);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(180, 380);
+        contentStream.showText(PDFValeViveresConstantes.copia);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 80);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(180, 200);
         contentStream.showText(PDFValeViveresConstantes.copia);
         contentStream.endText();
 
@@ -4689,6 +4705,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(String.valueOf(detalleDto.getTotal()));
             contentStream.endText();
 
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(450, y);
+            contentStream.showText(String.valueOf(dto.getComentario()));
+            contentStream.endText();
+
             y-=20;
         }
 
@@ -4696,32 +4718,35 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(30, 520);
+        contentStream.moveTextPositionByAmount(30, y);
         contentStream.showText(PDFValeViveresConstantes.totalRaciones);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(100, 520);
+        contentStream.moveTextPositionByAmount(100, y);
         contentStream.showText(String.valueOf(dto.getTotalRaciones()));
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(310, 520);
+        contentStream.moveTextPositionByAmount(310, y);
         contentStream.showText(PDFValeViveresConstantes.totalCosto);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(360, 520);
+        contentStream.moveTextPositionByAmount(360, y);
         contentStream.showText(String.valueOf(dto.getTotalCosto()));
         contentStream.endText();
+
+
+
 
         drawCuadroValeViveres(contentStream, 280,30);
 
         int cant=3;
-        int nx=60;
+        int nx=50;
 
         for(int i=0; i<cant; i++){
 
@@ -4749,13 +4774,26 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(PDFValeViveresConstantes.guion);
             contentStream.endText();
 
-            nx+=170;
+            if(i==2){
+                nx+=190;
+            }else {
+                nx += 160;
+            }
         }
+
+
+
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(120, 220);
         contentStream.showText(PDFValeViveresConstantes.radioOperador);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.newLineAtOffset(250, 230);
+        contentStream.showText(dto.getCocinero());
         contentStream.endText();
 
         contentStream.beginText();
@@ -4774,6 +4812,18 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(font, 11.5f);
         contentStream.moveTextPositionByAmount(30, 170);
         contentStream.showText(PDFValeViveresConstantes.textoUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.newLineAtOffset(55, 170);
+        contentStream.showText(dto.getCocinero());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11.5f);
+        contentStream.moveTextPositionByAmount(410, 170);
+        contentStream.showText(dto.getNombreEmbarcacion());
         contentStream.endText();
 
         contentStream.beginText();
@@ -4962,8 +5012,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         S_DATA.setRow(0);
+        dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
+        dto.setCocinero(S_DATA.getString(PDFValeViveresConstantes.NMPER));
         dto.setCentro(S_DATA.getString(PDFValeViveresConstantes.WERKS));
-        dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.LGORT));
+        dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.CDALM));
         dto.setNroVale(S_DATA.getString(PDFValeViveresConstantes.NRVVI));
         dto.setFecha(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FCVVI ));
         dto.setRuc(S_DATA.getString(PDFValeViveresConstantes.STCD1));

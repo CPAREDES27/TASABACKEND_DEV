@@ -19,6 +19,16 @@ public class PDFValeViveresDto {
     private String fechaValeUno;
     private String fechaValeDos;
     private String comentario;
+    private String cocinero;
+
+
+    public String getCocinero() {
+        return cocinero;
+    }
+
+    public void setCocinero(String cocinero) {
+        this.cocinero = cocinero;
+    }
 
     public float getTotalCosto() {
         return totalCosto;
