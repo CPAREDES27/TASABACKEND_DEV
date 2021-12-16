@@ -505,6 +505,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             importx.setValue("P_ROL", imports.getP_rol());
             importx.setValue("P_APP", imports.getP_app());
             importx.setValue("P_TIPO", imports.getP_tipo());
+            importx.setValue("PT_ROL", imports.getP_tipo());
 
 
             JCoParameterList tables = stfcConnection.getExportParameterList();
