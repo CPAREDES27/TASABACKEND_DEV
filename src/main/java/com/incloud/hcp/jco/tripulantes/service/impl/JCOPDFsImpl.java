@@ -4774,7 +4774,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(PDFValeViveresConstantes.guion);
             contentStream.endText();
 
-            if(i==2){
+            if(i==1){
                 nx+=190;
             }else {
                 nx += 160;
@@ -4816,13 +4816,13 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 10);
-        contentStream.newLineAtOffset(55, 170);
+        contentStream.newLineAtOffset(55, 171);
         contentStream.showText(dto.getCocinero());
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 11.5f);
-        contentStream.moveTextPositionByAmount(410, 170);
+        contentStream.moveTextPositionByAmount(410, 171);
         contentStream.showText(dto.getNombreEmbarcacion());
         contentStream.endText();
 
