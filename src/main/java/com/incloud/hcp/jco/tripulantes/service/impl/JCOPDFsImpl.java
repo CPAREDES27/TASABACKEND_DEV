@@ -22,8 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -175,18 +178,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==2){
-                        if(registros[1].trim().compareTo("ARQUEO")==0){
+                        if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
-
-                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
                         }
+
+                        if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                            String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date date = parseador.parse(fecha);
+
+
+                            fecha = formateador.format(date);
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date d = new Date();
+                            String fechaF = dateFormat.format(d);
+                            Date fActual = parseador.parse(fechaF);
+
+                            logger.error("FECHA : " + date.toString());
+                            logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                            if (date.after(fActual)) {
+                                registros[j] = fecha;
+
+                            } else {
+                                registros[j] = "";
+                            }
+
+                        }
+
                     campos++;
                     }
                 }
@@ -1958,17 +1983,38 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==2){
-                        if(registros[1].trim().compareTo("ARQUEO")==0){
+                        if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+                        }
 
-                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                            String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date date = parseador.parse(fecha);
+
+
+                            fecha = formateador.format(date);
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date d = new Date();
+                            String fechaF = dateFormat.format(d);
+                            Date fActual = parseador.parse(fechaF);
+
+                            logger.error("FECHA : " + date.toString());
+                            logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                            if (date.after(fActual)) {
+                                registros[j] = fecha;
+
+                            } else {
+                                registros[j] = "";
+                            }
+
                         }
                         campos++;
                     }
@@ -3113,19 +3159,39 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==1){
-                        if(registros[0].trim().compareTo("ARQUEO")==0){
+                         if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
-                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
+                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[0].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[0].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[0].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+                         }
 
-                            registros[j] =T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            String fecha=ConvertirFecha(T_VGCER,PDFZarpeConstantes.FECCF);
-                            registros[j] = fecha;
-                        }
+                         if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                             String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                             SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                             Date date = parseador.parse(fecha);
+
+
+                             fecha = formateador.format(date);
+
+                             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                             Date d = new Date();
+                             String fechaF = dateFormat.format(d);
+                             Date fActual = parseador.parse(fechaF);
+
+                             logger.error("FECHA : " + date.toString());
+                             logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                             if (date.after(fActual)) {
+                                 registros[j] = fecha;
+
+                             } else {
+                                 registros[j] = "";
+                             }
+
+                         }
                         campos++;
                     }
                 }
