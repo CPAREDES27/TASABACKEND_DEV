@@ -60,8 +60,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             switch (importsParam.getNombreConsulta()) {
                 case "CONSGENDSTRFLOTA":
 
-                    order=BuscarOrder("CONSGENDSTRFLOTA");
-                    rowcount=BuscarRowcount("CONSGENDSTRFLOTA");
+                    order = BuscarOrder("CONSGENDSTRFLOTA");
+                    rowcount = BuscarRowcount("CONSGENDSTRFLOTA");
                     tabla = "ZV_FLDF";
                     condicion = "CDEMB LIKE '" + importsParam.getParametro1() + "'";
                     opt.setWa(condicion);
@@ -69,7 +69,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     fields = new String[]{"CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "FEARR", "HEARR", "EMPLA", "WKSPT", "CDUPT", "MANDT"};
 
                     //Consulta en tabla ZV_FLDF
-                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields, order,rowcount);
+                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
                     if (result1.getData().size() > 0) {
                         data = result1.getData().get(0);
                         String empla = data.get("EMPLA").toString();
@@ -81,7 +81,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                         options2.add(opt2);
                         fields2 = new String[]{"DSEMP", "INPRP", "MANDT"};
 
-                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2,order,rowcount);
+                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2, order, rowcount);
                         listData2 = result2.getData();
 
                         data.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
@@ -98,15 +98,15 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     break;
                 case "CONSGENPLANTADIST":
                     //Consulta a la tabla ZV_FLPL
-                    order=BuscarOrder("CONSGENPLANTADIST");
-                    rowcount=BuscarRowcount("CONSGENPLANTADIST");
+                    order = BuscarOrder("CONSGENPLANTADIST");
+                    rowcount = BuscarRowcount("CONSGENPLANTADIST");
                     tabla = "ZV_FLPL";
                     condicion = "CDPTA LIKE '" + importsParam.getParametro1() + "'";
                     opt.setWa(condicion);
                     options.add(opt);
                     fields = new String[]{"CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "CDEMP", "CDUPT", "MANDT"};
 
-                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields,order, rowcount);
+                    result1 = ConsultaGeneralReadTable("", tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
                     if (result1.getData().size() > 0) {
                         data = result1.getData().get(0);
                         String emplaZvFlpl = data.get("CDEMP").toString();
@@ -118,7 +118,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                         options2.add(opt2);
                         fields2 = new String[]{"DSEMP", "INPRP", "MANDT"};
 
-                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2,order, rowcount);
+                        result2 = ConsultaGeneralReadTable("", tabla2, importsParam.getP_user(), options2, optionsKeys, fields2, order, rowcount);
                         listData2 = result2.getData();
 
                         data.put("DSEMP", listData2.size() > 0 ? listData2.get(0).get("DSEMP") : null);
@@ -133,8 +133,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
                     break;
                 default:
-                    order=BuscarOrder(importsParam.getNombreConsulta());
-                    rowcount=BuscarRowcount(importsParam.getNombreConsulta());
+                    order = BuscarOrder(importsParam.getNombreConsulta());
+                    rowcount = BuscarRowcount(importsParam.getNombreConsulta());
                     tabla = Buscartabla(importsParam.getNombreConsulta());
                     options = BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -144,20 +144,20 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
                     // Mapeo condicional de algunas consultas
-                    switch (importsParam.getNombreConsulta()){
+                    switch (importsParam.getNombreConsulta()) {
                         case "CONSGENBSQTRIPUROL": // Búsqueda de tripulación
-                            if(!dto.getData().isEmpty()){
+                            if (!dto.getData().isEmpty()) {
 
-                                String value="";
-                                for(Map.Entry<String, Object> entry:dto.getData().get(0).entrySet()){
-                                    String key=entry.getKey();
-                                    value=entry.getValue().toString();
+                                String value = "";
+                                for (Map.Entry<String, Object> entry : dto.getData().get(0).entrySet()) {
+                                    String key = entry.getKey();
+                                    value = entry.getValue().toString();
 
                                 }
                                 logger.error("CONSGENBSQTRIPUROL= 1");
-                                String CONSGENBSQTRIPUROL1="CONSGENBSQTRIPUROL1";
-                                rowcount=BuscarRowcount(CONSGENBSQTRIPUROL1);
-                                order=BuscarOrder(CONSGENBSQTRIPUROL1);
+                                String CONSGENBSQTRIPUROL1 = "CONSGENBSQTRIPUROL1";
+                                rowcount = BuscarRowcount(CONSGENBSQTRIPUROL1);
+                                order = BuscarOrder(CONSGENBSQTRIPUROL1);
                                 tabla = Buscartabla(CONSGENBSQTRIPUROL1);
                                 options = BuscarOption(CONSGENBSQTRIPUROL1, value, importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -166,11 +166,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 fields = BuscarFields(CONSGENBSQTRIPUROL1);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
-                            }else{
+                            } else {
                                 logger.error("CONSGENBSQTRIPUROL= 2");
-                                String CONSGENBSQTRIPUROL2="CONSGENBSQTRIPUROL2";
-                                rowcount=BuscarRowcount(CONSGENBSQTRIPUROL2);
-                                order=BuscarOrder(CONSGENBSQTRIPUROL2);
+                                String CONSGENBSQTRIPUROL2 = "CONSGENBSQTRIPUROL2";
+                                rowcount = BuscarRowcount(CONSGENBSQTRIPUROL2);
+                                order = BuscarOrder(CONSGENBSQTRIPUROL2);
                                 tabla = Buscartabla(CONSGENBSQTRIPUROL2);
                                 options = BuscarOption(CONSGENBSQTRIPUROL2, importsParam.getParametro1(), importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -182,18 +182,18 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                             }
                             break;
                         case "CONSGENBSQTRIPUZARPE": // Búsqueda de tripulación
-                            if(!dto.getData().isEmpty()){
+                            if (!dto.getData().isEmpty()) {
 
-                                String value="";
-                                for(Map.Entry<String, Object> entry:dto.getData().get(0).entrySet()){
-                                    String key=entry.getKey();
-                                    value=entry.getValue().toString();
+                                String value = "";
+                                for (Map.Entry<String, Object> entry : dto.getData().get(0).entrySet()) {
+                                    String key = entry.getKey();
+                                    value = entry.getValue().toString();
 
                                 }
                                 logger.error("CONSGENBSQTRIPUZARPE= 1");
-                                String CONSGENBSQTRIPUZARPE1="CONSGENBSQTRIPUZARPE1";
-                                rowcount=BuscarRowcount(CONSGENBSQTRIPUZARPE1);
-                                order=BuscarOrder(CONSGENBSQTRIPUZARPE1);
+                                String CONSGENBSQTRIPUZARPE1 = "CONSGENBSQTRIPUZARPE1";
+                                rowcount = BuscarRowcount(CONSGENBSQTRIPUZARPE1);
+                                order = BuscarOrder(CONSGENBSQTRIPUZARPE1);
                                 tabla = Buscartabla(CONSGENBSQTRIPUZARPE1);
                                 options = BuscarOption(CONSGENBSQTRIPUZARPE1, value, importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -202,11 +202,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 fields = BuscarFields(CONSGENBSQTRIPUZARPE1);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
-                            }else{
-                                logger.error("CONSGENBSQTRIPUROL= 2");
-                                String CONSGENBSQTRIPUZARPE2="CONSGENBSQTRIPUZARPE2";
-                                rowcount=BuscarRowcount(CONSGENBSQTRIPUZARPE2);
-                                order=BuscarOrder(CONSGENBSQTRIPUZARPE2);
+                            } else {
+                                logger.error("CONSGENBSQTRIPUZARPE2= 2");
+                                String CONSGENBSQTRIPUZARPE2 = "CONSGENBSQTRIPUZARPE2";
+                                rowcount = BuscarRowcount(CONSGENBSQTRIPUZARPE2);
+                                order = BuscarOrder(CONSGENBSQTRIPUZARPE2);
                                 tabla = Buscartabla(CONSGENBSQTRIPUZARPE2);
                                 options = BuscarOption(CONSGENBSQTRIPUZARPE2, importsParam.getParametro1(), importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -712,7 +712,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 options.add(opt);
                 break;
             case "CONSGENPROVEEDORES":
-                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 +ConsultaGeneralOptions.CONSGENPROVEEDORES2 + parametro2 + "'";
+                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + ConsultaGeneralOptions.CONSGENPROVEEDORES2 + parametro2 + "'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
@@ -723,25 +723,25 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENTRIPULANTES":
                 condicion = ConsultaGeneralOptions.CONSGENTRIPULANTES;
-                if(!parametro1.equals("")){
-                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES2 + parametro1+"'";
-                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                if (!parametro1.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES2 + parametro1 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
-                if(!parametro2.equals("")){
-                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES3 + parametro2+"'";
-                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                if (!parametro2.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES3 + parametro2 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
-                if(!parametro3.equals("")){
-                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES4 + parametro3+"'";
-                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                if (!parametro3.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES4 + parametro3 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
-                if(!parametro4.equals("")){
-                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES5 + parametro4+"'";
-                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                if (!parametro4.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES5 + parametro4 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
-                if(!parametro5.equals("")){
-                    condicion+=ConsultaGeneralOptions.CONSGENTRIPULANTES6 + parametro5+"'";
-                    logger.error("CONSGENTRIPULANTES: "+condicion);
+                if (!parametro5.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES6 + parametro5 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
                 opt.setWa(condicion);
                 options.add(opt);
@@ -927,44 +927,45 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         return ListOptions;
     }
 
-    public String BuscarOrder(String nomConsulta)throws Exception{
-        String order="";
+    public String BuscarOrder(String nomConsulta) throws Exception {
+        String order = "";
 
-        if(nomConsulta.equals("CONSGENBSQTRIPUROL")){
-            order="FERTR DESCENDING";
-        }else if(nomConsulta.equals("CONSGENBSQTRIPUROL1")){
-            order="CDDRT ASCENDING";
-        }else if(nomConsulta.equals("CONSGENBSQTRIPUROL2")){
-            order="STELL ASCENDING NACHN ASCENDING NACH2 ASCENDING";
+        if (nomConsulta.equals("CONSGENBSQTRIPUROL")) {
+            order = "FERTR DESCENDING";
+        } else if (nomConsulta.equals("CONSGENBSQTRIPUROL1")) {
+            order = "CDDRT ASCENDING";
+        } else if (nomConsulta.equals("CONSGENBSQTRIPUROL2")) {
+            order = "STELL ASCENDING NACHN ASCENDING NACH2 ASCENDING";
         }
-        if(nomConsulta.equals("CONSGENBSQTRIPUZARPE")){
-            order="CDZAT DESCENDING";
+        if (nomConsulta.equals("CONSGENBSQTRIPUZARPE")) {
+            order = "CDZAT DESCENDING";
         }
-        if(nomConsulta.equals("CONSGENBSQTRIPUZARPE1")){
-            order="CDDZA ASCENDING";
+        if (nomConsulta.equals("CONSGENBSQTRIPUZARPE1")) {
+            order = "CDDZA ASCENDING";
         }
-        if(nomConsulta.equals("CONSGENBSQTRIPUZARPE2")){
-            order="STELL ASCENDING NACHN ASCENDING NACH2 ASCENDING";
+        if (nomConsulta.equals("CONSGENBSQTRIPUZARPE2")) {
+            order = "STELL ASCENDING NACHN ASCENDING NACH2 ASCENDING";
         }
 
         return order;
     }
-    public String BuscarRowcount(String nomConsulta)throws Exception{
-        String rowcount="200";
 
-        switch (nomConsulta){
+    public String BuscarRowcount(String nomConsulta) throws Exception {
+        String rowcount = "200";
+
+        switch (nomConsulta) {
             case "CONSGENBSQTRIPUROL":
-                rowcount="1";
+                rowcount = "1";
                 break;
             case "CONSGENMAREAANT":
                 rowcount = "1";
                 break;
             case "CONSGENBSQTRIPUZARPE":
-                rowcount="1";
+                rowcount = "1";
                 break;
         }
 
         return rowcount;
     }
-
 }
+
