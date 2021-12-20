@@ -175,6 +175,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
                 String key= entry.getKey();
                 Object value= entry.getValue();
                 data[contador2]=value.toString();
+                logger.info(contador2 + ": " +entry.getValue().toString());
                 contador2++;
             }
 
@@ -205,6 +206,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         String CalaUMTiemMinEntreExt = me.getFieldData(Tablas.ZFLUMD,optionsoptionsCalaMin,"MEINS");
         String CalaDescUMPescaDeclDescFinal = me.getFieldData(Tablas.ZFLUMD,CalaDescUMPescaDeclDesc,"DSUMD");
         String CalaDescUMPescaDeclDscgFinal = me.getFieldData(Tablas.ZFLUMD,CalaDescUMPescaDscgDesc,"DSUMD");
+        //String HoraCierre = me.getFieldData(Tablas.ZFLCEP,optionsCHI,"DSSPC");
 
         logger.error("ERROR 1");
         //8,9,16,5
@@ -221,6 +223,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         list.setCalaUMTMinEntreValido(true);
         list.setCalaTiemMaximo(Double.parseDouble(data[18]));
         list.setCalaCodEspecieCHI(data[9]);
+        list.setDescHoraCorte(data[1]);
         double espeLimMin = Double.parseDouble(data[0]);
         double espeLimMax = Double.parseDouble(data[13]);
         logger.error("ERROR 2");
@@ -395,6 +398,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         for(int i=0;i<listHoro.size();i++){
             for(int k=0;k<listaHoro.size();k++){
                 if(listaHoro.get(k).getTipoHorometro().equals(listHoro.get(i).getCDTHR())){
+                    listaHoro.get(k).setCodigo(listHoro.get(i).getCDTHR());
                     listaHoro.get(k).setLectura(listHoro.get(i).getLCHOR());
                     listaHoro.get(k).setAveriado(listHoro.get(i).getNORAV());
                     break;

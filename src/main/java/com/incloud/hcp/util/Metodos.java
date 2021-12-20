@@ -1179,6 +1179,9 @@ public class Metodos {
                     if (key.equals(fields[k])) {
                         value = ArrayResponse[j].trim();
                         campo = value.toString();
+                        if(key.equals("HRCOR")){
+                            campo=value.toString().substring(0,2)+":"+value.toString().substring(2,4)+":"+value.toString().substring(4,6);
+                        }
                         newRecord.put(key, campo);
                     }
                 }
