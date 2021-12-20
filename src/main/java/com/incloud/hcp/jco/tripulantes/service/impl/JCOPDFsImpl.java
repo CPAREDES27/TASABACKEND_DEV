@@ -1,5 +1,8 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroExport;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.dto.PDFTrimestralConstantes;
 import com.incloud.hcp.jco.tripulantes.dto.PDFValeViveresConstantes;
@@ -4470,6 +4473,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             dto.setTotalRaciones(totalRaciones);
              dto.setTotalCosto(totalCosto);
 
+            String codAlm=ObtenerCodAlmacen(dto.getAlmacen(), imports.getP_user());
+            dto.setAlmacen(codAlm);
 
             PantillaPDFValeViveres(path, dto, detalle);
 
@@ -4486,6 +4491,43 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         return pdf;
     }
+    public String ObtenerCodAlmacen(String codAlm, String user)throws  Exception{
+
+        String codAlmacen="";
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        logger.error("ARMADOR 4");
+        imports.put("QUERY_TABLE", "ZFLALM");
+        imports.put("DELIMITER", "|");
+        imports.put("NO_DATA", "");
+        imports.put("ROWSKIPS", "");
+        imports.put("ROWCOUNT", "");
+        imports.put("P_USER", user);
+        imports.put("P_ORDER", "");
+        imports.put("P_PAG", "");
+
+        List<MaestroOptions> option =new ArrayList<>();
+        MaestroOptions opt=new MaestroOptions();
+        opt.setWa("CDALM = '"+ codAlm+"'");
+        option.add(opt);
+        List<MaestroOptionsKey > optionsKeys= new ArrayList<>();
+
+        Metodos m= new Metodos();
+        List<HashMap<String, Object>> tmpOptions=m.ValidarOptions(option, optionsKeys);
+
+        String[] fields={"CDALE"};
+
+         EjecutarRFC exec=new EjecutarRFC();
+        MaestroExport me=exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+
+        for(Map.Entry<String, Object> entry: me.getData().get(0).entrySet()){
+
+                codAlmacen= entry.getValue().toString();
+
+        }
+
+        return codAlmacen;
+    }
     public void PantillaPDFValeViveres(String path, PDFValeViveresDto dto, List<PDFValeVivereDetalleDto> detalle)throws IOException{
 
         PDDocument document = new PDDocument();
@@ -4499,6 +4541,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDFont times = PDType1Font.TIMES_ROMAN;
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        String tasa= Constantes.RUTA_ARCHIVO_IMPORTAR+"tasa.jpg";
+        PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
+        contentStream.drawImage(logoTasa, 40, 760);
+
 
         contentStream.beginText();
         contentStream.setFont(bold, 80);

@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
+import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.util.Constantes;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOValeViveresImpl implements JCOValeVivereService {
@@ -71,8 +73,34 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             List<HashMap<String, Object>> s_data = metodo.ObtenerListObjetos(S_DATA, fields);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
 
+
+            //String codAlm=s_data.get(0).get("CDALM").toString();
+            /*String codAlmacen="";
+            for(int i=0;i<s_data.size();i++){
+
+                for(Map.Entry<String, Object>entry: s_data.get(i).entrySet()){
+
+                    if(entry.getKey().equals("CDALM")){
+                        codAlmacen=entry.getValue().toString();
+                    }
+                }
+            }*/
+
+
+            List<HashMap<String, Object>> data=new ArrayList<>();
+
+            for(int i=0; i<s_data.size();i++){
+
+                HashMap<String, Object> obj=s_data.get(i);
+                String codAlm=s_data.get(i).get("CDALM").toString();
+                String codAlmacen=ObtenerCodAlmacen(codAlm, imports.getP_user());
+
+                obj.put("CDALE", codAlmacen);
+                data.add(obj);
+            }
+
             vve.setT_mensaje(t_mensaje);
-            vve.setData(s_data);
+            vve.setData(data);
             vve.setMensaje("Ok");
         }catch (Exception e){
             vve .setMensaje(e.getMessage());
@@ -80,6 +108,43 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
         return vve;
     }
+    public String ObtenerCodAlmacen(String codAlm, String user)throws  Exception{
+
+        String codAlmacen="";
+
+        HashMap<String, Object> imports = new HashMap<String, Object>();
+        imports.put("QUERY_TABLE", "ZFLALM");
+        imports.put("DELIMITER", "|");
+        imports.put("NO_DATA", "");
+        imports.put("ROWSKIPS", "");
+        imports.put("ROWCOUNT", "");
+        imports.put("P_USER", user);
+        imports.put("P_ORDER", "");
+        imports.put("P_PAG", "");
+
+        List<MaestroOptions> option =new ArrayList<>();
+        MaestroOptions opt=new MaestroOptions();
+        opt.setWa("CDALM = '"+ codAlm+"'");
+        option.add(opt);
+        List<MaestroOptionsKey> optionsKeys= new ArrayList<>();
+
+        Metodos m= new Metodos();
+        List<HashMap<String, Object>> tmpOptions=m.ValidarOptions(option, optionsKeys);
+
+        String[] fields={"CDALE"};
+
+        EjecutarRFC exec=new EjecutarRFC();
+        MaestroExport me=exec.Execute_ZFL_RFC_READ_TABLE(imports, tmpOptions, fields);
+
+        for(Map.Entry<String, Object> entry: me.getData().get(0).entrySet()){
+
+            codAlmacen= entry.getValue().toString();
+
+        }
+
+        return codAlmacen;
+    }
+
     public VvGuardaExports GuardarValeViveres(VvGuardaImports imports)throws Exception{
 
         VvGuardaExports vve = new VvGuardaExports();
@@ -89,7 +154,7 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_VALE_VIVER);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_VALE_VIVER_BTP);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
 

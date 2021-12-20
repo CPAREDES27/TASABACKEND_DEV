@@ -1,16 +1,18 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
-import com.incloud.hcp.jco.maestro.dto.DetalleViveresExports;
-import com.incloud.hcp.jco.maestro.dto.DetalleViveresImports;
+import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCODetalleViveresService;
 import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCODetalleViveresImpl implements JCODetalleViveresService {
@@ -40,6 +42,9 @@ public class JCODetalleViveresImpl implements JCODetalleViveresService {
             List<HashMap<String, Object>> s_posicion = metodo.ObtenerListObjetos(S_POSICION, imports.getFields());
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
 
+
+
+
             dto.setS_posicion(s_posicion);
             dto.setT_mensaje(t_mensaje);
             dto.setMensaje("Ok");
@@ -50,4 +55,5 @@ public class JCODetalleViveresImpl implements JCODetalleViveresService {
 
         return dto;
     }
+
 }
