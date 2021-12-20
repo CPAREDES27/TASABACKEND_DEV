@@ -14,10 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
@@ -65,17 +63,19 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     tabla = Buscartabla("CONSGENCODZONA");
                     options = BuscarOption("CONSGENCODZONA", importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
-                    optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                    /*optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                     fields = BuscarFields(importsParam.getNombreConsulta());
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
+                     */
+                        fields = BuscarFields("CONSGENCODZONA");
+                        dto = ConsultaGeneralReadTable("CONSGENCODZONA", tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
 
-                    /*
                     String codZona="";
 
 
-                    HashMap<String, Object> zcdzar=result1.getData().get(0);
+                    HashMap<String, Object> zcdzar=dto.getData().get(0);
                     codZona=zcdzar.get("ZCDZAR").toString();
 
                     logger.error("CODZONA: "+ codZona);
@@ -91,7 +91,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     fields = BuscarFields(importsParam.getNombreConsulta());
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
-                    */
+
                     break;
                 case "CONSGENDSTRFLOTA":
 
@@ -815,6 +815,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 options.add(opt);
                 break;
             case "CONSGENTEORICO":
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                Date now = new Date();
+                String nowStr=sdf.format(now);
                 condicion = ConsultaGeneralOptions.CONSGENTEORICO + parametro1 +  ConsultaGeneralOptions.CONSGENTEORICO1 ;
                 opt.setWa(condicion);
                 logger.error("option= " + opt.getWa());
@@ -825,7 +828,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 logger.error("option= " + opt.getWa());
                 options.add(opt);
                 opt = new MaestroOptions();
-                condicion = ConsultaGeneralOptions.CONSGENTEORICO4 + parametro4 +ConsultaGeneralOptions.CONSGENTEORICO5+parametro5+ "'";
+                condicion = ConsultaGeneralOptions.CONSGENTEORICO4 + nowStr +ConsultaGeneralOptions.CONSGENTEORICO5+nowStr+ "'";
                 opt.setWa(condicion);
                 logger.error("option= " + opt.getWa());
                 options.add(opt);
