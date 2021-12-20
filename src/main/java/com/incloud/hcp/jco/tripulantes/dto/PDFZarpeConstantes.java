@@ -73,6 +73,8 @@ public class PDFZarpeConstantes {
     public static String DSETP   ="DSETP";
     public static String FECCF   ="FECCF";
     public static String NRCER   ="NRCER";
+    public static String CDCER   ="CDCER";
+
 
 
     //Fields Rol Tripulacion

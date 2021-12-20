@@ -20,7 +20,26 @@ public class ConfiguracionEventoPescaExports {
     private double CalaTiemMinEntre;
     private double CalaMiliTiemMinEntre;
     private String  CalaDescUMPescaDeclDesc;
+    private String  CalaDescUMPescaDscgDesc;
     private String CalaDescUMPescaDecl;
+    private String CalaCodEspecieCHI;
+
+
+    public String getCalaDescUMPescaDscgDesc() {
+        return CalaDescUMPescaDscgDesc;
+    }
+
+    public void setCalaDescUMPescaDscgDesc(String calaDescUMPescaDscgDesc) {
+        CalaDescUMPescaDscgDesc = calaDescUMPescaDscgDesc;
+    }
+
+    public String getCalaCodEspecieCHI() {
+        return CalaCodEspecieCHI;
+    }
+
+    public void setCalaCodEspecieCHI(String calaCodEspecieCHI) {
+        CalaCodEspecieCHI = calaCodEspecieCHI;
+    }
 
     public String getCalaDescUMPescaDecl() {
         return CalaDescUMPescaDecl;

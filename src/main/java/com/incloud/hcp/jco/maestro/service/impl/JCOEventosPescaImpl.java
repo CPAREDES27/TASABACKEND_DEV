@@ -194,6 +194,9 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         String[] optionsoptionsCalaMax={"CDUMD = '"+data[16]+"'"};
         String[] optionsoptionsCalaMin={"CDUMD = '"+data[5]+"'"};
         String[]  CalaDescUMPescaDeclDesc   ={"CDUMD = '"+data[4]+"'"};
+        String[]  CalaDescUMPescaDscgDesc   ={"CDUMD = '"+data[15]+"'"};
+        logger.error("data[10]= "+data[15]);
+
         String CalaDescUMPescaDecl = data[4];
         String fields="";
         String EspeUniMedTiempExt = me.getFieldData(Tablas.ZFLUMD,optionsEspe,"MEINS");
@@ -201,11 +204,14 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         String CalaUMTiemMaximoExt = me.getFieldData(Tablas.ZFLUMD,optionsoptionsCalaMax,"MEINS");
         String CalaUMTiemMinEntreExt = me.getFieldData(Tablas.ZFLUMD,optionsoptionsCalaMin,"MEINS");
         String CalaDescUMPescaDeclDescFinal = me.getFieldData(Tablas.ZFLUMD,CalaDescUMPescaDeclDesc,"DSUMD");
+        String CalaDescUMPescaDeclDscgFinal = me.getFieldData(Tablas.ZFLUMD,CalaDescUMPescaDscgDesc,"DSUMD");
+
         logger.error("ERROR 1");
         //8,9,16,5
         logger.error("CADENA CALA: "+EspeUniMedTiempExt);
         list.setCalaDescUMPescaDecl(CalaDescUMPescaDecl);
         list.setCalaDescUMPescaDeclDesc(CalaDescUMPescaDeclDescFinal);
+        list.setCalaDescUMPescaDscgDesc(CalaDescUMPescaDeclDscgFinal);
         list.setEspeUniMedTiempExt(EspeUniMedTiempExt);
         list.setCalaDescEspecieCHI(CalaDescEspecieCHI);
         list.setCalaUMTiemMaximoExt(CalaUMTiemMaximoExt);
@@ -214,6 +220,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         list.setCalaUMTiemMaxValido(true);
         list.setCalaUMTMinEntreValido(true);
         list.setCalaTiemMaximo(Double.parseDouble(data[18]));
+        list.setCalaCodEspecieCHI(data[9]);
         double espeLimMin = Double.parseDouble(data[0]);
         double espeLimMax = Double.parseDouble(data[13]);
         logger.error("ERROR 2");

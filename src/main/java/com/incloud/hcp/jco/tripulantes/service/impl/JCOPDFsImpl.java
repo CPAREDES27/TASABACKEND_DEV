@@ -18,12 +18,15 @@ import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -175,18 +178,40 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==2){
-                        if(registros[1].trim().compareTo("ARQUEO")==0){
+                        if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
-
-                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
                         }
+
+                        if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                            String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date date = parseador.parse(fecha);
+
+
+                            fecha = formateador.format(date);
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date d = new Date();
+                            String fechaF = dateFormat.format(d);
+                            Date fActual = parseador.parse(fechaF);
+
+                            logger.error("FECHA : " + date.toString());
+                            logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                            if (date.after(fActual)) {
+                                registros[j] = fecha;
+
+                            } else {
+                                registros[j] = "";
+                            }
+
+                        }
+
                     campos++;
                     }
                 }
@@ -1958,17 +1983,38 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==2){
-                        if(registros[1].trim().compareTo("ARQUEO")==0){
+                        if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[1].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[1].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[1].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+                        }
 
-                            registros[j] = T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            registros[j] = T_VGCER.getString(CamposCertificados[campos]);
+                        if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                            String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                            SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                            Date date = parseador.parse(fecha);
+
+
+                            fecha = formateador.format(date);
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date d = new Date();
+                            String fechaF = dateFormat.format(d);
+                            Date fActual = parseador.parse(fechaF);
+
+                            logger.error("FECHA : " + date.toString());
+                            logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                            if (date.after(fActual)) {
+                                registros[j] = fecha;
+
+                            } else {
+                                registros[j] = "";
+                            }
+
                         }
                         campos++;
                     }
@@ -3113,19 +3159,39 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
                     }else if(j==1){
-                        if(registros[0].trim().compareTo("ARQUEO")==0){
+                         if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
 
-                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
+                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
 
-                        }else if(registros[0].trim().compareTo("REGISTRO DE RADIOBALIZA")==0
-                                || registros[0].trim().compareTo("MATRICULA DE NAVES")==0
-                                || registros[0].trim().compareTo("COMPENSACION DE COMPAS")==0) {
+                         }
 
-                            registros[j] =T_VGCER.getString(PDFZarpeConstantes.DSETP);
-                        }else{
-                            String fecha=ConvertirFecha(T_VGCER,PDFZarpeConstantes.FECCF);
-                            registros[j] = fecha;
-                        }
+                         if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
+
+                             String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
+
+                             SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                             Date date = parseador.parse(fecha);
+
+
+                             fecha = formateador.format(date);
+
+                             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                             Date d = new Date();
+                             String fechaF = dateFormat.format(d);
+                             Date fActual = parseador.parse(fechaF);
+
+                             logger.error("FECHA : " + date.toString());
+                             logger.error("FECHA ACTUAL: " + fActual.toString());
+
+                             if (date.after(fActual)) {
+                                 registros[j] = fecha;
+
+                             } else {
+                                 registros[j] = "";
+                             }
+
+                         }
                         campos++;
                     }
                 }
@@ -3684,6 +3750,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             TrabajoFueraFaenaImports tfi = new TrabajoFueraFaenaImports();
             TrabajoFueraFaenaDetalleExports dto = jcoTrabajoFueraFaena.DetalleTrabajoFueraFaenaTransporte(imports);
 
+
+
             try {
                 if (dto.getObservacion() == null || dto.getObservacion().equals(null)) {
                     dto.setObservacion("");
@@ -3807,7 +3875,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             PlantillaPDFTrabajoFF(path, dto, ListaRegistros);
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
-            pdf.setMensaje("Ok");
+            pdf.setMensaje(dto.getMensaje());
 
         }catch (Exception e){
             pdf.setMensaje(e.getMessage());
@@ -4396,8 +4464,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 totalCosto+=detalle.get(i).getTotal();
 
             }
+            DecimalFormat decimal = new DecimalFormat("#.00");
+            totalCosto=Float.parseFloat(decimal.format(totalCosto));
 
-             dto.setTotalRaciones(totalRaciones);
+            dto.setTotalRaciones(totalRaciones);
              dto.setTotalCosto(totalCosto);
 
 
@@ -4434,6 +4504,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(bold, 80);
         contentStream.setNonStrokingColor(Color.lightGray);
         contentStream.moveTextPositionByAmount(180, 640);
+        contentStream.showText(PDFValeViveresConstantes.copia);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 80);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(180, 380);
+        contentStream.showText(PDFValeViveresConstantes.copia);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(bold, 80);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(180, 200);
         contentStream.showText(PDFValeViveresConstantes.copia);
         contentStream.endText();
 
@@ -4687,6 +4771,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(String.valueOf(detalleDto.getTotal()));
             contentStream.endText();
 
+            contentStream.beginText();
+            contentStream.setFont(font, 8);
+            contentStream.moveTextPositionByAmount(450, y);
+            contentStream.showText(String.valueOf(dto.getComentario()));
+            contentStream.endText();
+
             y-=20;
         }
 
@@ -4694,32 +4784,35 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(30, 520);
+        contentStream.moveTextPositionByAmount(30, y);
         contentStream.showText(PDFValeViveresConstantes.totalRaciones);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(100, 520);
+        contentStream.moveTextPositionByAmount(100, y);
         contentStream.showText(String.valueOf(dto.getTotalRaciones()));
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(310, 520);
+        contentStream.moveTextPositionByAmount(310, y);
         contentStream.showText(PDFValeViveresConstantes.totalCosto);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(360, 520);
+        contentStream.moveTextPositionByAmount(360, y);
         contentStream.showText(String.valueOf(dto.getTotalCosto()));
         contentStream.endText();
+
+
+
 
         drawCuadroValeViveres(contentStream, 280,30);
 
         int cant=3;
-        int nx=60;
+        int nx=50;
 
         for(int i=0; i<cant; i++){
 
@@ -4747,13 +4840,26 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.showText(PDFValeViveresConstantes.guion);
             contentStream.endText();
 
-            nx+=170;
+            if(i==1){
+                nx+=190;
+            }else {
+                nx += 160;
+            }
         }
+
+
+
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(120, 220);
         contentStream.showText(PDFValeViveresConstantes.radioOperador);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 7);
+        contentStream.newLineAtOffset(250, 230);
+        contentStream.showText(dto.getCocinero());
         contentStream.endText();
 
         contentStream.beginText();
@@ -4772,6 +4878,18 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(font, 11.5f);
         contentStream.moveTextPositionByAmount(30, 170);
         contentStream.showText(PDFValeViveresConstantes.textoUno);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 10);
+        contentStream.newLineAtOffset(55, 171);
+        contentStream.showText(dto.getCocinero());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 11.5f);
+        contentStream.moveTextPositionByAmount(410, 171);
+        contentStream.showText(dto.getNombreEmbarcacion());
         contentStream.endText();
 
         contentStream.beginText();
@@ -4960,8 +5078,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         S_DATA.setRow(0);
+        dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
+        dto.setCocinero(S_DATA.getString(PDFValeViveresConstantes.NMPER));
         dto.setCentro(S_DATA.getString(PDFValeViveresConstantes.WERKS));
-        dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.LGORT));
+        dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.CDALM));
         dto.setNroVale(S_DATA.getString(PDFValeViveresConstantes.NRVVI));
         dto.setFecha(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FCVVI ));
         dto.setRuc(S_DATA.getString(PDFValeViveresConstantes.STCD1));

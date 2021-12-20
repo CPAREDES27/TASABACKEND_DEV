@@ -5,6 +5,7 @@ public class AppMaestrosImports {
     private String p_rol;
     private String p_app;
     private String p_tipo;
+    private String pt_rol;
 
     public String getP_rol() {
         return p_rol;
@@ -28,5 +29,13 @@ public class AppMaestrosImports {
 
     public void setP_tipo(String p_tipo) {
         this.p_tipo = p_tipo;
+    }
+
+    public String getPt_rol() {
+        return pt_rol;
+    }
+
+    public void setPt_rol(String pt_rol) {
+        this.pt_rol = pt_rol;
     }
 }

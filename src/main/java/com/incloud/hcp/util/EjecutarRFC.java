@@ -111,17 +111,22 @@ public class EjecutarRFC {
         JCoTable tableImport = listTables.getTable(tableName);
         logger.error("setTable_1");
 
-        for (int i = 0; i < data.size(); i++){
-            tableImport.appendRow();
-            HashMap<String, Object> record = data.get(i);
-            Iterator iterator = record.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry tmpImport = (Map.Entry) iterator.next();
-                String key = tmpImport.getKey().toString();
-                Object value = tmpImport.getValue();
-                tableImport.setValue(key, value);
-
+        String msg = "SET TABLA: " + tableName;
+        logger.error(msg);
+        if(data != null){
+            for (int i = 0; i < data.size(); i++){
+                tableImport.appendRow();
+                HashMap<String, Object> record = data.get(i);
+                Iterator iterator = record.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry tmpImport = (Map.Entry) iterator.next();
+                    String key = tmpImport.getKey().toString();
+                    Object value = tmpImport.getValue();
+                    tableImport.setValue(key, value);
+                }
             }
+        }else{
+            logger.error("TABLA NULA");
         }
         logger.error("setTable_2");
 
