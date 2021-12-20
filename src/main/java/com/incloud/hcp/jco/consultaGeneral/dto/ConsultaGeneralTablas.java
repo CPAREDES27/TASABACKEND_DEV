@@ -36,5 +36,8 @@ public class ConsultaGeneralTablas {
     public static String CONSGENBSQTRIPUZARPE ="ZTFL_ZATRP";
     public static String CONSGENBSQTRIPUZARPE1 ="ZVFL_DZAT2";
     public static String CONSGENBSQTRIPUZARPE2 ="ZHRP_BD_PERSONAL";
+    public static String CONSGENCODZONA="ZV_FLPU";
+    public static String CONSGENTEORICO="ZFLCEF";
+
 
 }

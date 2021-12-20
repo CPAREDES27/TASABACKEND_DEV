@@ -58,6 +58,41 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             List<HashMap<String, Object>> listData2;
 
             switch (importsParam.getNombreConsulta()) {
+
+                    case "CONSGENTEORICO":
+                    order = BuscarOrder("CONSGENCODZONA");
+                    rowcount = BuscarRowcount("CONSGENCODZONA");
+                    tabla = Buscartabla("CONSGENCODZONA");
+                    options = BuscarOption("CONSGENCODZONA", importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                    optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                    fields = BuscarFields(importsParam.getNombreConsulta());
+                    dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
+
+
+                    /*
+                    String codZona="";
+
+
+                    HashMap<String, Object> zcdzar=result1.getData().get(0);
+                    codZona=zcdzar.get("ZCDZAR").toString();
+
+                    logger.error("CODZONA: "+ codZona);
+
+
+                    order = BuscarOrder("CONSGENTEORICO");
+                    rowcount = BuscarRowcount("CONSGENTEORICO");
+                    tabla = Buscartabla("CONSGENTEORICO");
+                    options = BuscarOption("CONSGENTEORICO", importsParam.getParametro1(), importsParam.getParametro2()
+                            , codZona, importsParam.getParametro4(), importsParam.getParametro5());
+                    optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
+                    fields = BuscarFields(importsParam.getNombreConsulta());
+                    dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
+
+                    */
+                    break;
                 case "CONSGENDSTRFLOTA":
 
                     order = BuscarOrder("CONSGENDSTRFLOTA");
@@ -446,6 +481,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENBSQTRIPUZARPE2":
                 tabla = ConsultaGeneralTablas.CONSGENBSQTRIPUZARPE2;
                 break;
+            case "CONSGENCODZONA":
+                tabla = ConsultaGeneralTablas.CONSGENCODZONA;
+                break;
+            case "CONSGENTEORICO":
+                tabla = ConsultaGeneralTablas.CONSGENTEORICO;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -554,6 +595,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENBSQTRIPUZARPE2":
                 fields = ConsultaGeneralFields.CONSGENBSQTRIPUZARPE2;
+                break;
+            case "CONSGENCODZONA":
+                fields = ConsultaGeneralFields.CONSGENCODZONA;
+                break;
+            case "CONSGENTEORICO":
+                fields = ConsultaGeneralFields.CONSGENTEORICO;
                 break;
         }
 
@@ -760,6 +807,27 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENBSQTRIPUZARPE2":
                 condicion = ConsultaGeneralOptions.CONSGENBSQTRIPUZARPE2 + parametro1 + "'";
                 opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENCODZONA":
+                condicion = ConsultaGeneralOptions.CONSGENCODZONA + parametro3 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENTEORICO":
+                condicion = ConsultaGeneralOptions.CONSGENTEORICO + parametro1 +  ConsultaGeneralOptions.CONSGENTEORICO1 ;
+                opt.setWa(condicion);
+                logger.error("option= " + opt.getWa());
+                options.add(opt);
+                opt = new MaestroOptions();
+                condicion = ConsultaGeneralOptions.CONSGENTEORICO2 + parametro2 + ConsultaGeneralOptions.CONSGENTEORICO3+parametro3+"'";
+                opt.setWa(condicion);
+                logger.error("option= " + opt.getWa());
+                options.add(opt);
+                opt = new MaestroOptions();
+                condicion = ConsultaGeneralOptions.CONSGENTEORICO4 + parametro4 +ConsultaGeneralOptions.CONSGENTEORICO5+parametro5+ "'";
+                opt.setWa(condicion);
+                logger.error("option= " + opt.getWa());
                 options.add(opt);
                 break;
             default:

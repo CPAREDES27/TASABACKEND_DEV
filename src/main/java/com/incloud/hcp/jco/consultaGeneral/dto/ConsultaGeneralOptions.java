@@ -59,5 +59,12 @@ public class ConsultaGeneralOptions {
     public static String CONSGENBSQTRIPUZARPE ="WERKS EQ '";
     public static String CONSGENBSQTRIPUZARPE1 ="CDZAT EQ '" ;
     public static String CONSGENBSQTRIPUZARPE2 ="ABKRS EQ 'TT' AND CENTRO EQ '";
+    public static String CONSGENCODZONA="CDPTO EQ '";
+    public static String CONSGENTEORICO="CDEMB EQ '";
+    public static String CONSGENTEORICO1="' AND CDFAS EQ 'N'";
+    public static String CONSGENTEORICO2="AND CDMMA EQ '";
+    public static String CONSGENTEORICO3="' AND ZCDZAR EQ '";
+    public static String CONSGENTEORICO4="AND FHIVG <= '";
+    public static String CONSGENTEORICO5="' AND FHFVG >= '";
 
 }
