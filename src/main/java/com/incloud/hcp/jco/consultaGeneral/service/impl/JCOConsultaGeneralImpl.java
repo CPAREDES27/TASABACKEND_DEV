@@ -366,6 +366,15 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 dto.setData(me.getData());
             }
 
+            for(Map.Entry<String, Object> Entry:me.getData().get(0).entrySet()){
+
+                logger.error("CONSGEN DTO");
+                logger.error("Key: "+ Entry.getKey());
+                logger.error("Value: "+ Entry.getValue());
+
+
+            }
+
             dto.setMensaje("Ok");
         } catch (Exception e) {
             dto.setMensaje(e.getMessage());
