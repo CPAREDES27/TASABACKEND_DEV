@@ -1,11 +1,20 @@
 package com.incloud.hcp.jco.maestro.dto;
 
 public class HorometrosDto {
+    private String codigo;
     private String indicador;
     private String tipoHorometro;
     private String descTipoHorom;
     private String lectura;
     private String Averiado;
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public String getLectura() {
         return lectura;

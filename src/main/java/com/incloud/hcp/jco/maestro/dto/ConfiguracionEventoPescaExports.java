@@ -23,6 +23,7 @@ public class ConfiguracionEventoPescaExports {
     private String  CalaDescUMPescaDscgDesc;
     private String CalaDescUMPescaDecl;
     private String CalaCodEspecieCHI;
+    private String descHoraCorte;
 
 
     public String getCalaDescUMPescaDscgDesc() {
@@ -175,5 +176,13 @@ public class ConfiguracionEventoPescaExports {
 
     public void setList_EventosPesca(List<HashMap<String, Object>> list_EventosPesca) {
         List_EventosPesca = list_EventosPesca;
+    }
+
+    public String getDescHoraCorte() {
+        return descHoraCorte;
+    }
+
+    public void setDescHoraCorte(String descHoraCorte) {
+        this.descHoraCorte = descHoraCorte;
     }
 }
