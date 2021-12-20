@@ -712,7 +712,8 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 options.add(opt);
                 break;
             case "CONSGENPROVEEDORES":
-                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 + ConsultaGeneralOptions.CONSGENPROVEEDORES2 + parametro2 + "'";
+
+                condicion = ConsultaGeneralOptions.CONSGENPROVEEDORES + parametro1 +ConsultaGeneralOptions.CONSGENPROVEEDORES2 + parametro2 + "'" +" ESREG = 'S'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;

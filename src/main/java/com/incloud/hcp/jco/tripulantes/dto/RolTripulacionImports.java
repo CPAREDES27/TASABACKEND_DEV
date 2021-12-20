@@ -18,7 +18,7 @@ public class RolTripulacionImports {
     private String[] fieldsT_archivo;
     private List<HashMap<String, Object>> t_zartr;
     private List<HashMap<String, Object>> t_dzart;
-    private List<HashMap<String, Object>> t_archivo;
+
 
     public String[] getFieldsT_archivo() {
         return fieldsT_archivo;
@@ -28,13 +28,7 @@ public class RolTripulacionImports {
         this.fieldsT_archivo = fieldsT_archivo;
     }
 
-    public List<HashMap<String, Object>> getT_archivo() {
-        return t_archivo;
-    }
 
-    public void setT_archivo(List<HashMap<String, Object>> t_archivo) {
-        this.t_archivo = t_archivo;
-    }
 
     public List<HashMap<String, Object>> getT_zartr() {
         return t_zartr;

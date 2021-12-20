@@ -7,17 +7,10 @@ public class RolTripulacionExports {
 
     private List<HashMap<String, Object>> t_zartr;
     private List<HashMap<String, Object>> t_dzart;
-    private List<HashMap<String, Object>> t_archivo;
+
     private List<HashMap<String, Object>> t_mensaje;
     private String mensaje;
 
-    public List<HashMap<String, Object>> getT_archivo() {
-        return t_archivo;
-    }
-
-    public void setT_archivo(List<HashMap<String, Object>> t_archivo) {
-        this.t_archivo = t_archivo;
-    }
 
     public List<HashMap<String, Object>> getT_zartr() {
         return t_zartr;
