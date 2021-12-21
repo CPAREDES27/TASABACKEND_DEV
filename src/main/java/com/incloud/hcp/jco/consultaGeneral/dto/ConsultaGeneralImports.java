@@ -8,6 +8,7 @@ public class ConsultaGeneralImports {
     private String parametro3;
     private String parametro4;
     private String parametro5;
+    private String parametro6;
     private String p_user;
 
     public String getParametro1() {
@@ -48,6 +49,14 @@ public class ConsultaGeneralImports {
 
     public void setParametro5(String parametro5) {
         this.parametro5 = parametro5;
+    }
+
+    public String getParametro6() {
+        return parametro6;
+    }
+
+    public void setParametro6(String parametro6) {
+        this.parametro6 = parametro6;
     }
 
     public String getNombreConsulta() {
