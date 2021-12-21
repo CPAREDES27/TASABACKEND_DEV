@@ -109,7 +109,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         Metodos metodo = new Metodos();
         List<HashMap<String, Object>> ListarST_CEP= metodo.ListarObjetos(STR_ZLT);
-        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetosDIR(STR_DI);
+        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetos(STR_DI);
         List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetos(STR_PTA);
         List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetos(STR_DP);
 
