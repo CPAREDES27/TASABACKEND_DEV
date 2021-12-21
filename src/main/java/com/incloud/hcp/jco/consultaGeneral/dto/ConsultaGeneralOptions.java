@@ -66,5 +66,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENTEORICO3="' AND ZCDZAR EQ '";
     public static String CONSGENTEORICO4="AND FHIVG <= '";
     public static String CONSGENTEORICO5="' AND FHFVG >= '";
+    public static String CONSGENCONST="PROGRAMA EQ 'BTP'";
+    public static String CONSGENCONST2=" AND CAMPO EQ '";
 
 }

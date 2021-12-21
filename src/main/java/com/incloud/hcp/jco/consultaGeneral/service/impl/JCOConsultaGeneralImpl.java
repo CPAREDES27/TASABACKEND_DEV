@@ -496,6 +496,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENTEORICO":
                 tabla = ConsultaGeneralTablas.CONSGENTEORICO;
                 break;
+            case "CONSGENCONST":
+                tabla = ConsultaGeneralTablas.CONSGENCONST;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -610,6 +613,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENTEORICO":
                 fields = ConsultaGeneralFields.CONSGENTEORICO;
+                break;
+            case "CONSGENCONST":
+                fields = ConsultaGeneralFields.CONSGENCONST;
                 break;
         }
 
@@ -840,6 +846,14 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 condicion = ConsultaGeneralOptions.CONSGENTEORICO4 + nowStr +ConsultaGeneralOptions.CONSGENTEORICO5+nowStr+ "'";
                 opt.setWa(condicion);
                 logger.error("option= " + opt.getWa());
+                options.add(opt);
+                break;
+            case "CONSGENCONST":
+                condicion = ConsultaGeneralOptions.CONSGENCONST;
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENCONST2 + parametro1 + "'";
+                }
+                opt.setWa(condicion);
                 options.add(opt);
                 break;
             default:
