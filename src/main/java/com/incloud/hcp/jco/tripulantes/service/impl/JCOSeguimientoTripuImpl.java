@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +88,8 @@ public class JCOSeguimientoTripuImpl implements JCOSeguimientoTripuService {
                         }
                     }
                 }
-
+                DecimalFormat decimal = new DecimalFormat("#.000");
+                totalPesDes=Float.parseFloat(decimal.format(totalPesDes));
 
                 HashMap<String, Object> total = new HashMap<>();
                 total.put("PERNR", "Total: ");

@@ -74,19 +74,6 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
 
 
-            //String codAlm=s_data.get(0).get("CDALM").toString();
-            /*String codAlmacen="";
-            for(int i=0;i<s_data.size();i++){
-
-                for(Map.Entry<String, Object>entry: s_data.get(i).entrySet()){
-
-                    if(entry.getKey().equals("CDALM")){
-                        codAlmacen=entry.getValue().toString();
-                    }
-                }
-            }*/
-
-
             List<HashMap<String, Object>> data=new ArrayList<>();
 
             for(int i=0; i<s_data.size();i++){

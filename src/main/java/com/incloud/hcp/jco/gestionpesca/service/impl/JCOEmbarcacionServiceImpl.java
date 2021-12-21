@@ -595,19 +595,23 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             importx.setValue("P_CODEMB", imports.getP_codemb());
             importx.setValue("P_CODPTA", imports.getP_codpta());
 
+            JCoParameterList table = stfcConnection.getTableParameterList();
             JCoParameterList export = stfcConnection.getExportParameterList();
+
             stfcConnection.execute(destination);
-            JCoStructure T_MENSAJE=export.getStructure(Tablas.T_MENSAJE);
-            MensajeDto msj= new MensajeDto();
-            msj.setMANDT(T_MENSAJE.getString("MANDT"));
-            msj.setCMIN(T_MENSAJE.getString("CMIN"));
-            msj.setCDMIN(T_MENSAJE.getString("CDMIN"));
-            msj.setDSMIN(T_MENSAJE.getString("DSMIN"));
+
+            JCoTable T_MENSAJE=table.getTable(Tablas.T_MENSAJE);
+
+            Metodos me=new Metodos();
+
+            List<HashMap<String, Object>> t_mensaje=me.ListarObjetos(T_MENSAJE);
+
+
 
             vm.setP_correcto(export.getValue("P_CORRECTO").toString());
             vm.setP_primeracondicioncn(export.getValue("P_PRIMERACONDICIONCN").toString());
             vm.setP_segundacondicions(export.getValue("P_SEGUNDACONDICIONS").toString());
-            vm.setT_mensaje(msj);
+            vm.setT_mensaje(t_mensaje);
             vm.setMensaje("Ok");
 
         }catch (Exception e){
