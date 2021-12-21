@@ -1049,6 +1049,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         if (nomConsulta.equals("CONSGENBSQTRIPUZARPE2")) {
             order = "STELL ASCENDING NACHN ASCENDING NACH2 ASCENDING";
         }
+        if (nomConsulta.equals("CONSGENMAREAANT")){
+            order = "NRMAR DESCENDING";
+        }
 
         return order;
     }
