@@ -1360,6 +1360,13 @@ public class Metodos {
                 dom="ZESMAR";
                 campo="DESC_"+campo;
             }
+            if(campo.equals("CDTPC")){
+                dom="ZCDTPC";
+                campo="DESC_"+campo;
+            }if(campo.equals("ESDES")){
+                dom="ZESDES";
+                campo="DESC_"+campo;
+            }
             descripcion=ObtenerDominio(dom,valor);
        }
 
