@@ -532,6 +532,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                             detalle.setHomod(valor);
                         } else if (key.equals("INDEJ")) {
                             detalle.setIndej(valor);
+                        } else if (key.equals("DESC_STELL")) {
+                            //valor=me.ObtenerDominio("CARGOTRIPU",valor);
+                            detalle.setCargo(valor);
                         }
                         HashMap<String, Object> fechas = new HashMap<>();
                         for (int j = 0; j < tffde.getT_fechas().size(); j++) {

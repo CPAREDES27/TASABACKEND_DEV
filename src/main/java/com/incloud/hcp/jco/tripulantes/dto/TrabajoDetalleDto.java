@@ -28,6 +28,15 @@ public class TrabajoDetalleDto {
     private String centro;
     private String destino;
     private String origen;
+    private String cargo;
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
 
     public HashMap<String, Object> getFechas() {
         return fechas;
