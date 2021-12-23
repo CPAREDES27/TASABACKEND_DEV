@@ -488,6 +488,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         exports.setUbicacionPlanta(imports2.getUbicacion());
         exports.setObservacion(imports2.getObservacion());
         detalle.setTolva(imports2.getTolva());
+        detalle.setBalanza(imports2.getTolva());
 
 
 
