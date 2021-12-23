@@ -1,5 +1,6 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestoNuevoImport;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosExports;
@@ -10,6 +11,8 @@ import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +21,9 @@ import java.util.List;
 
 @Service
 public class JCOProtestosImpl implements JCOProtestosService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public ProtestosExports Protestos(ProtestosImports imports) throws Exception {
 
@@ -42,6 +48,7 @@ public class JCOProtestosImpl implements JCOProtestosService {
                 HashMap<String, Object> record = new HashMap<String, Object>();
 
                 record.put("DATA", o.getData());
+                logger.error(o.getData());
                 tmpOptions.add(record);
             }
 

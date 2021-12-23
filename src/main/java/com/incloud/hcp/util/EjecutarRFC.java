@@ -123,6 +123,7 @@ public class EjecutarRFC {
                     String key = tmpImport.getKey().toString();
                     Object value = tmpImport.getValue();
                     tableImport.setValue(key, value);
+                    logger.error("setTable "+key+": "+value);
                 }
             }
         }else{

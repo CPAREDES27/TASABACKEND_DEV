@@ -428,7 +428,7 @@ public class Metodos {
             tablita = "ZV_FLPL";
         }
         else if(table.equals("TIPOPROTESTO")){
-            tablita = "ZTBC_DATA";
+                tablita = "ZTBC_DATA";
         }else if(table.equals("CLASEPROTESTO")){
             tablita = "ZTBC_DATA";
         }
@@ -924,7 +924,7 @@ public class Metodos {
                             if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                                     || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
                                     || key.equals("CDFAS")||key.equals("CDMMA")|| key.equals("ESRNV")|| key.equals("ESVVI")|| key.equals("CDTEV")||key.equals("STELL")
-                                    ||key.equals("TIPTR")||key.equals("CDLDS")){
+                                    ||key.equals("TIPTR")||key.equals("CDLDS")||key.equals("TPPRT")){
                                 HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                                 for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                                     String campo=entry.getKey();
@@ -1051,7 +1051,7 @@ public class Metodos {
                 if(key.equals("INPRP") || key.equals("ESREG") ||key.equals("WAERS") || key.equals("ESCSG")|| key.equals("ESPRC")
                         || key.equals("CALIDA")|| key.equals("CDLDS")|| key.equals("ESDES")|| key.equals("ESPRO")|| key.equals("CDTPC")
                         || key.equals("CDFAS")||key.equals("CDMMA") || key.equals("ESRNV") || key.equals("ESVVI")|| key.equals("CDTEV")
-                        ||key.equals("STELL")||key.equals("TIPTR")){
+                        ||key.equals("STELL")||key.equals("TIPTR")||key.equals("TPPRT")){
                     HashMap<String, Object>dominio=BuscarNombreDominio(key, value.toString());
                     for (Map.Entry<String, Object> entry:dominio.entrySet() ){
                         String campo=entry.getKey();
@@ -1368,6 +1368,10 @@ public class Metodos {
                 campo="DESC_"+campo;
             }if(campo.equals("CDLDS")){
                 dom="ZCDLDS";
+                campo="DESC_"+campo;
+            }
+            if(campo.equals("TPPRT")){
+                dom="TIPOPROTESTO";
                 campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);
