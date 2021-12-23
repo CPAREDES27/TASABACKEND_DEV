@@ -126,4 +126,15 @@ public class TolvasRest {
             throw new RuntimeException(e.toString());
         }
     }
+
+    @PostMapping(value = "/pdfdeclaracionjurada2", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PDFExports> PDFDeclaracionJuradaTolvas2(@RequestBody DeclaracionJurada2Imports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.PlantillaPDF(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 }

@@ -12,6 +12,7 @@ public class DeclaracionJuradaExports {
     private String centro;
     private String razonSocial;
     private String ubicacionPlanta;
+    private String observacion;
     private List<HashMap<String,Object>> detalle;
     private List<DominioExportsData> especies;
     private List<DominioExportsData> destino;
@@ -57,6 +58,13 @@ public class DeclaracionJuradaExports {
         this.ubicacionPlanta = ubicacionPlanta;
     }
 
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
 
     public List<HashMap<String, Object>> getDetalle() {
         return detalle;

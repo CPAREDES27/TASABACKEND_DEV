@@ -396,6 +396,103 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
 
 
+        PlantillaPDFDeclaracion(path, exports,detalle, ListDetalle, total);
+        Metodos exec = new Metodos();
+        pdf.setBase64(exec.ConvertirABase64(path));
+        pdf.setMensaje("Ok");
+
+        return  pdf;
+    }
+
+    public PDFExports PlantillaPDF(DeclaracionJurada2Imports imports2)throws Exception{
+        PDFExports pdf= new PDFExports();
+        String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
+        DeclaracionJuradaImports imports=new DeclaracionJuradaImports();
+        imports.setCentro(imports2.getCentro());
+        imports.setFecha(imports2.getFecha());
+
+        DeclaracionJuradaExports exports = DeclaracionJuradaTolvas(imports);
+
+        Metodos me=new Metodos();
+
+
+
+        PDFDeclaracionJuradaDetallaDto detalle=new PDFDeclaracionJuradaDetallaDto();
+        List<String[]>ListDetalle= new ArrayList<>();
+
+        ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle);
+        ListDetalle.add(PDFDeclaracionJuradaConstantes.Detalle2);
+
+        float total=0f;
+
+        // Alistar la lista de descargas
+        int indexLast = imports2.getDescargas().size() - 1;
+        imports2.getDescargas().remove(indexLast);
+
+        // Indicar los valores de la lista de descargas
+
+        for (int i=0;i<imports2.getDescargas().size(); i++){
+
+            String[]det= new String[9];
+            HashMap<String, Object> descarga = imports2.getDescargas().get(i);
+            for (Map.Entry<String, Object> entry : descarga.entrySet()) {
+                String key=entry.getKey();
+                String valor = entry.getValue().toString();
+
+                if(key.equals("INBAL")){
+                    detalle.setTolva(valor);
+                    detalle.setBalanza(valor);
+                    det[0]=detalle.getBalanza();
+                }else if(key.equals("FIDES")){
+                    String fecha=ConvertirFecha(valor);
+                    detalle.setFecha(fecha);
+                }else if(key.equals("TICKE")){
+                    detalle.setReporte(valor);
+                    det[1]=detalle.getReporte();
+                }else if(key.equals("NMEMB")){
+                    detalle.setNombreEmbarca(valor);
+                    det[2]=detalle.getNombreEmbarca();
+
+                }else if(key.equals("MREMB")){
+                    detalle.setMatricula(valor);
+                    det[3]=detalle.getMatricula();
+
+                }else if(key.equals("CNTOL")){
+                    detalle.setCantidad(valor);
+                    det[6]=detalle.getCantidad();
+
+                }else if(key.equals("PESACUMOD")){
+                    detalle.setPesoAcumulado(valor);
+                    det[7]=detalle.getPesoAcumulado();
+                    total+=Float.parseFloat(valor);
+
+                }else if(key.equals("HIDES")){
+                    String hora=Convertirhora(valor);
+                    detalle.setHoraInicio(hora);
+                    det[8]=detalle.getHoraInicio();
+                }else if(key.equals("HFDES")){
+                    String hora=Convertirhora(valor);
+                    detalle.getHoraFin();
+                    detalle.setHoraFin(hora);
+                }else if(key.equals("DSSPC")){
+                    detalle.setEspecie(valor);
+                }
+
+            }
+            det[4]=ObtenerCodEspecie();
+            det[5]=ObtenerCodDestino();
+            ListDetalle.add(det);
+        }
+
+        //Adicionando los campos que no vienen de las tablas
+        exports.setUbicacionPlanta(imports2.getUbicacion());
+        exports.setObservacion(imports2.getObservacion());
+        detalle.setTolva(imports2.getTolva());
+
+
+
+        //Agregando las cabeceras
+
 
         PlantillaPDFDeclaracion(path, exports,detalle, ListDetalle, total);
         Metodos exec = new Metodos();
@@ -558,6 +655,12 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.endText();
 
         drawCuadro(contentStream, 160, txty-15, 30, 525);
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(180, txty-27);
+        contentStream.drawString(dto.getObservacion());
+        contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 6);
