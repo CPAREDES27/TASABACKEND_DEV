@@ -9,6 +9,7 @@ public class ConsultaGeneralTablas {
     public static String CONSGENLISTBODE="ZV_FLBE";
     public static String CONSGENPESBODE="ZFLPDB";
     public static String CONSGENPUNTDES="ZFLPDG";
+    public static String CONSGENBALANZA="ZFLBAL";
     public static String CONSGENPESDESC="ZV_FLDS";  //consulta dominio, campo CDLDS
     public static String CONSGENCALENTEMP="ZFLCLT";
     public static String CONSGENCLDRTEMPFECHA="ZV_FLCP";

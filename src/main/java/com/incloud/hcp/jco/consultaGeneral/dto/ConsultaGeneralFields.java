@@ -8,6 +8,7 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENLISTBODE={"CDBOD", "DSBOD", "CAPES"};
     public static String[] CONSGENPESBODE={"CDBOD", "CNPCM"};
     public static String[] CONSGENPUNTDES={"CDPDG", "CDTPD", "DSPDG"};
+    public static String[] CONSGENBALANZA={"CDBAL", "DSBAL", "INBAL"};
     public static String[] CONSGENPESDESC={"CDTPC", "CDPTA", "DSPTA", "CDSPC", "DSSPC", "CNPDS", "CDPDG", "CDLDS", "FIDES", "HIDES", "FFDES", "HFDES",
             "FECCONMOV", "ESDES", "NROPEDI", "DOC_MB1B", "DOC_MIGO", "DOC_MFBF", "SALDO", "TICKE", "CNPCM", "TPDES", "PESACUMOD", "MANDT"};
     public static String[] CONSGENCALENTEMP={"FHCAL"};

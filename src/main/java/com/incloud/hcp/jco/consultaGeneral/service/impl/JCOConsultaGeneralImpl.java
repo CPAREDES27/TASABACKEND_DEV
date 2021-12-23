@@ -409,6 +409,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENPUNTDES":
                 tabla = ConsultaGeneralTablas.CONSGENPUNTDES;
                 break;
+            case "CONSGENBALANZA":
+                tabla = ConsultaGeneralTablas.CONSGENBALANZA;
+                break;
             case "CONSGENPESDESC":
                 tabla = ConsultaGeneralTablas.CONSGENPESDESC;
                 break;
@@ -529,6 +532,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENPUNTDES":
                 fields = ConsultaGeneralFields.CONSGENPUNTDES;
+                break;
+            case "CONSGENBALANZA":
+                fields = ConsultaGeneralFields.CONSGENBALANZA;
                 break;
             case "CONSGENPESDESC":
                 fields = ConsultaGeneralFields.CONSGENPESDESC;
@@ -667,6 +673,11 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENPUNTDES":
                 condicion = ConsultaGeneralOptions.CONSGENPUNTDES + parametro1 + "'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENBALANZA":
+                condicion = ConsultaGeneralOptions.CONSGENBALANZA + parametro1 + "'";
                 opt.setWa(condicion);
                 options.add(opt);
                 break;

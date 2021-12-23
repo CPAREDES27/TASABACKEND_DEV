@@ -12,6 +12,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENPESBODE="NRMAR = '";
     public static String CONSGENPESBODE_="' AND NREVN  = '";
     public static String CONSGENPUNTDES="ESREG = 'S' AND CDPTA = '";
+    public static String CONSGENBALANZA="ESREG = 'S' AND CDPTA = '";
     public static String CONSGENPESDESC="NRDES = '";
     public static String CONSGENCALENTEMP="FHCAL LIKE '";
     public static String CONSGENCLDRTEMPFECHA="FHCAL BETWEEN '";
