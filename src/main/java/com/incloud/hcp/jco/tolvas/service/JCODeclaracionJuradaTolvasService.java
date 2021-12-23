@@ -9,5 +9,5 @@ public interface JCODeclaracionJuradaTolvasService {
 
     DeclaracionJuradaExports DeclaracionJuradaTolvas(DeclaracionJuradaImports imports)throws Exception;
     PDFExports PlantillaPDF(DeclaracionJuradaImports imports)throws Exception;
-    PDFExports PlantillaPDF(DeclaracionJurada2Imports imports)throws Exception;
+    PDFExports PlantillaPDF2(DeclaracionJurada2Imports imports)throws Exception;
 }

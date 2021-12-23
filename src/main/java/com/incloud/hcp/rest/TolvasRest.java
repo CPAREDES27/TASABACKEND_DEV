@@ -131,7 +131,7 @@ public class TolvasRest {
     public ResponseEntity<PDFExports> PDFDeclaracionJuradaTolvas2(@RequestBody DeclaracionJurada2Imports imports) {
 
         try {
-            return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.PlantillaPDF(imports))
+            return Optional.ofNullable(this.jcoDeclaracionJuradaTolvasService.PlantillaPDF2(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

@@ -404,7 +404,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         return  pdf;
     }
 
-    public PDFExports PlantillaPDF(DeclaracionJurada2Imports imports2)throws Exception{
+    public PDFExports PlantillaPDF2(DeclaracionJurada2Imports imports2)throws Exception{
         PDFExports pdf= new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         DeclaracionJuradaImports imports=new DeclaracionJuradaImports();
