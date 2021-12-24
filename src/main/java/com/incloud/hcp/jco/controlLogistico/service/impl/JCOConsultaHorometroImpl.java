@@ -2,14 +2,12 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOConsultaHorometroService;
-import com.incloud.hcp.jco.gestionpesca.dto.HorometroExport;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +25,7 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_HORO);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_HORO_BTP);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());

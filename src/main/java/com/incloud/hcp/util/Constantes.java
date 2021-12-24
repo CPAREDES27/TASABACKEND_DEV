@@ -30,11 +30,11 @@ public class Constantes {
     public static String ZFL_RFC_LECT_MAES_VIVER="ZFL_RFC_LECT_MAES_VIVER";
     public static String ZFL_RFC_DISTR_FLOTA="ZFL_RFC_DISTR_FLOTA";
     public static String ZFL_RFC_VALE_VIVER_BTP ="ZFL_RFC_VALE_VIVER_BTP    ";
-    public static String ZFL_RFC_CONT_COMB_MARE="ZFL_RFC_CONT_COMB_MARE";
+    public static String ZFL_RFC_CONT_COMB_MARE_BTP ="ZFL_RFC_CONT_COMB_MARE_BTP";
     public static String ZFL_RFC_COMBUS_VEDA="ZFL_RFC_COMBUS_VEDA";
     public static String ZFL_RFC_REG_COMB_MARE_SAP="ZFL_RFC_REG_COMB_MARE_SAP";
     public static String ZFL_RFC_COMB_CONS_MODIF_DATOS="ZFL_RFC_COMB_CONS_MODIF_DATOS";
-    public static String ZFL_RFC_CONS_HORO="ZFL_RFC_CONS_HORO";
+    public static String ZFL_RFC_CONS_HORO_BTP ="ZFL_RFC_CONS_HORO_BTP";
     public static String ZFL_RFC_GEST_ACEITES="ZFL_RFC_GEST_ACEITES";
     public static String ZFL_RFC_APP_MAESTROS="ZFL_RFC_APP_MAESTROS";
     public static String ZFL_RFC_GET_LISTAED="ZFL_RFC_GET_LISTAED";
