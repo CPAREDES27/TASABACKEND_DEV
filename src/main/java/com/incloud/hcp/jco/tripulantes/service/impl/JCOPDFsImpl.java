@@ -1471,15 +1471,18 @@ public class JCOPDFsImpl implements JCOPDFsService {
             importx.setValue("IP_CANTI", imports.getIp_canti());
             importx.setValue("IP_PERNR", imports.getIp_pernr());
 
-            List<Options> options = imports.getT_opcion();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            List<MaestroOptions> options = imports.getT_opcion();
+            List<HashMap<String, Object>> listOptions = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
+                MaestroOptions o = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
 
-                record.put("DATA", o.getData());
-                tmpOptions.add(record);
+                record.put("DATA", o.getWa());
+                listOptions.add(record);
             }
+
+            Metodos me=new Metodos();
+            List<HashMap<String, Object>> tmpOptions =me.ValidarOptions(imports.getT_opcion(),imports.getOpcionkeys(),"DATA");
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
 

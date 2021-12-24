@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestoNuevoImport;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosExports;
@@ -41,21 +42,25 @@ public class JCOProtestosImpl implements JCOProtestosService {
             importx.setValue("IP_CANTI", imports.getIp_canti());
             importx.setValue("IP_PERNR", imports.getIp_pernr());
 
-            List<Options> options = imports.getT_opcion();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
+            List<MaestroOptions> options = imports.getT_opcion();
+            List<HashMap<String, Object>> listOptions = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
+                MaestroOptions o = options.get(i);
                 HashMap<String, Object> record = new HashMap<String, Object>();
 
-                record.put("DATA", o.getData());
-                logger.error(o.getData());
-                tmpOptions.add(record);
+                record.put("DATA", o.getWa());
+                logger.error(o.getWa());
+                listOptions.add(record);
             }
+
+            Metodos me=new Metodos();
+            List<HashMap<String, Object>> tmpOptions =me.ValidarOptions(imports.getT_opcion(),imports.getOpcionkeys(),"DATA");
 
             JCoParameterList export = stfcConnection.getExportParameterList();
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
+
             exec.setTable(tables, Tablas.T_OPCION,tmpOptions);
             if(imports.getIp_tope().equals("C")){
                 exec.setTable(tables, Tablas.T_BAPRT,imports.getT_baprt());

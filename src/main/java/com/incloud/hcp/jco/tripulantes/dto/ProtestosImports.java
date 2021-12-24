@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.tripulantes.dto;
 
+import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 
@@ -14,9 +16,18 @@ public class ProtestosImports {
     private String ip_pernr;
     private String[] fieldst_baprt;
     private String[] fieldst_textos;
-    private List<Options> t_opcion;
+    private List<MaestroOptions> t_opcion;
+    private List<MaestroOptionsKey> opcionkeys;
     private List<HashMap<String, Object>> t_baprt;
     private List<HashMap<String, Object>> t_textos;
+
+    public List<MaestroOptionsKey> getOpcionkeys() {
+        return opcionkeys;
+    }
+
+    public void setOpcionkeys(List<MaestroOptionsKey> opcionkeys) {
+        this.opcionkeys = opcionkeys;
+    }
 
     public List<HashMap<String, Object>> getT_baprt() {
         return t_baprt;
@@ -82,11 +93,11 @@ public class ProtestosImports {
         this.fieldst_textos = fieldst_textos;
     }
 
-    public List<Options> getT_opcion() {
+    public List<MaestroOptions> getT_opcion() {
         return t_opcion;
     }
 
-    public void setT_opcion(List<Options> t_opcion) {
+    public void setT_opcion(List<MaestroOptions> t_opcion) {
         this.t_opcion = t_opcion;
     }
 }
