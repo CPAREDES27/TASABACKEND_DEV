@@ -113,6 +113,53 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
             List<HashMap<String, Object>> estcce = new ArrayList<>();
             List<HashMap<String, Object>> estcep = new ArrayList<>();
 
+            HashMap<String, Object> valuesEstcceZarpe = new HashMap<>();
+            HashMap<String, Object> valuesEstcceArrbpto = new HashMap<>();
+            HashMap<String, Object> valuesEstcceDesc = new HashMap<>();
+            HashMap<String, Object> valuesEstcep = new HashMap<>();
+
+            // Mapeao de ST_CCP en ESTCCE
+            for (Map.Entry<String, Object> entry: imports.getEstcmap().entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                int indexSuffix = 0;
+                String suffix = "";
+
+                if (key.endsWith("_ZARPE")) {
+                    suffix = "_ZARPE";
+                } else if (key.endsWith("_ARRBPTO")) {
+                    suffix = "_ARRBPTO";
+                } else if (key.endsWith("_DSCG")) {
+                    suffix = "_DSCG";
+                }
+
+                indexSuffix = key.indexOf(suffix);
+                String fieldName = key.substring(0, indexSuffix);
+
+                switch (suffix) {
+                    case "_ZARPE":
+                        valuesEstcceZarpe.put(fieldName, value);
+                        break;
+                    case "_ARRBPTO":
+                        valuesEstcceArrbpto.put(fieldName, value);
+                        break;
+                    case "_DSCG":
+                        valuesEstcceDesc.put(fieldName, value);
+                        break;
+                    default:
+                        valuesEstcep.put(key, value);
+                        break;
+                }
+            }
+
+            estcce.add(valuesEstcceZarpe);
+            estcce.add(valuesEstcceArrbpto);
+            estcce.add(valuesEstcceDesc);
+            estcep.add(valuesEstcep);
+
+            // Mapeo de ST_CEP en ESTCEP
+
+            /*
             HashMap<String, Object> estcceFromMap = new HashMap<>();
             HashMap<String, Object> estcepFromMap = new HashMap<>();
 
@@ -133,6 +180,7 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
 
             estcce.add(estcceFromMap);
             estcep.add(estcepFromMap);
+            */
 
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, importParams);

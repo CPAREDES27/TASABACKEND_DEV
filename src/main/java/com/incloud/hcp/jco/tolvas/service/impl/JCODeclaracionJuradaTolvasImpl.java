@@ -504,7 +504,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
     }
 
     public void PlantillaPDFDeclaracion(String path, DeclaracionJuradaExports dto, PDFDeclaracionJuradaDetallaDto detalle, List<String[]> content, float total)throws IOException {
-
+        Metodos metodos = new Metodos();
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
         page.setRotation(90);
@@ -655,13 +655,52 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.drawString(PDFDeclaracionJuradaConstantes.Observaciones);
         contentStream.endText();
 
-        drawCuadro(contentStream, 160, txty-15, 30, 525);
-
+        float fontSizeObservacion = 8;
+        int altoCuadroObservacion = 20;
+        float leading = 1.5f * fontSizeObservacion;
         contentStream.beginText();
-        contentStream.setFont(font, 8);
+        contentStream.setFont(font, fontSizeObservacion);
         contentStream.moveTextPositionByAmount(170, txty-27);
-        contentStream.drawString(dto.getObservacion());
+        //contentStream.drawString(metodos.alinearTexto(dto.getObservacion(), 150));
+        int numCaracteres = 145;
+        if (dto.getObservacion() != "") {
+            int cursor = 0;
+            String textFormat = "";
+            int textLenght = dto.getObservacion().length();
+            System.out.println(textLenght);
+
+            while (cursor <= textLenght) {
+                String renglon = "";
+
+                if ((cursor + numCaracteres) <= textLenght) {
+
+                    renglon = dto.getObservacion().substring(cursor, cursor + numCaracteres);
+                    if (renglon.startsWith(" ")) {
+                        renglon = renglon.substring(1);
+                    }
+                    //textFormat += renglon + "\n";
+                    contentStream.showText(renglon);
+                    contentStream.newLineAtOffset(0, -leading);
+                    altoCuadroObservacion += fontSizeObservacion + 3;
+                } else {
+                    renglon = dto.getObservacion().substring(cursor, textLenght);
+                    if (renglon.startsWith(" ")) {
+                        renglon = renglon.substring(1);
+                    }
+                    //textFormat += renglon;
+                    contentStream.showText(renglon);
+                }
+                cursor += numCaracteres;
+            }
+        } else {
+            altoCuadroObservacion = 30;
+        }
+
         contentStream.endText();
+
+        drawCuadro(contentStream, 160, txty-15, altoCuadroObservacion, 525);
+
+        txty -= altoCuadroObservacion;
 
         contentStream.beginText();
         contentStream.setFont(bold, 6);
