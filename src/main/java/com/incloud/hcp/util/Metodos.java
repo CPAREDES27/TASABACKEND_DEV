@@ -1840,6 +1840,35 @@ public class Metodos {
     }
 
 
+    public String alinearTexto(String text, int numCaracteres) {
+        int cursor = 0;
+        String textFormat = "";
+        int textLenght = text.length();
+        System.out.println(textLenght);
 
+        while (cursor <= textLenght){
+            String renglon = "";
+            System.out.println(cursor);
+
+            if ((cursor + numCaracteres) <= textLenght) {
+
+                renglon = text.substring(cursor, cursor + numCaracteres);
+                if (renglon.startsWith(" ")) {
+                    renglon = renglon.substring(1);
+                }
+                textFormat += renglon + "\n";
+            } else {
+                int finTexto = textLenght - cursor;
+                renglon = text.substring(cursor, textLenght);
+                if (renglon.startsWith(" ")) {
+                    renglon = renglon.substring(1);
+                }
+                textFormat += renglon;
+            }
+            cursor += numCaracteres;
+        }
+
+        return textFormat;
+    }
 
 }

@@ -659,7 +659,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
-        contentStream.moveTextPositionByAmount(180, txty-27);
+        contentStream.moveTextPositionByAmount(170, txty-27);
         contentStream.drawString(dto.getObservacion());
         contentStream.endText();
 
