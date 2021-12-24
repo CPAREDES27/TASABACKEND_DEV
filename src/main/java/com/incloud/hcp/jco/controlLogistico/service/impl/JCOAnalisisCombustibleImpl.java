@@ -2,10 +2,7 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
-import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
@@ -13,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,7 +27,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
 
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONT_COMB_MARE);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONT_COMB_MARE_BTP);
             logger.error("stfcConnection: "+stfcConnection.toString());
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
