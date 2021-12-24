@@ -499,7 +499,7 @@ public class Metodos {
             fields= new String[]{"CDINC", "DSINC"};
         }
         else if (table.equals("CLASEAVISOMANT")){
-            fields= new String[]{"CDGRE","DSGRE"};
+            fields= new String[]{"QMART","QMARTX"};
         }
         else if (table.equals("GRUPOEMPRESA")){
             fields= new String[]{"QMART", "QMARTX"};
