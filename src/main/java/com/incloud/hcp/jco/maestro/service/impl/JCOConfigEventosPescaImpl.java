@@ -4,12 +4,16 @@ import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOConfigEventosPesca;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public EventosPesca2Exports ListarEventoPesca(EventosPesca2Imports imports) throws Exception {
         EventosPesca2Exports dto = new EventosPesca2Exports();
@@ -73,19 +77,17 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
 
             HashMap<String, Object> ST_CMAP = new HashMap<>();
             for (Map.Entry<String, Object> entry: ST_CCP.entrySet()) {
-                String key = entry.getKey() + "_CCP";
+                String key = entry.getKey();
                 Object value = entry.getValue();
                 ST_CMAP.put(key, value);
             }
 
             for (Map.Entry<String, Object> entry: ST_CEP.entrySet()) {
-                String key = entry.getKey() + "_CEP";
+                String key = entry.getKey();
                 Object value = entry.getValue();
                 ST_CMAP.put(key, value);
             }
 
-            dto.setSt_cep(ST_CEP);
-            dto.setSt_ccp(ST_CCP);
             dto.setSt_cmap(ST_CMAP);
             dto.setMensaje("Ok");
 
@@ -100,6 +102,7 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
     public Mensaje EditarEventosPesca(EventosPescaEdit2Imports imports) throws Exception {
         Mensaje msj = new Mensaje();
         try {
+            Metodos metodos=new Metodos();
             HashMap<String, Object> importParams = new HashMap<String, Object>();
             importParams.put("I_FLAG", "S");
             importParams.put("P_USER", imports.getP_user());
@@ -118,7 +121,7 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
             HashMap<String, Object> valuesEstcceDesc = new HashMap<>();
             HashMap<String, Object> valuesEstcep = new HashMap<>();
 
-            // Mapeao de ST_CCP en ESTCCE
+            // Mapeao de parámetros ZFLCEP y ZFLCCE
             for (Map.Entry<String, Object> entry: imports.getEstcmap().entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
@@ -152,41 +155,64 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
                 }
             }
 
+            // Eliminación de cmmpos
+            String[] fieldsToRemoveCCP = {"MAKTX", "DESC_CDTEV"};
+            String[] fieldsToRemoveCEP = {"DSSPC", "LTEXT", "EKNAM", "MAKTX", "BEZEI"};
+
+            for (String fieldCCP: fieldsToRemoveCCP) {
+                if (valuesEstcceArrbpto.containsKey(fieldCCP)) {
+                     valuesEstcceArrbpto.remove(fieldCCP);
+                }
+                if (valuesEstcceZarpe.containsKey(fieldCCP)) {
+                    valuesEstcceZarpe.remove(fieldCCP);
+                }
+                if (valuesEstcceDesc.containsKey(fieldCCP)) {
+                    valuesEstcceDesc.remove(fieldCCP);
+                }
+            }
+
+            for (String fieldCEP: fieldsToRemoveCEP) {
+                valuesEstcep.remove(fieldCEP);
+            }
+
             estcce.add(valuesEstcceZarpe);
             estcce.add(valuesEstcceArrbpto);
             estcce.add(valuesEstcceDesc);
             estcep.add(valuesEstcep);
 
-            // Mapeo de ST_CEP en ESTCEP
-
-            /*
-            HashMap<String, Object> estcceFromMap = new HashMap<>();
-            HashMap<String, Object> estcepFromMap = new HashMap<>();
-
-            for (Map.Entry<String, Object> entry: imports.getEstcmap().entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-
-                if (key.endsWith("_CEP")) {
-                    int indexSuffix = key.indexOf("_CEP");
-                    String keyOriginal = key.substring(0, indexSuffix);
-                    estcepFromMap.put(keyOriginal, value);
-                } else if (key.endsWith("_CCP")) {
-                    int indexSuffix = key.indexOf("_CCP");
-                    String keyOriginal = key.substring(0, indexSuffix);
-                    estcceFromMap.put(keyOriginal, value);
-                }
+            String infoArrbpto="";
+            String infoZarpe="";
+            String infoDesc="";
+            String infocep="";
+            for (Map.Entry<String, Object> entry: valuesEstcceArrbpto.entrySet()) {
+                infoArrbpto+=entry.getKey()+": "+entry.getValue().toString() + "\n";
             }
-
-            estcce.add(estcceFromMap);
-            estcep.add(estcepFromMap);
-            */
+            for (Map.Entry<String, Object> entry: valuesEstcceZarpe.entrySet()) {
+                infoZarpe+=entry.getKey()+": "+entry.getValue().toString() + "\n";;
+            }
+            for (Map.Entry<String, Object> entry: valuesEstcceDesc.entrySet()) {
+                infoDesc+=entry.getKey()+": "+entry.getValue().toString() + "\n";;
+            }
+            for (Map.Entry<String, Object> entry: valuesEstcep.entrySet()) {
+                infocep+=entry.getKey()+": "+entry.getValue().toString() + "\n";;
+            }
+            logger.info("ARRIBO ESTCCE: "+infoArrbpto);
+            logger.info("ZARPE ESTCCE: "+infoZarpe);
+            logger.info("DESCARGA ESTCCE: "+infoDesc);
+            logger.info("ESTCEP:"+infocep);
 
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, importParams);
             exec.setTable(jcoTables, Tablas.ESTCCE, estcce);
             exec.setTable(jcoTables, Tablas.ESTCEP, estcep);
             function.execute(destination);
+
+            /*
+            JCoTable T_MENSAJE = jcoTables.getTable(Tablas.T_MENSAJE);
+            List<HashMap<String, Object>> tMensaje = metodos.ListarObjetos(T_MENSAJE);
+            logger.info("Mensaje del RFC: " + tMensaje.get(0).get("DSMIN") + ", Clase de mensaje: " + tMensaje.get(0).get("CMIN") + ", Código de mensaje: " + tMensaje.get(0).get("CDMIN"));
+             */
+
             msj.setMensaje("Ok");
 
         } catch (Exception e) {
