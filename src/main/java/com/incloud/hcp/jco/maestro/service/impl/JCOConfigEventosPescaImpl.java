@@ -71,8 +71,22 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
              */
             ST_CEP = ListarST_CEP.get(0);
 
+            HashMap<String, Object> ST_CMAP = new HashMap<>();
+            for (Map.Entry<String, Object> entry: ST_CCP.entrySet()) {
+                String key = entry.getKey() + "_CCP";
+                Object value = entry.getValue();
+                ST_CMAP.put(key, value);
+            }
+
+            for (Map.Entry<String, Object> entry: ST_CEP.entrySet()) {
+                String key = entry.getKey() + "_CEP";
+                Object value = entry.getValue();
+                ST_CMAP.put(key, value);
+            }
+
             dto.setSt_cep(ST_CEP);
             dto.setSt_ccp(ST_CCP);
+            dto.setSt_cmap(ST_CMAP);
             dto.setMensaje("Ok");
 
         } catch (Exception e) {
@@ -98,8 +112,23 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
 
             List<HashMap<String, Object>> estcce = new ArrayList<>();
             List<HashMap<String, Object>> estcep = new ArrayList<>();
-            estcce.add(imports.getEstcce());
-            estcep.add(imports.getEstcep());
+
+            HashMap<String, Object> estcceFromMap = new HashMap<>();
+            HashMap<String, Object> estcepFromMap = new HashMap<>();
+
+            for (Map.Entry<String, Object> entry: imports.getEstcmap().entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                if (key.endsWith("_CEP")) {
+                    estcepFromMap.put(key, value);
+                } else if (key.endsWith("_CCP")) {
+                    estcceFromMap.put(key, value);
+                }
+            }
+
+            estcce.add(estcceFromMap);
+            estcep.add(estcepFromMap);
 
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, importParams);
