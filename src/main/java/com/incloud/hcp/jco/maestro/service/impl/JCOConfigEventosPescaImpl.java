@@ -121,9 +121,13 @@ public class JCOConfigEventosPescaImpl implements JCOConfigEventosPesca {
                 Object value = entry.getValue();
 
                 if (key.endsWith("_CEP")) {
-                    estcepFromMap.put(key, value);
+                    int indexSuffix = key.indexOf("_CEP");
+                    String keyOriginal = key.substring(0, indexSuffix);
+                    estcepFromMap.put(keyOriginal, value);
                 } else if (key.endsWith("_CCP")) {
-                    estcceFromMap.put(key, value);
+                    int indexSuffix = key.indexOf("_CCP");
+                    String keyOriginal = key.substring(0, indexSuffix);
+                    estcceFromMap.put(keyOriginal, value);
                 }
             }
 
