@@ -315,9 +315,10 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return dto;
     }
-    public MensajeDto crearMareaPropios(MarEventoDtoImport imports) throws Exception{
+    public ArrayList<MensajeDto> crearMareaPropios(MarEventoDtoImport imports) throws Exception{
 
-        MensajeDto msj= new MensajeDto();
+        ArrayList<MensajeDto> mensajes = new ArrayList<MensajeDto>();
+
         try{
             HashMap<String, Object> importsSap = new HashMap<String, Object>();
             importsSap.put("P_USER", imports.getP_user());
@@ -366,23 +367,27 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
             JCoTable tableExport = jcoTables.getTable(Tablas.T_MENSAJE);
 
+
             for (int i = 0; i < tableExport.getNumRows(); i++) {
                 tableExport.setRow(i);
-
+                MensajeDto msj= new MensajeDto();
                 msj.setMANDT(tableExport.getString("MANDT"));
                 msj.setCMIN(tableExport.getString("CMIN"));
                 msj.setCDMIN(tableExport.getString("CDMIN"));
                 msj.setDSMIN(tableExport.getString("DSMIN"));
+                mensajes.add(msj);
                 //lista.add(param);
             }
 
         }catch (Exception e){
+            MensajeDto msj= new MensajeDto();
             msj.setMANDT("00");
             msj.setCMIN("Error");
             msj.setCDMIN("Exception");
             msj.setDSMIN(e.getMessage());
+            mensajes.add(msj);
         }
-        return msj;
+        return mensajes;
     }
 
     public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
