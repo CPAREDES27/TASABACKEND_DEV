@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService {
@@ -161,7 +163,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
         ControlDetalleExport ce=new ControlDetalleExport();
 
-
+        logger.error("Analisis Combus Detalles 1");
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
@@ -177,18 +179,48 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoTable tableExport2 = tables.getTable(Tablas.STR_DETF);
 
 
+
             Metodos metodo = new Metodos();
             //List<HashMap<String, Object>> data = metodo.ListarObjetos(tableExport);
             String[] fields=imports.getFields();
             List<HashMap<String, Object>> data = metodo.ObtenerListObjetos(tableExport, fields);
             List<HashMap<String, Object>> data2 = metodo.ObtenerListObjetos(tableExport2, fields);
 
-            ce.setStr_detf(data2);
-            ce.setStr_fase(data);
-            ce.setMensaje("Ok");
 
+            List<HashMap<String, Object>> Datas= new ArrayList<>();
+
+            for (int i=0; i<data.size(); i++){
+
+                HashMap<String, Object> regData=data.get(i);
+                String obcom="";
+                for(Map.Entry<String, Object> entry:data.get(i).entrySet()){
+
+                    String key=entry.getKey();
+                    String value=entry.getValue().toString();
+
+                    if(key.equals("OBCOM")){
+                        obcom= value;
+                    }
+
+                }
+
+                if(obcom.equals("")){
+                    regData.put("detail", false);
+                    regData.put("request", true);
+                }
+                if(!obcom.equals("")){
+                    regData.put("detail", true);
+                    regData.put("request", false);
+                }
+                Datas.add(regData);
+
+            }
+            ce.setStr_detf(data2);
+            ce.setStr_fase(Datas);
+            ce.setMensaje("Ok");
         }catch (Exception e){
             ce .setMensaje(e.getMessage());
+
         }
 
         return ce;
