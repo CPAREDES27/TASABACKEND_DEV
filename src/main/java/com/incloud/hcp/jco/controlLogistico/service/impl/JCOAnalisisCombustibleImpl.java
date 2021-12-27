@@ -203,15 +203,13 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                     }
 
                 }
-
                 if(obcom.equals("")){
-                    regData.put("detail", false);
-                    regData.put("request", true);
+                    regData.put("request", "sap-icon://request");
                 }
                 if(!obcom.equals("")){
-                    regData.put("detail", true);
-                    regData.put("request", false);
+                    regData.put("request", "sap-icon://detail-view");
                 }
+
                 Datas.add(regData);
 
             }
