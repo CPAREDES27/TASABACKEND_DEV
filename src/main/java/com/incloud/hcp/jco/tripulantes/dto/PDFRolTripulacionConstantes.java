@@ -39,6 +39,8 @@ public class PDFRolTripulacionConstantes {
     public static String FEFVG ="FEFVG";    //fecha fin vigencia
     public static String STEXT ="STEXT";    //descripcion
     public static String TITRP ="TITRP";    //titulo
+    public static String STELL ="STELL";    //descripcion
+
 
 
 

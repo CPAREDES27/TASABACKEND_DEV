@@ -45,6 +45,7 @@ public class PDFZarpeConstantes {
     public static String FEFVG ="FEFVG";    //fecha fin vigencia
     public static String STEXT ="STEXT";    //
     public static String NRDNI  ="NRDNI";   //numero dni
+    public static String STELL ="STELL";
 
 
     //TABLA ZATRP Campos

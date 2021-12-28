@@ -339,7 +339,7 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         float total=0f;
         for (int i=0;i<exports.getDetalle().size(); i++){
 
-            String[]det= new String[9];
+            String[]det= new String[10];
             for (Map.Entry<String, Object> entry :exports.getDetalle().get(i).entrySet()) {
                 String key=entry.getKey();
                 String valor=entry.getValue().toString();
@@ -378,8 +378,8 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
                     det[8]=detalle.getHoraInicio();
                 }else if(key.equals("HFDES")){
                     String hora=Convertirhora(valor);
-                    detalle.getHoraFin();
                     detalle.setHoraFin(hora);
+                    det[9]=detalle.getHoraFin();
                 }else if(key.equals("DSSPC")){
                     detalle.setEspecie(valor);
                 }
@@ -663,6 +663,16 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
         contentStream.moveTextPositionByAmount(170, txty-27);
         //contentStream.drawString(metodos.alinearTexto(dto.getObservacion(), 150));
         int numCaracteres = 145;
+
+        try{
+            if(dto.getObservacion()==null || dto.getObservacion().length()==0){
+                dto.setObservacion("");
+            }
+        }catch (Exception e){
+            dto.setObservacion("");
+
+        }
+
         if (dto.getObservacion() != "") {
             int cursor = 0;
             String textFormat = "";
