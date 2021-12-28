@@ -31,7 +31,7 @@ public class PDFTrimestralConstantes {
     public static String notaDos="* LA TRAMITACIÓN DE LA PRESENTE AUTORIZACIÓN ES GRATUITA.";
     public static String notaTres="* CUALQUIER QUEJA O DENUNCIA DEBERÁ COMUNICARSE EN FORMA INMEIDATA AL CAPITÁN DE PUERTO Y/O PRIMER AYUDANTE DE LA JURISDICCIÓN A LOS TELEFONOS DE ";
     public static String notaTres1="  LA RELACIÓN QUE SE ENCUENTRA EN EL DORSO DE LA DECLARACIÓN DE ARRIBO O AL SIGUIENTE CORREO ELECTRÓNICO dicapi@marina.mil.pe ";
-    public static String nota4="(DICAPI 1003 - DIRCONTROL)";
+    public static String nota4="(DICAPI 1001 - DIRCONTROL)";
     public static String certificados="CERTIFICADOS";
     public static String declaracionJurada="DECLARACIÓN JURADA";
     public static String declaracionJuradaTexto="DECLARO BAJO JURAMENTO QUE EL EQUIPAMIENTO DE SEGURIDAD Y LAS CONDICIONES DE NAVEGABILIDAD DE MI EMBARCACIÓN ESTAN EN";

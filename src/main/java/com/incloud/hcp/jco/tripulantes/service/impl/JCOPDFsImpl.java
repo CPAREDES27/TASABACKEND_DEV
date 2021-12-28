@@ -102,6 +102,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setEmergenciaTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
                 dto.setFecha(fecha);
 
+                logger.error("Fecha y hora"+ dto.getEstimadaArribo());
+
 
             }
             logger.error("RolTripulacion");
@@ -150,6 +152,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 RolTripulacion[con]=registros;
                 con++;
             }
+
+            String [][]listaOrdenada=OrdenarTripulacion(RolTripulacion);
+
+
 
             if(dto.getNombrePatron()==null){
                 dto.setNombrePatron("");
@@ -224,7 +230,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
 
 
-           PlantillaPDFZarpe(path, dto, RolTripulacion, Certificados);
+           PlantillaPDFZarpe(path, dto, listaOrdenada, Certificados);
 
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
@@ -252,9 +258,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+        contentStream.beginText();
+        contentStream.setFont(bold, 100);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(395, 198);
+        contentStream.showText("_");
+        contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(170, 790);
         contentStream.drawString(PDFZarpeConstantes.titulo);
         contentStream.endText();
@@ -634,6 +647,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(50, 40);
         contentStream.drawString(PDFZarpeConstantes.notaTres1);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(50, 30);
+        contentStream.drawString("#"+dto.getCodigoZarpe());
         contentStream.endText();
 
         logger.error("PlantillaPDF_1");
@@ -1948,7 +1967,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         }
                         if(registros[j].trim().compareTo("PATRON EP") == 0){
                            patron=registros[j];
+
                         }
+
 
                         campos++;
                     }
@@ -2057,8 +2078,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+
+
         contentStream.beginText();
         contentStream.setFont(bold, 12);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(180, 770);
         contentStream.drawString(PDFZarpeTravesiaConstantes.titulo);
         contentStream.endText();
@@ -3135,6 +3159,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 if(cargo.trim().compareTo("PATRON E/P") == 0){
                     dto.setNombreCapitanPatron(T_DZATR.getString(PDFZarpeConstantes.NOMBR));
                     dto.setDni(T_DZATR.getString(PDFZarpeConstantes.NRDNI));
+                    logger.error("patron "+ dto.getNombreCapitanPatron());
+                    logger.error("dni "+ dto.getDni());
                 }
             }
             if(dto.getNombreCapitanPatron()==null){
@@ -3239,10 +3265,19 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         contentStream.beginText();
+        contentStream.setFont(bold, 190);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(40, 790);
+        contentStream.showText("_____");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(bold, 10);
+        contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFTrimestralConstantes.titulo);
         contentStream.endText();
+
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -6216,4 +6251,31 @@ public class JCOPDFsImpl implements JCOPDFsService {
         }
     }
 
+    public String[][] OrdenarTripulacion(String[][]rolTripulacion)throws Exception{
+
+        String[][]listaOrdenada=new String[rolTripulacion.length][4];
+
+        listaOrdenada[0]=rolTripulacion[0];
+
+        String [] cargos={"CAPITAN DE NAVEGACION","PATRON EP","SEGUNDO PATRON","INGENIERO DE MAQUINAS","MOTORISTA","SEGUNDO MOTORISTA","PANGUERO","WINCHERO","COCINERO", "TRIPULANTE EP",""};
+
+
+            int icargo=0;
+            int con=1;
+
+            for(int x=0;x<cargos.length;x++){
+
+                for(int i=1;i<rolTripulacion.length;i++){
+
+                    if(rolTripulacion[i][3].equals(cargos[x])){
+                        rolTripulacion[con]=rolTripulacion[i];
+                        con++;
+                    }
+
+               }
+
+            }
+
+        return rolTripulacion;
+    }
 }
