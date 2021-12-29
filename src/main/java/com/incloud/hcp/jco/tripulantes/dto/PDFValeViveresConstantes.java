@@ -56,7 +56,7 @@ public class PDFValeViveresConstantes {
     public static String FFTVS="FFTVS";	//FECHA SEGUNDO VALE
     public static String NMPER="NMPER";	//NOMBRE DE PERSONAL
     public static String OBVVI="OBVVI";	//COMENTARIOS
-
+    public static String descripcionViveres = "RACIONES DE VIVERES P/EMBARCACIONES 2";
 
 
 
@@ -65,5 +65,7 @@ public class PDFValeViveresConstantes {
     public static String CNRAC="CNRAC";	//TOTAL RACIONES
     public static String CUSUM="CUSUM";	//COSTO UNITARIO
     public static String QTSUM="QTSUM";	//COSTO TOTAL
+    public static String OBPVA="OBPVA";	//COMENTARIO
+
 
 }

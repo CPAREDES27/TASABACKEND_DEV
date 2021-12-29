@@ -4535,6 +4535,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String codAlm=ObtenerCodAlmacen(dto.getAlmacen(), imports.getP_user());
             dto.setAlmacen(codAlm);
 
+
+            //actualizando fechas si encuentra otro descripcion de vale diferente a "RACIONES DE VIVERES P/EMBARCACIONES 2"
+            String []fechas=new String[detalle.size()];
+
+            for(int i=0;i<detalle.size();i++) {
+                if (!detalle.get(i).getDescripcion().trim().equals(PDFValeViveresConstantes.descripcionViveres.trim())) {
+                    String fechaInicial=dto.getFechas()[0];
+                    fechas[i]=fechaInicial;
+                }else{
+                    String fecha=dto.getFechas()[i];
+                    fechas[i]=fecha;
+                }
+            }
+            dto.setFechas(fechas);
+
             PantillaPDFValeViveres(path, dto, detalle);
 
             Metodos exec = new Metodos();
@@ -4837,13 +4852,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
         int y=560;
         for(int i=0; i<detalle.size(); i++){
 
+
+
+            PDFValeVivereDetalleDto detalleDto=detalle.get(i);
+
+
             contentStream.beginText();
             contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(25, y);
             contentStream.showText(dto.getFechas()[i]);
             contentStream.endText();
-
-            PDFValeVivereDetalleDto detalleDto=detalle.get(i);
 
             contentStream.beginText();
             contentStream.setFont(font, 7.5f);
@@ -4871,8 +4889,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             contentStream.beginText();
             contentStream.setFont(font, 7.5f);
-            contentStream.moveTextPositionByAmount(420, y);
-            contentStream.showText(String.valueOf(dto.getComentario()));
+            contentStream.moveTextPositionByAmount(410, y);
+            contentStream.showText(String.valueOf(detalleDto.getComentario()));
             contentStream.endText();
 
             y-=20;
@@ -5176,7 +5194,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         S_DATA.setRow(0);
-        dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
+        //dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
         dto.setCocinero(S_DATA.getString(PDFValeViveresConstantes.NMPER));
         dto.setCentro(S_DATA.getString(PDFValeViveresConstantes.WERKS));
         dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.CDALM));
@@ -5247,7 +5265,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         for(int i=0; i<S_POSICION.getNumRows(); i++){
 
-            S_POSICION.setRow(0);
+            S_POSICION.setRow(i);
 
             PDFValeVivereDetalleDto dto=new PDFValeVivereDetalleDto();
 
@@ -5256,6 +5274,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             int raciones=Integer.parseInt(S_POSICION.getString(PDFValeViveresConstantes.CNRAC));
 
             dto.setDescripcion(S_POSICION.getString(PDFValeViveresConstantes.DSSUM));
+            dto.setComentario(S_POSICION.getString(PDFValeViveresConstantes.OBPVA));
             dto.setCostoUnitario(costoUnit);
             dto.setTotal(total);
             dto.setRaciones(raciones);
