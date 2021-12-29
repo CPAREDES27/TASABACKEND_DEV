@@ -4516,6 +4516,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             List<PDFValeVivereDetalleDto>detalle=PosiViveres(imports.getNumValeVivere(), imports.getP_user());
 
+            logger.error("detalle.size: "+detalle.size());
             int totalRaciones=0;
             float totalCosto=0;
 
@@ -4832,34 +4833,26 @@ public class JCOPDFsImpl implements JCOPDFsService {
         drawTableCabeceraValeViveres(page, contentStream,590, 20, PDFValeViveresConstantes.cabecerasTabla);
 
 
-        contentStream.beginText();
-        contentStream.setFont(font, 7.5f);
-        contentStream.moveTextPositionByAmount(25, 560);
-        contentStream.showText(dto.getFechaValeUno());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(font, 7.5f);
-        contentStream.moveTextPositionByAmount(25, 540);
-        contentStream.showText(dto.getFechaValeDos());
-        contentStream.endText();
-
 
         int y=560;
         for(int i=0; i<detalle.size(); i++){
 
-
+            contentStream.beginText();
+            contentStream.setFont(font, 7.5f);
+            contentStream.moveTextPositionByAmount(25, y);
+            contentStream.showText(dto.getFechas()[i]);
+            contentStream.endText();
 
             PDFValeVivereDetalleDto detalleDto=detalle.get(i);
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(95, y);
             contentStream.showText(String.valueOf(detalleDto.getRaciones()));
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(120, y);
             contentStream.showText(String.valueOf(detalleDto.getCostoUnitario()));
             contentStream.endText();
@@ -4871,14 +4864,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(360, y);
             contentStream.showText(String.valueOf(detalleDto.getTotal()));
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
-            contentStream.moveTextPositionByAmount(450, y);
+            contentStream.setFont(font, 7.5f);
+            contentStream.moveTextPositionByAmount(420, y);
             contentStream.showText(String.valueOf(dto.getComentario()));
             contentStream.endText();
 
@@ -5199,12 +5192,37 @@ public class JCOPDFsImpl implements JCOPDFsService {
         dto.setNombreEmbarcacion(S_DATA.getString(PDFValeViveresConstantes.NMEMB));
         dto.setCodigoProveeduria(S_DATA.getString(PDFValeViveresConstantes.CDPVE));
         dto.setRazonSocialDos(S_DATA.getString(PDFValeViveresConstantes.NAME2));
-        dto.setFechaValeUno(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
-        dto.setFechaValeDos(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
+        dto.setFechaInicio(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
+        dto.setFechaFin(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
 
-
+        dto.setFechas(ObtenerFechas(dto.getFechaInicio(), dto.getFechaFin()));
 
         return dto;
+    }
+    public String[] ObtenerFechas(String fechaInicio, String fechaFin){
+
+        String[] fi=fechaInicio.split("/");
+        String[] ff=fechaFin.split("/");
+
+        int dia=Integer.parseInt(fi[0]);
+        int dif=Integer.parseInt(ff[0])-Integer.parseInt(fi[0]);
+
+        logger.error("dia: "+dia);
+        logger.error("dif: "+dif);
+
+        String mesAño="/"+fi[1]+"/"+fi[2];
+
+        int dias=dif+1;
+
+        String[]fechas=new String[dias];
+
+        for(int i=0; i<dias;i++){
+
+            fechas[i]=dia+mesAño;
+            dia++;
+            logger.error("fechas["+i+"]: "+fechas[i]);
+        }
+        return fechas;
     }
 
     public List<PDFValeVivereDetalleDto> PosiViveres(String numVivere, String p_user)throws Exception{
