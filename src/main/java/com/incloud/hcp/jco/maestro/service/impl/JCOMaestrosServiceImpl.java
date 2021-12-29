@@ -553,6 +553,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                     rowcount="";
                 }
                 logger.error("AyudasBusqueda TABLA= " + tabla);
+
+                String order=BuscarOrder(importsParam.getNombreAyuda());
                 //setear mapeo de parametros import
                 HashMap<String, Object> imports = new HashMap<String, Object>();
                 imports.put("QUERY_TABLE", tabla);
@@ -561,7 +563,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 imports.put("ROWSKIPS", "");
                 imports.put("ROWCOUNT", rowcount);
                 imports.put("P_USER", importsParam.getP_user());
-                imports.put("P_ORDER", "");
+                imports.put("P_ORDER", order);
                 logger.error("AyudasBusqueda_2");
                 //setear mapeo de tabla options
 
@@ -764,6 +766,15 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return fields;
     }
 
+    public String BuscarOrder(String nombreAyuda){
+        String order="";
+
+        if(nombreAyuda.equals("BSQTEMPORADA")){
+            order="CDPCN DESCENDING";
+        }
+
+        return order;
+    }
     public List<MaestroOptions> BuscarOptions(String nombreAyuda){
 
         List<MaestroOptions> options= new ArrayList<>();

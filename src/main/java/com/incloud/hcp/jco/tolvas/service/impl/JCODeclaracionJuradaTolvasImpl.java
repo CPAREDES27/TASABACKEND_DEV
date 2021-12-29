@@ -712,51 +712,116 @@ public class JCODeclaracionJuradaTolvasImpl implements JCODeclaracionJuradaTolva
 
         txty -= altoCuadroObservacion;
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 6);
-        contentStream.moveTextPositionByAmount(40, txty-60);
-        contentStream.drawString(PDFDeclaracionJuradaConstantes.Especies);
-        contentStream.endText();
+        int y;
 
-        int y =txty-75;
-        for(int i=0; i<dto.getEspecies().size();i++){
+        if(txty-75<200) {
+            contentStream.close();
+            page = new PDPage(PDRectangle.A4);
+            page.setRotation(90);
+            document.addPage(page);
+            pageSize = page.getMediaBox();
+            pageWidth = pageSize.getWidth();
 
-            DominioExportsData d=dto.getEspecies().get(i);
+            contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.OVERWRITE, false);
+
+            contentStream.transform(new Matrix(0, 1, -1, 0, pageWidth, 0));
+
+            txty=550;
+            y=txty-25;
+            contentStream.beginText();
+            contentStream.setFont(bold, 6);
+            contentStream.moveTextPositionByAmount(40, txty);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Especies);
+            contentStream.endText();
+
+
+            for(int i=0; i<dto.getEspecies().size();i++){
+
+                DominioExportsData d=dto.getEspecies().get(i);
+
+                contentStream.beginText();
+                contentStream.setFont(bold, 6);
+                contentStream.moveTextPositionByAmount(40, y);
+                contentStream.drawString(d.getId() + " "+d.getDescripcion());
+                contentStream.endText();
+                y-=8;
+            }
+            contentStream.beginText();
+            contentStream.setFont(bold, 6);
+            contentStream.moveTextPositionByAmount(40, y-10);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Especificar);
+            contentStream.endText();
 
             contentStream.beginText();
             contentStream.setFont(bold, 6);
-            contentStream.moveTextPositionByAmount(40, y);
-            contentStream.drawString(d.getId() + " "+d.getDescripcion());
+            contentStream.moveTextPositionByAmount(230, txty);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Destino);
             contentStream.endText();
-            y-=8;
-        }
-        contentStream.beginText();
-        contentStream.setFont(bold, 6);
-        contentStream.moveTextPositionByAmount(40, y-10);
-        contentStream.drawString(PDFDeclaracionJuradaConstantes.Especificar);
-        contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 6);
-        contentStream.moveTextPositionByAmount(230, txty-60);
-        contentStream.drawString(PDFDeclaracionJuradaConstantes.Destino);
-        contentStream.endText();
+            y=txty-25;
+            for(int i=0; i<dto.getDestino().size();i++){
 
-        y=txty-75;
-        for(int i=0; i<dto.getDestino().size();i++){
+                DominioExportsData d=dto.getDestino().get(i);
 
-            DominioExportsData d=dto.getDestino().get(i);
+                contentStream.beginText();
+                contentStream.setFont(bold, 6);
+                contentStream.moveTextPositionByAmount(230, y);
+                contentStream.drawString(d.getId() + " "+d.getDescripcion());
+                contentStream.endText();
+                y-=8;
+            }
+            contentStream.close();
+
+
+        }else{
 
             contentStream.beginText();
             contentStream.setFont(bold, 6);
-            contentStream.moveTextPositionByAmount(230, y);
-            contentStream.drawString(d.getId() + " "+d.getDescripcion());
+            contentStream.moveTextPositionByAmount(40, txty-60);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Especies);
             contentStream.endText();
-            y-=8;
+
+             y =txty-75;
+            for(int i=0; i<dto.getEspecies().size();i++){
+
+                DominioExportsData d=dto.getEspecies().get(i);
+
+                contentStream.beginText();
+                contentStream.setFont(bold, 6);
+                contentStream.moveTextPositionByAmount(40, y);
+                contentStream.drawString(d.getId() + " "+d.getDescripcion());
+                contentStream.endText();
+                y-=8;
+            }
+            contentStream.beginText();
+            contentStream.setFont(bold, 6);
+            contentStream.moveTextPositionByAmount(40, y-10);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Especificar);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(bold, 6);
+            contentStream.moveTextPositionByAmount(230, txty-60);
+            contentStream.drawString(PDFDeclaracionJuradaConstantes.Destino);
+            contentStream.endText();
+
+            y=txty-75;
+            for(int i=0; i<dto.getDestino().size();i++){
+
+                DominioExportsData d=dto.getDestino().get(i);
+
+                contentStream.beginText();
+                contentStream.setFont(bold, 6);
+                contentStream.moveTextPositionByAmount(230, y);
+                contentStream.drawString(d.getId() + " "+d.getDescripcion());
+                contentStream.endText();
+                y-=8;
+            }
+            contentStream.close();
         }
         // drawTableCertificadosTrimestral(page, contentStream,535, 50, certificados);
 
-        contentStream.close();
+
         document.save(path);
         document.close();
     }
