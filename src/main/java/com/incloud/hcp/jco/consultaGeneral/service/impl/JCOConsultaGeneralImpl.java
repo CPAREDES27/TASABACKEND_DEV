@@ -1006,7 +1006,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             MaestroOptionsKey codPlanta = new MaestroOptionsKey();
             codPlanta.setCantidad("4");
             codPlanta.setControl("INPUT");
-            codPlanta.setKey("CDPTA");
+            codPlanta.setKey("WEPTA");
             codPlanta.setValueHigh("");
             codPlanta.setValueLow(parametro3);
             ListOptions.add(codPlanta);
