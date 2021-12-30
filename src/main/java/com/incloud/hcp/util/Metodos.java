@@ -854,6 +854,19 @@ public class Metodos {
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    if (i + 1 < options.size()) { // Evaluar que existan más options
+                        MaestroOptionsKey moNext = options.get(i + 1);
+                        String nextKey = moNext.getKey();
+                        String nextTipoControl = moNext.getControl();
+
+                        if (nextKey.equals(mo.getKey()) && mo.getControl().equals(nextTipoControl)) { // Verificar si existen más multicomboboxs siguientes del mismo campo
+                            cerrar = "";
+                        } else { // En caso que sea el último multicombobox del campo
+                            cerrar = ")";
+                        }
+                    } else {
+                        cerrar = ")";
+                    }
                     record.put(optionName, abrir+mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrar);
                 }
 
@@ -870,6 +883,20 @@ public class Metodos {
                     }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                         record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
                     }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                        // Evaluar si hay más multicomboboxs del mismo control
+                        if (i + 1 < options.size()) {
+                            MaestroOptionsKey moNext = options.get(i + 1);
+                            String nextKey = moNext.getKey();
+                            String nextTipoControl = moNext.getControl();
+
+                            if (nextKey.equals(mo.getKey()) && mo.getControl().equals(nextTipoControl)) { // Verificar si existen más multicomboboxs siguientes del mismo campo
+                                cerrarFinal = "";
+                            } else { // En caso que sea el último multicombobox del campo
+                                cerrarFinal = ")";
+                            }
+                        } else {
+                            cerrarFinal = ")";
+                        }
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
@@ -1279,6 +1306,7 @@ public class Metodos {
 
         if(campo.equals("CALIDA")){
             campo="DESC_"+campo;
+            //valor="TMP-HP340001"; // PTOSCANO: Solo para pruebas
             descripcion=ObtenerCalidad(valor);
 
         }else{
