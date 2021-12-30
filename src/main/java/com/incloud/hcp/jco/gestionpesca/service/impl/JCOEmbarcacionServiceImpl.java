@@ -430,16 +430,38 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             werks = codPlanta;
             bOk = false;
         }
+
+        /*
         imports1.setTabla(Tablas.ZFLEMB);
-        String wa2 = "CDEMB = '" +codEmba+ "'";
+
         logger.error(wa2);
         mo1.setWa(wa2);
         listOptions1.clear();
         listOptions1.add(mo1);
         imports1.setOption(listOptions1);
+
+        imports1.setFields(fields1);*/
+
+
+        MaestroImportsKey imports2 = new MaestroImportsKey();
+        MaestroOptions mo2 = new MaestroOptions();
+        String wa2 = "CDEMB = '" +codEmba+ "'";
+        mo2.setWa(wa2);
+        List<MaestroOptions> listOptions2 = new ArrayList<MaestroOptions>();
+        listOptions2.add(mo2);
         String[] fields1 = {"HPACH"};
-        imports1.setFields(fields1);
-        MaestroExport me2 = MaestroService.obtenerMaestro2(imports1);
+        List<MaestroOptionsKey> listOptKey2 = new ArrayList<MaestroOptionsKey>();
+        imports2.setTabla(Tablas.ZFLEMB);
+        imports2.setDelimitador("|");
+        imports2.setOption(listOptions2);
+        imports2.setFields(fields1);
+        imports2.setOptions(listOptKey2);
+        imports2.setOrder("");
+        imports2.setRowcount(0);
+        imports2.setRowskips(0);
+        imports2.setP_user(usuario);
+
+        MaestroExport me2 = MaestroService.obtenerMaestro2(imports2);
         String mssg0 = "M2 SIZE: " + me2.getData().size();
         logger.error(mssg0);
         if(me2.getData().size() > 0){
