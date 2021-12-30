@@ -432,6 +432,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
         imports1.setTabla(Tablas.ZFLEMB);
         String wa2 = "CDEMB = '" +codEmba+ "'";
+        logger.error(wa2);
         mo1.setWa(wa2);
         listOptions1.clear();
         listOptions1.add(mo1);
@@ -439,6 +440,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         String[] fields1 = {"HPACH"};
         imports1.setFields(fields1);
         MaestroExport me2 = MaestroService.obtenerMaestro2(imports1);
+        String mssg0 = "M2 SIZE: " + me2.getData().size();
+        logger.error(mssg0);
         if(me2.getData().size() > 0){
             List<HashMap<String, Object>> data = me2.getData();
             HashMap<String, Object> obj = data.get(0);
