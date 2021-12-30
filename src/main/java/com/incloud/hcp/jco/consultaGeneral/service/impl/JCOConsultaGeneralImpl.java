@@ -1063,6 +1063,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
         if (nomConsulta.equals("CONSGENMAREAANT")){
             order = "NRMAR DESCENDING";
         }
+        if (nomConsulta.equals("CONSGENEVENTANT")){
+            order = "NREVN DESCENDING";
+        }
 
         return order;
     }
@@ -1078,6 +1081,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 rowcount = "1";
                 break;
             case "CONSGENBSQTRIPUZARPE":
+                rowcount = "1";
+                break;
+            case "CONSGENEVENTANT":
                 rowcount = "1";
                 break;
         }

@@ -8,7 +8,15 @@ public class PDFValeVivereDetalleDto {
     private float costoUnitario;
     private String descripcion;
     private float total;
+    private String comentario;
 
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
+    }
 
     public int getRaciones() {
         return raciones;

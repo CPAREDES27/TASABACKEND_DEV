@@ -28,8 +28,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 
@@ -71,6 +69,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
             JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
             JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
 
+            Metodos me=new Metodos();
+
+
             for(int i=0; i<T_ZATRP.getNumRows(); i++){
                 T_ZATRP.setRow(i);
 
@@ -102,54 +103,68 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setEmergenciaTelefono(T_ZATRP.getString(PDFZarpeConstantes.TFEMP));
                 dto.setFecha(fecha);
 
+                logger.error("Fecha y hora"+ dto.getEstimadaArribo());
+
 
             }
             logger.error("RolTripulacion");
             String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
                                                         PDFZarpeConstantes.NRLIB,
                                                         PDFZarpeConstantes.FEFVG,
-                                                        PDFZarpeConstantes.STEXT};
-            String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
+                                                        PDFZarpeConstantes.STELL};
 
+
+            List<HashMap<String, Object>> t_daztr=me.ListarObjetos(T_DZATR);
+
+            String[][] RolTripulacion=new String[t_daztr.size()+1][CamposRolTripulacion.length];
             RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
-            int con=1;
-            for(int i=0; i<T_DZATR.getNumRows(); i++){
-                T_DZATR.setRow(i);
 
-                String[] registros=new String[CamposRolTripulacion.length+1];
-                int campos=0;
-                for(int j=0; j<registros.length; j++){
-                    if(j==0){
-                        registros[j]=String.valueOf(con);
+            String dni="";
+            int indice=1;
+            for(int i=0; i<t_daztr.size();i++){
 
-                    }else {
-                            if(campos==2){
+                String[]reg=new String[5];
 
-                                try {
-                                    String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
-                                    registros[j] = fecha;
-                                }catch (Exception e){
-                                    registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                                }
-                            }else
-                            if(campos==3){
-                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
-                            }else {
-                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                            }
-                            String dni = T_DZATR.getString(PDFZarpeConstantes.NRDNI);
-                            if (registros[j].trim().compareTo("PATRON EP") == 0) {
-                                dto.setNombrePatron(registros[1]);
-                                dto.setDni(dni);
-                            }
+                for(Map.Entry<String, Object> entry:t_daztr.get(i).entrySet()) {
 
-                        campos++;
+                    String key = entry.getKey();
+                    String valor = entry.getValue().toString();
+
+                    reg[0]=String.valueOf(indice);
+                    if(key.equals("NOMBR")){
+                        reg[1]=valor;
                     }
+                    if(key.equals("NRLIB")){
+                            reg[2]=valor;
+                    }
+                    if(key.equals("FEFVG")){
+
+                        try {
+                            String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                            reg[3] = fecha;
+                        }catch (Exception e){
+                            reg[3] =valor;
+                        }
+
+                    }
+                    if(key.equals("DESC_STELL")){
+                            reg[4] = valor;
+                    }
+                    if(key.equals("NRDNI")){
+                        dni=valor;
+                    }
+
                 }
 
-                RolTripulacion[con]=registros;
-                con++;
+                if(reg[4].equals("PATRON EP")){
+                    dto.setNombrePatron(reg[1]);
+                    dto.setDni(dni);
+                }
+                RolTripulacion[indice]=reg;
+                indice++;
             }
+
+
 
             if(dto.getNombrePatron()==null){
                 dto.setNombrePatron("");
@@ -164,7 +179,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFZarpeConstantes.fieldCertificados;
             logger.error("Certificados_1");
-            con=1;
+            int con=1;
             for(int i=0; i<T_VGCER.getNumRows(); i++){
                 T_VGCER.setRow(i);
 
@@ -252,9 +267,16 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+        contentStream.beginText();
+        contentStream.setFont(bold, 100);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(395, 198);
+        contentStream.showText("_");
+        contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(170, 790);
         contentStream.drawString(PDFZarpeConstantes.titulo);
         contentStream.endText();
@@ -636,6 +658,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.drawString(PDFZarpeConstantes.notaTres1);
         contentStream.endText();
 
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(50, 30);
+        contentStream.drawString("#"+dto.getCodigoZarpe());
+        contentStream.endText();
+
         logger.error("PlantillaPDF_1");
         drawTableRolTripulacion(page, contentStream, 655.0f, 50.0f, rolTripulacion);
         logger.error("PlantillaPDF_2");
@@ -667,6 +695,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 nexty -= rowHeight;
 
         }
+        logger.error("drawTableRolTripulacion_2");
 
 
         //draw the columns
@@ -700,7 +729,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         //now add the text
 
-
+        logger.error("drawTableRolTripulacion_3");
 
         float texty=y-10;
         for(int i=0; i<content.length; i++) {
@@ -740,7 +769,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                         }
                         break;
                 }
-
+                logger.error("drawTableRolTripulacion_4");
+                logger.error(fields[j]);
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.HELVETICA, 6);
                 contentStream.newLineAtOffset(textx, texty);
@@ -1911,55 +1941,62 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
                     PDFZarpeConstantes.NRLIB,
                     PDFZarpeConstantes.FEFVG,
-                    PDFZarpeConstantes.STEXT};
+                    PDFZarpeConstantes.STELL};
 
-            String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
+            Metodos me = new Metodos();
+            List<HashMap<String, Object>> t_daztr=me.ListarObjetos(T_DZATR);
+
+            String[][] RolTripulacion=new String[t_daztr.size()+1][CamposRolTripulacion.length];
 
             RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
-            int con=1;
-            String patron="";
-            for(int i=0; i<T_DZATR.getNumRows(); i++){
-                T_DZATR.setRow(i);
 
-                String[] registros=new String[CamposRolTripulacion.length+1];
-                int campos=0;
-                for(int j=0; j<registros.length; j++){
-                    if(j==0){
-                        registros[j]=String.valueOf(con);
+            String dni="";
+            int indice=1;
+            for(int i=0; i<t_daztr.size();i++){
 
-                    }else {
+                String[]reg=new String[5];
 
-                        if(campos==2){
+                for(Map.Entry<String, Object> entry:t_daztr.get(i).entrySet()) {
 
-                            try {
-                                String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
-                                registros[j] = fecha;
-                            }catch (Exception e){
-                                registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                            }
-                        }else if(campos==3){
-                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]).replace("/","");
-                        }else {
-                            registros[j] = T_DZATR.getString(CamposRolTripulacion[campos]);
-                        }
-                        if (registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0 ) {
-                            dto.setNombreCapitanPatron(registros[1]);
+                    String key = entry.getKey();
+                    String valor = entry.getValue().toString();
 
-                        }
-                        if(registros[j].trim().compareTo("PATRON EP") == 0){
-                           patron=registros[j];
-                        }
-
-                        campos++;
+                    reg[0]=String.valueOf(indice);
+                    if(key.equals("NOMBR")){
+                        reg[1]=valor;
                     }
+                    if(key.equals("NRLIB")){
+                        reg[2]=valor;
+                    }
+                    if(key.equals("FEFVG")){
+
+                        try {
+                            String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                            reg[3] = fecha;
+                        }catch (Exception e){
+                            reg[3] =valor;
+                        }
+
+                    }
+                    if(key.equals("DESC_STELL")){
+                        reg[4] = valor;
+                    }
+                    if(key.equals("NRDNI")){
+                        dni=valor;
+                    }
+
                 }
 
-                RolTripulacion[con]=registros;
-                con++;
+                if(reg[4].equals("PATRON EP")){
+                    dto.setNombreCapitanPatron(reg[1]);
+                    dto.setDni(dni);
+                }
+                RolTripulacion[indice]=reg;
+                indice++;
             }
 
             if(dto.getNombreCapitanPatron()==null){
-                dto.setNombreCapitanPatron(patron);
+                dto.setNombreCapitanPatron("");
             }
             if(dto.getDni()==null){
                 dto.setDni("");
@@ -1972,7 +2009,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFZarpeConstantes.fieldCertificados;
             logger.error("Certificados_1");
-            con=1;
+            int con=1;
             for(int i=0; i<T_VGCER.getNumRows(); i++){
                 T_VGCER.setRow(i);
 
@@ -2057,8 +2094,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
+
+
         contentStream.beginText();
         contentStream.setFont(bold, 12);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(180, 770);
         contentStream.drawString(PDFZarpeTravesiaConstantes.titulo);
         contentStream.endText();
@@ -2200,7 +2240,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 8);
+        contentStream.setFont(font, 6.5f);
         contentStream.moveTextPositionByAmount(155, 695);
         contentStream.drawString(dto.getDomicilioFiscal());
         contentStream.endText();
@@ -2237,7 +2277,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.endText();
 
         contentStream.beginText();
-        contentStream.setFont(font, 8);
+        contentStream.setFont(font, 6.5f);
         contentStream.moveTextPositionByAmount(155, 671);
         contentStream.drawString(dto.getDomicilioFiscal());
         contentStream.endText();
@@ -2571,7 +2611,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             logger.error("RolTripulacion");
             String[] CamposRolTripulacion= new String[]{PDFRolTripulacionConstantes.NOMBR,
                     PDFRolTripulacionConstantes.TITRP,
-                    PDFRolTripulacionConstantes.STEXT,
+                    PDFRolTripulacionConstantes.STELL,
                     PDFRolTripulacionConstantes.NRLIB,
                     PDFRolTripulacionConstantes.FEFVG};
             String[][] RolTripulacion=new String[T_DZART.getNumRows()+1][CamposRolTripulacion.length];
@@ -3122,19 +3162,23 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[] CamposRolTripulacion= new String[]{PDFZarpeConstantes.NOMBR,
                     PDFZarpeConstantes.NRLIB,
                     PDFZarpeConstantes.FEFVG,
-                    PDFZarpeConstantes.STEXT};
+                    PDFZarpeConstantes.STELL};
 
             String[][] RolTripulacion=new String[T_DZATR.getNumRows()+1][CamposRolTripulacion.length];
 
             RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
 
+            Metodos me=new Metodos();
+
             for(int i=0; i<T_DZATR.getNumRows(); i++){
                 T_DZATR.setRow(i);
-                String cargo=T_DZATR.getString(PDFZarpeConstantes.STEXT);
+                String cargo=me.ObtenerDominio("CARGOTRIPU", T_DZATR.getString(PDFZarpeConstantes.STELL));
 
-                if(cargo.trim().compareTo("PATRON E/P") == 0){
+                if(cargo.trim().compareTo("PATRON EP") == 0){
                     dto.setNombreCapitanPatron(T_DZATR.getString(PDFZarpeConstantes.NOMBR));
                     dto.setDni(T_DZATR.getString(PDFZarpeConstantes.NRDNI));
+                    logger.error("patron "+ dto.getNombreCapitanPatron());
+                    logger.error("dni "+ dto.getDni());
                 }
             }
             if(dto.getNombreCapitanPatron()==null){
@@ -3149,6 +3193,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
             Certificados[0]= PDFTrimestralConstantes.certificadosCabecera;
             logger.error("TIMESTRAL Certificados");
+
+
             int con=1;
             String guion="-     ";
             for(int i=0; i<T_VGCER.getNumRows(); i++){
@@ -3239,10 +3285,19 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
         contentStream.beginText();
+        contentStream.setFont(bold, 190);
+        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.moveTextPositionByAmount(40, 790);
+        contentStream.showText("_____");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(bold, 10);
+        contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFTrimestralConstantes.titulo);
         contentStream.endText();
+
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
@@ -4461,6 +4516,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             List<PDFValeVivereDetalleDto>detalle=PosiViveres(imports.getNumValeVivere(), imports.getP_user());
 
+            logger.error("detalle.size: "+detalle.size());
             int totalRaciones=0;
             float totalCosto=0;
 
@@ -4478,6 +4534,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             String codAlm=ObtenerCodAlmacen(dto.getAlmacen(), imports.getP_user());
             dto.setAlmacen(codAlm);
+
+
+            //actualizando fechas si encuentra otro descripcion de vale diferente a "RACIONES DE VIVERES P/EMBARCACIONES 2"
+            String []fechas=new String[detalle.size()];
+
+            for(int i=0;i<detalle.size();i++) {
+                if (!detalle.get(i).getDescripcion().trim().equals(PDFValeViveresConstantes.descripcionViveres.trim())) {
+                    String fechaInicial=dto.getFechas()[0];
+                    fechas[i]=fechaInicial;
+                }else{
+                    String fecha=dto.getFechas()[i];
+                    fechas[i]=fecha;
+                }
+            }
+            dto.setFechas(fechas);
 
             PantillaPDFValeViveres(path, dto, detalle);
 
@@ -4777,18 +4848,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
         drawTableCabeceraValeViveres(page, contentStream,590, 20, PDFValeViveresConstantes.cabecerasTabla);
 
 
-        contentStream.beginText();
-        contentStream.setFont(font, 7.5f);
-        contentStream.moveTextPositionByAmount(25, 560);
-        contentStream.showText(dto.getFechaValeUno());
-        contentStream.endText();
-
-        contentStream.beginText();
-        contentStream.setFont(font, 7.5f);
-        contentStream.moveTextPositionByAmount(25, 540);
-        contentStream.showText(dto.getFechaValeDos());
-        contentStream.endText();
-
 
         int y=560;
         for(int i=0; i<detalle.size(); i++){
@@ -4797,14 +4856,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             PDFValeVivereDetalleDto detalleDto=detalle.get(i);
 
+
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
+            contentStream.moveTextPositionByAmount(25, y);
+            contentStream.showText(dto.getFechas()[i]);
+            contentStream.endText();
+
+            contentStream.beginText();
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(95, y);
             contentStream.showText(String.valueOf(detalleDto.getRaciones()));
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(120, y);
             contentStream.showText(String.valueOf(detalleDto.getCostoUnitario()));
             contentStream.endText();
@@ -4816,15 +4882,15 @@ public class JCOPDFsImpl implements JCOPDFsService {
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
+            contentStream.setFont(font, 7.5f);
             contentStream.moveTextPositionByAmount(360, y);
             contentStream.showText(String.valueOf(detalleDto.getTotal()));
             contentStream.endText();
 
             contentStream.beginText();
-            contentStream.setFont(font, 8);
-            contentStream.moveTextPositionByAmount(450, y);
-            contentStream.showText(String.valueOf(dto.getComentario()));
+            contentStream.setFont(font, 7.5f);
+            contentStream.moveTextPositionByAmount(410, y);
+            contentStream.showText(String.valueOf(detalleDto.getComentario()));
             contentStream.endText();
 
             y-=20;
@@ -5128,7 +5194,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         S_DATA.setRow(0);
-        dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
+        //dto.setComentario(S_DATA.getString(PDFValeViveresConstantes.OBVVI));
         dto.setCocinero(S_DATA.getString(PDFValeViveresConstantes.NMPER));
         dto.setCentro(S_DATA.getString(PDFValeViveresConstantes.WERKS));
         dto.setAlmacen(S_DATA.getString(PDFValeViveresConstantes.CDALM));
@@ -5144,12 +5210,37 @@ public class JCOPDFsImpl implements JCOPDFsService {
         dto.setNombreEmbarcacion(S_DATA.getString(PDFValeViveresConstantes.NMEMB));
         dto.setCodigoProveeduria(S_DATA.getString(PDFValeViveresConstantes.CDPVE));
         dto.setRazonSocialDos(S_DATA.getString(PDFValeViveresConstantes.NAME2));
-        dto.setFechaValeUno(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
-        dto.setFechaValeDos(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
+        dto.setFechaInicio(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
+        dto.setFechaFin(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
 
-
+        dto.setFechas(ObtenerFechas(dto.getFechaInicio(), dto.getFechaFin()));
 
         return dto;
+    }
+    public String[] ObtenerFechas(String fechaInicio, String fechaFin){
+
+        String[] fi=fechaInicio.split("/");
+        String[] ff=fechaFin.split("/");
+
+        int dia=Integer.parseInt(fi[0]);
+        int dif=Integer.parseInt(ff[0])-Integer.parseInt(fi[0]);
+
+        logger.error("dia: "+dia);
+        logger.error("dif: "+dif);
+
+        String mesAño="/"+fi[1]+"/"+fi[2];
+
+        int dias=dif+1;
+
+        String[]fechas=new String[dias];
+
+        for(int i=0; i<dias;i++){
+
+            fechas[i]=dia+mesAño;
+            dia++;
+            logger.error("fechas["+i+"]: "+fechas[i]);
+        }
+        return fechas;
     }
 
     public List<PDFValeVivereDetalleDto> PosiViveres(String numVivere, String p_user)throws Exception{
@@ -5174,7 +5265,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         for(int i=0; i<S_POSICION.getNumRows(); i++){
 
-            S_POSICION.setRow(0);
+            S_POSICION.setRow(i);
 
             PDFValeVivereDetalleDto dto=new PDFValeVivereDetalleDto();
 
@@ -5183,6 +5274,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             int raciones=Integer.parseInt(S_POSICION.getString(PDFValeViveresConstantes.CNRAC));
 
             dto.setDescripcion(S_POSICION.getString(PDFValeViveresConstantes.DSSUM));
+            dto.setComentario(S_POSICION.getString(PDFValeViveresConstantes.OBPVA));
             dto.setCostoUnitario(costoUnit);
             dto.setTotal(total);
             dto.setRaciones(raciones);
@@ -6216,4 +6308,31 @@ public class JCOPDFsImpl implements JCOPDFsService {
         }
     }
 
+    public String[][] OrdenarTripulacion(String[][]rolTripulacion)throws Exception{
+
+        String[][]listaOrdenada=new String[rolTripulacion.length][4];
+
+        listaOrdenada[0]=rolTripulacion[0];
+
+        String [] cargos={"CAPITAN DE NAVEGACION","PATRON EP","SEGUNDO PATRON","INGENIERO DE MAQUINAS","MOTORISTA","SEGUNDO MOTORISTA","PANGUERO","WINCHERO","COCINERO", "TRIPULANTE EP",""};
+
+
+            int icargo=0;
+            int con=1;
+
+            for(int x=0;x<cargos.length;x++){
+
+                for(int i=1;i<rolTripulacion.length;i++){
+
+                    if(rolTripulacion[i][3].equals(cargos[x])){
+                        rolTripulacion[con]=rolTripulacion[i];
+                        con++;
+                    }
+
+               }
+
+            }
+
+        return rolTripulacion;
+    }
 }

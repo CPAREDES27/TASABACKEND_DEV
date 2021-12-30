@@ -16,11 +16,19 @@ public class PDFValeViveresDto {
     private String nombreEmbarcacion;
     private String codigoProveeduria;
     private String razonSocialDos;
-    private String fechaValeUno;
-    private String fechaValeDos;
+    private String fechaInicio;
+    private String fechaFin;
     private String comentario;
     private String cocinero;
+    private String[] fechas;
 
+    public String[] getFechas() {
+        return fechas;
+    }
+
+    public void setFechas(String[] fechas) {
+        this.fechas = fechas;
+    }
 
     public String getCocinero() {
         return cocinero;
@@ -50,12 +58,12 @@ public class PDFValeViveresDto {
     private int totalRaciones;
 
 
-    public String getFechaValeDos() {
-        return fechaValeDos;
+    public String getFechaFin() {
+        return fechaFin;
     }
 
-    public void setFechaValeDos(String fechaValeDos) {
-        this.fechaValeDos = fechaValeDos;
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public String getCentro() {
@@ -171,12 +179,12 @@ public class PDFValeViveresDto {
     }
 
 
-    public String getFechaValeUno() {
-        return fechaValeUno;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFechaValeUno(String fechaValeUno) {
-        this.fechaValeUno = fechaValeUno;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
 
