@@ -450,6 +450,10 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             bodCert = " ";
         }
 
+        String mssg1 = "Bok: " + bOk;
+        String mssg2 = "Bod Cert: " + bodCert;
+        logger.error(mssg1);
+        logger.error(mssg2);
         if (!bodCert.equalsIgnoreCase("S")){
 
             imports1.setTabla("ZTB_CONSTANTES");
@@ -478,6 +482,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }else{
             bOk = true;
         }
+
+        String mssg3 = "Val Bodega: " + bOk;
+        logger.error(mssg3);
 
         BodegaExport valBodega = new BodegaExport();
         valBodega.setEstado(bOk);
