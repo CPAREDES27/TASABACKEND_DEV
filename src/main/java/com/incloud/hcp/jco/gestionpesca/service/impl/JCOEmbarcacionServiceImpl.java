@@ -7,6 +7,7 @@ import com.incloud.hcp.jco.gestionpesca.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
+import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
@@ -461,7 +462,8 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         imports2.setRowskips(0);
         imports2.setP_user(usuario);
 
-        MaestroExport me2 = MaestroService.obtenerMaestro2(imports2);
+        JCOMaestrosServiceImpl jcoMaSer = new JCOMaestrosServiceImpl();
+        MaestroExport me2 = jcoMaSer.obtenerMaestro2(imports2);
         String mssg0 = "M2 SIZE: " + me2.getData().size();
         logger.error(mssg0);
         if(me2.getData().size() > 0){
