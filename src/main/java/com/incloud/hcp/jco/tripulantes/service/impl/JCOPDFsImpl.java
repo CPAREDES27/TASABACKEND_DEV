@@ -115,6 +115,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
             List<HashMap<String, Object>> t_daztr=me.ListarObjetos(T_DZATR);
+            List<HashMap<String, Object>> t_vgcer=me.ListarObjetos(T_VGCER);
 
             String[][] RolTripulacion=new String[t_daztr.size()+1][CamposRolTripulacion.length];
             RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
@@ -174,72 +175,61 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
             logger.error("Certificados");
 
-            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
-                                                         PDFZarpeConstantes.FECCF};
-            String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
-            Certificados[0]= PDFZarpeConstantes.fieldCertificados;
-            logger.error("Certificados_1");
-            int con=1;
-            for(int i=0; i<T_VGCER.getNumRows(); i++){
+
+
+            List<CertificadoDto> certificadosList=new ArrayList<>();
+            for(int i=0; i<t_vgcer.size();i++){
                 T_VGCER.setRow(i);
 
-                String[] registros=new String[CamposCertificados.length+1];
-                int campos=0;
-                for(int j=0; j<registros.length; j++){
+                CertificadoDto c=new CertificadoDto();
+                c.setCDCER(T_VGCER.getString("CDCER"));
+                c.setNRCER(T_VGCER.getString("NRCER"));
+                c.setDSCER(T_VGCER.getString("DSCER"));
 
-                    if(j==0){
-                        registros[j]=String.valueOf(con);
-                    }else if(j==1) {
+                String fecha = T_VGCER.getString("FECCF");
 
-                        registros[j] = T_VGCER.getString(CamposCertificados[campos]);
-                        campos++;
-
-
-                    }else if(j==2){
-                        if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
-
-                            registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
-
-                        }
-
-                        if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
-
-                            String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
-
-                            SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-                            Date date = parseador.parse(fecha);
+                SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = parseador.parse(fecha);
 
 
-                            fecha = formateador.format(date);
+                fecha = formateador.format(date);
 
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            Date d = new Date();
-                            String fechaF = dateFormat.format(d);
-                            Date fActual = parseador.parse(fechaF);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = new Date();
+                String fechaF = dateFormat.format(d);
+                Date fActual = parseador.parse(fechaF);
 
-                            logger.error("FECHA : " + date.toString());
-                            logger.error("FECHA ACTUAL: " + fActual.toString());
+                if (date.after(fActual)) {
+                    c.setFECCF(fecha);
 
-                            if (date.after(fActual)) {
-                                registros[j] = fecha;
-
-                            } else {
-                                registros[j] = "";
-                            }
-
-                        }
-
-                    campos++;
-                    }
+                } else {
+                    c.setFECCF("");
                 }
 
-                Certificados[con]=registros;
-                con++;
+
+                certificadosList.add(c);
+
+            }
+
+            String[][] cert=OrdenarCertificados(certificadosList,"");
+
+            for(int i=0; i<cert.length;i++){
+
+                for(int j=0;j<cert[i].length;j++){
+
+                    logger.error("cert["+i+"]["+j+"] : "+cert[i][j]);
+                }
             }
 
 
-           PlantillaPDFZarpe(path, dto, RolTripulacion, Certificados);
+            //ordenando los certificados
+
+
+
+
+
+           PlantillaPDFZarpe(path, dto, RolTripulacion, cert);
 
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
@@ -1945,6 +1935,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             Metodos me = new Metodos();
             List<HashMap<String, Object>> t_daztr=me.ListarObjetos(T_DZATR);
+            List<HashMap<String, Object>> t_vgcer=me.ListarObjetos(T_VGCER);
+
 
             String[][] RolTripulacion=new String[t_daztr.size()+1][CamposRolTripulacion.length];
 
@@ -2003,7 +1995,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
             logger.error("Certificados");
 
-            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
+           /* String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
                                                         PDFZarpeConstantes.FECCF};
 
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
@@ -2065,10 +2057,46 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
                 Certificados[con]=registros;
                 con++;
+            }*/
+
+            List<CertificadoDto> certificadosList=new ArrayList<>();
+            for(int i=0; i<t_vgcer.size();i++){
+                T_VGCER.setRow(i);
+
+                CertificadoDto c=new CertificadoDto();
+                c.setCDCER(T_VGCER.getString("CDCER"));
+                c.setNRCER(T_VGCER.getString("NRCER"));
+                c.setDSCER(T_VGCER.getString("DSCER"));
+
+                String fecha = T_VGCER.getString("FECCF");
+
+                SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = parseador.parse(fecha);
+
+
+                fecha = formateador.format(date);
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = new Date();
+                String fechaF = dateFormat.format(d);
+                Date fActual = parseador.parse(fechaF);
+
+                if (date.after(fActual)) {
+                    c.setFECCF(fecha);
+
+                } else {
+                    c.setFECCF("");
+                }
+
+
+                certificadosList.add(c);
+
             }
 
+            String[][] cert=OrdenarCertificados(certificadosList,"");
 
-            PlantillaPDFZarpeTravesia(path, dto, RolTripulacion, Certificados);
+            PlantillaPDFZarpeTravesia(path, dto, RolTripulacion, cert);
 
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
@@ -3137,6 +3165,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
             JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
             JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
 
+            Metodos me= new Metodos();
+
+            List<HashMap<String, Object>> t_vgcer=me.ListarObjetos(T_VGCER);
             for(int i=0; i<T_ZATRP.getNumRows(); i++){
                 T_ZATRP.setRow(i);
 
@@ -3168,7 +3199,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
             RolTripulacion[0]= PDFZarpeConstantes.fieldRolTripulacion;
 
-            Metodos me=new Metodos();
 
             for(int i=0; i<T_DZATR.getNumRows(); i++){
                 T_DZATR.setRow(i);
@@ -3187,7 +3217,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             if(dto.getDni()==null){
                 dto.setDni("");
             }
-            String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
+           /* String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
                     PDFZarpeConstantes.FECCF};
 
             String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
@@ -3250,7 +3280,44 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
                 Certificados[con]=registros;
                 con++;
+            }*/
+            List<CertificadoDto> certificadosList=new ArrayList<>();
+            for(int i=0; i<t_vgcer.size();i++){
+                T_VGCER.setRow(i);
+
+                CertificadoDto c=new CertificadoDto();
+                c.setCDCER(T_VGCER.getString("CDCER"));
+                c.setNRCER(T_VGCER.getString("NRCER"));
+                c.setDSCER(T_VGCER.getString("DSCER"));
+
+                String fecha = T_VGCER.getString("FECCF");
+
+                SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = parseador.parse(fecha);
+
+
+                fecha = formateador.format(date);
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = new Date();
+                String fechaF = dateFormat.format(d);
+                Date fActual = parseador.parse(fechaF);
+
+                if (date.after(fActual)) {
+                    c.setFECCF(fecha);
+
+                } else {
+                    c.setFECCF("");
+                }
+
+
+                certificadosList.add(c);
+
             }
+
+            String[][] cert=OrdenarCertificados(certificadosList,"X");
+
             if(!imports.getFlag().toUpperCase().equals("X")){
                 dto.setNombreCapitanPatron(imports.getPatron());
                 dto.setRepresentanteAcreditado(imports.getRepresentante());
@@ -3259,7 +3326,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
 
             logger.error("TIMESTRAL PDF");
-            PlantillaPDFTrimestral(path, dto,  Certificados);
+            PlantillaPDFTrimestral(path, dto,  cert);
 
             Metodos exec = new Metodos();
             pdf.setBase64(exec.ConvertirABase64(path));
@@ -3732,6 +3799,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         }
 
+        logger.error("drawTableCertificados1");
 
         //draw the columns
         float nextx = margin;
@@ -3754,6 +3822,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 nextx += colWidth;
             }
         }
+        logger.error("drawTableCertificados2");
 
         //data -  coordenadas data
         float texty=y-10;
@@ -3786,13 +3855,19 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 if(i==0){
                     font=8;
                 }
+                logger.error("drawTableCertificados3");
 
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.HELVETICA, font);
                 contentStream.newLineAtOffset(textx, texty);
-                contentStream.showText(fields[j]);
+                try{
+                    contentStream.showText(fields[j]);
+                }catch (Exception e){
+                    contentStream.showText("");
+                }
                 contentStream.endText();
 
+                logger.error("drawTableCertificados4");
 
             }
             texty-=15;
@@ -4539,12 +4614,29 @@ public class JCOPDFsImpl implements JCOPDFsService {
             //actualizando fechas si encuentra otro descripcion de vale diferente a "RACIONES DE VIVERES P/EMBARCACIONES 2"
             String []fechas=new String[detalle.size()];
 
+            logger.error("detalle.size(): "+detalle.size());
+
+           boolean existe=false;
             for(int i=0;i<detalle.size();i++) {
+                logger.error("detalle.get(i).getDescripcion(): "+detalle.get(i).getDescripcion());
+                logger.error("PDFValeViveresConstantes.descripcionViveres.trim(): "+PDFValeViveresConstantes.descripcionViveres.trim());
+
+
                 if (!detalle.get(i).getDescripcion().trim().equals(PDFValeViveresConstantes.descripcionViveres.trim())) {
                     String fechaInicial=dto.getFechas()[0];
+                    logger.error("fechaInicial: "+fechaInicial);
                     fechas[i]=fechaInicial;
+                    logger.error("fechas[i]: "+fechas[i]);
+                    existe=true;
                 }else{
-                    String fecha=dto.getFechas()[i];
+                    String fecha="";
+                    if(existe){
+                         fecha=dto.getFechas()[i-1];
+                    }else{
+                        fecha=dto.getFechas()[i];
+
+                    }
+
                     fechas[i]=fecha;
                 }
             }
@@ -5217,29 +5309,55 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         return dto;
     }
-    public String[] ObtenerFechas(String fechaInicio, String fechaFin){
+    public String[] ObtenerFechas(String fechaInicio, String fechaFin)throws  Exception{
 
-        String[] fi=fechaInicio.split("/");
-        String[] ff=fechaFin.split("/");
+        SimpleDateFormat sformat = new SimpleDateFormat("dd/MM/yyyy");
+        Date fechaI= sformat.parse(fechaInicio);
+        Date fechaF= sformat.parse(fechaFin);
 
-        int dia=Integer.parseInt(fi[0]);
-        int dif=Integer.parseInt(ff[0])-Integer.parseInt(fi[0]);
+        logger.error("fechaI: "+fechaI);
+        logger.error("fechaF: "+fechaF);
 
-        logger.error("dia: "+dia);
-        logger.error("dif: "+dif);
 
-        String mesAño="/"+fi[1]+"/"+fi[2];
+        int diff=(int)((fechaF.getTime() - fechaI.getTime())/86400000);
+        int totalDias=diff+1;
+        logger.error("diff: "+diff);
 
-        int dias=dif+1;
+        int con=0;
 
-        String[]fechas=new String[dias];
+        String[]fechas=new String[totalDias];
+        for(int i=0; i<totalDias;i++){
 
-        for(int i=0; i<dias;i++){
+            int x=0;
+            if(i>0){
+                x=1;
+            }
+            Calendar c = Calendar.getInstance();
+            c.setTime(fechaI);
+            c.add(Calendar.DATE, x);
 
-            fechas[i]=dia+mesAño;
-            dia++;
-            logger.error("fechas["+i+"]: "+fechas[i]);
+            fechaI=c.getTime();
+
+
+            SimpleDateFormat parseador = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = parseador.parse(fechaI.toString());
+            String fecha = formateador.format(date);
+
+            logger.error("fecha: "+fecha );
+            fechas[i]=fecha;
+
+           con++;
         }
+       /* if(con==diff-1){
+
+            SimpleDateFormat parseador = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = parseador.parse(fechaF.toString());
+            String fecha = formateador.format(date);
+            fechas[diff-1]=fecha;
+        }*/
+
         return fechas;
     }
 
@@ -6317,22 +6435,128 @@ public class JCOPDFsImpl implements JCOPDFsService {
         String [] cargos={"CAPITAN DE NAVEGACION","PATRON EP","SEGUNDO PATRON","INGENIERO DE MAQUINAS","MOTORISTA","SEGUNDO MOTORISTA","PANGUERO","WINCHERO","COCINERO", "TRIPULANTE EP",""};
 
 
-            int icargo=0;
-            int con=1;
+        int icargo=0;
+        int con=1;
 
-            for(int x=0;x<cargos.length;x++){
+        for(int x=0;x<cargos.length;x++){
 
-                for(int i=1;i<rolTripulacion.length;i++){
+            for(int i=1;i<rolTripulacion.length;i++){
 
-                    if(rolTripulacion[i][3].equals(cargos[x])){
-                        rolTripulacion[con]=rolTripulacion[i];
-                        con++;
-                    }
-
-               }
+                if(rolTripulacion[i][3].equals(cargos[x])){
+                    rolTripulacion[con]=rolTripulacion[i];
+                    con++;
+                }
 
             }
 
+        }
+
         return rolTripulacion;
+    }
+
+    public String[][] OrdenarCertificados( List<CertificadoDto> certificadosList, String pdf)throws Exception{
+
+
+
+        String[][]listaOrdenada=new String[certificadosList.size()+1][3];
+
+        String[]cdcer={"0031","0039","0034","0037","0035","0036","0033","0032"};
+        String[]cdcer2={"1","9","4","7","5","6","3","2"};
+
+        String[]cabeceras=PDFZarpeConstantes.fieldCertificados;
+
+        if(pdf.equals("X")){
+            return  listaOrdenada= OrdenarTrimestral(certificadosList, cdcer, cdcer2);
+
+        }
+
+        listaOrdenada[0]=cabeceras;
+        int con=1;
+
+
+
+
+        for(int i=0; i<cdcer.length;i++){
+
+            String[] certificados=new String[3];
+
+                for(CertificadoDto dto: certificadosList){
+
+
+
+                    if(i==3  && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
+
+                        certificados[0]=String.valueOf(con);
+                        certificados[1]=dto.getDSCER();
+                        certificados[2]=dto.getNRCER();
+
+                        listaOrdenada[con]=certificados;
+                        con++;
+                    }
+                    if(i!=3 && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
+
+                        certificados[0]=String.valueOf(con);
+                        certificados[1]=dto.getDSCER();
+                        certificados[2]=dto.getFECCF();
+
+                        listaOrdenada[con]=certificados;
+                        con++;
+                     }
+
+
+
+                }
+
+
+
+
+        }
+
+        return listaOrdenada;
+    }
+
+    public String[][] OrdenarTrimestral(List<CertificadoDto> certificadosList, String[] cdcer, String[] cdcer2){
+        String[][]listaOrdenada=new String[certificadosList.size()+1][3];
+        String[]cabeceras=PDFTrimestralConstantes.certificadosCabecera;
+
+        listaOrdenada[0]=cabeceras;
+        int con=1;
+        for(int i=0; i<cdcer.length;i++){
+
+            String[] certificados=new String[2];
+
+            for(CertificadoDto dto: certificadosList){
+
+
+
+                if(i==3  && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
+
+                    certificados[0]=dto.getDSCER();
+                    certificados[1]=dto.getNRCER();
+
+                    logger.error("ARQ. listaOrdenada["+con+"]: "+certificados);
+                    listaOrdenada[con]=certificados;
+                    con++;
+                }
+                if(i!=3 && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
+
+                    certificados[0]=dto.getDSCER();
+                    certificados[1]=dto.getFECCF();
+                    logger.error("listaOrdenada["+con+"]: "+certificados);
+
+                    listaOrdenada[con]=certificados;
+                    con++;
+                }
+
+
+
+            }
+
+
+
+
+        }
+
+        return listaOrdenada;
     }
 }
