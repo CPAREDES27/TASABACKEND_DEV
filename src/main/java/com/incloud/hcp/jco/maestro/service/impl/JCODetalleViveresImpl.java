@@ -21,14 +21,17 @@ public class JCODetalleViveresImpl implements JCODetalleViveresService {
     public DetalleViveresExports DetalleImpresionViveres(DetalleViveresImports imports) throws Exception {
 
         DetalleViveresExports dto= new DetalleViveresExports();
+        Metodos metodo = new Metodos();
 
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_LECT_POSI_VIVER);
 
+            String usuario= metodo.ObtenerUsuario(imports.getP_user());
+
             JCoParameterList importx = stfcConnection.getImportParameterList();
-            importx.setValue("P_USER", imports.getP_user());
+            importx.setValue("P_USER", usuario);
             importx.setValue("P_CODE", imports.getP_code());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
@@ -38,7 +41,6 @@ public class JCODetalleViveresImpl implements JCODetalleViveresService {
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
 
-            Metodos metodo = new Metodos();
             List<HashMap<String, Object>> s_posicion = metodo.ObtenerListObjetos(S_POSICION, imports.getFields());
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
 
