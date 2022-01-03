@@ -6497,7 +6497,20 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
                         certificados[0]=String.valueOf(con);
                         certificados[1]=dto.getDSCER();
-                        certificados[2]=dto.getFECCF();
+                        //certificados[2]=dto.getFECCF();
+
+                        DateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+                        Date d = new Date();
+                        String date=parseador.format(d);
+                        Date fechaActual = parseador.parse(date);
+                        Date fecha=parseador.parse(dto.getFECCF());
+
+                        if(fecha.after(fechaActual)){
+
+                            certificados[2]=dto.getFECCF();
+                        }else{
+                            certificados[2]="";
+                        }
 
                         listaOrdenada[con]=certificados;
                         con++;
@@ -6515,7 +6528,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         return listaOrdenada;
     }
 
-    public String[][] OrdenarTrimestral(List<CertificadoDto> certificadosList, String[] cdcer, String[] cdcer2){
+    public String[][] OrdenarTrimestral(List<CertificadoDto> certificadosList, String[] cdcer, String[] cdcer2)throws Exception{
         String[][]listaOrdenada=new String[certificadosList.size()+1][3];
         String[]cabeceras=PDFTrimestralConstantes.certificadosCabecera;
 
@@ -6541,8 +6554,21 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 if(i!=3 && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
 
                     certificados[0]=dto.getDSCER();
-                    certificados[1]=dto.getFECCF();
+                    //certificados[1]=dto.getFECCF();
                     logger.error("listaOrdenada["+con+"]: "+certificados);
+
+
+                    DateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+                    Date d = new Date();
+                    String date=parseador.format(d);
+                    Date fechaActual = parseador.parse(date);
+                    Date fecha=parseador.parse(dto.getFECCF());
+
+                    if(fecha.after(fechaActual)){
+                        certificados[1]=fecha.toString();
+                    }else{
+                        certificados[1]="";
+                    }
 
                     listaOrdenada[con]=certificados;
                     con++;
