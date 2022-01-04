@@ -854,6 +854,7 @@ public class Metodos {
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    /*
                     if (i + 1 < options.size()) { // Evaluar que existan más options
                         MaestroOptionsKey moNext = options.get(i + 1);
                         String nextKey = moNext.getKey();
@@ -867,6 +868,8 @@ public class Metodos {
                     } else {
                         cerrar = ")";
                     }
+
+                     */
                     record.put(optionName, abrir+mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrar);
                 }
 
@@ -883,6 +886,7 @@ public class Metodos {
                     }else if(mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))){
                         record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
                     }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                        /*
                         // Evaluar si hay más multicomboboxs del mismo control
                         if (i + 1 < options.size()) {
                             MaestroOptionsKey moNext = options.get(i + 1);
@@ -897,6 +901,8 @@ public class Metodos {
                         } else {
                             cerrarFinal = ")";
                         }
+
+                         */
                         record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
