@@ -160,6 +160,24 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
         List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
 
+        for (int i = 0; i < ListarS_EVENTO.size(); i++){
+            HashMap<String, Object> item = ListarS_EVENTO.get(i);
+            for (Map.Entry<String, Object> entry : item.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if(key.equalsIgnoreCase("NREVN")){
+                    int nrevn = Integer.parseInt(String.valueOf(value));
+                    String newValue = "";
+                    if(nrevn > 10){
+                        newValue = String.valueOf(nrevn);
+                    }else{
+                        newValue = "0" + nrevn;
+                    }
+                    item.put("NREVN", newValue);
+                }
+            }
+        }
+
         MareaDto dto= new MareaDto();
         dto.setS_marea(ListarS_MAREA);
         dto.setS_evento(ListarS_EVENTO);

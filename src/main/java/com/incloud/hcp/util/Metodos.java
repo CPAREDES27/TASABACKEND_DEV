@@ -1049,10 +1049,18 @@ public class Metodos {
                }
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-                    value = dateFormat.format(value);
+                    String mssg = "TIME VALUE: " + value;
+                    logger.error(mssg);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                    if(String.valueOf(value).equalsIgnoreCase("")){
+                        value="";
+                    }else{
 
+                        value = dateFormat.format(value);
+                    }
                 }
+
+
 
                 try {
                     if (field.getTypeAsString().equals("DATE")) {
