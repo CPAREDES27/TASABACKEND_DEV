@@ -8,7 +8,7 @@ applications:
   timeout: 100
   disk-quota: 1G
   routes:
-  - route: flotabackend.cfapps.us10.hana.ondemand.com
+  - route: flotabackendqas.cfapps.us10.hana.ondemand.com
    
   env:
     USE_JCO: true
