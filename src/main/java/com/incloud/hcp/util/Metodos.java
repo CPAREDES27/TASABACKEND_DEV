@@ -821,6 +821,7 @@ public class Metodos {
             String abrir="(";
             String cerrar=")";
             String cerrarFinal="";
+            boolean isFirstMulticombobox = false;
             if(options.size()>1){
                 cerrar="";
                 cerrarFinal=")";
@@ -854,6 +855,9 @@ public class Metodos {
                 } else if (mo.getControl().equals("MULTIINPUT") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                     record.put(optionName, mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'");
                 }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
+                    if (i == 0) {
+                        isFirstMulticombobox = true;
+                    }
                     if (i + 1 < options.size()) { // Evaluar que existan más options
                         MaestroOptionsKey moNext = options.get(i + 1);
                         String nextKey = moNext.getKey();
@@ -884,6 +888,20 @@ public class Metodos {
                         record.put(optionName,"AND"+" "+ mo.getKey()+" "+ control+ " "+ "'"+mo.getValueLow()+"'" );
                     }else if (mo.getControl().equals("MULTICOMBOBOX") && (mo.getValueHigh().equals("") || mo.getValueHigh().equals(null))) {
                         // Evaluar si hay más multicomboboxs del mismo control
+                        String logicalOrInicio = "OR";
+                        MaestroOptionsKey moPrevious = options.get(i - 1);
+                        String previousKey = moPrevious.getKey();
+                        String previousTipoControl = moPrevious.getControl();
+                        if (previousKey.equals(mo.getKey()) && mo.getControl().equals(previousTipoControl)) { // Verificar si no el primer multicombobox
+                            isFirstMulticombobox = false;
+                        } else {
+                            isFirstMulticombobox = true;
+                        }
+
+                        if (isFirstMulticombobox) {
+                            logicalOrInicio += " " +abrir;
+                        }
+
                         if (i + 1 < options.size()) {
                             MaestroOptionsKey moNext = options.get(i + 1);
                             String nextKey = moNext.getKey();
@@ -897,7 +915,8 @@ public class Metodos {
                         } else {
                             cerrarFinal = ")";
                         }
-                        record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
+                        //record.put(optionName, "OR" + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
+                        record.put(optionName, logicalOrInicio + " " + mo.getKey() + " " + control + " " + "'" + mo.getValueLow().toUpperCase().trim() + "'"+cerrarFinal);
                     }
                 }
                 tmpOptions.add(record);
