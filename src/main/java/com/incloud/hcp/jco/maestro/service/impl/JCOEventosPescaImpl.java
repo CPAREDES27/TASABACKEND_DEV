@@ -360,6 +360,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
         JCoTable tableExports = tabless.getTable("DATA");
         JCoTable FIELDSs = tabless.getTable("FIELDS");
         List<HashMap<String, Object>> Listar_ConsCombEve =me.obtenerLectHormoetros(tableExports,FIELDSs,fieldz);
+
         List<HorometroExportDto> listHoro = new ArrayList<HorometroExportDto>();
         logger.error("PASO 0");
         int contador=0;
@@ -380,6 +381,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
                 Object value= entry.getValue();
                 logger.error("KEYCITO:" + key + " " + value);
                 if(key.equals("LCHOR")){
+
                     objHorom.setLCHOR(value.toString());
                 }
                 if(key.equals("NORAV")){
@@ -401,6 +403,7 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
                     listaHoro.get(k).setCodigo(listHoro.get(i).getCDTHR());
                     listaHoro.get(k).setLectura(listHoro.get(i).getLCHOR());
                     listaHoro.get(k).setAveriado(listHoro.get(i).getNORAV());
+                    listaHoro.get(k).setIndicador(Constant.CARACTEREDITAR);
                     break;
                 }
             }
