@@ -265,20 +265,31 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String,Object>> str_flbsp_matched=new ArrayList<>();
         //Obtener columnas dinamicas
         for (Map.Entry<String,ArrayList<HashMap<String,Object>>> entry: str_flbsp_group_copy.entrySet()) {
-            String codEspecie = null;
+            String codEspecie = "";
 
             //Fila al cual se le añadirán las columnas dinámicas
             HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
             for (HashMap<String,Object> flbsp: entry.getValue()) {
-                codEspecie = flbsp.get("CDSPC").toString();
-                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+                String cdspc = flbsp.get("CDSPC").toString();
                 int cnspc=Integer.parseInt(flbsp.get("CNSPC").toString());
+                if (!codEspecie.equals(cdspc)) {
+                    codEspecie = cdspc;
+                    totalCnspc = 0;
+                }
+                //codEspecie = flbsp.get("CDSPC").toString();
+                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+
                 double tmmed=Double.parseDouble(flbsp.get("TMMED").toString());
                 tnmmed=tnmmed.replace('.','_');
                 record.put(tnmmed,flbsp.get("CNSPC"));
 
                 //Total de cantidades
-                totalCnspc+=cnspc;
+                if(codEspecie.equals(cdspc)) {
+                    totalCnspc+=cnspc;
+                } else {
+                    totalCnspc=cnspc;
+                }
+
 
                 //Moda
                 if(cnspcModa<cnspc){

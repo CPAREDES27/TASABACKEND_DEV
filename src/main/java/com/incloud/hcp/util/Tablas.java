@@ -73,6 +73,7 @@ public class Tablas {
     public static String IT_SAC_ORDENGE="IT_SAC_ORDENGE";
     public static String IT_SAC_FLOTATASA="IT_SAC_FLOTATASA";
     public static String IT_SAC_PPESCAR_CN="IT_SAC_PPESCAR_CN";
+    public static String IT_SAC_LIM_CAP_PLN="IT_SAC_LIM_CAP_PLN";
 
 
 
