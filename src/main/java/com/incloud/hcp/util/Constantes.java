@@ -136,5 +136,8 @@ public class Constantes {
     public static String ZFL_RFC_CREAR_VENTA_COMBU="ZFL_RFC_CREAR_VENTA_COMBU";
     public static String ZFL_RFC_ANULA_VENTA_COMBU="ZFL_RFC_ANULA_VENTA_COMBU";
 
+    //RFCs Correos
+    public static String ZFL_RFC_NOTIF_DESC_TOLVAS_BTP="ZFL_RFC_NOTIF_DESC_TOLVAS_BTP";
+    public static String ZFL_RFC_NOTIF_HORO_AVER_BTP="ZFL_RFC_NOTIF_HORO_AVER_BTP";
 
 }

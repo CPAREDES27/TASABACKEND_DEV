@@ -182,6 +182,8 @@ public class Tablas {
     public static String STR_RSC="STR_RSC";
 
 
-
+    //tablas de rfcs de correos
+    public static String IT_ASIG_EMB="IT_ASIG_EMB";
+    public static String IT_HORO_AVE="IT_HORO_AVE";
 
 }

@@ -3,10 +3,10 @@ package com.incloud.hcp.util.Mail.Service.Impl;
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
-import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.*;
 import com.incloud.hcp.util.Mail.Dto.*;
 import com.incloud.hcp.util.Mail.Service.CorreoService;
-import com.incloud.hcp.util.Mensaje;
+import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,7 @@ public class CorreoImpl implements CorreoService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
-    @Override
-    public Mensaje EnviarInfoHorometroAveriado(InfoHorometrosAveriadosImport imports) throws Exception {
+  /*  public Mensaje EnviarInfoHorometroAveriado(InfoHorometrosAveriadosImport imports) throws Exception {
         Mensaje msj = new Mensaje();
         try {
             String remitente = "mareaeventos@tasa.com.pe";
@@ -103,7 +102,7 @@ public class CorreoImpl implements CorreoService {
         }
 
         return msj;
-    }
+    }*/
 
     @Override
     public Mensaje EnviarCorreosSiniestro(InfoEventoImports imports) throws Exception {
@@ -325,7 +324,7 @@ public class CorreoImpl implements CorreoService {
         return msj;
     }
 
-    public Mensaje EnviarNotifDescTolvas(NotifDescTolvasDto imports) throws Exception {
+   /* public Mensaje EnviarNotifDescTolvas(NotifDescTolvasDto imports) throws Exception {
         String subject = "CORRECCIÓN DESCARGAS";
         String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
         String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
@@ -369,14 +368,6 @@ public class CorreoImpl implements CorreoService {
             String emailSAP = ConcatListCorreos(emails);
             log.error("email SAP: " + emailSAP);
 
-            /*
-            //emails de prueba
-            List<String> emailPrueba = new ArrayList<>();
-            emailPrueba.add("amagno.96@outlook.com");
-            emailPrueba.add("ifp23@outlook.com");
-            emailPrueba.add("grosales@xternal.biz");
-
-             */
             List<String> emailsToSend = verificarEmails("", emails);
 
             String body = getFormatHtml(titulo, mensaje, header, imports.getData());
@@ -394,7 +385,7 @@ public class CorreoImpl implements CorreoService {
 
 
         return msj;
-    }
+    }*/
 
 
     public String getFormatHtml(String titulo, String mensaje, String[] header, String[] data) {
@@ -471,5 +462,129 @@ public class CorreoImpl implements CorreoService {
         }
 
     }
+
+    public CorreoMensaje EnviarNotifDescTolvas_btp(NotifDescTolvasDto imports) throws Exception {
+
+        CorreoMensaje msj=new CorreoMensaje();
+        String remitente="mareaeventos@tasa.com.pe";
+        String asunto = "CORRECCIÓN DESCARGAS";
+        String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
+        String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
+
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_NOTIF_DESC_TOLVAS_BTP);
+
+            log.error("correo_notiftolvas");
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_REMITE", remitente);
+            importx.setValue("P_ASUNTO", asunto);
+            importx.setValue("P_CDPTA", imports.getPlanta());
+            importx.setValue("P_TITULO", titulo);
+            importx.setValue("P_MENSAJE", mensaje);
+
+            log.error("correo_notiftolvas_1");
+
+            log.error("correo_notiftolvas_2");
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            EjecutarRFC exec=new EjecutarRFC();
+            exec.setTable(importx, Tablas.IT_ASIG_EMB, imports.getData());
+            log.error("correo_notiftolvas_3");
+
+            stfcConnection.execute(destination);
+
+            log.error("correo_notiftolvas_4");
+            JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJE);
+
+            log.error("correo_notiftolvas_5");
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+
+            msj.setT_mensaje(t_mensaj);
+
+            msj.setMensaje("ok");
+
+        }catch (Exception e){
+            msj.setMensaje(e.getMessage());
+        }
+
+        return msj;
+    }
+
+    public CorreoMensaje EnviarInfoHorometroAveriado_btp(InfoHorometrosAveriadosImport imports) throws Exception {
+
+        CorreoMensaje msj=new CorreoMensaje();
+        String remitente = "mareaeventos@tasa.com.pe";
+        String asunto = "Horometros averiados";
+        String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
+        String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
+
+        try {
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_NOTIF_HORO_AVER_BTP);
+
+            log.error("correo_notiftolvas");
+
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_REMITE", remitente);
+            importx.setValue("P_ASUNTO", asunto);
+            importx.setValue("P_MENSAJE", mensaje);
+            importx.setValue("P_EMBARCACION", imports.getEmbarcacion().getDescripcion());
+            importx.setValue("P_EVENTO",  imports.getEmbarcacion().getEventos().get(0).getNroEvento());
+
+
+            log.error("correo_notiftolvas_1");
+
+
+            String[] fields={"CENTRO", "NRODESC","EMBA","MATR","CBOD","FECHINIDESC","FECHFINDESC","PESDESC"};
+           /* List<HashMap<String, Object>> embarcas= new ArrayList<>();
+            for(int i=0; i<imports.getData().length;i++){
+
+                String[] registros=imports.getData()[i].split("%");
+
+                HashMap<String, Object>reg=new HashMap<>();
+
+                for(int j=0; j<registros.length;j++){
+
+                    reg.put(fields[j],registros[j]);
+                    log.error("notiftolvas embarca: "+fields[j]+" : "+registros[j]);
+
+                }
+                embarcas.add(reg);
+
+            }*/
+            log.error("correo_notiftolvas_2");
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            EjecutarRFC exec=new EjecutarRFC();
+            exec.setTable(importx, Tablas.IT_HORO_AVE, imports.getEmbarcacion().getEventos().get(0).getHorometrosAveriados());
+            log.error("correo_notiftolvas_3");
+
+            stfcConnection.execute(destination);
+
+            log.error("correo_notiftolvas_4");
+            JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJE);
+
+            log.error("correo_notiftolvas_5");
+            Metodos metodo = new Metodos();
+            List<HashMap<String, Object>> t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+
+            msj.setT_mensaje(t_mensaj);
+
+            msj.setMensaje("ok");
+
+        }catch (Exception e){
+            msj.setMensaje(e.getMessage());
+        }
+
+        return msj;
+    }
+
 
 }
