@@ -1,10 +1,13 @@
 package com.incloud.hcp.util.Mail.Dto;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class NotifDescTolvasDto {
 
 
     private String planta;
-    private String[] data;
+    private List<HashMap<String, Object>> data;
 
 
 
@@ -16,11 +19,11 @@ public class NotifDescTolvasDto {
         this.planta = planta;
     }
 
-    public String[] getData() {
+    public List<HashMap<String, Object>> getData() {
         return data;
     }
 
-    public void setData(String[] data) {
+    public void setData(List<HashMap<String, Object>> data) {
         this.data = data;
     }
 }
