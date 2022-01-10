@@ -1172,6 +1172,54 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return  ave;
     }
 
+    @Override
+    public MaestroExport obtenerEveElim(EveElimImport eveElimImport) throws  Exception{
+        MaestroExport me = new MaestroExport();
+        try{
+            int marea = eveElimImport.getMarea();
+            int nroEvento = eveElimImport.getNumero_evento();
+            String estructura = eveElimImport.getEstructura();
+            String usuario = eveElimImport.getUsuario();
+            String query = "NRMAR = " + marea + " AND NREVN = " + nroEvento;
+
+            MaestroImportsKey imports1 = new MaestroImportsKey();
+
+            if(estructura.equalsIgnoreCase("HOROM")){
+                imports1.setTabla("ZFLLHO");
+                String[] fields = {"CDTHR"};
+                imports1.setFields(fields);
+            }else if(estructura.equalsIgnoreCase("BODG")){
+                imports1.setTabla("ZFLPDB");
+                String[] fields = {"CDBOD"};
+                imports1.setFields(fields);
+            }else if(estructura.equalsIgnoreCase("PESCD")){
+                imports1.setTabla("ZFLPCL");
+                String[] fields = {"CDSPC"};
+                imports1.setFields(fields);
+            }
+
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(query);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+
+            //imports1.setTabla(Tablas.ZFLEMB);
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions);
+            //imports1.setFields(fields);
+            imports1.setOptions(listOptKey);
+            imports1.setOrder("");
+            imports1.setRowcount(0);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            me = MaestroService.obtenerMaestro2(imports1);
+        }catch (Error e){
+            me.setMensaje(e.getMessage());
+        }
+        return me;
+    }
 
 
 }
