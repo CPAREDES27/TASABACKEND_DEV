@@ -20,7 +20,16 @@ public class PDFValeViveresDto {
     private String fechaFin;
     private String comentario;
     private String cocinero;
+    private String estadoImpresion;
     private String[] fechas;
+
+    public String getEstadoImpresion() {
+        return estadoImpresion;
+    }
+
+    public void setEstadoImpresion(String estadoImpresion) {
+        this.estadoImpresion = estadoImpresion;
+    }
 
     public String[] getFechas() {
         return fechas;
