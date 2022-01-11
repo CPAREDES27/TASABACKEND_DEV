@@ -2832,13 +2832,22 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         contentStream.beginText();
+        contentStream.setFont(bold, 155);
+        contentStream.setNonStrokingColor(Color.gray);
+        contentStream.moveTextPositionByAmount(40, 790);
+        contentStream.showText("______");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(bold, 12);
+        contentStream.setNonStrokingColor(Color.white);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFRolTripulacionConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(35, 740);
         contentStream.drawString(PDFRolTripulacionConstantes.uno);
         contentStream.endText();
@@ -3356,14 +3365,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 190);
-        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.setNonStrokingColor(Color.gray);
         contentStream.moveTextPositionByAmount(40, 790);
         contentStream.showText("_____");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 10);
-        contentStream.setNonStrokingColor(Color.BLACK);
+        contentStream.setNonStrokingColor(Color.white);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFTrimestralConstantes.titulo);
         contentStream.endText();
@@ -3371,6 +3380,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.moveTextPositionByAmount(50, 735);
         contentStream.drawString(PDFTrimestralConstantes.capitania );
         contentStream.endText();
