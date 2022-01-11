@@ -1220,6 +1220,4 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
         return me;
     }
-
-
 }

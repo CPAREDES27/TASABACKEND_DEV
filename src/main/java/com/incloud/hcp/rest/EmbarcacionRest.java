@@ -365,7 +365,7 @@ public class EmbarcacionRest {
 
     }
 
-    @PostMapping(value = "/ObtenerEeveElim/", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/ObtenerEveElim/", produces = APPLICATION_JSON_VALUE)
     public  ResponseEntity<MaestroExport> obtenerEveElim(@RequestBody EveElimImport imports){
 
         try {
