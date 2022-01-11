@@ -2636,7 +2636,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
             }
-            logger.error("RolTripulacion");
+             Metodos me= new Metodos();
+
+             logger.error("RolTripulacion");
             String[] CamposRolTripulacion= new String[]{PDFRolTripulacionConstantes.NOMBR,
                     PDFRolTripulacionConstantes.TITRP,
                     PDFRolTripulacionConstantes.STELL,
@@ -2666,7 +2668,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                                 registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
                             }
                         }else if(campos==2){
-                            registros[j] = T_DZART.getString(CamposRolTripulacion[campos]).replace("/","");
+                            String rol=me.ObtenerDominio("CARGOTRIPU",T_DZART.getString(CamposRolTripulacion[campos]));
+                            registros[j] = rol;
                         }else {
                             registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
                         }
@@ -2829,13 +2832,22 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
 
         contentStream.beginText();
+        contentStream.setFont(bold, 155);
+        contentStream.setNonStrokingColor(Color.gray);
+        contentStream.moveTextPositionByAmount(40, 790);
+        contentStream.showText("______");
+        contentStream.endText();
+
+        contentStream.beginText();
         contentStream.setFont(bold, 12);
+        contentStream.setNonStrokingColor(Color.white);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFRolTripulacionConstantes.titulo);
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.black);
         contentStream.moveTextPositionByAmount(35, 740);
         contentStream.drawString(PDFRolTripulacionConstantes.uno);
         contentStream.endText();
@@ -3353,14 +3365,14 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 190);
-        contentStream.setNonStrokingColor(Color.lightGray);
+        contentStream.setNonStrokingColor(Color.gray);
         contentStream.moveTextPositionByAmount(40, 790);
         contentStream.showText("_____");
         contentStream.endText();
 
         contentStream.beginText();
         contentStream.setFont(bold, 10);
-        contentStream.setNonStrokingColor(Color.BLACK);
+        contentStream.setNonStrokingColor(Color.white);
         contentStream.moveTextPositionByAmount(40, 760);
         contentStream.drawString(PDFTrimestralConstantes.titulo);
         contentStream.endText();
@@ -3368,6 +3380,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         contentStream.beginText();
         contentStream.setFont(bold, 8);
+        contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.moveTextPositionByAmount(50, 735);
         contentStream.drawString(PDFTrimestralConstantes.capitania );
         contentStream.endText();
@@ -4712,27 +4725,30 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
         contentStream.drawImage(logoTasa, 40, 760);
 
+        if(dto.getEstadoImpresion().equals("I")) {
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 80);
-        contentStream.setNonStrokingColor(Color.lightGray);
-        contentStream.moveTextPositionByAmount(180, 640);
-        contentStream.showText(PDFValeViveresConstantes.copia);
-        contentStream.endText();
+            contentStream.beginText();
+            contentStream.setFont(bold, 80);
+            contentStream.setNonStrokingColor(Color.lightGray);
+            contentStream.moveTextPositionByAmount(180, 640);
+            contentStream.showText(PDFValeViveresConstantes.copia);
+            contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 80);
-        contentStream.setNonStrokingColor(Color.lightGray);
-        contentStream.moveTextPositionByAmount(180, 380);
-        contentStream.showText(PDFValeViveresConstantes.copia);
-        contentStream.endText();
+            contentStream.beginText();
+            contentStream.setFont(bold, 80);
+            contentStream.setNonStrokingColor(Color.lightGray);
+            contentStream.moveTextPositionByAmount(180, 380);
+            contentStream.showText(PDFValeViveresConstantes.copia);
+            contentStream.endText();
 
-        contentStream.beginText();
-        contentStream.setFont(bold, 80);
-        contentStream.setNonStrokingColor(Color.lightGray);
-        contentStream.moveTextPositionByAmount(180, 200);
-        contentStream.showText(PDFValeViveresConstantes.copia);
-        contentStream.endText();
+            contentStream.beginText();
+            contentStream.setFont(bold, 80);
+            contentStream.setNonStrokingColor(Color.lightGray);
+            contentStream.moveTextPositionByAmount(180, 200);
+            contentStream.showText(PDFValeViveresConstantes.copia);
+            contentStream.endText();
+
+        }
 
         contentStream.beginText();
         contentStream.setFont(timesBold, 14);
@@ -5304,6 +5320,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
         dto.setRazonSocialDos(S_DATA.getString(PDFValeViveresConstantes.NAME2));
         dto.setFechaInicio(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FITVS));
         dto.setFechaFin(ConvertirFecha(S_DATA, PDFValeViveresConstantes.FFTVS));
+        dto.setEstadoImpresion(S_DATA.getString(PDFValeViveresConstantes.ESIMP));
+
+        logger.error("ESTADO IMPRESION: "+ dto.getEstadoImpresion());
 
         dto.setFechas(ObtenerFechas(dto.getFechaInicio(), dto.getFechaFin()));
 
