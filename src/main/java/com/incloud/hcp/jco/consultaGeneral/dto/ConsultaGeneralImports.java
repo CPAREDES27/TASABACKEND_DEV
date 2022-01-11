@@ -9,7 +9,44 @@ public class ConsultaGeneralImports {
     private String parametro4;
     private String parametro5;
     private String parametro6;
+    private String parametro7;
+    private String parametro8;
+    private String parametro9;
+    private String parametro10;
+
+    public String getParametro8() {
+        return parametro8;
+    }
+
+    public void setParametro8(String parametro8) {
+        this.parametro8 = parametro8;
+    }
+
+    public String getParametro9() {
+        return parametro9;
+    }
+
+    public void setParametro9(String parametro9) {
+        this.parametro9 = parametro9;
+    }
+
+    public String getParametro10() {
+        return parametro10;
+    }
+
+    public void setParametro10(String parametro10) {
+        this.parametro10 = parametro10;
+    }
+
     private String p_user;
+
+    public String getParametro7() {
+        return parametro7;
+    }
+
+    public void setParametro7(String parametro7) {
+        this.parametro7 = parametro7;
+    }
 
     public String getParametro1() {
         return parametro1;

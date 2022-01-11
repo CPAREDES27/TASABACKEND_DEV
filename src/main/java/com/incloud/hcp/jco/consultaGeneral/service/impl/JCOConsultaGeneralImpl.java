@@ -87,7 +87,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     options = BuscarOption("CONSGENTEORICO", importsParam.getParametro1(), importsParam.getParametro2()
                             , codZona, importsParam.getParametro4(), importsParam.getParametro5());
                     optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
-                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6());
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6(), importsParam.getParametro7());
                     fields = BuscarFields(importsParam.getNombreConsulta());
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -174,7 +174,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     options = BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                     optionsKeys = BuscarOptions(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
-                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6());
+                            , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6(), importsParam.getParametro7());
                     fields = BuscarFields(importsParam.getNombreConsulta());
                     dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -197,7 +197,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 options = BuscarOption(CONSGENBSQTRIPUROL1, value, importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                                 optionsKeys = BuscarOptions(CONSGENBSQTRIPUROL1, importsParam.getParametro1(), importsParam.getParametro2()
-                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6());
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6(), importsParam.getParametro7());
                                 fields = BuscarFields(CONSGENBSQTRIPUROL1);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -210,7 +210,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 options = BuscarOption(CONSGENBSQTRIPUROL2, importsParam.getParametro1(), importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                                 optionsKeys = BuscarOptions(CONSGENBSQTRIPUROL2, importsParam.getParametro1(), importsParam.getParametro2()
-                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6());
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6(), importsParam.getParametro7());
                                 fields = BuscarFields(CONSGENBSQTRIPUROL2);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -233,7 +233,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 options = BuscarOption(CONSGENBSQTRIPUZARPE1, value, importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                                 optionsKeys = BuscarOptions(CONSGENBSQTRIPUZARPE1, importsParam.getParametro1(), importsParam.getParametro2()
-                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6());
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(),importsParam.getParametro6(), importsParam.getParametro7());
                                 fields = BuscarFields(CONSGENBSQTRIPUZARPE1);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -246,7 +246,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                                 options = BuscarOption(CONSGENBSQTRIPUZARPE2, importsParam.getParametro1(), importsParam.getParametro2()
                                         , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
                                 optionsKeys = BuscarOptions(CONSGENBSQTRIPUZARPE2, importsParam.getParametro1(), importsParam.getParametro2()
-                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(), importsParam.getParametro6());
+                                        , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5(), importsParam.getParametro6(), importsParam.getParametro7());
                                 fields = BuscarFields(CONSGENBSQTRIPUZARPE2);
                                 dto = ConsultaGeneralReadTable(importsParam.getNombreConsulta(), tabla, importsParam.getP_user(), options, optionsKeys, fields, order, rowcount);
 
@@ -981,7 +981,7 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
     }
 
     public List<MaestroOptionsKey> BuscarOptions(String nombreConsultaG, String parametro1, String parametro2,
-                                                 String parametro3, String parametro4, String parametro5, String parametro6) {
+                                                 String parametro3, String parametro4, String parametro5, String parametro6, String parametro7) {
 
         List<MaestroOptionsKey> ListOptions = new ArrayList<>();
 
@@ -1034,6 +1034,14 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             numDescarga.setValueHigh("");
             numDescarga.setValueLow(parametro6);
             ListOptions.add(numDescarga);
+
+            MaestroOptionsKey estado = new MaestroOptionsKey();
+            estado.setCantidad("1");
+            estado.setControl("COMBOBOX");
+            estado.setKey("ESDES");
+            estado.setValueHigh("");
+            estado.setValueLow(parametro7);
+            ListOptions.add(estado);
 
         }
 
