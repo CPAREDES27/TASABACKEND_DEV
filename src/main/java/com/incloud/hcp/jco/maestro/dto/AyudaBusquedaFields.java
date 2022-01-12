@@ -29,6 +29,6 @@ public class AyudaBusquedaFields {
     public static String[] BSQCOCINERO={"PERNR","VORNA","NACHN","NACH2","STELL"};
     public static String[] BSQTRIPULANTES={"PERNR", "VORNA","NACHN","NACH2","STELL","DESC_STELL"};
     public static String[] BSQGRPEMPR={"CDGRE","DSGRE","CTGRA"};
-
+    public static String[] BSQEMPRESAREC={"CDEMP","DSEMP","RUCPRO"};
 
 }

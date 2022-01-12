@@ -545,7 +545,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         try {
             if(importsParam.getNombreAyuda().equals("BSQEMBHORO")){
                 dto=BuscarEmbaHorometro();
-            }else {
+            } if(importsParam.getNombreAyuda().equals("BSQEMPRESAREC")) {
+                dto=BuscarEmpresasReceptoras();
+            }
+            else {
                 String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
                 String rowcount="200";
@@ -864,6 +867,39 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
             Metodos exec= new Metodos();
             List<HashMap<String, Object>> data=exec.ObtenerListObjetos(STR_EMB,AyudaBusquedaFields.BSQEMBHORO) ;
+
+            dto.setData(data);
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
+    public AyudaBusquedaExports BuscarEmpresasReceptoras(){
+        AyudaBusquedaExports dto= new AyudaBusquedaExports();
+        try{
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_EMPRESAS);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+
+            importx.setValue("P_CDUSR", "BUSQEMP");
+            importx.setValue("P_RUC", "");
+
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable tableImport = tables.getTable(Tablas.P_OPTIONS);
+            tableImport.appendRow();
+            tableImport.setValue("WA", AyudaBusquedaOptions.BSQEMPRESAREC);
+
+            stfcConnection.execute(destination);
+
+            JCoTable STR_EMB = tables.getTable(Tablas.STR_EMP);
+
+            Metodos exec= new Metodos();
+            List<HashMap<String, Object>> data=exec.ObtenerListObjetos(STR_EMB,AyudaBusquedaFields.BSQEMPRESAREC) ;
 
             dto.setData(data);
             dto.setMensaje("Ok");
