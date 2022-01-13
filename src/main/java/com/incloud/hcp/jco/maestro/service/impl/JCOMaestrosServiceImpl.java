@@ -551,7 +551,8 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             else {
                 String tabla = (Buscartabla(importsParam.getNombreAyuda()));
 
-                String rowcount="200";
+                //String rowcount="200";
+                String rowcount="";
                 if(importsParam.getNombreAyuda().equals("BSQCOCINERO")){
                     rowcount="";
                 }
@@ -679,6 +680,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQGRPEMPR":
                 tabla=AyudaBusquedaTablas.BSQGRPEMPR;
                 break;
+            case "BSQEMBARCA":
+                tabla=AyudaBusquedaTablas.BSQEMBARCA;
+                break;
         }
 
         return tabla;
@@ -764,6 +768,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQGRPEMPR":
                 fields = AyudaBusquedaFields.BSQGRPEMPR;
                 break;
+            case "BSQEMBARCA":
+                fields = AyudaBusquedaFields.BSQEMBARCA;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -827,6 +834,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQGRPEMPR":
                 opt.setWa(AyudaBusquedaOptions.BSQGRPEMPR);//
+                break;
+            case "BSQEMBARCA":
+                opt.setWa(AyudaBusquedaOptions.BSQEMBARCA);//
                 break;
             default:
                 noExists=true;

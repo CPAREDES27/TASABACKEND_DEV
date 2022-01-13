@@ -27,5 +27,6 @@ public class AyudaBusquedaTablas {
     public static String BSQCOCINERO="ZHRP_BD_PERSONAL";
     public static String BSQTRIPULANTES="ZHRP_BD_PERSONAL";
     public static String BSQGRPEMPR="ZFLGRE";
+    public static String BSQEMBARCA="ZFLEMB";
 
 }
