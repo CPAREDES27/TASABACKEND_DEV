@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.sistemainformacionflota.dto;
 
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 
 import java.util.List;
 
@@ -17,18 +18,8 @@ public class PescaCompetenciaProduceImports {
     private String p_zcdzar;
     private String p_emba;
     private String p_empeb;
-    private List<MaestroOptions> p_options;
-    private String[] fieldstr_zlt;
-    private String[] fieldstr_pto;
-    private String[] fieldstr_gre;
-    private String[] fieldstr_pge;
-    private String[] fieldstr_gzp;
-    private String[] fieldstr_epp;
-    private String[] fieldstr_zpl;
-    private String[] fieldstr_emp;
-    private String[] fieldstr_pem;
-    private String[] fieldstr_ped;
-
+    private List<MaestroOptions> p_option;
+    private List<MaestroOptionsKey> p_options;
 
     public String getCdusr() {
         return cdusr;
@@ -118,91 +109,19 @@ public class PescaCompetenciaProduceImports {
         this.p_empeb = p_empeb;
     }
 
-    public List<MaestroOptions> getP_options() {
+    public List<MaestroOptions> getP_option() {
+        return p_option;
+    }
+
+    public void setP_option(List<MaestroOptions> p_option) {
+        this.p_option = p_option;
+    }
+
+    public List<MaestroOptionsKey> getP_options() {
         return p_options;
     }
 
-    public void setP_options(List<MaestroOptions> p_options) {
+    public void setP_options(List<MaestroOptionsKey> p_options) {
         this.p_options = p_options;
-    }
-
-    public String[] getFieldstr_zlt() {
-        return fieldstr_zlt;
-    }
-
-    public void setFieldstr_zlt(String[] fieldstr_zlt) {
-        this.fieldstr_zlt = fieldstr_zlt;
-    }
-
-    public String[] getFieldstr_pto() {
-        return fieldstr_pto;
-    }
-
-    public void setFieldstr_pto(String[] fieldstr_pto) {
-        this.fieldstr_pto = fieldstr_pto;
-    }
-
-    public String[] getFieldstr_gre() {
-        return fieldstr_gre;
-    }
-
-    public void setFieldstr_gre(String[] fieldstr_gre) {
-        this.fieldstr_gre = fieldstr_gre;
-    }
-
-    public String[] getFieldstr_pge() {
-        return fieldstr_pge;
-    }
-
-    public void setFieldstr_pge(String[] fieldstr_pge) {
-        this.fieldstr_pge = fieldstr_pge;
-    }
-
-    public String[] getFieldstr_gzp() {
-        return fieldstr_gzp;
-    }
-
-    public void setFieldstr_gzp(String[] fieldstr_gzp) {
-        this.fieldstr_gzp = fieldstr_gzp;
-    }
-
-    public String[] getFieldstr_epp() {
-        return fieldstr_epp;
-    }
-
-    public void setFieldstr_epp(String[] fieldstr_epp) {
-        this.fieldstr_epp = fieldstr_epp;
-    }
-
-    public String[] getFieldstr_zpl() {
-        return fieldstr_zpl;
-    }
-
-    public void setFieldstr_zpl(String[] fieldstr_zpl) {
-        this.fieldstr_zpl = fieldstr_zpl;
-    }
-
-    public String[] getFieldstr_emp() {
-        return fieldstr_emp;
-    }
-
-    public void setFieldstr_emp(String[] fieldstr_emp) {
-        this.fieldstr_emp = fieldstr_emp;
-    }
-
-    public String[] getFieldstr_pem() {
-        return fieldstr_pem;
-    }
-
-    public void setFieldstr_pem(String[] fieldstr_pem) {
-        this.fieldstr_pem = fieldstr_pem;
-    }
-
-    public String[] getFieldstr_ped() {
-        return fieldstr_ped;
-    }
-
-    public void setFieldstr_ped(String[] fieldstr_ped) {
-        this.fieldstr_ped = fieldstr_ped;
     }
 }
