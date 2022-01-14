@@ -4,11 +4,22 @@ import com.incloud.hcp.jco.controlLogistico.dto.HorometroForEmailDto;
 import com.incloud.hcp.jco.controlLogistico.dto.SiniestroForEmailDto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class EventoForEmailDto {
     private String nroEvento;
-    private ArrayList<HorometroForEmailDto> horometrosAveriados;
+    private List<HashMap<String, Object>> horometrosAveriados;
     private ArrayList<SiniestroForEmailDto> siniestros;
+
+
+    public List<HashMap<String, Object>> getHorometrosAveriados() {
+        return horometrosAveriados;
+    }
+
+    public void setHorometrosAveriados(List<HashMap<String, Object>> horometrosAveriados) {
+        this.horometrosAveriados = horometrosAveriados;
+    }
 
     public String getNroEvento() {
         return nroEvento;
@@ -18,13 +29,7 @@ public class EventoForEmailDto {
         this.nroEvento = nroEvento;
     }
 
-    public ArrayList<HorometroForEmailDto> getHorometrosAveriados() {
-        return horometrosAveriados;
-    }
 
-    public void setHorometrosAveriados(ArrayList<HorometroForEmailDto> horometrosAveriados) {
-        this.horometrosAveriados = horometrosAveriados;
-    }
 
     public ArrayList<SiniestroForEmailDto> getSiniestros() {
         return siniestros;

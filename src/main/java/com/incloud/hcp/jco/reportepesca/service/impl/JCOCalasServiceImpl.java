@@ -127,6 +127,9 @@ public class JCOCalasServiceImpl implements JCOCalasService {
             String strPorot = String.valueOf(m.get("POROT"));
             m.put("POROT", strPorot);
 
+            String strNrmar = String.valueOf(m.get("NRMAR"));
+            m.put("NRMAR", strNrmar);
+
             return m;
         }).collect(Collectors.toList());
 

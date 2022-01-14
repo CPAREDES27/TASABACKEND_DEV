@@ -168,6 +168,9 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                 case "8": // SAC Pesca CN
                     nombreData = Tablas.IT_SAC_PPESCAR_CN;
                     break;
+                case "9": // SAC LIM_CAP_PLN
+                    nombreData = Tablas.IT_SAC_LIM_CAP_PLN;
+                    break;
             }
 
             //Evaluar que todos los campos indicados por el RFC existan en el import
@@ -228,6 +231,39 @@ public class JCOCargaArchivosImpl implements JCOCargaArchivosService {
                             data.replace("PMCE", decimalFormat2.format(pmce));
                             data.replace("LMCE", decimalFormat2.format(lmce));
                             break;
+                        case "4":
+                            String[] keys = {"CBOD", "LMCE"};
+
+                            for (Map.Entry<String, Object> dataEntry: data.entrySet()) {
+                                String key = dataEntry.getKey();
+                                if (Arrays.asList(keys).contains(key)) {
+                                    String value = dataEntry.getValue().toString().replace(",", "");
+                                    Double number = Double.parseDouble(value);
+                                    data.replace(key, number);
+                                }
+                            }
+                            break;
+                        case "8":
+                            /*
+                            String porPescar18_1 = data.get("PORPESCAR18_1").toString().replace(",", "");
+                            String porPescar18_2 = data.get("PORPESCAR18_2").toString().replace(",", "");
+
+                            data.replace("PORPESCAR18_1", porPescar18_1);
+                            data.replace("PORPESCAR18_2", porPescar18_2);
+
+                             */
+
+                            // Recorrer los porPescar de los periodos
+                            for (Map.Entry<String, Object> dataEntry: data.entrySet()) {
+                                if (dataEntry.getKey().startsWith("PORPESCAR")) {
+                                    String porPescarPeriodo = dataEntry.getKey();
+                                    String valorPorPescar = dataEntry.getValue().toString().replace(",", "");
+                                    Double porPescar = ! valorPorPescar.equals("") ? Double.parseDouble(valorPorPescar) : 0;
+                                    data.replace(porPescarPeriodo, porPescar);
+                                }
+                            }
+                            break;
+
                     }
                 }
 

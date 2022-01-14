@@ -73,6 +73,7 @@ public class Tablas {
     public static String IT_SAC_ORDENGE="IT_SAC_ORDENGE";
     public static String IT_SAC_FLOTATASA="IT_SAC_FLOTATASA";
     public static String IT_SAC_PPESCAR_CN="IT_SAC_PPESCAR_CN";
+    public static String IT_SAC_LIM_CAP_PLN="IT_SAC_LIM_CAP_PLN";
 
 
 
@@ -182,6 +183,8 @@ public class Tablas {
     public static String STR_RSC="STR_RSC";
 
 
-
+    //tablas de rfcs de correos
+    public static String IT_ASIG_EMB="IT_ASIG_EMB";
+    public static String IT_HORO_AVE="IT_HORO_AVE";
 
 }

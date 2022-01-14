@@ -265,20 +265,31 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String,Object>> str_flbsp_matched=new ArrayList<>();
         //Obtener columnas dinamicas
         for (Map.Entry<String,ArrayList<HashMap<String,Object>>> entry: str_flbsp_group_copy.entrySet()) {
-            String codEspecie = null;
+            String codEspecie = "";
 
             //Fila al cual se le añadirán las columnas dinámicas
             HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
             for (HashMap<String,Object> flbsp: entry.getValue()) {
-                codEspecie = flbsp.get("CDSPC").toString();
-                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+                String cdspc = flbsp.get("CDSPC").toString();
                 int cnspc=Integer.parseInt(flbsp.get("CNSPC").toString());
+                if (!codEspecie.equals(cdspc)) {
+                    codEspecie = cdspc;
+                    totalCnspc = 0;
+                }
+                //codEspecie = flbsp.get("CDSPC").toString();
+                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+
                 double tmmed=Double.parseDouble(flbsp.get("TMMED").toString());
                 tnmmed=tnmmed.replace('.','_');
                 record.put(tnmmed,flbsp.get("CNSPC"));
 
                 //Total de cantidades
-                totalCnspc+=cnspc;
+                if(codEspecie.equals(cdspc)) {
+                    totalCnspc+=cnspc;
+                } else {
+                    totalCnspc=cnspc;
+                }
+
 
                 //Moda
                 if(cnspcModa<cnspc){
@@ -1161,6 +1172,52 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return  ave;
     }
 
+    @Override
+    public MaestroExport obtenerEveElim(EveElimImport eveElimImport) throws  Exception{
+        MaestroExport me = new MaestroExport();
+        try{
+            int marea = eveElimImport.getMarea();
+            int nroEvento = eveElimImport.getNumero_evento();
+            String estructura = eveElimImport.getEstructura();
+            String usuario = eveElimImport.getUsuario();
+            String query = "NRMAR = " + marea + " AND NREVN = " + nroEvento;
 
+            MaestroImportsKey imports1 = new MaestroImportsKey();
 
+            if(estructura.equalsIgnoreCase("HOROM")){
+                imports1.setTabla("ZFLLHO");
+                String[] fields = {"CDTHR"};
+                imports1.setFields(fields);
+            }else if(estructura.equalsIgnoreCase("BODG")){
+                imports1.setTabla("ZFLPDB");
+                String[] fields = {"CDBOD"};
+                imports1.setFields(fields);
+            }else if(estructura.equalsIgnoreCase("PESCD")){
+                imports1.setTabla("ZFLPCL");
+                String[] fields = {"CDSPC"};
+                imports1.setFields(fields);
+            }
+
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(query);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+
+            //imports1.setTabla(Tablas.ZFLEMB);
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions);
+            //imports1.setFields(fields);
+            imports1.setOptions(listOptKey);
+            imports1.setOrder("");
+            imports1.setRowcount(0);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            me = MaestroService.obtenerMaestro2(imports1);
+        }catch (Error e){
+            me.setMensaje(e.getMessage());
+        }
+        return me;
+    }
 }

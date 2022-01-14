@@ -42,5 +42,7 @@ public interface JCOEmbarcacionService {
 
     AnularVentaExport anularVenta(AnularVentaImport imports) throws Exception;
 
+    MaestroExport obtenerEveElim(EveElimImport imports) throws Exception;
+
 
 }

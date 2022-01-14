@@ -923,7 +923,16 @@ public class Metodos {
 
             }
         }
-        logger.error("arreglo: " +tmpOptions);
+        String resultOp = "Options armados:\n[";
+        for (HashMap<String, Object> op: tmpOptions) {
+            resultOp += "{\n";
+            for (Map.Entry<String, Object> itOp:op.entrySet()) {
+                resultOp += itOp.getKey() + ": " + itOp.getValue().toString()+",";
+            }
+            resultOp += "}\n";
+        }
+        resultOp+="]";
+        logger.error("arreglo: " + resultOp);
         return tmpOptions;
     }
     public List<HashMap<String, Object>> ObtenerListObjetos(JCoTable jcoTable,  String[] fields)throws Exception{

@@ -93,7 +93,7 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
         PescaCompetenciaProduceExports pcp=new PescaCompetenciaProduceExports();
 
         try {
-
+            Metodos metodo = new Metodos();
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_COMP_GNRAL);
@@ -111,43 +111,34 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             importx.setValue("P_EMBA", imports.getP_emba());
             importx.setValue("P_EMPEB", imports.getP_empeb());
 
-            List<MaestroOptions> options = imports.getP_options();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                MaestroOptions mo = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-
-                record.put("WA", mo.getWa());
-                tmpOptions.add(record);
-            }
+            List<HashMap<String, Object>> tmpOptions = metodo.ValidarOptions(imports.getP_option(),imports.getP_options());
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec = new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
             stfcConnection.execute(destination);
 
-            JCoTable STR_ZLT = tables.getTable(Tablas.STR_ZLT);
-            JCoTable STR_PTO = tables.getTable(Tablas.STR_PTO);
-            JCoTable STR_GRE = tables.getTable(Tablas.STR_GRE);
-            JCoTable STR_PGE = tables.getTable(Tablas.STR_PGE);
-            JCoTable STR_GZP = tables.getTable(Tablas.STR_GZP);
-            JCoTable STR_EPP = tables.getTable(Tablas.STR_EPP);
-            JCoTable STR_ZPL = tables.getTable(Tablas.STR_ZPL);
-            JCoTable STR_EMP = tables.getTable(Tablas.STR_EMP);
-            JCoTable STR_PEM = tables.getTable(Tablas.STR_PEM);
-            JCoTable STR_PED = tables.getTable(Tablas.STR_PED);
+            JCoTable tblSTR_ZLT = tables.getTable(Tablas.STR_ZLT);
+            JCoTable tblSTR_PTO = tables.getTable(Tablas.STR_PTO);
+            JCoTable tblSTR_GRE = tables.getTable(Tablas.STR_GRE);
+            JCoTable tblSTR_PGE = tables.getTable(Tablas.STR_PGE);
+            JCoTable tblSTR_GZP = tables.getTable(Tablas.STR_GZP);
+            JCoTable tblSTR_EPP = tables.getTable(Tablas.STR_EPP);
+            JCoTable tblSTR_ZPL = tables.getTable(Tablas.STR_ZPL);
+            JCoTable tblSTR_EMP = tables.getTable(Tablas.STR_EMP);
+            JCoTable tblSTR_PEM = tables.getTable(Tablas.STR_PEM);
+            JCoTable tblSTR_PED = tables.getTable(Tablas.STR_PED);
 
-            Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_zlt = metodo.ObtenerListObjetos(STR_ZLT, imports.getFieldstr_zlt());
-            List<HashMap<String, Object>> str_pto = metodo.ObtenerListObjetos(STR_PTO, imports.getFieldstr_pto());
-            List<HashMap<String, Object>> str_gre = metodo.ObtenerListObjetos(STR_GRE, imports.getFieldstr_gre());
-            List<HashMap<String, Object>> str_pge = metodo.ObtenerListObjetos(STR_PGE, imports.getFieldstr_pge());
-            List<HashMap<String, Object>> str_gzp = metodo.ObtenerListObjetos(STR_GZP, imports.getFieldstr_gzp());
-            List<HashMap<String, Object>> str_epp = metodo.ObtenerListObjetos(STR_EPP, imports.getFieldstr_epp());
-            List<HashMap<String, Object>> str_zpl = metodo.ObtenerListObjetos(STR_ZPL, imports.getFieldstr_zpl());
-            List<HashMap<String, Object>> str_emp = metodo.ObtenerListObjetos(STR_EMP, imports.getFieldstr_emp());
-            List<HashMap<String, Object>> str_pem = metodo.ObtenerListObjetos(STR_PEM, imports.getFieldstr_pem());
-            List<HashMap<String, Object>> str_ped = metodo.ObtenerListObjetos(STR_PED, imports.getFieldstr_ped());
+            List<HashMap<String, Object>> str_zlt = metodo.ListarObjetos(tblSTR_ZLT);
+            List<HashMap<String, Object>> str_pto = metodo.ListarObjetos(tblSTR_PTO);
+            List<HashMap<String, Object>> str_gre = metodo.ListarObjetos(tblSTR_GRE);
+            List<HashMap<String, Object>> str_pge = metodo.ListarObjetos(tblSTR_PGE);
+            List<HashMap<String, Object>> str_gzp = metodo.ListarObjetos(tblSTR_GZP);
+            List<HashMap<String, Object>> str_epp = metodo.ListarObjetos(tblSTR_EPP);
+            List<HashMap<String, Object>> str_zpl = metodo.ListarObjetos(tblSTR_ZPL);
+            List<HashMap<String, Object>> str_emp = metodo.ListarObjetos(tblSTR_EMP);
+            List<HashMap<String, Object>> str_pem = metodo.ListarObjetos(tblSTR_PEM);
+            List<HashMap<String, Object>> str_ped = metodo.ListarObjetos(tblSTR_PED);
 
             pcp.setStr_zlt(str_zlt);
             pcp.setStr_pto(str_pto);

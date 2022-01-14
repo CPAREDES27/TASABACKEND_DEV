@@ -21,7 +21,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQGPOCOMP={"EKGRP", "EKNAM"};
     public static String[] BSQARMCOM={"LIFNR", "NAME1", "STCD1"};
     public static String[] BSQEMBHORO={"CDEMB","MREMB","NMEMB","LIFNR","NAME1"};
-    public static String[] BSQEMBARCA={};
+    public static String[] BSQEMBARCA={"CDEMB","NMEMB","MREMB"};
     public static String[] BSQEMPLANTA={"CDEMP","DSEMP","LIFNR"};
     public static String[] BSQTEMPORADA={"CDPCN","DSPCN","FHITM","FHFTM","CTNAC","ZCDZAR","ZDSZAR"};
     public static String[] BSQEQUIPO={"EQUNR","EQKTX"};
@@ -29,6 +29,6 @@ public class AyudaBusquedaFields {
     public static String[] BSQCOCINERO={"PERNR","VORNA","NACHN","NACH2","STELL"};
     public static String[] BSQTRIPULANTES={"PERNR", "VORNA","NACHN","NACH2","STELL","DESC_STELL"};
     public static String[] BSQGRPEMPR={"CDGRE","DSGRE","CTGRA"};
-
+    public static String[] BSQEMPRESAREC={"CDEMP","DSEMP","RUCPRO"};
 
 }

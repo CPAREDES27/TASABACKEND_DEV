@@ -13,10 +13,10 @@ public class AyudaBusquedaOptions {
     public static String BSQEMBHORO="ESEMB = 'O'";
     public static String BSQEMBHORO1="AND INPRP LIKE 'P'";
     public static String BSQCENTRO="CDEMP = '0000000001'";
-    public static String BSQEMBARCA="";
+    public static String BSQEMBARCA="ESEMB = 'O'";
     public static String BSQTEMPORADA="ESPCN = 'S'";
     public static String BSQCOCINERO="ABKRS = 'TT' AND STELL = '30000083'";
     public static String BSQTRIPULANTES="ABKRS = 'TT'";
     public static String BSQGRPEMPR="ESREG = 'S'";
-
+    public static String BSQEMPRESAREC="ESREG = 'S'";
 }
