@@ -234,7 +234,6 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
 
             for (int i = 0; i < s_str_dp.getNumRows(); i++) {
                 s_str_dp.setRow(i);
-                TotalDto resumenTotal = new TotalDto();
                 BigDecimal b_cnpcm = new BigDecimal(s_str_dp.getString("CNPCM"));
                 BigDecimal b_cnpdt = new BigDecimal(s_str_dp.getString("CNPDT"));
 
@@ -265,6 +264,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     maestro.setTabla("ZFLPTA");
                     String v_PescDecl = s_str_dp.getString("CNPCM");
                     String v_dif = this.prueba(maestro,importsParam.getP_user(),v_PescDecl);
+
+                    TotalDto resumenTotal = new TotalDto();
                     resumenTotal.setDif(v_dif);
 
                     /*-----------------------------------------------------------*/
@@ -289,7 +290,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     vd_tottot_cbod = vd_tottot_cbod + resumenProp.getCbodProp();
                     vd_tottot_dscl = vd_tottot_dscl + resumenProp.getPescDeclProp();
                     vd_tottot_ep = vd_tottot_ep + resumenProp.getEmbaPescProp();
-                    logger.error(resumenTotal.toString());
+
+                    logger.error("CESARIN: "+resumenTotal.getCbodProp());
                     lst_propios.add(resumenProp);
                     lst_totales.add(resumenTotal);
 
@@ -319,6 +321,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     maestro.setTabla("ZFLPTA");
                     String v_PescDecl = s_str_dp.getString("CNPDT");
                     String v_dif = this.prueba(maestro,importsParam.getP_user(),v_PescDecl);
+
+                    TotalDto resumenTotal = new TotalDto();
                     resumenTotal.setDif(v_dif);
 
                     /*-----------------------------------------------------------*/
@@ -344,10 +348,84 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     vd_tottot_cbod = vd_tottot_cbod + resumenTerc.getCbodProp();
                     vd_tottot_dscl = vd_tottot_dscl + resumenTerc.getPescDeclProp();
                     vd_tottot_ep = vd_tottot_ep + resumenTerc.getEmbaPescProp();
-                    logger.error(resumenTotal.toString());
+
+                    logger.error("CESARIN: "+resumenTotal.getCbodProp());
                     lst_terceros.add(resumenTerc);
                     lst_totales.add(resumenTotal);
 
+                }
+
+            }
+            List<TotalDto> lst_totales2 = new ArrayList<TotalDto>();
+            String planta="";
+            double sumCBOD=0;
+            double sumDCL=0;
+            double sumEP=0;
+            for(int i=0; i<lst_totales.size();i++){
+
+
+                if(!lst_totales.get(i).getDescPlanta().equals(planta)){
+
+                    if(i==0){
+                        planta=lst_totales.get(i).getDescPlanta();
+                        sumCBOD=lst_totales.get(i).getCbodProp();
+                        sumDCL=lst_totales.get(i).getPescDeclProp();
+                        sumEP=lst_totales.get(i).getEmbaPescProp();
+                    }else if(i==(lst_totales.size()-1)){
+
+                        TotalDto resumenTotal2 = new TotalDto();
+
+                        resumenTotal2.setCodPlanta(lst_totales.get(i-1).getCodPlanta());
+                        resumenTotal2.setDescPlanta(lst_totales.get(i-1).getDescPlanta());
+                        resumenTotal2.setPescDeclProp(sumDCL);
+                        resumenTotal2.setEmbaPescProp(sumEP);
+                        resumenTotal2.setCbodProp(sumCBOD);
+
+                        lst_totales2.add(resumenTotal2);
+
+                        TotalDto resumenTotal3 = new TotalDto();
+
+                        resumenTotal3.setCodPlanta(lst_totales.get(i).getCodPlanta());
+                        resumenTotal3.setDescPlanta(lst_totales.get(i).getDescPlanta());
+                        resumenTotal3.setPescDeclProp(lst_totales.get(i).getPescDeclProp());
+                        resumenTotal3.setEmbaPescProp(lst_totales.get(i).getEmbaPescProp());
+                        resumenTotal3.setCbodProp(lst_totales.get(i).getCbodProp());
+
+                        lst_totales2.add(resumenTotal3);
+                    }else{
+                        TotalDto resumenTotal2 = new TotalDto();
+
+                        resumenTotal2.setCodPlanta(lst_totales.get(i-1).getCodPlanta());
+                        resumenTotal2.setDescPlanta(lst_totales.get(i-1).getDescPlanta());
+                        resumenTotal2.setPescDeclProp(sumDCL);
+                        resumenTotal2.setEmbaPescProp(sumEP);
+                        resumenTotal2.setCbodProp(sumCBOD);
+
+                        lst_totales2.add(resumenTotal2);
+
+                    }
+                    planta=lst_totales.get(i).getDescPlanta();
+                    sumCBOD=lst_totales.get(i).getCbodProp();
+                    sumDCL=lst_totales.get(i).getPescDeclProp();
+                    sumEP=lst_totales.get(i).getEmbaPescProp();
+                }else{
+                    //planta=lst_totales.get(i).getDescPlanta();
+                    sumCBOD+=lst_totales.get(i).getCbodProp();
+                    sumDCL+=lst_totales.get(i).getPescDeclProp();
+                    sumEP+=lst_totales.get(i).getEmbaPescProp();
+
+                    if (i==(lst_totales.size()-1)){
+
+                        TotalDto resumenTotal2 = new TotalDto();
+
+                        resumenTotal2.setCodPlanta(lst_totales.get(i-1).getCodPlanta());
+                        resumenTotal2.setDescPlanta(lst_totales.get(i-1).getDescPlanta());
+                        resumenTotal2.setPescDeclProp(sumDCL);
+                        resumenTotal2.setEmbaPescProp(sumEP);
+                        resumenTotal2.setCbodProp(sumCBOD);
+
+                        lst_totales2.add(resumenTotal2);
+                    }
                 }
 
             }
@@ -360,7 +438,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             dto.setTot_terc_cbod(vd_totterc_cbod);
             dto.setTot_terc_dscl(vd_totterc_dscl);
             dto.setTot_terc_ep(vd_totterc_ep);
-            dto.setListaTotal(lst_totales);
+            dto.setListaTotal(lst_totales2);
             dto.setTot_tot_cbod(vd_tottot_cbod);
             dto.setTot_tot_dscl(vd_tottot_dscl);
             dto.setTot_tot_ep(vd_tottot_ep);

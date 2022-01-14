@@ -1,11 +1,9 @@
 package com.incloud.hcp.jco.reportepesca.service.impl;
 
 import com.incloud.hcp.jco.dominios.dto.*;
-import com.incloud.hcp.jco.dominios.service.impl.JCODominiosImpl;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
-import com.incloud.hcp.jco.reportepesca.dto.MaestroOptionsMarea;
 import com.incloud.hcp.jco.reportepesca.dto.MareaExports;
 import com.incloud.hcp.jco.reportepesca.dto.MareaImports;
 import com.incloud.hcp.jco.reportepesca.service.JCOMareasService;
@@ -37,7 +35,7 @@ public class JCOMareasServiceImpl implements JCOMareasService {
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA);
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA_BTP);
 
         JCoParameterList paramsTable = function.getTableParameterList();
 
