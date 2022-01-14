@@ -1220,4 +1220,41 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         }
         return me;
     }
+
+    @Override
+    public AyudaBusqExport ayudaBusq(AyudaBusqImport imports) throws Exception {
+        AyudaBusqExport export = new AyudaBusqExport();
+        try {
+            Metodos metodo=new Metodos();
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_AYUDBSQ_EMB);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", imports.getP_user());
+
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+
+            List<MaestroOptions> option = imports.getOptions();
+            List<MaestroOptionsKey> options = imports.getP_options();
+            List<MaestroOptionsKey> options2 = imports.getP_options2();
+
+            List<HashMap<String, Object>> tmpOptions1 = metodo.ValidarOptions(option,options);
+            List<HashMap<String, Object>> tmpOptions2 = metodo.ValidarOptions(option,options2);
+
+            EjecutarRFC exe = new EjecutarRFC();
+            exe.setTable(tables, Tablas.P_OPTIONS, tmpOptions1);
+            exe.setTable(tables, Tablas.P_OPTIONS2, tmpOptions2);
+
+            stfcConnection.execute(destination);
+
+            JCoTable tblStr_emb = tables.getTable(Tablas.STR_EMB);
+            List<HashMap<String, Object>> str_emb = metodo.ListarObjetos(tblStr_emb);
+            export.setStr_emb(str_emb);
+            export.setMensaje("OK");
+        } catch (Exception ex) {
+            export.setMensaje(ex.getMessage());
+        }
+
+        return export;
+    }
 }

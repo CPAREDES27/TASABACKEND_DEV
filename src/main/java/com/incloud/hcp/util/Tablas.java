@@ -39,6 +39,7 @@ public class Tablas {
     public static String STR_HOR="STR_HOR";
     public static String OPTIONS="OPTIONS";
     public static String P_OPTIONS="P_OPTIONS";
+    public static String P_OPTIONS2="P_OPTIONS2";
     public static String STR_DSF="STR_DSF";
     public static String STR_EMP="STR_EMP";
     public static String ST_VVI="ST_VVI";
