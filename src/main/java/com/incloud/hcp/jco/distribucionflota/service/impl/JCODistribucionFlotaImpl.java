@@ -289,7 +289,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     vd_tottot_cbod = vd_tottot_cbod + resumenProp.getCbodProp();
                     vd_tottot_dscl = vd_tottot_dscl + resumenProp.getPescDeclProp();
                     vd_tottot_ep = vd_tottot_ep + resumenProp.getEmbaPescProp();
-
+                    logger.error(resumenTotal.toString());
                     lst_propios.add(resumenProp);
                     lst_totales.add(resumenTotal);
 
@@ -344,7 +344,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     vd_tottot_cbod = vd_tottot_cbod + resumenTerc.getCbodProp();
                     vd_tottot_dscl = vd_tottot_dscl + resumenTerc.getPescDeclProp();
                     vd_tottot_ep = vd_tottot_ep + resumenTerc.getEmbaPescProp();
-
+                    logger.error(resumenTotal.toString());
                     lst_terceros.add(resumenTerc);
                     lst_totales.add(resumenTotal);
 
