@@ -49,7 +49,8 @@ public class JCOCalasServiceImpl implements JCOCalasService {
         JCoTable tblS_CALA = tables.getTable(Tablas.S_CALA);
 
         Metodos metodos = new Metodos();
-        List<HashMap<String, Object>> listS_CALA = metodos.ListarObjetos(tblS_CALA);
+        //List<HashMap<String, Object>> listS_CALA = metodos.ListarObjetos(tblS_CALA);
+        List<HashMap<String, Object>> listS_CALA = metodos.ListarObjetosLazy(tblS_CALA);
 
         /**
          * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea

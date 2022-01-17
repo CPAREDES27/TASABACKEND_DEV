@@ -67,7 +67,7 @@ public class Constantes {
 
 
     // Reportes de pesca
-    public static String ZFL_RFC_GPES_CONS_MAREA_BTP ="ZFL_RFC_GPES_CONS_MAREA_BTP";
+    public static String ZFL_RFC_GPES_CONS_MAREA ="ZFL_RFC_GPES_CONS_MAREA";
     public static String ZFL_RFC_CONS_DESCA="ZFL_RFC_CONS_DESCA";
     public static String ZFL_RFC_AGREGA_INTER="ZFL_RFC_AGREGA_INTER";
     public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";

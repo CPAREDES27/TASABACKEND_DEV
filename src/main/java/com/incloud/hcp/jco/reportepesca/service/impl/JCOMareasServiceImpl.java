@@ -35,7 +35,7 @@ public class JCOMareasServiceImpl implements JCOMareasService {
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA_BTP);
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_MAREA);
 
         JCoParameterList paramsTable = function.getTableParameterList();
 
@@ -47,7 +47,8 @@ public class JCOMareasServiceImpl implements JCOMareasService {
         function.execute(destination);
         JCoTable tblS_MAREA = tables.getTable(Tablas.S_MAREA);
 
-        List<HashMap<String, Object>> listS_MAREA = metodo.ListarObjetos(tblS_MAREA);
+        //List<HashMap<String, Object>> listS_MAREA = metodo.ListarObjetos(tblS_MAREA);
+        List<HashMap<String, Object>> listS_MAREA = metodo.ListarObjetosLazy(tblS_MAREA);
 
         /**
          * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea

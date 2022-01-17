@@ -30,6 +30,24 @@ public class Metodos {
     @Autowired
     private JCOConsultaGeneralService jcoConsultaGeneralService;
 
+    public List<HashMap<String, Object>> ListarObjetosLazy(JCoTable tableExport) throws Exception {
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+        for (int i = 0; i < tableExport.getNumRows(); i++) {
+            tableExport.setRow(i);
+            JCoFieldIterator iter = tableExport.getFieldIterator();
+            HashMap<String, Object> newRecord = new HashMap<String, Object>();
+            while (iter.hasNextField()) {
+                JCoField field = iter.nextField();
+                String key = (String) field.getName();
+                Object value = tableExport.getValue(key);
+                newRecord.put(key, value);
+            }
+            data.add(newRecord);
+        }
+
+        return data;
+    }
     public List<HashMap<String, Object>> ListarObjetos(JCoTable tableExport) throws Exception {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
