@@ -55,7 +55,8 @@ public class JCODescargasServiceImpl implements JCODescargasService {
         JCoTable tblSTR_DES = tables.getTable(Tablas.STR_DES);
 
         Metodos metodos = new Metodos();
-        List<HashMap<String, Object>> listSTR_DES = metodos.ListarObjetos(tblSTR_DES);
+        //List<HashMap<String, Object>> listSTR_DES = metodos.ListarObjetos(tblSTR_DES);
+        List<HashMap<String, Object>> listSTR_DES = metodos.ListarObjetosLazy(tblSTR_DES);
 
         /**
          * Búsqueda de descripciones de campos: Ind. propiedad, motivo de marea
