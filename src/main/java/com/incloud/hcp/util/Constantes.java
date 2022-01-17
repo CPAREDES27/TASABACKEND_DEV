@@ -70,7 +70,7 @@ public class Constantes {
     public static String ZFL_RFC_GPES_CONS_MAREA ="ZFL_RFC_GPES_CONS_MAREA";
     public static String ZFL_RFC_CONS_DESCA="ZFL_RFC_CONS_DESCA";
     public static String ZFL_RFC_AGREGA_INTER="ZFL_RFC_AGREGA_INTER";
-    public static String ZFL_RFC_GPES_CONS_CALAS="ZFL_RFC_GPES_CONS_CALAS";
+    public static String ZFL_RFC_GPES_CONS_CALAS_BTP ="ZFL_RFC_GPES_CONS_CALAS_BTP";
     public static String ZFL_RFC_GPES_CONS_BIOM="ZFL_RFC_GPES_CONS_BIOM";
     public static String ZFL_RFC_GESP_CONSULTA_CHDPM="ZFL_RFC_GESP_CONSULTA_CHDPM";
     public static String ZFL_RFC_GCOM_CONS_COMBU="ZFL_RFC_GCOM_CONS_COMBU";

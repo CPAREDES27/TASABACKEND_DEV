@@ -36,7 +36,7 @@ public class JCOCalasServiceImpl implements JCOCalasService {
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_CALAS);
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_GPES_CONS_CALAS_BTP);
 
         JCoParameterList paramsTable = function.getTableParameterList();
 
