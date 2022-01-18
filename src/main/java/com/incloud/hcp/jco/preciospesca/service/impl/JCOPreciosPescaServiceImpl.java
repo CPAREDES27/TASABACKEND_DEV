@@ -59,7 +59,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         ArrayList<String> listDomNames = new ArrayList<>();
         listDomNames.add(Dominios.ESCSG);
         listDomNames.add(Dominios.ESPRC);
-        listDomNames.add(Dominios.MONEDA);
+        listDomNames.add(Dominios.ZDOMMONEDA);
 
 
         DominiosHelper helper = new DominiosHelper();
@@ -67,7 +67,7 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
 
         DominiosExports estadoCastigo = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESCSG)).findFirst().orElse(null);
         DominiosExports estadoPrecio = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESPRC)).findFirst().orElse(null);
-        DominiosExports moneda = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.MONEDA)).findFirst().orElse(null);
+        DominiosExports moneda = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZDOMMONEDA)).findFirst().orElse(null);
 
         listSTR_APP.stream().map(m -> {
             String escsg = m.get("ESCSG").toString();
