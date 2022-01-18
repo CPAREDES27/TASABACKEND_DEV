@@ -142,7 +142,36 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         JCoTable tblSTR_PPC = tables.getTable(Tablas.STR_PPC);
 
 
-        List<HashMap<String, Object>> listSTR_PPC = metodo.ListarObjetos(tblSTR_PPC);
+        //List<HashMap<String, Object>> listSTR_PPC = metodo.ListarObjetos(tblSTR_PPC);
+
+        List<HashMap<String, Object>> listSTR_PPC = metodo.ListarObjetosLazy(tblSTR_PPC);
+
+
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add(Dominios.ZDOMMONEDA);
+
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports moneda = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZDOMMONEDA)).findFirst().orElse(null);
+
+        listSTR_PPC.stream().map(m -> {
+            String waers = m.get("WAERS").toString();
+
+            // Buscar los detalles
+            DominioExportsData dataWAERS = moneda.getData().stream().filter(d -> d.getId().equals(waers)).findFirst().orElse(null);
+
+            if (dataWAERS != null) {
+                String descWAERS = dataWAERS.getDescripcion();
+                m.put("DESC_WAERS", descWAERS);
+            } else {
+                m.put("DESC_WAERS", "");
+            }
+
+            return m;
+        }).collect(Collectors.toList());
+
 
         PrecioPescaExports dto = new PrecioPescaExports();
         dto.setStr_ppc(listSTR_PPC);

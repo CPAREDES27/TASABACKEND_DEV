@@ -1,21 +1,22 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.dto.MaestroOptionsPrecioMar;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarExports;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarImports;
 import com.incloud.hcp.jco.preciospesca.service.JCOPrecioMarService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
@@ -89,8 +90,81 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
         JCoTable tblSTR_PM = tables.getTable(Tablas.STR_PM);
 
 
-        List<HashMap<String, Object>> listSTR_PM = metodos.ListarObjetos(tblSTR_PM);
-        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_MENSAJE);
+       // List<HashMap<String, Object>> listSTR_PM = metodos.ListarObjetos(tblSTR_PM);
+       // List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetos(tblT_MENSAJE);
+
+
+        List<HashMap<String, Object>> listSTR_PM = metodos.ListarObjetosLazy(tblSTR_PM);
+        List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetosLazy(tblT_MENSAJE);
+
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add(Dominios.ZINPRP);
+        listDomNames.add(Dominios.ESCSG);
+        listDomNames.add(Dominios.ESPRC);
+        listDomNames.add(Dominios.ZDOMMONEDA);
+        //listDomNames.add(Dominios.CALIDA);
+
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports estadoCastigo = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESCSG)).findFirst().orElse(null);
+        DominiosExports estadoPrecio = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESPRC)).findFirst().orElse(null);
+        DominiosExports moneda = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZDOMMONEDA)).findFirst().orElse(null);
+        DominiosExports indicadorPropiedad = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZINPRP)).findFirst().orElse(null);
+        //DominiosExports calidad = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CALIDA)).findFirst().orElse(null);
+
+
+        listSTR_PM.stream().map(m -> {
+            String escsg = m.get("ESCSG").toString();
+            String esprc = m.get("ESPRC").toString();
+            String waers = m.get("WAERS").toString();
+            String inprp = m.get("INPRP").toString();
+            //String calida = m.get("CALIDA").toString();
+
+
+            // Buscar los detalles
+            DominioExportsData dataESCSG = estadoCastigo.getData().stream().filter(d -> d.getId().equals(escsg)).findFirst().orElse(null);
+            DominioExportsData dataESPRC = estadoPrecio.getData().stream().filter(d -> d.getId().equals(esprc)).findFirst().orElse(null);
+            DominioExportsData dataWAERS = moneda.getData().stream().filter(d -> d.getId().equals(waers)).findFirst().orElse(null);
+            DominioExportsData dataINPRP = indicadorPropiedad.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+         //   DominioExportsData dataCALIDA = calidad.getData().stream().filter(d -> d.getId().equals(calida)).findFirst().orElse(null);
+
+            if (dataESCSG != null) {
+                String descESCSG = dataESCSG.getDescripcion();
+                m.put("DESC_ESCSG", descESCSG);
+            } else {
+                m.put("DESC_ESCSG", "");
+            }
+
+            if (dataESPRC != null) {
+                String descESPRC = dataESPRC.getDescripcion();
+                m.put("DESC_ESPRC", descESPRC);
+            } else {
+                m.put("DESC_ESPRC", "");
+            }
+
+            if (dataWAERS != null) {
+                String descWAERS = dataWAERS.getDescripcion();
+                m.put("DESC_WAERS", descWAERS);
+            } else {
+                m.put("DESC_WAERS", "");
+            }
+            if (dataINPRP != null) {
+                String descINPRP = dataINPRP.getDescripcion();
+                m.put("DESC_INPRP", descINPRP);
+            } else {
+                m.put("DESC_INPRP", "");
+            }
+          /*  if (dataCALIDA != null) {
+                String descCALIDA = dataCALIDA.getDescripcion();
+                m.put("DESC_CALIDA", descCALIDA);
+            } else {
+                m.put("DESC_CALIDA", "");
+            }*/
+
+            return m;
+        }).collect(Collectors.toList());
 
         PrecioMarExports dto = new PrecioMarExports();
         dto.setStr_pm(listSTR_PM);
