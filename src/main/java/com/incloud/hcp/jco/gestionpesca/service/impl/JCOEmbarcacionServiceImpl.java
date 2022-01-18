@@ -973,10 +973,10 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             String p_cdemb = imports.getP_cdemb();
             String p_lgort = imports.getP_lgort();
             int p_nrevn = imports.getP_nrevn();
-            String p_fhrsv = imports.getP_fhrsv();//'24092021'
-            int year = Integer.parseInt(p_fhrsv.substring(4,8));
+            String p_fhrsv = imports.getP_fhrsv();//'20211229'
+            /*int year = Integer.parseInt(p_fhrsv.substring(4,8));
             int mes = Integer.parseInt(p_fhrsv.substring(2,4));
-            int dia = Integer.parseInt(p_fhrsv.substring(0,2));
+            int dia = Integer.parseInt(p_fhrsv.substring(0,2));*/
             /*String aniotest = "ANIO: " + year;
             String mestest = "MES: " + mes;
             String diatest = "DIA: " + dia;
@@ -987,7 +987,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             c1.set(Calendar.YEAR, year);
             c1.set(Calendar.DATE, dia);*/
 
-            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Date dateFhrsv = sdf.parse(p_fhrsv);
 
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
@@ -1084,7 +1084,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             String p_lgort = imports.getP_lgort();
             int p_nrevn = imports.getP_nrevn();
             String p_fhrsv = imports.getP_fhrsv();
-            SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             Date dateFhrsv = sdf.parse(p_fhrsv);
             List<HashMap<String, Object>> str_rcb = imports.getStr_rcb();
 
