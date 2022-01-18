@@ -377,7 +377,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
             JCoRepository repo = destination.getRepository();
-            JCoFunction function = repo.getFunction("ZFL_RFC_MAR_EVENT");
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_MAR_EVENT_BTP);
             JCoParameterList jcoTables = function.getTableParameterList();
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, importsSap);

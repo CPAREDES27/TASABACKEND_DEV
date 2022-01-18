@@ -48,6 +48,7 @@ public class Constantes {
     public static String ZFL_RFC_ANULA_MAREA="ZFL_RFC_ANULA_MAREA";
     public static String ZFL_RFC_IMPO_BTP="ZFL_RFC_IMPO_BTP";
     public static String ZFL_RFC_AYUDBSQ_EMB="ZFL_RFC_AYUDBSQ_EMB";
+    public static String ZFL_RFC_MAR_EVENT_BTP="ZFL_RFC_MAR_EVENT_BTP";
 
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";

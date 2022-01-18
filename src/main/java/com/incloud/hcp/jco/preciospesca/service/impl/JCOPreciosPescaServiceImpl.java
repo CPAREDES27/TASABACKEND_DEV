@@ -1,16 +1,16 @@
 package com.incloud.hcp.jco.preciospesca.service.impl;
 
 import com.incloud.hcp.CallBAPI;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.ListaWA;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.preciospesca.PrecioPonderadoExport;
 import com.incloud.hcp.jco.preciospesca.dto.*;
 import com.incloud.hcp.jco.preciospesca.service.JCOPreciosPescaService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.apache.poi.hpsf.Decimal;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
@@ -52,12 +53,62 @@ public class JCOPreciosPescaServiceImpl implements JCOPreciosPescaService {
         logger.error("PRECIOS PESCA PROB2");
 
 
-        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
+        //List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetos(tblSTR_APP);
+        List<HashMap<String, Object>> listSTR_APP = metodos.ListarObjetosLazy(tblSTR_APP);
 
-        List<HashMap<String, Object>>listaConPromedio=CalcularPromedio(listSTR_APP);
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add(Dominios.ESCSG);
+        listDomNames.add(Dominios.ESPRC);
+        listDomNames.add(Dominios.MONEDA);
+
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports estadoCastigo = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESCSG)).findFirst().orElse(null);
+        DominiosExports estadoPrecio = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESPRC)).findFirst().orElse(null);
+        DominiosExports moneda = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.MONEDA)).findFirst().orElse(null);
+
+        listSTR_APP.stream().map(m -> {
+            String escsg = m.get("ESCSG").toString();
+            String esprc = m.get("ESPRC").toString();
+            String waers = m.get("WAERS").toString();
+
+
+            // Buscar los detalles
+            DominioExportsData dataESCSG = estadoCastigo.getData().stream().filter(d -> d.getId().equals(escsg)).findFirst().orElse(null);
+            DominioExportsData dataESPRC = estadoPrecio.getData().stream().filter(d -> d.getId().equals(esprc)).findFirst().orElse(null);
+            DominioExportsData dataWAERS = moneda.getData().stream().filter(d -> d.getId().equals(waers)).findFirst().orElse(null);
+
+            if (dataESCSG != null) {
+                String descESCSG = dataESCSG.getDescripcion();
+                m.put("DESC_ESCSG", descESCSG);
+            } else {
+                m.put("DESC_ESCSG", "");
+            }
+
+            if (dataESPRC != null) {
+                String descESPRC = dataESPRC.getDescripcion();
+                m.put("DESC_ESPRC", descESPRC);
+            } else {
+                m.put("DESC_ESPRC", "");
+            }
+
+            if (dataWAERS != null) {
+                String descWAERS = dataWAERS.getDescripcion();
+                m.put("DESC_WAERS", descWAERS);
+            } else {
+                m.put("DESC_WAERS", "");
+            }
+
+            return m;
+        }).collect(Collectors.toList());
+
+        //List<HashMap<String, Object>>listaConPromedio=CalcularPromedio(listSTR_APP);
+
         logger.error("PRECIOS PESCA PROB_3");
         PrecioProbPescaExports dto = new PrecioProbPescaExports();
-        dto.setStr_app(listaConPromedio);
+        dto.setStr_app(listSTR_APP);
         dto.setMensaje("OK");
 
         return dto;
