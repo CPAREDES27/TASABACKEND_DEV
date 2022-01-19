@@ -1,6 +1,9 @@
 package com.incloud.hcp.util;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.*;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EjecutarRFC {
 
@@ -642,6 +646,222 @@ public class EjecutarRFC {
         }
         return data;
     }
+
+    public List<HashMap<String, Object>>   ObtenerRegistros(JCoTable jcoTable, JCoTable jcoFields)throws Exception{
+
+        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
+
+
+            for (int i = 0; i < jcoTable.getNumRows(); i++) {
+                jcoTable.setRow(i);
+                String ArrayResponse[] = jcoTable.getString().split("\\|");
+                HashMap<String, Object> newRecord = new HashMap<String, Object>();
+                for (int j = 0; j < jcoFields.getNumRows(); j++) {
+                    jcoFields.setRow(j);
+                    String key = (String) jcoFields.getValue("FIELDNAME");
+                    Object   value="";
+                    try{
+                        value = ArrayResponse[j].trim();
+                    }catch (Exception e){
+                        value="";
+
+                    }
+                  /*  for (int k = 0; k < fields.length; k++) {
+
+
+
+                        if (fields[k].trim().equals(key.trim())) {
+
+
+                            try {
+                                if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN")
+                                        ||key.equals("LGFIN") || key.equals("LNINI") ||key.equals("LTFIN") ||key.equals("LTINI")){
+                                    String field="";
+                                    if(key.equals("LNMAX")){
+                                        field=key+"_S";
+                                    }else if  (key.equals("LNMIN")){
+                                        field=key+"_S";
+                                    }else if  (key.equals("LTMAX")){
+                                        field=key+"_S";
+                                    }else if  (key.equals("LTMIN")){
+                                        field=key+"_S";
+                                    }
+                                    newRecord.put(field, value);
+                                    String valor=value.toString();
+                                    logger.error("valor= "+valor);
+                                    valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
+                                    logger.error("valor= "+valor);
+                                    value=valor.substring(0,6)+"'";
+                                    logger.error("value= "+value);
+                                }
+
+                                if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR") ||
+                                        key.equals("HFEVN") || key.equals("HIEVN")) {
+
+                                    if(value.toString().equals("000000")){
+                                        value="";
+                                    }else {
+                                        SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                        SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
+                                        Date hora = parseador.parse(value.toString());
+                                        value = formateador.format(hora);
+                                    }
+
+                                }
+
+                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
+                                        key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
+                                        key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM") || key.equals("LE_ENDDA")){
+                                    if(value.toString().equals("00000000")){
+                                        value="";
+                                    }else{
+                                        SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                                        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                                        Date fecha = parseador.parse(value.toString());
+                                        value=formateador.format(fecha);
+                                    }
+
+                                }
+                            }catch (Exception e){
+                                value=String.valueOf(value);
+                            }
+
+                            newRecord.put(key, value);
+                            Metodos me=new Metodos();
+                            if(key.equals("INPRP") || key.equals("ESREG") || key.equals("CDMMA") || key.equals("CDTEV")|| key.equals("STELL")|| key.equals("CDTPC")
+                                    || key.equals("ESDES")|| key.equals("CDLDS")){
+                                HashMap<String, Object>dominio=me.BuscarNombreDominio(key, value.toString());
+                                for (Map.Entry<String, Object> entry:dominio.entrySet() ){
+                                    String campo=entry.getKey();
+                                    Object valor=entry.getValue();
+                                    newRecord.put(campo, valor);
+                                }
+                            }
+
+
+                        }
+                    }*/
+
+                    newRecord.put(key,value);
+                }
+
+                data.add(newRecord);
+            }
+
+
+
+
+        return data;
+    }
+/*
+    public ArrayList<DomDto> ObtenerNombreDominio(String tabla)throws Exception{
+
+        ArrayList<DomDto> lisDomDto= new ArrayList<>();
+
+        if(tabla.equals(Tablas.ZV_FLRP)){
+            DomDto domDto=new DomDto();
+
+            domDto.setNombreDominio(Dominios.ZESREG);
+            domDto.setNombreCampo("ESREG");
+          //  lisDomDto.add(domDto);
+        }
+
+
+        return lisDomDto;
+    }
+
+
+    public void Dom(List<HashMap<String, Object>> listaRegistros, ArrayList<DomDto> domDto) throws Exception{
+
+        ArrayList<String> listaDom= new ArrayList<>();
+
+        for(int i=0; i<domDto.size();i++){
+
+           // String dominio=domDto.get(i).getNombreDominio();
+            //listaDom.add(dominio);
+        }
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listaDom);
+
+        ArrayList<DominiosExports> listDominiosExports= new ArrayList<>();
+
+        for(int i=0; i<domDto.size();i++){
+
+            String dominio=domDto.get(i).getNombreDominio();
+            DominiosExports de=listDescipciones.stream().filter(d -> d.getDominio().equals(dominio)).findFirst().orElse(null);
+
+            listDominiosExports.add(de);
+        }
+
+        listaRegistros.stream().map(m -> {
+
+
+            String inprp = m.get("INPRP").toString();
+            String cdmma = m.get("CDMMA").toString();
+
+            for(int i=0; i<listDominiosExports.size();i++){
+
+                DominiosExports detalle=listDominiosExports.get(i);
+
+                String campo=domDto.get(i).getNombreCampo();
+                DominioExportsData data = detalle.getData().stream().filter(d -> d.getId().equals(campo)).findFirst().orElse(null);
+
+                if (data != null) {
+                    String descInprp = data.getDescripcion();
+                    m.put("DESC_"+campo, descInprp);
+                } else {
+                    m.put("DESC_"+campo, "");
+                }
+            }
+
+            return m;
+        }).collect(Collectors.toList());
+    }
+*/
+    public MaestroExport Execute_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
+
+        JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
+        setImports(function, imports);
+
+        logger.error("Obtener Registros_1");
+
+        JCoParameterList jcoTables = function.getTableParameterList();
+        JCoTable FIELD = jcoTables.getTable(Tablas.FIELDS);
+        JCoTable DATA = jcoTables.getTable("DATA");
+
+        logger.error("Obtener Registros_2");;
+
+
+        if(fields.length>0) {
+            logger.error("Obtener Registros_ field>0");;
+
+
+            for (int i = 0; i < fields.length; i++) {
+                FIELD.appendRow();
+                FIELD.setValue("FIELDAME", fields[i]);
+            }
+        }
+
+        setTable(jcoTables, Tablas.OPTIONS, optionsParam);
+        function.execute(destination);
+
+        logger.error("Obtener Registros_3");
+
+        List<HashMap<String, Object>> data =ObtenerRegistros(DATA, FIELD);
+        logger.error("Obtener Registros_4");
+
+        List<HashMap<String, Object>> Fields = ObtenerFields(FIELD, fields);
+        logger.error("Obtener Registros_5");
+
+
+        MaestroExport me = new MaestroExport();
+        me.setFields(Fields);
+        me.setData(data);
+        me.setMensaje("Ok");
+        return me;
+    }
+
 }
 
 

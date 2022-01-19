@@ -234,7 +234,18 @@ public class GeneralRest {
         }
     }
 
+    @PostMapping(value = "/Maestro_ObtenerRegistros/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ObtenerRegistros(@RequestBody MaestroImportsKey imports){
 
+        try {
+            return Optional.ofNullable(this.MaestroService.obtenerRegistrosMaestro(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
 
 
 }
