@@ -63,7 +63,16 @@ public class Metodos {
                 Object value = tableExport.getValue(key);
 
 
-                if (field.getTypeAsString().equals("TIME")) {
+                if (field.getTypeAsString().equals("TIME")  && key.equals("HIZAR") || key.equals("HAMAR") ||key.equals("HIARR")  ) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    value = dateFormat.format(value);
+                    if(String.valueOf(value).equalsIgnoreCase("00:00")){
+                        value = "";
+                    }
+                }
+
+
+                else  if (field.getTypeAsString().equals("TIME")) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                     value = dateFormat.format(value);
                     if(String.valueOf(value).equalsIgnoreCase("00:00")){

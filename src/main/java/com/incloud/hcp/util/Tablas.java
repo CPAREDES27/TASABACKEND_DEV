@@ -62,6 +62,9 @@ public class Tablas {
     public static String ET_ZFLEMB="ET_ZFLEMB";
     public static String T_CAL="T_CAL";
     public static String ZV_FLDC1="ZV_FLDC1";
+    public static String ZV_FLRP="ZV_FLRP";
+    public static String FIELDS="FIELDS";
+
 
     // Carga dinamica de archivos
     public static String IT_ZFLEMB="IT_ZFLEMB";
