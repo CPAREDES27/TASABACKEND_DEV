@@ -45,7 +45,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             ppe.setP_totalpag(export.getString("P_TOTALPAG"));
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_pem = metodo.ObtenerListObjetos(STR_PEM, imports.getFieldstr_pem());
+            List<HashMap<String, Object>> str_pem = metodo.ListarObjetosLazy(STR_PEM);
 
             ppe.setStr_pem(str_pem);
             ppe.setMensaje("Ok");
