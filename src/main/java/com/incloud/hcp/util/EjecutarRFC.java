@@ -753,72 +753,89 @@ public class EjecutarRFC {
 
         return data;
     }
-/*
+
     public ArrayList<DomDto> ObtenerNombreDominio(String tabla)throws Exception{
-
+        logger.error("ObtenerNombreDominio_1");
         ArrayList<DomDto> lisDomDto= new ArrayList<>();
-
+        logger.error("ObtenerNombreDominio_2 tabla "+ tabla);
         if(tabla.equals(Tablas.ZV_FLRP)){
+
             DomDto domDto=new DomDto();
 
             domDto.setNombreDominio(Dominios.ZESREG);
             domDto.setNombreCampo("ESREG");
-          //  lisDomDto.add(domDto);
+            lisDomDto.add(domDto);
+
+            logger.error("setNombreDominio  "+ domDto.getNombreDominio());
+            logger.error("setNombreDominio  "+ domDto.getNombreCampo());
         }
 
-
+        logger.error("ObtenerNombreDominio_2");
         return lisDomDto;
     }
 
 
-    public void Dom(List<HashMap<String, Object>> listaRegistros, ArrayList<DomDto> domDto) throws Exception{
+    public List<HashMap<String, Object>>  ListaConDominio(List<HashMap<String, Object>> listaRegistros, ArrayList<DomDto> domDto) throws Exception{
 
+        logger.error("ListaConDominio_1");
+
+        logger.error("listaRegistros.size: "+listaRegistros.size());
         ArrayList<String> listaDom= new ArrayList<>();
 
         for(int i=0; i<domDto.size();i++){
 
-           // String dominio=domDto.get(i).getNombreDominio();
-            //listaDom.add(dominio);
+           String dominio=domDto.get(i).getNombreDominio();
+            listaDom.add(dominio);
+            logger.error("DOMINIO: "+ dominio);
         }
-
+        logger.error("ListaConDominio_2");
         DominiosHelper helper = new DominiosHelper();
         ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listaDom);
 
         ArrayList<DominiosExports> listDominiosExports= new ArrayList<>();
-
+        logger.error("ListaConDominio_3");
         for(int i=0; i<domDto.size();i++){
+            logger.error("DOMINIO: "+ domDto.get(i).getNombreDominio());
 
             String dominio=domDto.get(i).getNombreDominio();
             DominiosExports de=listDescipciones.stream().filter(d -> d.getDominio().equals(dominio)).findFirst().orElse(null);
 
             listDominiosExports.add(de);
         }
-
+        logger.error("ListaConDominio_4");
         listaRegistros.stream().map(m -> {
 
+            logger.error("ListaConDominio_5");
 
-            String inprp = m.get("INPRP").toString();
-            String cdmma = m.get("CDMMA").toString();
 
             for(int i=0; i<listDominiosExports.size();i++){
 
                 DominiosExports detalle=listDominiosExports.get(i);
 
-                String campo=domDto.get(i).getNombreCampo();
+                String campoDom=domDto.get(i).getNombreCampo();
+                logger.error("campoDom: "+ campoDom);
+
+                String campo = m.get(campoDom).toString();
+
+                logger.error("campo: "+ campo);
                 DominioExportsData data = detalle.getData().stream().filter(d -> d.getId().equals(campo)).findFirst().orElse(null);
 
                 if (data != null) {
                     String descInprp = data.getDescripcion();
-                    m.put("DESC_"+campo, descInprp);
+                    m.put("DESC_"+campoDom, descInprp);
                 } else {
-                    m.put("DESC_"+campo, "");
+                    m.put("DESC_"+campoDom, "");
                 }
             }
+            logger.error("ListaConDominio_6");
 
             return m;
         }).collect(Collectors.toList());
+
+        logger.error("ListaConDominio_7");
+        return listaRegistros;
     }
-*/
+
     public MaestroExport Execute_READ_TABLE(HashMap<String, Object> imports, List<HashMap<String, Object>> optionsParam, String[] fields) throws Exception{
 
         JCoFunction function = getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
@@ -839,7 +856,7 @@ public class EjecutarRFC {
 
             for (int i = 0; i < fields.length; i++) {
                 FIELD.appendRow();
-                FIELD.setValue("FIELDAME", fields[i]);
+                FIELD.setValue("FIELDNAME", fields[i]);
             }
         }
 
