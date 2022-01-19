@@ -45,4 +45,6 @@ public interface JCOEmbarcacionService {
     MaestroExport obtenerEveElim(EveElimImport imports) throws Exception;
 
     AyudaBusqExport ayudaBusq(AyudaBusqImport imports) throws Exception;
+
+    MaestroExport obtenerAlmacenExterno(String usuario) throws Exception;
 }

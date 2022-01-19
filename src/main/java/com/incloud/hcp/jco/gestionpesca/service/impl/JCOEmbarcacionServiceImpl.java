@@ -1257,4 +1257,40 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         return export;
     }
+
+    @Override
+    public MaestroExport obtenerAlmacenExterno(String usuario){
+        MaestroExport me = new MaestroExport();
+        try {
+            String query = "CDCNS EQ '62'";
+
+            MaestroImportsKey imports1 = new MaestroImportsKey();
+            imports1.setTabla("ZFLCNS");
+            String[] fields = {"VAL01", "DESCR"};
+            imports1.setFields(fields);
+
+            MaestroOptions mo1 = new MaestroOptions();
+            mo1.setWa(query);
+            List<MaestroOptions> listOptions = new ArrayList<MaestroOptions>();
+            listOptions.add(mo1);
+
+            List<MaestroOptionsKey> listOptKey = new ArrayList<MaestroOptionsKey>();
+
+            imports1.setDelimitador("|");
+            imports1.setOption(listOptions);
+            imports1.setOptions(listOptKey);
+            imports1.setOrder("");
+            imports1.setRowcount(0);
+            imports1.setRowskips(0);
+            imports1.setP_user(usuario);
+            me = MaestroService.obtenerMaestro2(imports1);
+
+        }catch (Exception e){
+            me.setMensaje(e.getMessage());
+        }
+        return me;
+    }
+
+
+
 }
