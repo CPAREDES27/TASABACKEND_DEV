@@ -206,11 +206,11 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_pta = metodo.ObtenerListObjetos(STR_PTA, imports.getFieldstr_pta());
-            List<HashMap<String, Object>> str_dsd = metodo.ObtenerListObjetos(STR_DSD, imports.getFielstr_dsd());
-            List<HashMap<String, Object>> str_dsddia = metodo.ObtenerListObjetos(STR_DSDDIA, imports.getFielstr_dsd());
-            List<HashMap<String, Object>> str_dsdtot = metodo.ObtenerListObjetos(STR_DSDTOT, imports.getFielstr_dsd());
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>> str_pta = metodo.ListarObjetosLazy(STR_PTA);
+            List<HashMap<String, Object>> str_dsd = metodo.ListarObjetosLazy(STR_DSD);
+            List<HashMap<String, Object>> str_dsddia = metodo.ListarObjetosLazy(STR_DSDDIA);
+            List<HashMap<String, Object>> str_dsdtot = metodo.ListarObjetosLazy(STR_DSDTOT);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
             pd.setStr_pta(str_pta);
             pd.setStr_dsd(str_dsd);

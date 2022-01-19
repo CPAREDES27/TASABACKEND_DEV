@@ -109,10 +109,10 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("ListarEventosPesca_7");
 
         Metodos metodo = new Metodos();
-        List<HashMap<String, Object>> ListarST_CEP= metodo.ListarObjetos(STR_ZLT);
-        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetos(STR_DI);
-        List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetos(STR_PTA);
-        List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetos(STR_DP);
+        List<HashMap<String, Object>> ListarST_CEP= metodo.ListarObjetosLazy(STR_ZLT);
+        List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetosLazy(STR_DI);
+        List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetosLazy(STR_PTA);
+        List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetosLazy(STR_DP);
 
         FlotaDto dto= new FlotaDto();
         dto.setStr_zlt(ListarST_CEP);

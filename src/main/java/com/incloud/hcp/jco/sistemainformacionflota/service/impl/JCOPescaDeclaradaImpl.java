@@ -47,9 +47,9 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_tp = metodo.ObtenerListObjetos(STR_TP, imports.getFieldstr_tp());
-            List<HashMap<String, Object>> str_te = metodo.ObtenerListObjetos(STR_TE, imports.getFieldstr_te());
-            List<HashMap<String, Object>> t_mensaje = metodo.ObtenerListObjetos(T_MENSAJE, imports.getFieldstr_te());
+            List<HashMap<String, Object>> str_tp = metodo.ListarObjetosLazy(STR_TP);
+            List<HashMap<String, Object>> str_te = metodo.ListarObjetosLazy(STR_TE);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
             /**
              * Cálculo de porcentajes
@@ -208,7 +208,7 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>> str_dl = metodo.ObtenerListObjetos(STR_DL, imports.getFieldstr_dl());
+            List<HashMap<String, Object>> str_dl = metodo.ListarObjetosLazy(STR_DL);
 
             /**
              * Redondear a 2 dígitos los campos decimales
