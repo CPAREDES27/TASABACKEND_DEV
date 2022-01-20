@@ -129,16 +129,16 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             JCoTable tblSTR_PEM = tables.getTable(Tablas.STR_PEM);
             JCoTable tblSTR_PED = tables.getTable(Tablas.STR_PED);
 
-            List<HashMap<String, Object>> str_zlt = metodo.ListarObjetos(tblSTR_ZLT);
-            List<HashMap<String, Object>> str_pto = metodo.ListarObjetos(tblSTR_PTO);
-            List<HashMap<String, Object>> str_gre = metodo.ListarObjetos(tblSTR_GRE);
-            List<HashMap<String, Object>> str_pge = metodo.ListarObjetos(tblSTR_PGE);
-            List<HashMap<String, Object>> str_gzp = metodo.ListarObjetos(tblSTR_GZP);
-            List<HashMap<String, Object>> str_epp = metodo.ListarObjetos(tblSTR_EPP);
-            List<HashMap<String, Object>> str_zpl = metodo.ListarObjetos(tblSTR_ZPL);
-            List<HashMap<String, Object>> str_emp = metodo.ListarObjetos(tblSTR_EMP);
-            List<HashMap<String, Object>> str_pem = metodo.ListarObjetos(tblSTR_PEM);
-            List<HashMap<String, Object>> str_ped = metodo.ListarObjetos(tblSTR_PED);
+            List<HashMap<String, Object>> str_zlt = metodo.ListarObjetosLazy(tblSTR_ZLT);
+            List<HashMap<String, Object>> str_pto = metodo.ListarObjetosLazy(tblSTR_PTO);
+            List<HashMap<String, Object>> str_gre = metodo.ListarObjetosLazy(tblSTR_GRE);
+            List<HashMap<String, Object>> str_pge = metodo.ListarObjetosLazy(tblSTR_PGE);
+            List<HashMap<String, Object>> str_gzp = metodo.ListarObjetosLazy(tblSTR_GZP);
+            List<HashMap<String, Object>> str_epp = metodo.ListarObjetosLazy(tblSTR_EPP);
+            List<HashMap<String, Object>> str_zpl = metodo.ListarObjetosLazy(tblSTR_ZPL);
+            List<HashMap<String, Object>> str_emp = metodo.ListarObjetosLazy(tblSTR_EMP);
+            List<HashMap<String, Object>> str_pem = metodo.ListarObjetosLazy(tblSTR_PEM);
+            List<HashMap<String, Object>> str_ped = metodo.ListarObjetosLazy(tblSTR_PED);
 
             pcp.setStr_zlt(str_zlt);
             pcp.setStr_pto(str_pto);
