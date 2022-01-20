@@ -4,7 +4,6 @@ import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
 import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.jco.preciospesca.dto.MaestroOptionsPrecioMar;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarExports;
 import com.incloud.hcp.jco.preciospesca.dto.PrecioMarImports;
 import com.incloud.hcp.jco.preciospesca.service.JCOPrecioMarService;
@@ -76,7 +75,7 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
 
         JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
-        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_LECT_PRECIO_MAR);
+        JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_LECT_PRECIO_MAR_BTP);
 
         JCoParameterList paramsTable = function.getTableParameterList();
 
