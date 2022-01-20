@@ -109,8 +109,8 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
 
-            List<HashMap<String, Object>> str_csmar = metodo.ListarObjetos(STR_CSMAR);
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosLazy(STR_CSMAR);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
 
             ce.setStr_csmar(str_csmar);
