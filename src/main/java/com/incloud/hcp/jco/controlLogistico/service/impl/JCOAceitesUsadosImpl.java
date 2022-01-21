@@ -47,8 +47,8 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
 
             //endRegion
             stfcConnection.execute(destination);
-            List<HashMap<String, Object>> t_rnv = metodo.ListarObjetosLazy(T_RNV);
-            List<HashMap<String, Object>> t_rpn = metodo.ListarObjetosLazy(T_RPN);
+            List<HashMap<String, Object>> t_rnv = metodo.ListarObjetosFormatLazy(T_RNV);
+            List<HashMap<String, Object>> t_rpn = metodo.ListarObjetosFormatLazy(T_RPN);
 
 
             au.setT_rnv(t_rnv);

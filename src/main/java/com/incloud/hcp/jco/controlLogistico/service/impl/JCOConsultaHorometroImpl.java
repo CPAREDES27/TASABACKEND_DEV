@@ -44,10 +44,10 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
 
             Metodos metodo = new Metodos();
 
-            List<HashMap<String, Object>> str_emb = metodo.ListarObjetosLazy(STR_EMB);
-            List<HashMap<String, Object>> str_evn = metodo.ListarObjetosLazy(STR_EVN);
-            List<HashMap<String, Object>> str_lho = metodo.ListarObjetosLazy(STR_LHO);
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
+            List<HashMap<String, Object>> str_emb = metodo.ListarObjetosFormatLazy(STR_EMB);
+            List<HashMap<String, Object>> str_evn = metodo.ListarObjetosFormatLazy(STR_EVN);
+            List<HashMap<String, Object>> str_lho = metodo.ListarObjetosFormatLazy(STR_LHO);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosFormatLazy(T_MENSAJE);
 
 
 
