@@ -72,8 +72,8 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             String[] fieldsT_mensaje=imports.getFieldsT_mensaje();
 
-            List<HashMap<String, Object>> t_flocc = metodo.ListarObjetosFormatLazy(T_FLOCC);
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosFormatLazy(T_OPCIONES);
+            List<HashMap<String, Object>> t_flocc = metodo.ListarObjetosLazy(T_FLOCC);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_OPCIONES);
             rmdc.setT_mensaje(t_mensaje);
             rmdc.setIndicadorPorc(total);
             rmdc.setT_flocc(t_flocc);

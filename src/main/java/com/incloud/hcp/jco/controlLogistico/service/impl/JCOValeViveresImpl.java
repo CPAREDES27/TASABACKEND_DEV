@@ -70,8 +70,8 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
   ;
             String [] fields=imports.getFields();
-            List<HashMap<String, Object>> s_data = metodo.ListarObjetosFormatLazy(S_DATA);
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosFormatLazy(T_MENSAJE);
+            List<HashMap<String, Object>> s_data = metodo.ListarObjetosLazy(S_DATA);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
 
             List<HashMap<String, Object>> data=new ArrayList<>();

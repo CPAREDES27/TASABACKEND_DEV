@@ -88,10 +88,10 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
 
 
-            List<HashMap<String, Object>> str_lgcco = metodo.ListarObjetosFormatLazy(STR_LGCCO);
-            List<HashMap<String, Object>> str_csmaj = metodo.ListarObjetosFormatLazy(STR_CSMAJ);
-            List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosFormatLazy(STR_CSMAR);
-            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosFormatLazy(T_MENSAJE);
+            List<HashMap<String, Object>> str_lgcco = metodo.ListarObjetosLazy(STR_LGCCO);
+            List<HashMap<String, Object>> str_csmaj = metodo.ListarObjetosLazy(STR_CSMAJ);
+            List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosLazy(STR_CSMAR);
+            List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
             List<LogRegistroCombusDto> ListDto= new ArrayList<>();
             for(int i=0; i<str_lgcco.size();i++){

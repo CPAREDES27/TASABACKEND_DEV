@@ -41,25 +41,6 @@ public class Metodos {
                 JCoField field = iter.nextField();
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
-                newRecord.put(key, value);
-            }
-            data.add(newRecord);
-        }
-
-        return data;
-    }
-
-    public List<HashMap<String, Object>> ListarObjetosFormatLazy(JCoTable tableExport) throws Exception {
-
-        List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
-        for (int i = 0; i < tableExport.getNumRows(); i++) {
-            tableExport.setRow(i);
-            JCoFieldIterator iter = tableExport.getFieldIterator();
-            HashMap<String, Object> newRecord = new HashMap<String, Object>();
-            while (iter.hasNextField()) {
-                JCoField field = iter.nextField();
-                String key = (String) field.getName();
-                Object value = tableExport.getValue(key);
 
                 if (field.getTypeAsString().equals("TIME")  && key.equals("HIZAR") || key.equals("HAMAR") ||key.equals("HIARR")  ) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
