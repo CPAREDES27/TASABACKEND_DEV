@@ -380,7 +380,7 @@ public class EjecutarRFC {
                                    if(value.toString().equals("000000")){
                                        value="";
                                    }else {
-                                       SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                       SimpleDateFormat parseador = new SimpleDateFormat("HHmmss");
                                        SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
                                        Date hora = parseador.parse(value.toString());
                                        value = formateador.format(hora);
@@ -460,13 +460,13 @@ public class EjecutarRFC {
                             value=valor.substring(0,6)+"'";
                             logger.error("value= "+value);
                         }
-
-                        if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ")) {
+//HIDES
+                        if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ") || key.equals("HIDES")) {
 
                             if(value.toString().equals("000000")){
                                 value="";
                             }else {
-                                SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                SimpleDateFormat parseador = new SimpleDateFormat("HHmmss");
                                 SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
                                 Date hora = parseador.parse(value.toString());
                                 value = formateador.format(hora);

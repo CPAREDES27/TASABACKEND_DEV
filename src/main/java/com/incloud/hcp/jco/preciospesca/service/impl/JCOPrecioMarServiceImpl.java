@@ -96,6 +96,8 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
         List<HashMap<String, Object>> listSTR_PM = metodos.ListarObjetosLazy(tblSTR_PM);
         List<HashMap<String, Object>> listT_MENSAJE = metodos.ListarObjetosLazy(tblT_MENSAJE);
 
+
+        /*PROCESO MAPEAR DOMINIOS - INICIO*/
         ArrayList<String> listDomNames = new ArrayList<>();
         listDomNames.add(Dominios.ZINPRP);
         listDomNames.add(Dominios.ESCSG);
@@ -164,6 +166,8 @@ public class JCOPrecioMarServiceImpl implements JCOPrecioMarService {
 
             return m;
         }).collect(Collectors.toList());
+        /*PROCESO MAPEAR DOMINIOS - FIN*/
+
 
         PrecioMarExports dto = new PrecioMarExports();
         dto.setStr_pm(listSTR_PM);

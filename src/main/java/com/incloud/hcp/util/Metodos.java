@@ -1039,7 +1039,7 @@ public class Metodos {
 
                         if (fields[k].trim().equals(key.trim())) {
                             if (field.getTypeAsString().equals("TIME")) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                                 value = dateFormat.format(value);
 
                             }
@@ -1782,7 +1782,7 @@ public class Metodos {
                 }
 
                 if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                     value = dateFormat.format(value);
 
                 }
@@ -1844,7 +1844,7 @@ public class Metodos {
 
                         if (fields[k].trim().equals(key.trim())) {
                             if (field.getTypeAsString().equals("TIME")) {
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                                 value = dateFormat.format(value);
 
                             }
