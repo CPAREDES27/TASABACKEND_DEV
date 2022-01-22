@@ -2,12 +2,12 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOLogRegisCombusService;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
@@ -92,6 +93,25 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
             List<HashMap<String, Object>> str_csmaj = metodo.ListarObjetosLazy(STR_CSMAJ);
             List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosLazy(STR_CSMAR);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
+
+            //Dominios
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.ESPRO);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports esproDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESPRO)).findFirst().orElse(null);
+
+            str_lgcco.stream().map(s -> {
+                String espro = s.get("ESPRO").toString();
+
+                DominioExportsData dataEspro = esproDom.getData().stream().filter(d -> d.getId().equals(espro)).findFirst().orElse(null);
+
+                s.put("DESC_ESPRO", dataEspro != null ? dataEspro.getDescripcion() : "");
+
+                return s;
+            }).collect(Collectors.toList());
 
             List<LogRegistroCombusDto> ListDto= new ArrayList<>();
             for(int i=0; i<str_lgcco.size();i++){

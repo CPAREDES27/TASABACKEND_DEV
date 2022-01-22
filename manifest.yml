@@ -4,7 +4,7 @@ applications:
   path: target/flotabackend-0.0.1-SNAPSHOT.war
   buildpacks:
     - sap_java_buildpack
-  memory: 3000M
+  memory: 500M
   timeout: 100
   disk-quota: 1G
   routes:

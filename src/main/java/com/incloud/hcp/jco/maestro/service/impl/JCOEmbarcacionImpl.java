@@ -72,7 +72,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
             dto.setP_totalpag(export.getString("P_TOTALPAG"));
 
-            List<HashMap<String, Object>> data = me.ListarObjetos(tableExport);
+            List<HashMap<String, Object>> data = me.ListarObjetosLazy(tableExport);
             logger.error("CONSULTA EMBARCA");
 
 
@@ -152,12 +152,12 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoTable t_mensaje = jcoTables.getTable(Tablas.T_MENSAJE);
 
             Metodos m = new Metodos();
-            List<HashMap<String, Object>> S_PE = m.ListarObjetos(s_pe);
-            List<HashMap<String, Object>> S_PS = m.ListarObjetos(s_ps);
-            List<HashMap<String, Object>> S_EE = m.ListarObjetos(s_ee);
-            List<HashMap<String, Object>> S_BE = m.ListarObjetos(s_be);
-            List<HashMap<String, Object>> STR_HOR = m.ListarObjetos(str_hor);
-            List<HashMap<String, Object>> T_MENSAJE = m.ListarObjetos(t_mensaje);
+            List<HashMap<String, Object>> S_PE = m.ListarObjetosLazy(s_pe);
+            List<HashMap<String, Object>> S_PS = m.ListarObjetosLazy(s_ps);
+            List<HashMap<String, Object>> S_EE = m.ListarObjetosLazy(s_ee);
+            List<HashMap<String, Object>> S_BE = m.ListarObjetosLazy(s_be);
+            List<HashMap<String, Object>> STR_HOR = m.ListarObjetosLazy(str_hor);
+            List<HashMap<String, Object>> T_MENSAJE = m.ListarObjetosLazy(t_mensaje);
 
             dto.setT_mensaje(T_MENSAJE);
             dto.setStr_hor(STR_HOR);

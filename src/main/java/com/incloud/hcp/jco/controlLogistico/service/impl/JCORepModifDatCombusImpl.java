@@ -4,12 +4,12 @@ import com.incloud.hcp.CallBAPI;
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusExports;
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusImports;
 import com.incloud.hcp.jco.controlLogistico.service.JCORepModifDatCombusService;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
@@ -74,6 +75,31 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             List<HashMap<String, Object>> t_flocc = metodo.ListarObjetosLazy(T_FLOCC);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_OPCIONES);
+
+            //Dominios
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.CDFAS);
+            listDomNames.add(Dominios.CDMMA);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports cdfasDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CDFAS)).findFirst().orElse(null);
+            DominiosExports cdmmaDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CDMMA)).findFirst().orElse(null);
+
+            t_flocc.stream().map(s -> {
+                String cdfas = s.get("CDFAS").toString();
+                String cdmma = s.get("CDMMA").toString();
+
+                DominioExportsData dataCdfas = cdfasDom.getData().stream().filter(d -> d.getId().equals(cdfas)).findFirst().orElse(null);
+                DominioExportsData dataCdmma = cdmmaDom.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+
+                s.put("DESC_CDFAS", dataCdfas != null ? dataCdfas.getDescripcion() : "");
+                s.put("DESC_CDMMA", dataCdmma != null ? dataCdmma.getDescripcion() : "");
+
+                return s;
+            }).collect(Collectors.toList());
+
             rmdc.setT_mensaje(t_mensaje);
             rmdc.setIndicadorPorc(total);
             rmdc.setT_flocc(t_flocc);

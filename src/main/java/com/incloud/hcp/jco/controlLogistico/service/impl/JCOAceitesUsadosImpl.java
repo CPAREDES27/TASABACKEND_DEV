@@ -4,7 +4,11 @@ import com.incloud.hcp.jco.controlLogistico.dto.AceitesUsadosExports;
 import com.incloud.hcp.jco.controlLogistico.dto.AceitesUsadosImports;
 import com.incloud.hcp.jco.controlLogistico.dto.RegistroAceiteDto;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAceitesUsadosService;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.Dominios;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
@@ -12,8 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
@@ -50,6 +56,24 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             List<HashMap<String, Object>> t_rnv = metodo.ListarObjetosLazy(T_RNV);
             List<HashMap<String, Object>> t_rpn = metodo.ListarObjetosLazy(T_RPN);
 
+            //Dominios
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.ESRNV);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports esrnvDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESRNV)).findFirst().orElse(null);
+
+            t_rpn.stream().map(s -> {
+                String esrnv = s.get("ESRNV").toString();
+
+                DominioExportsData dataErnv = esrnvDom.getData().stream().filter(d -> d.getId().equals(esrnv)).findFirst().orElse(null);
+
+                s.put("DESC_ESRNV", dataErnv != null ? dataErnv.getDescripcion() : "");
+
+                return s;
+            }).collect(Collectors.toList());
 
             au.setT_rnv(t_rnv);
             au.setT_rpn(t_rpn);

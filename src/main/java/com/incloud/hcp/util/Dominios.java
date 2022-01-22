@@ -9,4 +9,11 @@ public class Dominios {
     public static String MONEDA="MONEDA"; //tipo de moneda (id: 00001, 00002, 00003)
     public static String ZDOMMONEDA="ZDOMMONEDA"; //tipo de moneda (id: USD, PEN, PAB, COP, CLP, BRL)
     public static String ZESREG = "ZESREG";
+    public static String ESMAR = "ZESMAR";
+    public static String CDMMA = "ZCDMMA";
+    public static String INPRP = "ZINPRP";
+    public static String ESVVI = "ZESREG";
+    public static String ESRNV = "ZD_FLESRNV";
+    public static String CDFAS = "ZCDFAS";
+    public static String ESPRO = "ZDO_ESREGC";
 }

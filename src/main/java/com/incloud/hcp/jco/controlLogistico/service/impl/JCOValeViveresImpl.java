@@ -2,13 +2,13 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOValeVivereService;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOValeViveresImpl implements JCOValeVivereService {
@@ -73,6 +74,29 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             List<HashMap<String, Object>> s_data = metodo.ListarObjetosLazy(S_DATA);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
 
+            //Dominios
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.INPRP);
+            listDomNames.add(Dominios.ESVVI);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports inprpDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.INPRP)).findFirst().orElse(null);
+            DominiosExports esvviDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESVVI)).findFirst().orElse(null);
+
+            s_data.stream().map(s -> {
+                String inprp = s.get("INPRP").toString();
+                String esvvi = s.get("ESVVI").toString();
+
+                DominioExportsData dataInprp = inprpDom.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+                DominioExportsData dataEsvvi = esvviDom.getData().stream().filter(d -> d.getId().equals(esvvi)).findFirst().orElse(null);
+
+                s.put("DESC_INPRP", !dataInprp.equals(null) ? dataInprp.getDescripcion() : "");
+                s.put("DESC_ESVVI", !dataEsvvi.equals(null) ? dataEsvvi.getDescripcion() : "");
+
+                return s;
+            }).collect(Collectors.toList());
 
             List<HashMap<String, Object>> data=new ArrayList<>();
 

@@ -8,17 +8,16 @@ import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
 import com.incloud.hcp.jco.maestro.service.JCOMaestrosService;
 import com.incloud.hcp.jco.maestro.service.impl.JCOMaestrosServiceImpl;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.reportepesca.dto.MareaDto2;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.Error;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,6 +112,30 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<HashMap<String, Object>> ListarST_CCP= metodo.ListarObjetosLazy(STR_DI);
         List<HashMap<String, Object>> ListarSTR_PTA= metodo.ListarObjetosLazy(STR_PTA);
         List<HashMap<String, Object>> ListarSTR_DP= metodo.ListarObjetosLazy(STR_DP);
+
+        //Dominios
+        ArrayList<String> listDomNames = new ArrayList<>();
+        listDomNames.add(Dominios.ESMAR);
+        listDomNames.add(Dominios.CDMMA);
+
+        DominiosHelper helper = new DominiosHelper();
+        ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+        DominiosExports esmarDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESMAR)).findFirst().orElse(null);
+        DominiosExports cdmmaDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CDMMA)).findFirst().orElse(null);
+
+        ListarST_CCP.stream().map(s -> {
+            String esmar = s.get("ESMAR").toString();
+            String cdmma = s.get("CDMMA").toString();
+
+            DominioExportsData dataEsmar = esmarDom.getData().stream().filter(d -> d.getId().equals(esmar)).findFirst().orElse(null);
+            DominioExportsData dataCdmma = cdmmaDom.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+
+            s.put("DESC_ESMAR", dataEsmar != null ? dataEsmar.getDescripcion() : "");
+            s.put("DESC_CDMMA", dataCdmma != null ? dataCdmma.getDescripcion() : "");
+
+            return s;
+        }).collect(Collectors.toList());
 
         FlotaDto dto= new FlotaDto();
         dto.setStr_zlt(ListarST_CEP);
