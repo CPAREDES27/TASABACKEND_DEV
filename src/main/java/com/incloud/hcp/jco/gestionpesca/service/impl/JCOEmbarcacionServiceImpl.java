@@ -369,7 +369,6 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return dto;
     }
     public ArrayList<MensajeDto> crearMareaPropios(MarEventoDtoImport imports) throws Exception{
-
         ArrayList<MensajeDto> mensajes = new ArrayList<MensajeDto>();
 
         try{
@@ -396,6 +395,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             List<HashMap<String, Object>> str_psbod = imports.getStr_psbod();
             List<HashMap<String, Object>> str_desca = imports.getStr_desca();
             List<HashMap<String, Object>> str_simar = imports.getStr_simar();
+            List<HashMap<String, Object>> str_disfl = imports.getStr_disfl();
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
@@ -415,6 +415,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             exec.setTable(jcoTables, "STR_PSBOD", str_psbod);
             exec.setTable(jcoTables, "STR_DESCA", str_desca);
             exec.setTable(jcoTables, "STR_SIMAR", str_simar);
+            exec.setTable(jcoTables, "STR_DISFL", str_disfl);
 
             function.execute(destination);
 

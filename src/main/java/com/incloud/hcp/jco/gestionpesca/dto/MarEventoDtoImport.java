@@ -18,6 +18,7 @@ public class MarEventoDtoImport {
     private List<HashMap<String, Object>> str_evento;
     private List<HashMap<String, Object>> str_horom;
     private List<HashMap<String, Object>> str_equip;
+    private List<HashMap<String, Object>> str_disfl;
 
     public List<HashMap<String, Object>> getStr_equip() {
         return str_equip;
@@ -194,5 +195,13 @@ public class MarEventoDtoImport {
 
     public void setStr_horom(List<HashMap<String, Object>> str_horom) {
         this.str_horom = str_horom;
+    }
+
+    public List<HashMap<String, Object>> getStr_disfl() {
+        return str_disfl;
+    }
+
+    public void setStr_disfl(List<HashMap<String, Object>> str_disfl) {
+        this.str_disfl = str_disfl;
     }
 }
