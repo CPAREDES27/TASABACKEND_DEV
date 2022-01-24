@@ -1,8 +1,11 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOEmbarcacionService;
 import com.incloud.hcp.jco.maestro.service.RFCCompartidos.ZFL_RFC_READ_TEABLEImplement;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
@@ -74,6 +78,33 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
             List<HashMap<String, Object>> data = me.ListarObjetosLazy(tableExport);
             logger.error("CONSULTA EMBARCA");
+
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.ZINPRP);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports detalleIndPropiedad = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZINPRP)).findFirst().orElse(null);
+
+            /**
+             * Enlace de los detqlles de los campos
+             * */
+            data.stream().map(m -> {
+                String inprp = m.get("INPRP").toString();
+
+                // Buscar los detalles
+                DominioExportsData dataINPRP = detalleIndPropiedad.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
+                if (dataINPRP != null) {
+                    String descInprp = dataINPRP.getDescripcion();
+                    m.put("DESC_INPRP", descInprp);
+                } else {
+                    m.put("DESC_INPRP", "");
+                }
+
+
+                return m;
+            }).collect(Collectors.toList());
 
 
             dto.setData(data);
