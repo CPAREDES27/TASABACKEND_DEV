@@ -85,9 +85,30 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
             logger.error("tff3");
 
+            List<HashMap<String, Object>> listaTrabajadores= new ArrayList<>();
+
+            for(int i=0; i<t_trabaj.size();i++) {
+
+                boolean employee=false;
+                for (Map.Entry<String, Object> entry: t_trabaj.get(i).entrySet()) {
+
+                    String key=entry.getKey();
+                    String value=entry.getValue().toString();
+
+                    logger.error("tripulantes ESREG");
+                    logger.error(key+":"+value);
+                    if(key.equals("ESREG") && value.equals("A") || value.equals("P") || value.equals("L")){
+
+                            employee=true;
+                    }
+                }
+                if(employee){
+                    listaTrabajadores.add( t_trabaj.get(i));
+                }
+            }
 
             tff.setT_trabff(t_trabff);
-            tff.setT_trabaj(t_trabaj);
+            tff.setT_trabaj(listaTrabajadores);
             tff.setT_fechas(t_fechas);
             tff.setT_textos(t_textos);
             tff.setT_mensajes(t_mensajes);
