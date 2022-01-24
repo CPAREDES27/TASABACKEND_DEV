@@ -9,4 +9,5 @@ public interface JCOAnalisisCombustibleService {
     ControlDetalleExport Detalles(AnalisisCombusImports imports)throws Exception;
     QlikExport QlikView(QlikView imports)throws Exception;
     AnalisisDtoExport AnalisisCombu(AnalisisDtoImport imports) throws Exception;
+    AnalisisCombusRegExport ExportarRegistroAnalisisCombu(AnalisisCombusRegImport imports) throws Exception;
 }

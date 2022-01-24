@@ -6,10 +6,21 @@ import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -291,6 +302,121 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             dto.setMensaje(e.getMessage());
         }
         return dto;
+    }
+
+    @Override
+    public AnalisisCombusRegExport ExportarRegistroAnalisisCombu(AnalisisCombusRegImport imports) throws Exception {
+        AnalisisCombusRegExport exports = new AnalisisCombusRegExport();
+
+        try {
+            Workbook reporteBook = new HSSFWorkbook();
+            Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
+
+            Font fuenteTitulo = reporteBook.createFont();
+            fuenteTitulo.setBold(true);
+
+            // Título general
+            Row rowTituloGeneral = analisisCombusSheet.createRow(2);
+            Cell cellTituloGeneral = rowTituloGeneral.createCell(2);
+            cellTituloGeneral.setCellValue("CONTROL DE COMBUSTIBLE");
+
+            // ------ Títulos de categorías ----------
+            Row rowTitulosCategorias = analisisCombusSheet.createRow(4);
+            Cell cellTituloZarpe = rowTitulosCategorias.createCell(18);
+            cellTituloZarpe.setCellValue("Zarpe");
+
+            Cell cellTituloArribo = rowTitulosCategorias.createCell(26);
+            cellTituloArribo.setCellValue("Arribo");
+
+            Cell cellTituloDescarga = rowTitulosCategorias.createCell(34);
+            cellTituloDescarga.setCellValue("Descarga");
+
+            Cell cellTituloHorometro = rowTitulosCategorias.createCell(36);
+            cellTituloHorometro.setCellValue("Horometro");
+
+            CellRangeAddress cellRangeZarpe = CellRangeAddress.valueOf("R4:Y4");
+            CellRangeAddress cellRangeArribo = CellRangeAddress.valueOf("Z4:AG4");
+            CellRangeAddress cellRangeDescarga = CellRangeAddress.valueOf("AH4:AI4");
+            CellRangeAddress cellRangeHorometro = CellRangeAddress.valueOf("AJ4:AQ4");
+
+            analisisCombusSheet.addMergedRegion(cellRangeZarpe);
+            analisisCombusSheet.addMergedRegion(cellRangeArribo);
+            analisisCombusSheet.addMergedRegion(cellRangeDescarga);
+            analisisCombusSheet.addMergedRegion(cellRangeHorometro);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+
+            CellStyle styleTitulosCategorias = rowTitulosCategorias.getRowStyle();
+            styleTitulosCategorias.setFont(fuenteTitulo);
+
+            // ------ Títulos de columnas ----------
+            int cellIndexTitulos = 2;
+            Row rowTitulos = analisisCombusSheet.createRow(5);
+            for (String titulo: imports.getTitulos()) {
+                Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
+
+                CellStyle styleTitulo = reporteBook.createCellStyle();
+                styleTitulo.setBorderTop(BorderStyle.THIN);
+                styleTitulo.setBorderBottom(BorderStyle.THIN);
+                styleTitulo.setBorderRight(BorderStyle.THIN);
+                styleTitulo.setBorderLeft(BorderStyle.THIN);
+
+                styleTitulo.setFont(fuenteTitulo);
+
+                cellTitulo.setCellValue(titulo);
+                cellTitulo.setCellStyle(styleTitulo);
+
+                cellIndexTitulos++;
+            }
+
+            // Llenado de datos
+            int rowIndex = 6;
+            for (HashMap<String, Object> itemData : imports.getData()) {
+                Row row = analisisCombusSheet.createRow(rowIndex);
+                int cellIndex = 2;
+                for (Map.Entry<String, Object> entryData: itemData.entrySet()) {
+                    Cell cell = row.createCell(cellIndex);
+                    cell.setCellValue(entryData.getValue().toString());
+
+                    cellIndex++;
+                }
+
+                rowIndex++;
+            }
+
+            String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Reporte Análisis de Combustuible.xlsx";
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
+            reporteBook.write(fileOutputStream);
+            fileOutputStream.close();
+
+            File file = new File(path);
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+            String base64Encoded = new String(encoded, StandardCharsets.UTF_8);
+            exports.setBase64(base64Encoded);
+
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+
+        return exports;
     }
 
 }
