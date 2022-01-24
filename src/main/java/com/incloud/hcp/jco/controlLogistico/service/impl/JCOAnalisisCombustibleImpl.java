@@ -316,19 +316,22 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             fuenteTitulo.setBold(true);
 
             // Título general
-            Row rowTituloGeneral = analisisCombusSheet.createRow(2);
-            Cell cellTituloGeneral = rowTituloGeneral.createCell(2);
+            Row rowTituloGeneral = analisisCombusSheet.createRow(1);
+            Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
             cellTituloGeneral.setCellValue("CONTROL DE COMBUSTIBLE");
 
+            CellRangeAddress cellRangeGeneral = CellRangeAddress.valueOf("B2:AQ2");
+            analisisCombusSheet.addMergedRegion(cellRangeGeneral);
+
             // ------ Títulos de categorías ----------
-            Row rowTitulosCategorias = analisisCombusSheet.createRow(4);
-            Cell cellTituloZarpe = rowTitulosCategorias.createCell(18);
+            Row rowTitulosCategorias = analisisCombusSheet.createRow(3);
+            Cell cellTituloZarpe = rowTitulosCategorias.createCell(17);
             cellTituloZarpe.setCellValue("Zarpe");
 
-            Cell cellTituloArribo = rowTitulosCategorias.createCell(26);
+            Cell cellTituloArribo = rowTitulosCategorias.createCell(25);
             cellTituloArribo.setCellValue("Arribo");
 
-            Cell cellTituloDescarga = rowTitulosCategorias.createCell(34);
+            Cell cellTituloDescarga = rowTitulosCategorias.createCell(33);
             cellTituloDescarga.setCellValue("Descarga");
 
             Cell cellTituloHorometro = rowTitulosCategorias.createCell(36);
@@ -364,12 +367,12 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
             RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
 
-            CellStyle styleTitulosCategorias = rowTitulosCategorias.getRowStyle();
-            styleTitulosCategorias.setFont(fuenteTitulo);
+            /*CellStyle styleTitulosCategorias = reporteBook.createCellStyle();
+            styleTitulosCategorias.setFont(fuenteTitulo);*/
 
             // ------ Títulos de columnas ----------
-            int cellIndexTitulos = 2;
-            Row rowTitulos = analisisCombusSheet.createRow(5);
+            int cellIndexTitulos = 1;
+            Row rowTitulos = analisisCombusSheet.createRow(4);
             for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
                 String titulo = titulosFieldEntry.getValue();
                 Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
@@ -389,21 +392,25 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             }
 
             // Llenado de datos
-            int rowIndex = 6;
+            int rowIndex = 5;
+            String dataStr = "";
             for (HashMap<String, Object> itemData : imports.getData()) {
                 Row row = analisisCombusSheet.createRow(rowIndex);
-                int cellIndex = 2;
+                int cellIndex = 1;
 
                 for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
                     cell.setCellValue(value);
+                    dataStr+=value;
 
                     cellIndex++;
                 }
 
                 rowIndex++;
             }
+
+            logger.info(dataStr);
 
             String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Reporte Análisis de Combustuible.xlsx";
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
