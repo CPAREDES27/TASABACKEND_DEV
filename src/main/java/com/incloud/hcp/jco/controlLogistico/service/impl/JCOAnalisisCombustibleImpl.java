@@ -370,7 +370,8 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             // ------ Títulos de columnas ----------
             int cellIndexTitulos = 2;
             Row rowTitulos = analisisCombusSheet.createRow(5);
-            for (String titulo: imports.getTitulos()) {
+            for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+                String titulo = titulosFieldEntry.getValue();
                 Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
 
                 CellStyle styleTitulo = reporteBook.createCellStyle();
@@ -392,9 +393,11 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             for (HashMap<String, Object> itemData : imports.getData()) {
                 Row row = analisisCombusSheet.createRow(rowIndex);
                 int cellIndex = 2;
-                for (Map.Entry<String, Object> entryData: itemData.entrySet()) {
+
+                for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+                    String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
-                    cell.setCellValue(entryData.getValue().toString());
+                    cell.setCellValue(value);
 
                     cellIndex++;
                 }

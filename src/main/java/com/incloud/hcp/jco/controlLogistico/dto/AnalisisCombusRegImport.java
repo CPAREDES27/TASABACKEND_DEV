@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AnalisisCombusRegImport {
-    private ArrayList<String> titulos;
+    private HashMap<String, String> titulosField;
     private ArrayList<HashMap<String, Object>> data;
 
-    public ArrayList<String> getTitulos() {
-        return titulos;
+    public HashMap<String, String> getTitulosField() {
+        return titulosField;
     }
 
-    public void setTitulos(ArrayList<String> titulos) {
-        this.titulos = titulos;
+    public void setTitulosField(HashMap<String, String> titulosField) {
+        this.titulosField = titulosField;
     }
 
     public ArrayList<HashMap<String, Object>> getData() {
