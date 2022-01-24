@@ -75,6 +75,15 @@ public class AnalisisCombustibleRest {
         }
     }
 
+    @PostMapping(value = "/AnalisisCombu", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnalisisCombusRegExport> AnalisisCombu(@RequestBody AnalisisCombusRegImport imports) {
 
+        try {
+            return Optional.ofNullable(this.jcoAnalisisCombustibleService.ExportarRegistroAnalisisCombu(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
 
 }
