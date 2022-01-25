@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -127,7 +124,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
         RepModifDatCombusRegExports exports = new RepModifDatCombusRegExports();
         try {
             // Lista de campos
-            HashMap<String, String> titulosField = new HashMap<>();
+            LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
             titulosField.put("NMEMB", "Embarcación");
             titulosField.put("NRMAR", "Marea");
             titulosField.put("DESC_CDFAS", "Fase");
@@ -150,7 +147,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             CellStyle styleTituloGeneral = repModifDatosCombusBook.createCellStyle();
             styleTituloGeneral.setFont(fuenteTitulo);
-            styleTituloGeneral.setVerticalAlignment(VerticalAlignment.CENTER);
+            styleTituloGeneral.setAlignment(HorizontalAlignment.CENTER);
 
             // Título general
             Row rowTituloGeneral = exportRepSheet.createRow(1);
@@ -185,7 +182,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                 styleTitulo.setBorderRight(BorderStyle.THIN);
                 styleTitulo.setBorderLeft(BorderStyle.THIN);
                 styleTitulo.setFont(fuenteTitulo);
-                styleTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
+                styleTitulo.setAlignment(HorizontalAlignment.CENTER);
 
                 cellTitulo.setCellValue(titulo);
                 cellTitulo.setCellStyle(styleTitulo);

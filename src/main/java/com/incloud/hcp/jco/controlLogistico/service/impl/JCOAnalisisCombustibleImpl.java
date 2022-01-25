@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService {
@@ -309,16 +306,65 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         AnalisisCombusRegExport exports = new AnalisisCombusRegExport();
 
         try {
+            LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
+            titulosField.put("NRMAR2", "Num. Marea");
+            titulosField.put("CDEMB", "Cod. de Embarcación");
+            titulosField.put("NMEMB", "Nombre de Embarcación");
+            titulosField.put("DSMMA", "Motivo");
+            titulosField.put("PTOZA", "Puerto de Zarpe");
+            titulosField.put("FECZA2", "Fecha de Zarpe");
+            titulosField.put("HIZAR", "Hora de Zarpe");
+            titulosField.put("PTOAR", "Puerto de Arribo");
+            titulosField.put("FECAR2", "Fecha de Arribo");
+            titulosField.put("HIARR", "Hora de Arribo");
+            titulosField.put("FECCONMOV2", "Fecha de prod.");
+            titulosField.put("CNPDS", "Cant. desc. (Tn)");
+            titulosField.put("STCMB2", "Stock Inicial");
+            titulosField.put("CNSUM2", "Suministro");
+            titulosField.put("CONSU2", "Consumo");
+            titulosField.put("STFIN2", "Stock Final");
+            titulosField.put("HOZMP2", "MP");
+            titulosField.put("HOZA12", "A1");
+            titulosField.put("HOZA22", "A2");
+            titulosField.put("HOZA32", "A3");
+            titulosField.put("HOZA42", "A4");
+            titulosField.put("HOZA52", "A5");
+            titulosField.put("HOZPA2", "PA");
+            titulosField.put("HOZFP2", "FP");
+            titulosField.put("HOAMP2", "MP");
+            titulosField.put("HOAA12", "A1");
+            titulosField.put("HOAA22", "A2");
+            titulosField.put("HOAA32", "A3");
+            titulosField.put("HOAA42", "A4");
+            titulosField.put("HOAA52", "A5");
+            titulosField.put("HOAPA2", "PA");
+            titulosField.put("HOAFP2", "FP");
+            titulosField.put("HODMP2", "MP");
+            titulosField.put("HODFP2", "FP");
+            titulosField.put("HOHMP2", "MP");
+            titulosField.put("HOHA12", "A1");
+            titulosField.put("HOHA22", "A2");
+            titulosField.put("HOHA32", "A3");
+            titulosField.put("HOHA42", "A4");
+            titulosField.put("HOHA52", "A5");
+            titulosField.put("HOHPA2", "PA");
+            titulosField.put("HOHFP2", "FP");
+
             Workbook reporteBook = new HSSFWorkbook();
             Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
 
             Font fuenteTitulo = reporteBook.createFont();
             fuenteTitulo.setBold(true);
 
+            CellStyle styleTituloGeneral = reporteBook.createCellStyle();
+            styleTituloGeneral.setFont(fuenteTitulo);
+            styleTituloGeneral.setAlignment(HorizontalAlignment.CENTER);
+
             // Título general
             Row rowTituloGeneral = analisisCombusSheet.createRow(1);
             Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
             cellTituloGeneral.setCellValue("CONTROL DE COMBUSTIBLE");
+            cellTituloGeneral.setCellStyle(styleTituloGeneral);
 
             CellRangeAddress cellRangeGeneral = CellRangeAddress.valueOf("B2:AQ2");
             analisisCombusSheet.addMergedRegion(cellRangeGeneral);
@@ -327,15 +373,19 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             Row rowTitulosCategorias = analisisCombusSheet.createRow(3);
             Cell cellTituloZarpe = rowTitulosCategorias.createCell(17);
             cellTituloZarpe.setCellValue("Zarpe");
+            cellTituloZarpe.setCellStyle(styleTituloGeneral);
 
             Cell cellTituloArribo = rowTitulosCategorias.createCell(25);
             cellTituloArribo.setCellValue("Arribo");
+            cellTituloArribo.setCellStyle(styleTituloGeneral);
 
             Cell cellTituloDescarga = rowTitulosCategorias.createCell(33);
             cellTituloDescarga.setCellValue("Descarga");
+            cellTituloDescarga.setCellStyle(styleTituloGeneral);
 
             Cell cellTituloHorometro = rowTitulosCategorias.createCell(36);
             cellTituloHorometro.setCellValue("Horometro");
+            cellTituloHorometro.setCellStyle(styleTituloGeneral);
 
             CellRangeAddress cellRangeZarpe = CellRangeAddress.valueOf("R4:Y4");
             CellRangeAddress cellRangeArribo = CellRangeAddress.valueOf("Z4:AG4");
@@ -373,7 +423,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             // ------ Títulos de columnas ----------
             int cellIndexTitulos = 1;
             Row rowTitulos = analisisCombusSheet.createRow(4);
-            for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+            for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                 String titulo = titulosFieldEntry.getValue();
                 Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
 
@@ -398,11 +448,11 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 Row row = analisisCombusSheet.createRow(rowIndex);
                 int cellIndex = 1;
 
-                for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+                for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
                     cell.setCellValue(value);
-                    dataStr+=value;
+                    dataStr += value;
 
                     cellIndex++;
                 }
