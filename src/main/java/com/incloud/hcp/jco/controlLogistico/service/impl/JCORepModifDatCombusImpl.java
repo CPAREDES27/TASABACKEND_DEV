@@ -129,8 +129,8 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             titulosField.put("NRMAR", "Marea");
             titulosField.put("DESC_CDFAS", "Fase");
             titulosField.put("DESC_CDMMA", "Motivo de marea");
-            titulosField.put("FECCONMOV", "Fec. producción");
-            titulosField.put("FCMOD", "Fec. modificación");
+            titulosField.put("FECCONMOV2", "Fec. producción");
+            titulosField.put("FCMOD2", "Fec. modificación");
             titulosField.put("ATMOD", "Usuario");
             titulosField.put("CNPDS", "Descarga (TN)");
             titulosField.put("OBCOM", "Texto Explicativo");
