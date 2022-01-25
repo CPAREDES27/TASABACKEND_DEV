@@ -32,8 +32,8 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             importx.setValue("P_FCFIN", imports.getP_fcfin());
             importx.setValue("P_CDTEM", imports.getP_cdtem());
             importx.setValue("P_CDPCN", imports.getP_cdpcn());
-            importx.setValue("P_CDEMB", imports.getP_cdemb());
-            importx.setValue("P_PAG", imports.getP_pag());
+            //importx.setValue("P_CDEMB", imports.getP_cdemb());
+            //importx.setValue("P_PAG", imports.getP_pag());
 
 
             JCoParameterList tables = stfcConnection.getTableParameterList();
@@ -42,7 +42,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             stfcConnection.execute(destination);
 
             JCoTable STR_PEM = tables.getTable(Tablas.STR_PEM);
-            ppe.setP_totalpag(export.getString("P_TOTALPAG"));
+            //ppe.setP_totalpag(export.getString("P_TOTALPAG"));
 
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_pem = metodo.ListarObjetosLazy(STR_PEM);
