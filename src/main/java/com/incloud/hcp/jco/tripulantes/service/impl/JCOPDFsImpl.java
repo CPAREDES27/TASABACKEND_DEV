@@ -3182,70 +3182,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             if(dto.getDni()==null){
                 dto.setDni("");
             }
-           /* String[] CamposCertificados= new String[]{PDFZarpeConstantes.DSCER,
-                    PDFZarpeConstantes.FECCF};
 
-            String[][] Certificados=new String[T_VGCER.getNumRows()+1][CamposCertificados.length];
-            Certificados[0]= PDFTrimestralConstantes.certificadosCabecera;
-            logger.error("TIMESTRAL Certificados");
-
-
-            int con=1;
-            String guion="-     ";
-            for(int i=0; i<T_VGCER.getNumRows(); i++){
-                T_VGCER.setRow(i);
-
-                String[] registros=new String[CamposCertificados.length];
-                int campos=0;
-                for(int j=0; j<registros.length; j++){
-
-                     if(j==0) {
-
-                        registros[j] =guion+ T_VGCER.getString(PDFZarpeConstantes.DSCER);
-                        campos++;
-
-
-                    }else if(j==1){
-                         if(T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")){//ARQUEO
-
-                             registros[j]=T_VGCER.getString(PDFZarpeConstantes.NRCER);
-
-                         }
-
-                         if(!T_VGCER.getString(PDFZarpeConstantes.FECCF).equals(null) && !T_VGCER.getString(PDFZarpeConstantes.CDCER).equals("0037")) {
-
-                             String fecha = T_VGCER.getString(PDFZarpeConstantes.FECCF);
-
-                             SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
-                             SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-                             Date date = parseador.parse(fecha);
-
-
-                             fecha = formateador.format(date);
-
-                             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                             Date d = new Date();
-                             String fechaF = dateFormat.format(d);
-                             Date fActual = parseador.parse(fechaF);
-
-                             logger.error("FECHA : " + date.toString());
-                             logger.error("FECHA ACTUAL: " + fActual.toString());
-
-                             if (date.after(fActual)) {
-                                 registros[j] = fecha;
-
-                             } else {
-                                 registros[j] = "";
-                             }
-
-                         }
-                        campos++;
-                    }
-                }
-
-                Certificados[con]=registros;
-                con++;
-            }*/
             List<CertificadoDto> certificadosList=new ArrayList<>();
             for(int i=0; i<t_vgcer.size();i++){
                 T_VGCER.setRow(i);
@@ -3255,27 +3192,32 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 c.setNRCER(T_VGCER.getString("NRCER"));
                 c.setDSCER(T_VGCER.getString("DSCER"));
 
-                String fecha = T_VGCER.getString("FECCF");
+                try {
+                    String fecha = T_VGCER.getString("FECCF");
 
-                SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-                Date date = parseador.parse(fecha);
+                    SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = parseador.parse(fecha);
 
 
-                fecha = formateador.format(date);
+                    fecha = formateador.format(date);
 
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = new Date();
-                String fechaF = dateFormat.format(d);
-                Date fActual = parseador.parse(fechaF);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date d = new Date();
+                    String fechaF = dateFormat.format(d);
+                    Date fActual = parseador.parse(fechaF);
 
-                if (date.after(fActual)) {
-                    c.setFECCF(fecha);
+                    if (date.after(fActual)) {
+                        c.setFECCF(fecha);
 
-                } else {
+                    } else {
+                        c.setFECCF("");
+                    }
+
+                }catch (Exception e){
                     c.setFECCF("");
-                }
 
+                }
 
                 certificadosList.add(c);
 
@@ -6534,7 +6476,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 if(i!=3 && dto.getCDCER().equals(cdcer[i]) || dto.getCDCER().equals(cdcer2[i])){
 
                     certificados[0]=dto.getDSCER();
-                    //certificados[1]=dto.getFECCF();
+                    certificados[1]=dto.getFECCF();
+                    /*
                     logger.error("listaOrdenada["+con+"]: "+certificados);
 
 
@@ -6549,7 +6492,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     }else{
                         certificados[1]="";
                     }
-
+*/
                     listaOrdenada[con]=certificados;
                     con++;
                 }
