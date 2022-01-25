@@ -17,6 +17,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -128,12 +129,38 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             Workbook repModifDatosCombusBook = new HSSFWorkbook();
             Sheet exportRepSheet = repModifDatosCombusBook.createSheet("Exportación SAPUI5");
 
+            int startTableColumn = 1;
+            int startTableRow = 4;
+            int startTableData = startTableRow + 1;
+
             Font fuenteTitulo = repModifDatosCombusBook.createFont();
             fuenteTitulo.setBold(true);
 
+            CellStyle styleTituloGeneral = repModifDatosCombusBook.createCellStyle();
+            styleTituloGeneral.setFont(fuenteTitulo);
+
+            // Título general
+            Row rowTituloGeneral = exportRepSheet.createRow(1);
+            Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
+            cellTituloGeneral.setCellValue("REPORTE DE MODIFICACIONES DE DATOS SOBRE COMBUSTIBLE");
+            cellTituloGeneral.setCellStyle(styleTituloGeneral);
+
+            // % Mod
+            Row rowPorcMod = exportRepSheet.createRow(2);
+            Cell cellPorcMod = rowPorcMod.createCell(1);
+            cellPorcMod.setCellValue("INDICADOR DE MODIFICACIÓN: " + imports.getPorcIndMod() + "%");
+            cellPorcMod.setCellStyle(styleTituloGeneral);
+
+            // Combinación de celdas
+            CellRangeAddress cellRangeTituloGeneral = CellRangeAddress.valueOf("B2:J2");
+            CellRangeAddress cellRangePorcMod = CellRangeAddress.valueOf("B3:J3");
+
+            exportRepSheet.addMergedRegion(cellRangeTituloGeneral);
+            exportRepSheet.addMergedRegion(cellRangePorcMod);
+
             // Títulos de columnas
-            int cellIndexTitulos = 0;
-            Row rowTitulos = exportRepSheet.createRow(1);
+            int cellIndexTitulos = startTableColumn;
+            Row rowTitulos = exportRepSheet.createRow(startTableRow);
             for (Map.Entry<String, String> titulosFieldsEntry: imports.getTitulosField().entrySet()) {
                 String titulo = titulosFieldsEntry.getValue();
 
@@ -153,21 +180,8 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                 cellIndexTitulos++;
             }
 
-            // Porc de ind. de modif.
-            CellStyle styleValueNames = repModifDatosCombusBook.createCellStyle();
-            styleValueNames.setFont(fuenteTitulo);
-
-            Row rowIndModif = exportRepSheet.createRow(0);
-
-            Cell cellIndModifText = rowIndModif.createCell(0);
-            cellIndModifText.setCellStyle(styleValueNames);
-            cellIndModifText.setCellValue("Indicador de modificación:");
-
-            Cell cellIndModifValue = rowIndModif.createCell(1);
-            cellIndModifValue.setCellValue(String.valueOf(imports.getPorcIndMod()) + "%");
-
             // Datos
-            int rowIndex = 2;
+            int rowIndex = startTableData;
             String dataStr = "";
             for (HashMap<String, Object> itemData : imports.getData()) {
                 Row row = exportRepSheet.createRow(rowIndex);
@@ -177,7 +191,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
                     cell.setCellValue(value);
-                    dataStr+=value;
+                    dataStr += value;
 
                     cellIndex++;
                 }
