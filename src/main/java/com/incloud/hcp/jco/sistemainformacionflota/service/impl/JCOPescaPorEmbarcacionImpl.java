@@ -24,7 +24,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_EMBARCA_BTP);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_EMBARCA);
 
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user ());
