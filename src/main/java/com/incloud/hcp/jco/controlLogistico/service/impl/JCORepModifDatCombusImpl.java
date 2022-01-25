@@ -126,13 +126,13 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             // Lista de campos
             LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
             titulosField.put("NMEMB", "Embarcación");
-            titulosField.put("NRMAR", "Marea");
+            titulosField.put("NRMAR2", "Marea");
             titulosField.put("DESC_CDFAS", "Fase");
             titulosField.put("DESC_CDMMA", "Motivo de marea");
             titulosField.put("FECCONMOV2", "Fec. producción");
             titulosField.put("FCMOD2", "Fec. modificación");
             titulosField.put("ATMOD", "Usuario");
-            titulosField.put("CNPDS", "Descarga (TN)");
+            titulosField.put("CNPDS2", "Descarga (TN)");
             titulosField.put("OBCOM", "Texto Explicativo");
 
             Workbook repModifDatosCombusBook = new HSSFWorkbook();
@@ -207,6 +207,13 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                 }
 
                 rowIndex++;
+            }
+
+            // Autoajuste de ancho de columnas
+            int indexColumn = startTableColumn;
+            for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
+                exportRepSheet.autoSizeColumn(indexColumn);
+                indexColumn++;
             }
 
             logger.info(dataStr);

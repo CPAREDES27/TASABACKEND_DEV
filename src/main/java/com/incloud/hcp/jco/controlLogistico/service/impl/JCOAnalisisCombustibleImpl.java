@@ -318,7 +318,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             titulosField.put("FECAR2", "Fecha de Arribo");
             titulosField.put("HIARR", "Hora de Arribo");
             titulosField.put("FECCONMOV2", "Fecha de prod.");
-            titulosField.put("CNPDS", "Cant. desc. (Tn)");
+            titulosField.put("CNPDS2", "Cant. desc. (Tn)");
             titulosField.put("STCMB2", "Stock Inicial");
             titulosField.put("CNSUM2", "Suministro");
             titulosField.put("CONSU2", "Consumo");
@@ -423,18 +423,17 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             // ------ Títulos de columnas ----------
             int cellIndexTitulos = 1;
             Row rowTitulos = analisisCombusSheet.createRow(4);
+
+            CellStyle styleTitulo = reporteBook.createCellStyle();
+            styleTitulo.setBorderTop(BorderStyle.THIN);
+            styleTitulo.setBorderBottom(BorderStyle.THIN);
+            styleTitulo.setBorderRight(BorderStyle.THIN);
+            styleTitulo.setBorderLeft(BorderStyle.THIN);
+            styleTitulo.setFont(fuenteTitulo);
+
             for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                 String titulo = titulosFieldEntry.getValue();
                 Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
-
-                CellStyle styleTitulo = reporteBook.createCellStyle();
-                styleTitulo.setBorderTop(BorderStyle.THIN);
-                styleTitulo.setBorderBottom(BorderStyle.THIN);
-                styleTitulo.setBorderRight(BorderStyle.THIN);
-                styleTitulo.setBorderLeft(BorderStyle.THIN);
-
-                styleTitulo.setFont(fuenteTitulo);
-
                 cellTitulo.setCellValue(titulo);
                 cellTitulo.setCellStyle(styleTitulo);
 
@@ -458,6 +457,13 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                 }
 
                 rowIndex++;
+            }
+
+            // Autoajuste de ancho de columnas
+            int indexColumn = 1;
+            for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
+                analisisCombusSheet.autoSizeColumn(indexColumn);
+                indexColumn++;
             }
 
             logger.info(dataStr);
