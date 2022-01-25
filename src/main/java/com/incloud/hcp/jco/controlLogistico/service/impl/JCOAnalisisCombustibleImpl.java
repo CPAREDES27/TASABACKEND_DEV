@@ -254,9 +254,9 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetosLazy(T_MENSAJE);
 
-            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetos(STR_CEF);
+            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetosLazy(STR_CEF);
 
 
             ce.setT_mensaje(dataT_MENSAJE);
