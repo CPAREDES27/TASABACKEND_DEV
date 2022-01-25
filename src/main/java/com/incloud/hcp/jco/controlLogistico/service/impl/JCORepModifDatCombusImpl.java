@@ -126,6 +126,18 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
     public RepModifDatCombusRegExports Exportar(RepModifDatCombusRegImports imports) throws Exception {
         RepModifDatCombusRegExports exports = new RepModifDatCombusRegExports();
         try {
+            // Lista de campos
+            HashMap<String, String> titulosField = new HashMap<>();
+            titulosField.put("NMEMB", "Embarcación");
+            titulosField.put("NRMAR", "Marea");
+            titulosField.put("DESC_CDFAS", "Fase");
+            titulosField.put("DESC_CDMMA", "Motivo de marea");
+            titulosField.put("FECCONMOV", "Fec. producción");
+            titulosField.put("FCMOD", "Fec. modificación");
+            titulosField.put("ATMOD", "Usuario");
+            titulosField.put("CNPDS", "Descarga (TN)");
+            titulosField.put("OBCOM", "Texto Explicativo");
+
             Workbook repModifDatosCombusBook = new HSSFWorkbook();
             Sheet exportRepSheet = repModifDatosCombusBook.createSheet("Exportación SAPUI5");
 
@@ -138,6 +150,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             CellStyle styleTituloGeneral = repModifDatosCombusBook.createCellStyle();
             styleTituloGeneral.setFont(fuenteTitulo);
+            styleTituloGeneral.setVerticalAlignment(VerticalAlignment.CENTER);
 
             // Título general
             Row rowTituloGeneral = exportRepSheet.createRow(1);
@@ -161,7 +174,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             // Títulos de columnas
             int cellIndexTitulos = startTableColumn;
             Row rowTitulos = exportRepSheet.createRow(startTableRow);
-            for (Map.Entry<String, String> titulosFieldsEntry: imports.getTitulosField().entrySet()) {
+            for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
                 String titulo = titulosFieldsEntry.getValue();
 
                 Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
@@ -171,8 +184,8 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                 styleTitulo.setBorderBottom(BorderStyle.THIN);
                 styleTitulo.setBorderRight(BorderStyle.THIN);
                 styleTitulo.setBorderLeft(BorderStyle.THIN);
-
                 styleTitulo.setFont(fuenteTitulo);
+                styleTitulo.setVerticalAlignment(VerticalAlignment.CENTER);
 
                 cellTitulo.setCellValue(titulo);
                 cellTitulo.setCellStyle(styleTitulo);
@@ -185,9 +198,9 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             String dataStr = "";
             for (HashMap<String, Object> itemData : imports.getData()) {
                 Row row = exportRepSheet.createRow(rowIndex);
-                int cellIndex = 0;
+                int cellIndex = startTableColumn;
 
-                for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+                for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
                     cell.setCellValue(value);
