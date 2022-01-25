@@ -2,6 +2,8 @@ package com.incloud.hcp.rest;
 
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusExports;
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusImports;
+import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusRegExports;
+import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusRegImports;
 import com.incloud.hcp.jco.controlLogistico.service.JCORepModifDatCombusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,18 @@ public class ReporModifDatosCombusRest {
 
         try {
             return Optional.ofNullable(this.jcoRepModifDatCombusService.Listar(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+    @PostMapping(value = "/Exportar", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<RepModifDatCombusRegExports> Exportar(@RequestBody RepModifDatCombusRegImports imports){
+
+        try {
+            return Optional.ofNullable(this.jcoRepModifDatCombusService.Exportar(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

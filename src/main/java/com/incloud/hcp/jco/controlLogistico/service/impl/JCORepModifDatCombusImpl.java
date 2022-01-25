@@ -3,6 +3,8 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 import com.incloud.hcp.CallBAPI;
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusExports;
 import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusImports;
+import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusRegExports;
+import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusRegImports;
 import com.incloud.hcp.jco.controlLogistico.service.JCORepModifDatCombusService;
 import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
 import com.incloud.hcp.jco.dominios.dto.DominiosExports;
@@ -11,13 +13,21 @@ import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
 import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,6 +119,89 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
         }
 
         return rmdc;
+    }
+
+    @Override
+    public RepModifDatCombusRegExports Exportar(RepModifDatCombusRegImports imports) throws Exception {
+        RepModifDatCombusRegExports exports = new RepModifDatCombusRegExports();
+        try {
+            Workbook repModifDatosCombusBook = new HSSFWorkbook();
+            Sheet exportRepSheet = repModifDatosCombusBook.createSheet("Exportación SAPUI5");
+
+            Font fuenteTitulo = repModifDatosCombusBook.createFont();
+            fuenteTitulo.setBold(true);
+
+            // Títulos de columnas
+            int cellIndexTitulos = 0;
+            Row rowTitulos = exportRepSheet.createRow(1);
+            for (Map.Entry<String, String> titulosFieldsEntry: imports.getTitulosField().entrySet()) {
+                String titulo = titulosFieldsEntry.getValue();
+
+                Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
+
+                CellStyle styleTitulo = repModifDatosCombusBook.createCellStyle();
+                styleTitulo.setBorderTop(BorderStyle.THIN);
+                styleTitulo.setBorderBottom(BorderStyle.THIN);
+                styleTitulo.setBorderRight(BorderStyle.THIN);
+                styleTitulo.setBorderLeft(BorderStyle.THIN);
+
+                styleTitulo.setFont(fuenteTitulo);
+
+                cellTitulo.setCellValue(titulo);
+                cellTitulo.setCellStyle(styleTitulo);
+
+                cellIndexTitulos++;
+            }
+
+            // Porc de ind. de modif.
+            CellStyle styleValueNames = repModifDatosCombusBook.createCellStyle();
+            styleValueNames.setFont(fuenteTitulo);
+
+            Row rowIndModif = exportRepSheet.createRow(0);
+
+            Cell cellIndModifText = rowIndModif.createCell(0);
+            cellIndModifText.setCellStyle(styleValueNames);
+            cellIndModifText.setCellValue("Indicador de modificación:");
+
+            Cell cellIndModifValue = rowIndModif.createCell(1);
+            cellIndModifValue.setCellValue(String.valueOf(imports.getPorcIndMod()) + "%");
+
+            // Datos
+            int rowIndex = 2;
+            String dataStr = "";
+            for (HashMap<String, Object> itemData : imports.getData()) {
+                Row row = exportRepSheet.createRow(rowIndex);
+                int cellIndex = 0;
+
+                for (Map.Entry<String, String> titulosFieldEntry: imports.getTitulosField().entrySet()) {
+                    String value = itemData.get(titulosFieldEntry.getKey()).toString();
+                    Cell cell = row.createCell(cellIndex);
+                    cell.setCellValue(value);
+                    dataStr+=value;
+
+                    cellIndex++;
+                }
+
+                rowIndex++;
+            }
+
+            logger.info(dataStr);
+
+            String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Reporte de modificación de datos de combustible.xlsx";
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
+            repModifDatosCombusBook.write(fileOutputStream);
+            fileOutputStream.close();
+
+            File file = new File(path);
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+            String base64Encoded = new String(encoded, StandardCharsets.UTF_8);
+            exports.setBase64(base64Encoded);
+
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+
+        return exports;
     }
 
 }
