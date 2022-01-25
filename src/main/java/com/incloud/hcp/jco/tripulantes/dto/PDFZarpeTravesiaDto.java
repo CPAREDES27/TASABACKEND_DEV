@@ -23,6 +23,15 @@ public class PDFZarpeTravesiaDto {
     private String AutorizadoPor;
     private String ValidoHasta;
     private String dni;
+    private String codigoZarpe;
+
+    public String getCodigoZarpe() {
+        return codigoZarpe;
+    }
+
+    public void setCodigoZarpe(String codigoZarpe) {
+        this.codigoZarpe = codigoZarpe;
+    }
 
     public String getDni() {
         return dni;

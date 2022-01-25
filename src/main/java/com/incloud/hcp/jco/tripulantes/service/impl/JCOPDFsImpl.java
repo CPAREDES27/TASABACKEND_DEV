@@ -80,12 +80,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 String fecha=ConvertirFecha(T_ZATRP, PDFZarpeConstantes.FEZAT);
                 String hora=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRARR);
 
-                /*
-                JCoField fieldH = T_ZATRP.getField(PDFZarpeConstantes.HRARR );
-                Date time =fieldH.getTime();
-                SimpleDateFormat hour = new SimpleDateFormat("HH:mm:ss");
-                String hora = hour.format(time);*/
-
                 String codigoZarpe=T_ZATRP.getString(PDFZarpeConstantes.CDZAT);
                 int codigoZ=Integer.parseInt(codigoZarpe);
                 String codigo =String.valueOf(codigoZ);
@@ -133,6 +127,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
                     reg[0]=String.valueOf(indice);
                     if(key.equals("NOMBR")){
+                        logger.error("NOMBR : "+valor);
                         reg[1]=valor;
                     }
                     if(key.equals("NRLIB")){
@@ -141,8 +136,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     if(key.equals("FEFVG")){
 
                         try {
-                            String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
-                            reg[3] = fecha;
+                            logger.error("FEFVG : "+valor);
+                            //String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                           // logger.error("FEFVG : "+fecha);
+                            reg[3] = valor;
                         }catch (Exception e){
                             reg[3] =valor;
                         }
@@ -1902,6 +1899,10 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 String horaArribo=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRARR);
                 String horaZarpe=ConvertirHora(T_ZATRP, PDFZarpeConstantes.HRZAR);
 
+                String codigoZarpe=T_ZATRP.getString(PDFZarpeConstantes.CDZAT);
+                int codigoZ=Integer.parseInt(codigoZarpe);
+                String codigo =String.valueOf(codigoZ);
+                dto.setCodigoZarpe(codigo);
 
                 dto.setCapitaniaGuardacostas(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
@@ -1963,8 +1964,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     if(key.equals("FEFVG")){
 
                         try {
-                            String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
-                            reg[3] = fecha;
+                            //String fecha = ConvertirFecha(T_DZATR, PDFZarpeConstantes.FEFVG);
+                            reg[3] = valor;
                         }catch (Exception e){
                             reg[3] =valor;
                         }
@@ -2579,6 +2580,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.setFont(font, 6);
         contentStream.moveTextPositionByAmount(45, 30);
         contentStream.drawString(PDFZarpeTravesiaConstantes.notaTres1);
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 6);
+        contentStream.moveTextPositionByAmount(50, 20);
+        contentStream.drawString("#"+dto.getCodigoZarpe());
         contentStream.endText();
 
         logger.error("PlantillaPDF_1");
