@@ -79,7 +79,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             PescaPorEmbarcaExports exports = PescaPorEmbarcacion(imports);
             boolean isTemporada = !imports.getP_cdpcn().equals("") ? true : false;
             ArrayList<HashMap<String, Object>> exportsFormatted = new ArrayList<>();
-            String formatDecimal = String.format("%.1f");
+            //String formatDecimal = String.format("%.1f");
 
             Workbook reporteBook = new HSSFWorkbook();
             Sheet pescaEmbSheet = reporteBook.createSheet("Hoja 1");
