@@ -49,6 +49,17 @@ public class SistemaInformacionFlotaRest {
         }
     }
 
+    @PostMapping(value = "/ExportPescaPorEmbarcacion", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<PescaPorEmbarcaRepExports> ExportPescaPorEmbarcacion(@RequestBody PescaPorEmbarcaImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaPorEmbarcacionService.ExportPescaPorEmbarcacion(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
     @PostMapping(value = "/PescaDeclaradaDiara", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<PescaDeclaradaDiariaExports> PescaDeclaradaDiaria(@RequestBody PescaDeclaradaDiariaImports imports) {
 
