@@ -86,13 +86,13 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
              DominiosHelper helper = new DominiosHelper();
              ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
 
-             DominiosExports claseProtesto = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CLASEPROTESTO)).findFirst().orElse(null);
+             DominiosExports estadoRegistro = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZESREG)).findFirst().orElse(null);
 
              t_zatrp.stream().map(m -> {
                  String esreg = m.get("ESREG").toString()!=null ? m.get("ESREG").toString() : "";
 
-                 DominioExportsData dataESREG = claseProtesto.getData().stream().filter(d -> d.getId().equals(esreg)).findFirst().orElse(null);
-                 m.put("DESC_CLPRT", dataESREG != null ? dataESREG.getDescripcion() : "");
+                 DominioExportsData dataESREG = estadoRegistro.getData().stream().filter(d -> d.getId().equals(esreg)).findFirst().orElse(null);
+                 m.put("DESC_ESREG", dataESREG != null ? dataESREG.getDescripcion() : "");
 
                  return m;
              }).collect(Collectors.toList());
