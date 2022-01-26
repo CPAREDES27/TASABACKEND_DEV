@@ -484,6 +484,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENTRIPULANTES":
                 tabla = ConsultaGeneralTablas.CONSGENTRIPULANTES;
                 break;
+            case "CONSGENTRIPULANTESB":
+                tabla = ConsultaGeneralTablas.CONSGENTRIPULANTES;
+                break;
             case "CONSGENBSQTRIPUZARPE":
                 tabla = ConsultaGeneralTablas.CONSGENBSQTRIPUZARPE;
                 break;
@@ -817,6 +820,28 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                     condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES6 + parametro5 + "'";
                     logger.error("CONSGENTRIPULANTES: " + condicion);
                 }
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENTRIPULANTESB":
+                condicion = ConsultaGeneralOptions.CONSGENTRIPULANTESB;
+                if (!parametro1.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES2 + parametro1 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
+                }
+                if (!parametro2.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES3 + parametro2 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
+                }
+                if (!parametro3.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES4 + parametro3 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
+                }
+                if (!parametro4.equals("")) {
+                    condicion += ConsultaGeneralOptions.CONSGENTRIPULANTES5 + parametro4 + "'";
+                    logger.error("CONSGENTRIPULANTES: " + condicion);
+                }
+
                 opt.setWa(condicion);
                 options.add(opt);
                 break;

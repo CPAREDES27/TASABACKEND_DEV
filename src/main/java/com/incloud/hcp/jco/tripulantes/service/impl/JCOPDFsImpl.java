@@ -1512,6 +1512,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             SimpleDateFormat dia = new SimpleDateFormat("d 'de' MMMM 'de' yyyy", new Locale("es","ES"));
             String fecha = dia.format(date);
 
+            dto.setCodigoProtesto(T_BAPRT.getString(PDFProtestosConstantes.CDPRT));
             dto.setTrato(T_BAPRT.getString(PDFProtestosConstantes.TRATO));
             dto.setGradoSupervisor(T_BAPRT.getString(PDFProtestosConstantes.GRADO));
             dto.setNombreSupervisor(T_BAPRT.getString(PDFProtestosConstantes.NAPSU));
@@ -1654,6 +1655,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.drawString("N° "+dto.getCarnetProcurador());
         contentStream.endText();
 
+        contentStream.beginText();
+        contentStream.setFont(font, 9);
+        contentStream.moveTextPositionByAmount(40, 64);
+        contentStream.drawString(dto.getCodigoProtesto());
+        contentStream.endText();
 
         contentStream.close();
         document.save(Path);
