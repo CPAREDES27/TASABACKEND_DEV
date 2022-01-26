@@ -390,7 +390,7 @@ public class EjecutarRFC {
 
                                if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
                                        key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
-                                       key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM") || key.equals("LE_ENDDA")){
+                                       key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM") || key.equals("LE_ENDDA") || key.equals("FECCONMOV")){
                                     if(value.toString().equals("00000000")){
                                         value="";
                                     }else{
@@ -475,7 +475,7 @@ public class EjecutarRFC {
                         }
                         if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS") ||
                                 key.equals("FHREQ") || key.equals("FHCRN")|| key.equals("FHMOD")|| key.equals("FHFVG")|| key.equals("FHIVG")
-                                || key.equals("FHFTM")|| key.equals("FHITM")|| key.equals("LE_ENDDA")) {
+                                || key.equals("FHFTM")|| key.equals("FHITM")|| key.equals("LE_ENDDA") || key.equals("FECCONMOV")) {
 
                             if(value.toString().equals("00000000")){
                                value="";
