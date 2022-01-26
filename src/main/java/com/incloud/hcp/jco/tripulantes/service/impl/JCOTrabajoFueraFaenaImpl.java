@@ -1,13 +1,13 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.tripulantes.dto.*;
 import com.incloud.hcp.jco.tripulantes.service.JCOTrabajoFueraFaenaService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import javax.swing.text.html.Option;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
@@ -77,13 +78,43 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             //    exec.setTable(tables, Tablas.T_FECHAS,imports.getT_fechas());
             //}
 
-            List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos2(T_TRABFF, imports.getFieldst_trabff());
-            List<HashMap<String, Object>> t_trabaj = metodo.ObtenerListObjetos(T_TRABAJ, imports.getFieldst_trabaj());
-            List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
-            List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
-            List<HashMap<String, Object>>  t_mensajes = metodo.ListarObjetos(T_MENSAJES);
+            //List<HashMap<String, Object>> t_trabff = metodo.ObtenerListObjetos2(T_TRABFF, imports.getFieldst_trabff());
+            //List<HashMap<String, Object>> t_trabaj = metodo.ObtenerListObjetos(T_TRABAJ, imports.getFieldst_trabaj());
+            //List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
+            //List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
+            //List<HashMap<String, Object>>  t_mensajes = metodo.ListarObjetos(T_MENSAJES);
 
+            List<HashMap<String, Object>> t_trabff = metodo.ListarObjetosLazy(T_TRABFF);
+            List<HashMap<String, Object>> t_trabaj = metodo.ListarObjetosLazy(T_TRABAJ);
+            List<HashMap<String, Object>> t_fechas = metodo.ListarObjetosLazy(T_FECHAS);
+            List<HashMap<String, Object>> t_textos = metodo.ListarObjetosLazy(T_TEXTOS);
+            List<HashMap<String, Object>> t_mensajes = metodo.ListarObjetosLazy(T_MENSAJES);
             logger.error("tff3");
+
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.ZDO_ESREGTFF);
+            listDomNames.add(Dominios.ZDO_TIPOTRABAJO);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports zdo_esregff = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZDO_ESREGTFF)).findFirst().orElse(null);
+            DominiosExports zdo_tipotrabajo = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZDO_TIPOTRABAJO)).findFirst().orElse(null);
+
+            t_trabff.stream().map(m -> {
+                String esreg = m.get("ESREG").toString()!=null ? m.get("ESREG").toString() : "";
+                String tiptr = m.get("TIPTR").toString()!=null ? m.get("TIPTR").toString() : "";
+
+                // Buscar los detalles
+                DominioExportsData dataESREG = zdo_esregff.getData().stream().filter(d -> d.getId().equals(esreg)).findFirst().orElse(null);
+                DominioExportsData dataTIPTR = zdo_tipotrabajo.getData().stream().filter(d -> d.getId().equals(tiptr)).findFirst().orElse(null);
+
+                m.put("DESC_ESREG", dataESREG != null ? dataESREG.getDescripcion() : "");
+                m.put("DESC_TIPTR", dataTIPTR != null ? dataTIPTR.getDescripcion() : "");
+
+
+                return m;
+            }).collect(Collectors.toList());
 
             List<HashMap<String, Object>> listaTrabajadores= new ArrayList<>();
 

@@ -2,6 +2,10 @@ package com.incloud.hcp.util;
 
 public class Dominios {
 
+    public static String CLASEPROTESTO="CLASEPROTESTO"; // clase protesto
+    public static String TIPOPROTESTO="TIPOPROTESTO"; //tipo protesto
+    public static String ZDO_TIPOTRABAJO="ZDO_TIPOTRABAJO"; //tipo trabajo ff
+    public static String ZDO_ESREGTFF="ZDO_ESREGTFF"; //estado en tff
     public static String ZINPRP="ZINPRP"; //indicador de propiedad
     public static String ZCDMMA="ZCDMMA"; //codigo de marea
     public static String ESCSG="ZESCSG"; //estado de castigo
@@ -16,4 +20,5 @@ public class Dominios {
     public static String ESRNV = "ZD_FLESRNV";
     public static String CDFAS = "ZCDFAS";
     public static String ESPRO = "ZDO_ESREGC";
+
 }

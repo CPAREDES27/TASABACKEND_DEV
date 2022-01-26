@@ -1,16 +1,16 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestoNuevoImport;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosExports;
 import com.incloud.hcp.jco.tripulantes.dto.ProtestosImports;
 import com.incloud.hcp.jco.tripulantes.service.JCOProtestosService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOProtestosImpl implements JCOProtestosService {
@@ -76,9 +77,38 @@ public class JCOProtestosImpl implements JCOProtestosService {
             JCoTable T_MENSAJ = tables.getTable(Tablas.T_MENSAJ);
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>>  t_baprt = metodo.ObtenerListObjetos(T_BAPRT, imports.getFieldst_baprt());
-            List<HashMap<String, Object>>  t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
-            List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+            //List<HashMap<String, Object>>  t_baprt = metodo.ObtenerListObjetos(T_BAPRT, imports.getFieldst_baprt());
+            //List<HashMap<String, Object>>  t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
+            //List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetos(T_MENSAJ);
+
+            List<HashMap<String, Object>>  t_baprt = metodo.ListarObjetosLazy(T_BAPRT);
+            List<HashMap<String, Object>>  t_textos = metodo.ListarObjetosLazy(T_TEXTOS);
+            List<HashMap<String, Object>>  t_mensaj = metodo.ListarObjetosLazy(T_MENSAJ);
+
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.CLASEPROTESTO);
+            listDomNames.add(Dominios.TIPOPROTESTO);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports claseProtesto = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CLASEPROTESTO)).findFirst().orElse(null);
+            DominiosExports tipoProtestos = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.TIPOPROTESTO)).findFirst().orElse(null);
+
+            t_baprt.stream().map(m -> {
+                String clprt = m.get("CLPRT").toString()!=null ? m.get("CLPRT").toString() : "";
+                String tpptr = m.get("TPPRT").toString()!=null ? m.get("TPPRT").toString() : "";
+
+
+                DominioExportsData dataCLPRT = claseProtesto.getData().stream().filter(d -> d.getId().equals(clprt)).findFirst().orElse(null);
+                DominioExportsData dataTPPTR = tipoProtestos.getData().stream().filter(d -> d.getId().equals(tpptr)).findFirst().orElse(null);
+                m.put("DESC_CLPRT", dataCLPRT != null ? dataCLPRT.getDescripcion() : "");
+                m.put("DESC_TPPRT", dataTPPTR != null ? dataTPPTR.getDescripcion() : "");
+
+
+
+                return m;
+            }).collect(Collectors.toList());
 
             pe.setT_baprt(t_baprt);
             pe.setT_textos(t_textos);
