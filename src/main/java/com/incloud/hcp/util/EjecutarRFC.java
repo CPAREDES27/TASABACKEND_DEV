@@ -662,6 +662,34 @@ public class EjecutarRFC {
                     Object   value="";
                     try{
                         value = ArrayResponse[j].trim();
+
+                        if (key.equals("HFDES") || key.equals("HIDES") || key.equals("HAMAR") || key.equals("HFMAR") || key.equals("HIMAR") || key.equals("HXMAR") ||
+                                key.equals("HFEVN") || key.equals("HIEVN") || key.equals("HRCRN") || key.equals("HRMOD")) {
+
+                            if(value.toString().equals("000000")){
+                                value="";
+                            }else {
+                                SimpleDateFormat parseador = new SimpleDateFormat("hhmmss");
+                                SimpleDateFormat formateador = new SimpleDateFormat("HH:mm", Locale.UK);
+                                Date hora = parseador.parse(value.toString());
+                                value = formateador.format(hora);
+                            }
+
+                        }
+
+                        if (key.equals("FEMAR") || key.equals("FITVS") || key.equals("FCVVI") || key.equals("FFTVS")|| key.equals("FHFVG")|| key.equals("FHIVG") ||
+                                key.equals("FFDES") || key.equals("FIDES") || key.equals("FFMAR") || key.equals("FIMAR") || key.equals("FXMAR") || key.equals("FFEVN") ||
+                                key.equals("FIEVN")|| key.equals("FHFTM")|| key.equals("FHITM") || key.equals("FHCRN") || key.equals("FHMOD") || key.equals("FHREQ")){
+                            if(value.toString().equals("00000000")){
+                                value="";
+                            }else{
+                                SimpleDateFormat parseador = new SimpleDateFormat("yyyyMMdd");
+                                SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+                                Date fecha = parseador.parse(value.toString());
+                                value=formateador.format(fecha);
+                            }
+
+                        }
                     }catch (Exception e){
                         value="";
 

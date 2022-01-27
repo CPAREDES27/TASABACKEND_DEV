@@ -17,6 +17,15 @@ public class PDFProtestosDto {
     private String numeroProtesto;
     private String carnetProcurador;
     private String cargoBahia;
+    private String codigoProtesto;
+
+    public String getCodigoProtesto() {
+        return codigoProtesto;
+    }
+
+    public void setCodigoProtesto(String codigoProtesto) {
+        this.codigoProtesto = codigoProtesto;
+    }
 
     public String getCarnetProcurador() {
         return carnetProcurador;

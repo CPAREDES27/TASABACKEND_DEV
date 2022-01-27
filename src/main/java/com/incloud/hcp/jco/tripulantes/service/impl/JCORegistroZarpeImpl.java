@@ -1,21 +1,22 @@
 package com.incloud.hcp.jco.tripulantes.service.impl;
 
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptionsKey;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.tripulantes.dto.Options;
 import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeExports;
 import com.incloud.hcp.jco.tripulantes.dto.RegistrosZarpeImports;
 import com.incloud.hcp.jco.tripulantes.service.JCORegistroZarpeService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
@@ -66,13 +67,37 @@ public class JCORegistroZarpeImpl implements JCORegistroZarpeService {
 
              }
              stfcConnection.execute(destination);
-             List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
-             List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
-             List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());
-             List<HashMap<String, Object>>  t_nzatr = metodo.ObtenerListObjetos(T_NZATR, imports.getFieldst_nzatr());
+             //List<HashMap<String, Object>>  t_zatrp = metodo.ObtenerListObjetos(T_ZATRP, imports.getFieldst_zatrp());
+             //List<HashMap<String, Object>>  t_dzatr = metodo.ObtenerListObjetos(T_DZATR, imports.getFieldst_dzatr());
+             //List<HashMap<String, Object>>  t_vgcer = metodo.ObtenerListObjetos(T_VGCER, imports.getFieldst_vgcer());
+             //List<HashMap<String, Object>>  t_nzatr = metodo.ObtenerListObjetos(T_NZATR, imports.getFieldst_nzatr());
+
+             List<HashMap<String, Object>>  t_zatrp = metodo.ListarObjetosLazy(T_ZATRP);
+             List<HashMap<String, Object>>  t_dzatr = metodo.ListarObjetosLazy(T_DZATR);
+             List<HashMap<String, Object>>  t_vgcer = metodo.ListarObjetosLazy(T_VGCER);
+             List<HashMap<String, Object>>  t_nzatr = metodo.ListarObjetosLazy(T_NZATR);
 
              JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetos(T_MENSAJE);
+             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
+
+             ArrayList<String> listDomNames = new ArrayList<>();
+             listDomNames.add(Dominios.ZESREG);
+
+             DominiosHelper helper = new DominiosHelper();
+             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+             DominiosExports estadoRegistro = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZESREG)).findFirst().orElse(null);
+
+             t_zatrp.stream().map(m -> {
+                 String esreg = m.get("ESREG").toString()!=null ? m.get("ESREG").toString() : "";
+
+                 DominioExportsData dataESREG = estadoRegistro.getData().stream().filter(d -> d.getId().equals(esreg)).findFirst().orElse(null);
+                 m.put("DESC_ESREG", dataESREG != null ? dataESREG.getDescripcion() : "");
+
+                 return m;
+             }).collect(Collectors.toList());
+
+
              rz.setT_mensaje(t_mensaje);
              rz.setT_zatrp(t_zatrp);
              rz.setT_dzatr(t_dzatr);

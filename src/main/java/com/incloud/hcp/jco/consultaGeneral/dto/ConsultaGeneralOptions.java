@@ -52,6 +52,7 @@ public class ConsultaGeneralOptions {
     public static String CONSGENERRDSCG="NRDES = '";
     public static String CONSGENERRDSCG2=" AND INDTR = 'P' AND ESREG = 'S' AND NRDES NE '' AND CMIN EQ 'E'";
     public static String CONSGENTRIPULANTES="ABKRS = 'TT'";
+    public static String CONSGENTRIPULANTESB="ABKRS = 'TE'";
     public static String CONSGENTRIPULANTES2=" AND PERNR = '";
     public static String CONSGENTRIPULANTES3=" AND VORNA = '";
     public static String CONSGENTRIPULANTES4=" AND NACHN = '";
