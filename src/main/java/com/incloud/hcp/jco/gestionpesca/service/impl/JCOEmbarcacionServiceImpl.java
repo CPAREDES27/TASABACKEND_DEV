@@ -901,7 +901,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ANULA_MAREA);
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_ANULA_MAREA_BTP);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_MAREA", imports.getP_marea());
 
