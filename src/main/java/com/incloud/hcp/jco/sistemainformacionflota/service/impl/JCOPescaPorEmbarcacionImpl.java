@@ -79,12 +79,12 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             PescaPorEmbarcaExports exports = PescaPorEmbarcacion(imports);
             boolean isTemporada = !imports.getP_cdpcn().equals("") ? true : false;
             ArrayList<HashMap<String, Object>> exportsFormatted = new ArrayList<>();
-            //String formatDecimal = String.format("%.1f");
 
             Workbook reporteBook = new HSSFWorkbook();
             Sheet pescaEmbSheet = reporteBook.createSheet("Hoja 1");
             int numTableRow = 5;
             int startColumn = 1;
+            int startRow = 1;
 
             Font fuenteTitulo = reporteBook.createFont();
             fuenteTitulo.setBold(true);
@@ -95,6 +95,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             styleTitulo.setBorderRight(BorderStyle.THIN);
             styleTitulo.setBorderLeft(BorderStyle.THIN);
             styleTitulo.setFont(fuenteTitulo);
+            styleTitulo.setAlignment(HorizontalAlignment.CENTER);
 
             LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
             LinkedHashMap<String, Object> totalesField = new LinkedHashMap<>();
@@ -118,6 +119,10 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
 
             for (HashMap<String, Object> pescaEmb: exports.getStr_pem()) {
                 HashMap<String, Object> pescaEmbFormatted = new HashMap<>();
+
+                DecimalFormat df1 = new DecimalFormat("#.#");
+                DecimalFormat df2 = new DecimalFormat("#");
+
                 String nmemb = pescaEmb.get("NMEMB").toString();
                 float cppms = Float.parseFloat(pescaEmb.get("CPPMS").toString());
                 float cprnc = Float.parseFloat(pescaEmb.get("CPRNC").toString());
@@ -136,24 +141,42 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
                 float difal = Float.parseFloat(pescaEmb.get("DIFAL").toString());
                 float renem = Float.parseFloat(pescaEmb.get("RENEM").toString()) * 100;
 
+                // Formato de números
+                String cppmsFormatted = isTemporada ? df1.format(cppms) : df2.format(cppms);
+                String cprncFormatted = isTemporada ? df1.format(cprnc) : df2.format(cprnc);
+                String cavncFormatted = isTemporada ? df1.format(cavnc) : df2.format(cavnc);
+                String cndcnFormatted = isTemporada ? df1.format(cndcn) : df2.format(cndcn);
+                String cndsuFormatted = isTemporada ? df1.format(cndsu) : df2.format(cndsu);
+                String cndhdFormatted = isTemporada ? df1.format(cndhd) : df2.format(cndhd);
+                String cndtoFormatted = isTemporada ? df1.format(cndto) : df2.format(cndto);
+                String dipcnFormatted = isTemporada ? df1.format(dipcn) : df2.format(dipcn);
+                String dipsuFormatted = isTemporada ? df1.format(dipsu) : df2.format(dipsu);
+                String diphdFormatted = isTemporada ? df1.format(diphd) : df2.format(diphd);
+                String dspsuFormatted = isTemporada ? df1.format(dspsu) : df2.format(dspsu);
+                String dsphdFormatted = isTemporada ? df1.format(dsphd) : df2.format(dsphd);
+                String divedFormatted = isTemporada ? df1.format(dived) : df2.format(dived);
+                String totdiFormatted = isTemporada ? df1.format(totdi) : df2.format(totdi);
+                String difalFormatted = isTemporada ? df1.format(difal) : df2.format(difal);
+                String renemFormatted = isTemporada ? df1.format(renem) : df2.format(renem);
+
                 pescaEmbFormatted.put("ROW", numRow);
                 pescaEmbFormatted.put("NMEMB", nmemb);
-                pescaEmbFormatted.put("CPPMS", isTemporada ? cppms : Math.round(cppms));
-                pescaEmbFormatted.put("CPRNC", cprnc);
-                pescaEmbFormatted.put("CAVNC", cavnc);
-                pescaEmbFormatted.put("CNDCN", cndcn);
-                pescaEmbFormatted.put("CNDSU", cndsu);
-                pescaEmbFormatted.put("CNDHD", cndhd);
-                pescaEmbFormatted.put("CNDTO", cndto);
-                pescaEmbFormatted.put("DIPCN", dipcn);
-                pescaEmbFormatted.put("DIPSU", dipsu);
-                pescaEmbFormatted.put("DIPHD", diphd);
-                pescaEmbFormatted.put("DSPSU", dspsu);
-                pescaEmbFormatted.put("DSPHD", dsphd);
-                pescaEmbFormatted.put("DIVED", dived);
-                pescaEmbFormatted.put("TOTDI", totdi);
-                pescaEmbFormatted.put("DIFAL", difal);
-                pescaEmbFormatted.put("RENEM", renem);
+                pescaEmbFormatted.put("CPPMS", cppmsFormatted);
+                pescaEmbFormatted.put("CPRNC", cprncFormatted);
+                pescaEmbFormatted.put("CAVNC", cavncFormatted);
+                pescaEmbFormatted.put("CNDCN", cndcnFormatted);
+                pescaEmbFormatted.put("CNDSU", cndsuFormatted);
+                pescaEmbFormatted.put("CNDHD", cndhdFormatted);
+                pescaEmbFormatted.put("CNDTO", cndtoFormatted);
+                pescaEmbFormatted.put("DIPCN", dipcnFormatted);
+                pescaEmbFormatted.put("DIPSU", dipsuFormatted);
+                pescaEmbFormatted.put("DIPHD", diphdFormatted);
+                pescaEmbFormatted.put("DSPSU", dspsuFormatted);
+                pescaEmbFormatted.put("DSPHD", dsphdFormatted);
+                pescaEmbFormatted.put("DIVED", divedFormatted);
+                pescaEmbFormatted.put("TOTDI", totdiFormatted);
+                pescaEmbFormatted.put("DIFAL", difalFormatted);
+                pescaEmbFormatted.put("RENEM", renemFormatted);
 
                 exportsFormatted.add(pescaEmbFormatted);
                 numRow++;
@@ -179,6 +202,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             Row rowTitulosCombined = pescaEmbSheet.createRow(numTableRow - 1);
             CellStyle styleTituloCombined = reporteBook.createCellStyle();
             styleTituloCombined.setFont(fuenteTitulo);
+            styleTituloCombined.setAlignment(HorizontalAlignment.CENTER);
 
             if (isTemporada) { // Renderizado para temporadas
                 titulosField.put("ROW", "");
@@ -204,7 +228,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
                 cellDiasPesca.setCellStyle(styleTitulo);
                 cellDiasPesca.setCellValue("Días de Pesca");
 
-                Cell cellDias = rowTitulosCombined.createCell(7);
+                Cell cellDias = rowTitulosCombined.createCell(8);
                 cellDias.setCellStyle(styleTitulo);
                 cellDias.setCellValue("Días");
 
@@ -247,7 +271,7 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
                 cellPescaTM.setCellStyle(styleTituloCombined);
                 cellPescaTM.setCellValue("Pesca TM");
 
-                Cell cellDiasPesca = rowTitulosCombined.createCell(7);
+                Cell cellDiasPesca = rowTitulosCombined.createCell(8);
                 cellDiasPesca.setCellStyle(styleTituloCombined);
                 cellDiasPesca.setCellValue("Días de Pesca");
 
@@ -290,14 +314,17 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
             String fechaIniFormat = fechaIni.substring(6) + "/" + fechaIni.substring(4, 6) + "/" + fechaIni.substring(0, 4);
             String fechaFinFormat = fechaFin.substring(6) + "/" + fechaFin.substring(4, 6) + "/" + fechaFin.substring(0, 4);
 
-            Row rowTituloGen = pescaEmbSheet.createRow(1);
-            Cell cellTituloGen1 = rowTituloGen.createCell(1);
-            cellTituloGen1.setCellStyle(styleTituloCombined);
-            cellTituloGen1.setCellValue("PESCA POR EMBARCACIÓN");
+            String[] tituloGeneral = {"PESCA POR EMBARCACIÓN", "DEL " + fechaIniFormat + " AL " + fechaFinFormat};
+            int numRowTitleGen = startRow;
 
-            Cell cellTituloGen2 = rowTituloGen.createCell(2);
-            cellTituloGen2.setCellStyle(styleTituloCombined);
-            cellTituloGen2.setCellValue("DEL " + fechaIniFormat + " AL " + fechaFinFormat);
+            for (String tituloGeneralPart: tituloGeneral) {
+                Row rowTituloGen = pescaEmbSheet.createRow(numRowTitleGen);
+                Cell cellTituloGen = rowTituloGen.createCell(1);
+                cellTituloGen.setCellStyle(styleTituloCombined);
+                cellTituloGen.setCellValue(tituloGeneralPart);
+
+                numRowTitleGen++;
+            }
 
             CellRangeAddress cellRangeTituloGen1 = CellRangeAddress.valueOf(isTemporada ? "B2:J2" : "B2:O2");
             pescaEmbSheet.addMergedRegion(cellRangeTituloGen1);
@@ -345,6 +372,13 @@ public class JCOPescaPorEmbarcacionImpl implements JCOPescaPorEmbarcacionService
                 cellTotal.setCellValue(totalesFieldEntry.getValue().toString());
 
                 cellIndexTotal++;
+            }
+
+            // Autoajuste de ancho de columnas
+            int indexColumn = startColumn;
+            for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
+                pescaEmbSheet.autoSizeColumn(indexColumn);
+                indexColumn++;
             }
 
             String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "PescaEmbarcacion.xlsx";
