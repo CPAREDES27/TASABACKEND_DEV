@@ -210,6 +210,86 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         dto.setMensaje("Ok");
 
+        // Agrupar los registros por el código de especie y evento
+
+        Map<Object,List<HashMap<String,Object>>> str_flbsp_group=dto.getStr_flbsp().stream().collect(Collectors.groupingBy(s->{
+            return new ArrayList<String>(Arrays.asList(s.get("NREVN").toString(),s.get("CDSPC").toString()));
+        }));
+
+        int totalCnspc=0;
+        int cnspcModa=0;
+        double moda=0;
+
+        // Copy Map
+        HashMap<String,ArrayList<HashMap<String,Object>>> str_flbsp_group_copy=new HashMap<>();
+        for (Map.Entry<Object,List<HashMap<String,Object>>> entry: str_flbsp_group.entrySet()) {
+            ArrayList<HashMap<String,Object>> str_flbsp_especie=new ArrayList<>(entry.getValue());
+            str_flbsp_group_copy.put(entry.getKey().toString(),str_flbsp_especie);
+        }
+
+        //Obtener las especies
+        DominiosImports dominiosImports=new DominiosImports();
+        ArrayList<DominioParams> listDominioParams=new ArrayList<>();
+        DominioParams dominioParams=new DominioParams();
+        dominioParams.setStatus("A");
+        dominioParams.setDomname("ESPECIE");
+        listDominioParams.add(dominioParams);
+        dominiosImports.setDominios(listDominioParams);
+        DominioDto dominioExport=dominioService.Listar(dominiosImports);
+        ArrayList<DominioExportsData> listEspecies=new ArrayList<>(dominioExport.getData().get(0).getData());
+
+        List<HashMap<String,Object>> str_flbsp_matched=new ArrayList<>();
+        //Obtener columnas dinamicas
+        for (Map.Entry<String,ArrayList<HashMap<String,Object>>> entry: str_flbsp_group_copy.entrySet()) {
+            String codEspecie = "";
+
+            //Fila al cual se le añadirán las columnas dinámicas
+            HashMap<String,Object> record = (HashMap<String, Object>) entry.getValue().get(0).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+            for (HashMap<String,Object> flbsp: entry.getValue()) {
+                String cdspc = flbsp.get("CDSPC").toString();
+                int cnspc=Integer.parseInt(flbsp.get("CNSPC").toString());
+                if (!codEspecie.equals(cdspc)) {
+                    codEspecie = cdspc;
+                    totalCnspc = 0;
+                }
+                //codEspecie = flbsp.get("CDSPC").toString();
+                String tnmmed="TNMED_"+ flbsp.get("TMMED").toString();
+
+                double tmmed=Double.parseDouble(flbsp.get("TMMED").toString());
+                tnmmed=tnmmed.replace('.','_');
+                record.put(tnmmed,flbsp.get("CNSPC"));
+
+                //Total de cantidades
+                if(codEspecie.equals(cdspc)) {
+                    totalCnspc+=cnspc;
+                } else {
+                    totalCnspc=cnspc;
+                }
+
+
+                //Moda
+                if(cnspcModa<cnspc){
+                    moda=tmmed;
+                    cnspcModa=cnspc;
+                }
+            }
+
+
+
+            //Buscar el nombre de la especie en la lista y adicionarlo
+            String finalCodEspecie = codEspecie;
+            DominioExportsData especie=listEspecies.stream().filter(s->s.getId().equals(finalCodEspecie)).findAny().orElse(null);
+            String descEspecie=especie!=null?especie.getDescripcion():null;
+
+            record.put("DESC_CDSPC",descEspecie);
+            record.put("CDSPC_TOTAL",totalCnspc);
+            record.put("MODA", moda);
+
+            str_flbsp_matched.add(record);
+        }
+
+        dto.setStr_flbsp_matched(str_flbsp_matched);
+
         return dto;
     }
 

@@ -8,6 +8,7 @@ public class MareaDto {
     private List<HashMap<String, Object>> s_evento;
     private List<HashMap<String, Object>> str_flbsp;
     private List<HashMap<String, Object>> str_pscinc;
+    private List<HashMap<String, Object>> str_flbsp_matched;
     private String mensaje;
 
     public List<HashMap<String, Object>> getStr_flbsp() {
@@ -40,6 +41,14 @@ public class MareaDto {
 
     public void setS_evento(List<HashMap<String, Object>> s_evento) {
         this.s_evento = s_evento;
+    }
+
+    public List<HashMap<String, Object>> getStr_flbsp_matched() {
+        return str_flbsp_matched;
+    }
+
+    public void setStr_flbsp_matched(List<HashMap<String, Object>> str_flbsp_matched) {
+        this.str_flbsp_matched = str_flbsp_matched;
     }
 
     public String getMensaje() {
