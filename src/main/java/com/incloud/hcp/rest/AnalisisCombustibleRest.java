@@ -76,7 +76,7 @@ public class AnalisisCombustibleRest {
     }
 
     @PostMapping(value = "/ExportRegistroAnalisisCombus", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<AnalisisCombusRegExport> AnalisisCombu(@RequestBody AnalisisCombusRegImport imports) {
+    public ResponseEntity<AnalisisCombusRegExport> AnalisisCombu(@RequestBody AnalisisCombusLisImports imports) {
 
         try {
             return Optional.ofNullable(this.jcoAnalisisCombustibleService.ExportarRegistroAnalisisCombu(imports))

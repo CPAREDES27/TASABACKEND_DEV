@@ -120,20 +120,22 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
     }
 
     @Override
-    public RepModifDatCombusRegExports Exportar(RepModifDatCombusRegImports imports) throws Exception {
+    public RepModifDatCombusRegExports Exportar(RepModifDatCombusImports imports) throws Exception {
         RepModifDatCombusRegExports exports = new RepModifDatCombusRegExports();
         try {
+            RepModifDatCombusExports exportsData = Listar(imports);
+
             // Lista de campos
             LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
             titulosField.put("NMEMB", "Embarcación");
-            titulosField.put("NRMAR2", "Marea");
+            titulosField.put("NRMAR", "Marea");
             titulosField.put("DESC_CDFAS", "Fase");
             titulosField.put("DESC_CDMMA", "Motivo de marea");
-            titulosField.put("FECCONMOV2", "Fec. producción");
-            titulosField.put("FCMOD2", "Fec. modificación");
+            titulosField.put("FECCONMOV", "Fec. producción");
+            titulosField.put("FCMOD", "Fec. modificación");
             titulosField.put("ATMOD", "Usuario");
-            titulosField.put("CNPDS2", "Descarga (TN)");
-            titulosField.put("OBCOM", "Texto Explicativo");
+            titulosField.put("CNPDS", "Descarga (TN)");
+            titulosField.put("OBCOM", "Texto explicativo por modificación");
 
             Workbook repModifDatosCombusBook = new HSSFWorkbook();
             Sheet exportRepSheet = repModifDatosCombusBook.createSheet("Exportación SAPUI5");
@@ -158,7 +160,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             // % Mod
             Row rowPorcMod = exportRepSheet.createRow(2);
             Cell cellPorcMod = rowPorcMod.createCell(1);
-            cellPorcMod.setCellValue("INDICADOR DE MODIFICACIÓN: " + imports.getPorcIndMod() + "%");
+            cellPorcMod.setCellValue("INDICADOR DE MODIFICACIÓN: " + exportsData.getIndicadorPorc() + "%");
             cellPorcMod.setCellStyle(styleTituloGeneral);
 
             // Combinación de celdas
@@ -192,16 +194,34 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
 
             // Datos
             int rowIndex = startTableData;
-            String dataStr = "";
-            for (HashMap<String, Object> itemData : imports.getData()) {
+            String[] fieldsNumber = {"NRMAR", "CNPDS"};
+            String[] fieldsDate = {"FECCONMOV", "FCMOD"};
+
+            CellStyle styleNumberFormat = repModifDatosCombusBook.createCellStyle();
+            styleNumberFormat.setDataFormat(repModifDatosCombusBook.createDataFormat().getFormat("#,##0"));
+
+            logger.info("Inicio Datos");
+            for (HashMap<String, Object> itemData : exportsData.getT_flocc()) {
                 Row row = exportRepSheet.createRow(rowIndex);
                 int cellIndex = startTableColumn;
 
                 for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
-                    cell.setCellValue(value);
-                    dataStr += value;
+                    if (Arrays.asList(fieldsDate).contains(titulosFieldEntry.getKey()) && !value.equals("")) {
+                        String dia = value.substring(0, 2);
+                        String mes = value.substring(3, 5);
+                        String anho = value.substring(6);
+
+                        value = anho + "-" + mes + "-" + dia;
+                        cell.setCellValue(value);
+                    } else if (Arrays.asList(fieldsNumber).contains(titulosFieldEntry.getKey())) {
+                        double doubleValue = Double.parseDouble(value);
+                        cell.setCellStyle(styleNumberFormat);
+                        cell.setCellValue(doubleValue);
+                    } else {
+                        cell.setCellValue(value);
+                    }
 
                     cellIndex++;
                 }
@@ -216,7 +236,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
                 indexColumn++;
             }
 
-            logger.info(dataStr);
+            logger.info("Ajuste ancho de columna");
 
             String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Reporte de modificación de datos de combustible.xlsx";
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
@@ -229,7 +249,7 @@ public class JCORepModifDatCombusImpl implements JCORepModifDatCombusService {
             exports.setBase64(base64Encoded);
 
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            logger.error("Error de exportación Rep Modificación de datos de combustible: " + ex.getMessage());
         }
 
         return exports;

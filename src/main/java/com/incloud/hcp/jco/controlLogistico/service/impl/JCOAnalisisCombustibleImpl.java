@@ -302,53 +302,56 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
     }
 
     @Override
-    public AnalisisCombusRegExport ExportarRegistroAnalisisCombu(AnalisisCombusRegImport imports) throws Exception {
+    public AnalisisCombusRegExport ExportarRegistroAnalisisCombu(AnalisisCombusLisImports imports) throws Exception {
         AnalisisCombusRegExport exports = new AnalisisCombusRegExport();
 
         try {
+            AnalisisCombusLisExports exportsData = Listar(imports);
+
+            // Nombres de campos de la tabla
             LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
-            titulosField.put("NRMAR2", "Num. Marea");
+            titulosField.put("NRMAR", "Num. Marea");
             titulosField.put("CDEMB", "Cod. de Embarcación");
             titulosField.put("NMEMB", "Nombre de Embarcación");
             titulosField.put("DSMMA", "Motivo");
             titulosField.put("PTOZA", "Puerto de Zarpe");
-            titulosField.put("FECZA2", "Fecha de Zarpe");
+            titulosField.put("FECZA", "Fecha de Zarpe");
             titulosField.put("HIZAR", "Hora de Zarpe");
             titulosField.put("PTOAR", "Puerto de Arribo");
-            titulosField.put("FECAR2", "Fecha de Arribo");
+            titulosField.put("FECAR", "Fecha de Arribo");
             titulosField.put("HIARR", "Hora de Arribo");
-            titulosField.put("FECCONMOV2", "Fecha de prod.");
-            titulosField.put("CNPDS2", "Cant. desc. (Tn)");
-            titulosField.put("STCMB2", "Stock Inicial");
-            titulosField.put("CNSUM2", "Suministro");
-            titulosField.put("CONSU2", "Consumo");
-            titulosField.put("STFIN2", "Stock Final");
-            titulosField.put("HOZMP2", "MP");
-            titulosField.put("HOZA12", "A1");
-            titulosField.put("HOZA22", "A2");
-            titulosField.put("HOZA32", "A3");
-            titulosField.put("HOZA42", "A4");
-            titulosField.put("HOZA52", "A5");
-            titulosField.put("HOZPA2", "PA");
-            titulosField.put("HOZFP2", "FP");
-            titulosField.put("HOAMP2", "MP");
-            titulosField.put("HOAA12", "A1");
-            titulosField.put("HOAA22", "A2");
-            titulosField.put("HOAA32", "A3");
-            titulosField.put("HOAA42", "A4");
-            titulosField.put("HOAA52", "A5");
-            titulosField.put("HOAPA2", "PA");
-            titulosField.put("HOAFP2", "FP");
-            titulosField.put("HODMP2", "MP");
-            titulosField.put("HODFP2", "FP");
-            titulosField.put("HOHMP2", "MP");
-            titulosField.put("HOHA12", "A1");
-            titulosField.put("HOHA22", "A2");
-            titulosField.put("HOHA32", "A3");
-            titulosField.put("HOHA42", "A4");
-            titulosField.put("HOHA52", "A5");
-            titulosField.put("HOHPA2", "PA");
-            titulosField.put("HOHFP2", "FP");
+            titulosField.put("FECCONMOV", "Fecha de prod.");
+            titulosField.put("CNPDS", "Cant. desc. (Tn)");
+            titulosField.put("STCMB", "Stock Inicial");
+            titulosField.put("CNSUM", "Suministro");
+            titulosField.put("CONSU", "Consumo");
+            titulosField.put("STFIN", "Stock Final");
+            titulosField.put("HOZMP", "MP");
+            titulosField.put("HOZA1", "A1");
+            titulosField.put("HOZA2", "A2");
+            titulosField.put("HOZA3", "A3");
+            titulosField.put("HOZA4", "A4");
+            titulosField.put("HOZA5", "A5");
+            titulosField.put("HOZPA", "PA");
+            titulosField.put("HOZFP", "FP");
+            titulosField.put("HOAMP", "MP");
+            titulosField.put("HOAA1", "A1");
+            titulosField.put("HOAA2", "A2");
+            titulosField.put("HOAA3", "A3");
+            titulosField.put("HOAA4", "A4");
+            titulosField.put("HOAA5", "A5");
+            titulosField.put("HOAPA", "PA");
+            titulosField.put("HOAFP", "FP");
+            titulosField.put("HODMP", "MP");
+            titulosField.put("HODFP", "FP");
+            titulosField.put("HOHMP", "MP");
+            titulosField.put("HOHA1", "A1");
+            titulosField.put("HOHA2", "A2");
+            titulosField.put("HOHA3", "A3");
+            titulosField.put("HOHA4", "A4");
+            titulosField.put("HOHA5", "A5");
+            titulosField.put("HOHPA", "PA");
+            titulosField.put("HOHFP", "FP");
 
             Workbook reporteBook = new HSSFWorkbook();
             Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
@@ -383,7 +386,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             cellTituloDescarga.setCellValue("Descarga");
             cellTituloDescarga.setCellStyle(styleTituloGeneral);
 
-            Cell cellTituloHorometro = rowTitulosCategorias.createCell(36);
+            Cell cellTituloHorometro = rowTitulosCategorias.createCell(35);
             cellTituloHorometro.setCellValue("Horometro");
             cellTituloHorometro.setCellStyle(styleTituloGeneral);
 
@@ -443,14 +446,34 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             // Llenado de datos
             int rowIndex = 5;
             String dataStr = "";
-            for (HashMap<String, Object> itemData : imports.getData()) {
+            String[] fieldsNumbers = {"NRMAR", "CNPDS", "STCMB", "CNSUM", "CONSU", "STFIN", "HOZMP", "HOZA1", "HOZA2", "HOZA3", "HOZA4", "HOZA5", "HOZPA", "HOZFP", "HOAMP", "HOAA1", "HOAA2", "HOAA3", "HOAA4", "HOAA5", "HOAPA", "HOAFP", "HODMP", "HODFP", "HOHMP", "HOHA1", "HOHA2", "HOHA3", "HOHA4", "HOHA5", "HOHPA", "HOHFP"};
+            String[] fieldsDate = {"FECZA", "FECAR", "FECCONMOV"};
+
+            CellStyle styleNumberFormat = reporteBook.createCellStyle();
+            styleNumberFormat.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0"));
+
+            for (HashMap<String, Object> itemData : exportsData.getStr_csmar()) {
                 Row row = analisisCombusSheet.createRow(rowIndex);
                 int cellIndex = 1;
 
                 for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
                     Cell cell = row.createCell(cellIndex);
-                    cell.setCellValue(value);
+                    if (Arrays.asList(fieldsDate).contains(titulosFieldEntry.getKey()) && !value.equals("")) {
+                        String dia = value.substring(0, 2);
+                        String mes = value.substring(3, 5);
+                        String anho = value.substring(6);
+
+                        value = anho + "-" + mes + "-" + dia;
+                        cell.setCellValue(value);
+                    } else if (Arrays.asList(fieldsNumbers).contains(titulosFieldEntry.getKey())) {
+                        double doubleValue = Double.parseDouble(value);
+                        cell.setCellStyle(styleNumberFormat);
+                        cell.setCellValue(doubleValue);
+                    } else {
+                        cell.setCellValue(value);
+                    }
+
                     dataStr += value;
 
                     cellIndex++;

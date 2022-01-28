@@ -36,7 +36,7 @@ public class ReporModifDatosCombusRest {
     }
 
     @PostMapping(value = "/Exportar", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<RepModifDatCombusRegExports> Exportar(@RequestBody RepModifDatCombusRegImports imports){
+    public ResponseEntity<RepModifDatCombusRegExports> Exportar(@RequestBody RepModifDatCombusImports imports){
 
         try {
             return Optional.ofNullable(this.jcoRepModifDatCombusService.Exportar(imports))

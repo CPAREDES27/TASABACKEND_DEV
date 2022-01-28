@@ -9,5 +9,5 @@ import com.incloud.hcp.jco.controlLogistico.dto.RepModifDatCombusRegImports;
 public interface JCORepModifDatCombusService {
 
     RepModifDatCombusExports Listar(RepModifDatCombusImports imports)throws Exception;
-    RepModifDatCombusRegExports Exportar(RepModifDatCombusRegImports imports) throws Exception;
+    RepModifDatCombusRegExports Exportar(RepModifDatCombusImports imports) throws Exception;
 }
