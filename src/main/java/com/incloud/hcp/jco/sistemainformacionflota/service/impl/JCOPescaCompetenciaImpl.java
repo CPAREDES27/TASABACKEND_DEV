@@ -128,6 +128,8 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             JCoTable tblSTR_EMP = tables.getTable(Tablas.STR_EMP);
             JCoTable tblSTR_PEM = tables.getTable(Tablas.STR_PEM);
             JCoTable tblSTR_PED = tables.getTable(Tablas.STR_PED);
+            JCoTable tblSTR_GRP = tables.getTable(Tablas.STR_GRP);
+            JCoTable tblSTR_PLM = tables.getTable(Tablas.STR_PLM);
 
             List<HashMap<String, Object>> str_zlt = metodo.ListarObjetosLazy(tblSTR_ZLT);
             List<HashMap<String, Object>> str_pto = metodo.ListarObjetosLazy(tblSTR_PTO);
@@ -139,6 +141,8 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             List<HashMap<String, Object>> str_emp = metodo.ListarObjetosLazy(tblSTR_EMP);
             List<HashMap<String, Object>> str_pem = metodo.ListarObjetosLazy(tblSTR_PEM);
             List<HashMap<String, Object>> str_ped = metodo.ListarObjetosLazy(tblSTR_PED);
+            List<HashMap<String, Object>> str_grp = metodo.ListarObjetosLazy(tblSTR_GRP);
+            List<HashMap<String, Object>> str_plm = metodo.ListarObjetosLazy(tblSTR_PLM);
 
             pcp.setStr_zlt(str_zlt);
             pcp.setStr_pto(str_pto);
@@ -150,6 +154,8 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             pcp.setStr_emp(str_emp);
             pcp.setStr_pem(str_pem);
             pcp.setStr_ped(str_ped);
+            pcp.setStr_grp(str_grp);
+            pcp.setStr_plm(str_plm);
             pcp.setMensaje("Ok");
 
         }catch (Exception e){

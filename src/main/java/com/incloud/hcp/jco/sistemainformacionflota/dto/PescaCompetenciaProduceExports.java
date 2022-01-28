@@ -15,6 +15,8 @@ public class PescaCompetenciaProduceExports {
     private List<HashMap<String, Object>> str_emp;
     private List<HashMap<String, Object>> str_pem;
     private List<HashMap<String, Object>> str_ped;
+    private List<HashMap<String, Object>> str_grp;
+    private List<HashMap<String, Object>> str_plm;
     private String mensaje;
 
     public List<HashMap<String, Object>> getStr_zlt() {
@@ -95,6 +97,22 @@ public class PescaCompetenciaProduceExports {
 
     public void setStr_ped(List<HashMap<String, Object>> str_ped) {
         this.str_ped = str_ped;
+    }
+
+    public List<HashMap<String, Object>> getStr_grp() {
+        return str_grp;
+    }
+
+    public void setStr_grp(List<HashMap<String, Object>> str_grp) {
+        this.str_grp = str_grp;
+    }
+
+    public List<HashMap<String, Object>> getStr_plm() {
+        return str_plm;
+    }
+
+    public void setStr_plm(List<HashMap<String, Object>> str_plm) {
+        this.str_plm = str_plm;
     }
 
     public String getMensaje() {

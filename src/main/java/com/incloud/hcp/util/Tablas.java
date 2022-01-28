@@ -175,6 +175,8 @@ public class Tablas {
     public static String STR_ZPL="STR_ZPL";
     public static String STR_GZP="STR_GZP";
     public static String STR_PED="STR_PED";
+    public static String STR_GRP="STR_GRP";
+    public static String STR_PLM="STR_PLM";
 
     public static String T_RESERVAS="T_RESERVAS";
     public static String T_DETALLE="T_DETALLE";
