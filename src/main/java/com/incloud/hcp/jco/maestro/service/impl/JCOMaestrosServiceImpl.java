@@ -678,7 +678,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 tabla=AyudaBusquedaTablas.BSQGRPEMPR;
                 break;
             case "BSQEMBARCA":
-                tabla=AyudaBusquedaTablas.BSQEMBARCA;
+                    tabla=AyudaBusquedaTablas.BSQEMBARCA;
+                break;
+            case "BSQAMADORPROP":
+                    tabla=AyudaBusquedaTablas.BSQAMADORPROP;
                 break;
         }
 
@@ -768,6 +771,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQEMBARCA":
                 fields = AyudaBusquedaFields.BSQEMBARCA;
                 break;
+            case "BSQAMADORPROP":
+                fields = AyudaBusquedaFields.BSQAMADORPROP;
+                break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
         return fields;
@@ -834,6 +840,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQEMBARCA":
                 opt.setWa(AyudaBusquedaOptions.BSQEMBARCA);//
+                break;
+            case "BSQAMADORPROP":
+                opt.setWa(AyudaBusquedaOptions.BSQAMADORPROP);//
                 break;
             default:
                 noExists=true;

@@ -19,4 +19,6 @@ public class AyudaBusquedaOptions {
     public static String BSQTRIPULANTES="ABKRS = 'TT'";
     public static String BSQGRPEMPR="ESREG = 'S'";
     public static String BSQEMPRESAREC="ESREG = 'S'";
+    public static String BSQAMADORPROP="INPRP = 'P' AND ESREG = 'S'";
+
 }

@@ -28,5 +28,6 @@ public class AyudaBusquedaTablas {
     public static String BSQTRIPULANTES="ZHRP_BD_PERSONAL";
     public static String BSQGRPEMPR="ZFLGRE";
     public static String BSQEMBARCA="ZFLEMB";
+    public static String BSQAMADORPROP="ZFLEMP";
 
 }
