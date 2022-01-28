@@ -42,7 +42,7 @@ public class Metodos {
                 String key = (String) field.getName();
                 Object value = tableExport.getValue(key);
 
-                if (field.getTypeAsString().equals("TIME")  && key.equals("HIZAR") || key.equals("HAMAR") ||key.equals("HIARR")  ) {
+                if (field.getTypeAsString().equals("TIME")  && key.equals("HIZAR")  ||key.equals("HIARR")  ) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                     value = dateFormat.format(value);
                     if(String.valueOf(value).equalsIgnoreCase("00:00")){
