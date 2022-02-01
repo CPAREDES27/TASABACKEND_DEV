@@ -49,6 +49,9 @@ public class Constantes {
     public static String ZFL_RFC_IMPO_BTP="ZFL_RFC_IMPO_BTP";
     public static String ZFL_RFC_AYUDBSQ_EMB="ZFL_RFC_AYUDBSQ_EMB";
     public static String ZFL_RFC_MAR_EVENT_BTP="ZFL_RFC_MAR_EVENT_BTP";
+    public static String ZFL_RFC_OBT_LEC_ULT_HOR="ZFL_RFC_OBT_LEC_ULT_HOR";
+    public static String ZFL_RFC_CONS_MARE_EVENT="ZFL_RFC_CONS_MARE_EVENT";
+
 
     public static String CODTIPOEVENTOARRIBO="5";
     public static String CODTIPOEVENTOZARPE="1";

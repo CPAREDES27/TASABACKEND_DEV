@@ -299,7 +299,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
         logger.error("ListarEventosPesca_3");;
-        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_CONS_MARE_EVENT");
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_MARE_EVENT);
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
         importx.setValue("P_USER", marea.getUser());
@@ -425,7 +425,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
         JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
         JCoRepository repo = destination.getRepository();
-        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_OBT_LEC_ULT_HOR");
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_OBT_LEC_ULT_HOR);
         JCoParameterList importx = stfcConnection.getImportParameterList();
         importx.setValue("IP_CDEMB", horometro.getIp_cdemb());
         importx.setValue("IP_NRMAR", horometro.getIp_nrmar());
