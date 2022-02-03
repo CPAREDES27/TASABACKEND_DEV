@@ -667,10 +667,14 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                     } else if (Arrays.asList(fieldsNumbers).contains(titulosFieldEntry.getKey())) {
                         double doubleValue = Double.parseDouble(value);
                         cell.setCellStyle(styleNumberFormat1);
-                       // DecimalFormat formatter = new DecimalFormat("#.##0");
-                        //doubleValue =Double.parseDouble(formatter.format(doubleValue));
-
                         cell.setCellValue(doubleValue);
+
+                    } else if(key.equals("NRMAR")){
+                        double doubleValue = Double.parseDouble(value);
+                        cell.setCellStyle(styleNumberFormat);
+                        String nrmar=String.valueOf(doubleValue).concat(".000");
+                        cell.setCellValue(nrmar);
+
                     }else {
                         cell.setCellValue(value);
                     }
