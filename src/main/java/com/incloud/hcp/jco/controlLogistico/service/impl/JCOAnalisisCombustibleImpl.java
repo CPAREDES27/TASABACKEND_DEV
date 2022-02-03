@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 @Service
@@ -503,6 +505,215 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
         } catch (Exception ex) {
             logger.error(ex.getMessage());
+        }
+
+        return exports;
+    }
+
+    public AnalisisCombusRegExport ExportarQlikView(QlikView imports) throws Exception {
+        AnalisisCombusRegExport exports = new AnalisisCombusRegExport();
+
+        try {
+            QlikExport exportsData = QlikView(imports);
+
+            // Nombres de campos de la tabla
+            LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
+            titulosField.put("CDEMB", "Cdemb");
+            titulosField.put("NRMAR", "Nmar");
+            titulosField.put("NMEMB", "Nmemb");
+            titulosField.put("CDMMA", "Cdmma");
+            titulosField.put("DSMMA", "Dsmma");
+            titulosField.put("CNPDS", "Cnpds");
+            titulosField.put("HONAV", "Honav");
+            titulosField.put("HODES", "Hodes");
+            titulosField.put("HOPUE", "Hopue");
+            titulosField.put("HOMAR", "Homar");
+            titulosField.put("CONAV", "Conav");
+            titulosField.put("CODES", "Codes");
+            titulosField.put("COPUE", "Copue");
+            titulosField.put("COMAR", "Comar");
+            titulosField.put("RRNAV", "Rrnav");
+            titulosField.put("RRDES", "Rrdes");
+            titulosField.put("RRPUE", "Rrpue");
+            titulosField.put("RRMAR", "Rrmar");
+            titulosField.put("RPNAV", "Rpnav");
+            titulosField.put("RPDES", "Rpdes");
+            titulosField.put("RPPUE", "Rppue");
+            titulosField.put("RPMAR", "Rpmar");
+            titulosField.put("FEPRD", "Feprd");
+
+
+            Workbook reporteBook = new HSSFWorkbook();
+            Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
+
+            Font fuenteTitulo = reporteBook.createFont();
+            fuenteTitulo.setBold(true);
+
+            CellStyle styleTituloGeneral = reporteBook.createCellStyle();
+            styleTituloGeneral.setFont(fuenteTitulo);
+            styleTituloGeneral.setAlignment(HorizontalAlignment.CENTER);
+
+            // Título general
+            Row rowTituloGeneral = analisisCombusSheet.createRow(1);
+            Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
+            cellTituloGeneral.setCellValue("CONTROL DE COMBUSTIBLE - QLIKVIEW");
+            cellTituloGeneral.setCellStyle(styleTituloGeneral);
+
+            CellRangeAddress cellRangeGeneral = CellRangeAddress.valueOf("B2:X2");
+            analisisCombusSheet.addMergedRegion(cellRangeGeneral);
+
+            // ------ Títulos de categorías ----------
+            /*
+            Row rowTitulosCategorias = analisisCombusSheet.createRow(3);
+            Cell cellTituloZarpe = rowTitulosCategorias.createCell(17);
+            cellTituloZarpe.setCellValue("Zarpe");
+            cellTituloZarpe.setCellStyle(styleTituloGeneral);
+
+            Cell cellTituloArribo = rowTitulosCategorias.createCell(25);
+            cellTituloArribo.setCellValue("Arribo");
+            cellTituloArribo.setCellStyle(styleTituloGeneral);
+
+            Cell cellTituloDescarga = rowTitulosCategorias.createCell(33);
+            cellTituloDescarga.setCellValue("Descarga");
+            cellTituloDescarga.setCellStyle(styleTituloGeneral);
+
+            Cell cellTituloHorometro = rowTitulosCategorias.createCell(35);
+            cellTituloHorometro.setCellValue("Horometro");
+            cellTituloHorometro.setCellStyle(styleTituloGeneral);
+
+            CellRangeAddress cellRangeZarpe = CellRangeAddress.valueOf("R4:Y4");
+            CellRangeAddress cellRangeArribo = CellRangeAddress.valueOf("Z4:AG4");
+            CellRangeAddress cellRangeDescarga = CellRangeAddress.valueOf("AH4:AI4");
+            CellRangeAddress cellRangeHorometro = CellRangeAddress.valueOf("AJ4:AQ4");
+
+            analisisCombusSheet.addMergedRegion(cellRangeZarpe);
+            analisisCombusSheet.addMergedRegion(cellRangeArribo);
+            analisisCombusSheet.addMergedRegion(cellRangeDescarga);
+            analisisCombusSheet.addMergedRegion(cellRangeHorometro);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
+
+            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
+
+            */
+            /*CellStyle styleTitulosCategorias = reporteBook.createCellStyle();
+            styleTitulosCategorias.setFont(fuenteTitulo);*/
+
+            // ------ Títulos de columnas ----------
+            int cellIndexTitulos = 1;
+            Row rowTitulos = analisisCombusSheet.createRow(4);
+
+            CellStyle styleTitulo = reporteBook.createCellStyle();
+            styleTitulo.setBorderTop(BorderStyle.THIN);
+            styleTitulo.setBorderBottom(BorderStyle.THIN);
+            styleTitulo.setBorderRight(BorderStyle.THIN);
+            styleTitulo.setBorderLeft(BorderStyle.THIN);
+            styleTitulo.setFont(fuenteTitulo);
+
+            for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
+                String titulo = titulosFieldEntry.getValue();
+                Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
+                cellTitulo.setCellValue(titulo);
+                cellTitulo.setCellStyle(styleTitulo);
+
+                cellIndexTitulos++;
+            }
+
+            // Llenado de datos
+            int rowIndex = 5;
+            String dataStr = "";
+            String[] fieldsNumbers ={"HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE","COMAR"};
+            String[] fieldsDate = {"FEPRD"};
+
+            CellStyle styleNumberFormat = reporteBook.createCellStyle();
+            styleNumberFormat.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0"));
+
+
+            CellStyle styleNumberFormat1 = reporteBook.createCellStyle();
+            styleNumberFormat1.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0.000"));
+
+
+            for (HashMap<String, Object> itemData : exportsData.getStr_cef()) {
+                Row row = analisisCombusSheet.createRow(rowIndex);
+                int cellIndex = 1;
+
+                for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
+                    String key=titulosFieldEntry.getKey();
+                    String value = itemData.get(titulosFieldEntry.getKey()).toString();
+                    Cell cell = row.createCell(cellIndex);
+                    if (Arrays.asList(fieldsDate).contains(titulosFieldEntry.getKey()) && !value.equals("")) {
+                        String dia = value.substring(0, 2);
+                        String mes = value.substring(3, 5);
+                        String anho = value.substring(6);
+
+                        value = anho + "-" + mes + "-" + dia;
+                        cell.setCellValue(value);
+                    } else if (Arrays.asList(fieldsNumbers).contains(titulosFieldEntry.getKey())) {
+                        double doubleValue = Double.parseDouble(value);
+                        cell.setCellStyle(styleNumberFormat1);
+                       // DecimalFormat formatter = new DecimalFormat("#.##0");
+                        //doubleValue =Double.parseDouble(formatter.format(doubleValue));
+
+                        cell.setCellValue(doubleValue);
+                    }else if(key.equals("NRMAR")){
+                        double doubleValue = Double.parseDouble(value);
+                        logger.error("doublevalue NRMAR: "+doubleValue);
+                        cell.setCellStyle(styleNumberFormat);
+                        // DecimalFormat formatter = new DecimalFormat("#.##0");
+                        //doubleValue =Double.parseDouble(formatter.format(doubleValue));
+                        logger.error("doublevalue NRMAR format: "+doubleValue);
+                        cell.setCellValue(doubleValue);
+
+                    } else {
+                        cell.setCellValue(value);
+                    }
+
+                    dataStr += value;
+
+                    cellIndex++;
+                }
+
+                rowIndex++;
+            }
+
+            // Autoajuste de ancho de columnas
+            int indexColumn = 1;
+            for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
+                analisisCombusSheet.autoSizeColumn(indexColumn);
+                indexColumn++;
+            }
+
+            logger.info(dataStr);
+
+            String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "ControlCombustible_QlikView.xlsx";
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
+            reporteBook.write(fileOutputStream);
+            fileOutputStream.close();
+
+            File file = new File(path);
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+            String base64Encoded = new String(encoded, StandardCharsets.UTF_8);
+            exports.setBase64(base64Encoded);
+
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            exports.setBase64(ex.getMessage());
         }
 
         return exports;
