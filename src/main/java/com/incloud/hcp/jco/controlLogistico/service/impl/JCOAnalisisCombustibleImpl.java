@@ -638,7 +638,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             // Llenado de datos
             int rowIndex = 5;
             String dataStr = "";
-            String[] fieldsNumbers ={"HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE","COMAR"};
+            String[] fieldsNumbers ={"NRMAR","HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE","COMAR"};
             String[] fieldsDate = {"FEPRD"};
 
             CellStyle styleNumberFormat = reporteBook.createCellStyle();
@@ -671,16 +671,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                         //doubleValue =Double.parseDouble(formatter.format(doubleValue));
 
                         cell.setCellValue(doubleValue);
-                    }else if(key.equals("NRMAR")){
-                        double doubleValue = Double.parseDouble(value);
-                        logger.error("doublevalue NRMAR: "+doubleValue);
-                        cell.setCellStyle(styleNumberFormat);
-                        // DecimalFormat formatter = new DecimalFormat("#.##0");
-                        //doubleValue =Double.parseDouble(formatter.format(doubleValue));
-                        logger.error("doublevalue NRMAR format: "+doubleValue);
-                        cell.setCellValue(doubleValue);
-
-                    } else {
+                    }else {
                         cell.setCellValue(value);
                     }
 
