@@ -285,12 +285,6 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         Validacion valida = new Validacion();
 
 
-        switch (aplicacion){
-            case "ZARPE":
-
-
-        }
-
 
         return objeto;
     }
