@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService {
@@ -542,7 +543,6 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             titulosField.put("RPMAR", "Rpmar");
             titulosField.put("FEPRD", "Feprd");
 
-
             Workbook reporteBook = new HSSFWorkbook();
             Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
 
@@ -562,60 +562,6 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             CellRangeAddress cellRangeGeneral = CellRangeAddress.valueOf("B2:X2");
             analisisCombusSheet.addMergedRegion(cellRangeGeneral);
 
-            // ------ Títulos de categorías ----------
-            /*
-            Row rowTitulosCategorias = analisisCombusSheet.createRow(3);
-            Cell cellTituloZarpe = rowTitulosCategorias.createCell(17);
-            cellTituloZarpe.setCellValue("Zarpe");
-            cellTituloZarpe.setCellStyle(styleTituloGeneral);
-
-            Cell cellTituloArribo = rowTitulosCategorias.createCell(25);
-            cellTituloArribo.setCellValue("Arribo");
-            cellTituloArribo.setCellStyle(styleTituloGeneral);
-
-            Cell cellTituloDescarga = rowTitulosCategorias.createCell(33);
-            cellTituloDescarga.setCellValue("Descarga");
-            cellTituloDescarga.setCellStyle(styleTituloGeneral);
-
-            Cell cellTituloHorometro = rowTitulosCategorias.createCell(35);
-            cellTituloHorometro.setCellValue("Horometro");
-            cellTituloHorometro.setCellStyle(styleTituloGeneral);
-
-            CellRangeAddress cellRangeZarpe = CellRangeAddress.valueOf("R4:Y4");
-            CellRangeAddress cellRangeArribo = CellRangeAddress.valueOf("Z4:AG4");
-            CellRangeAddress cellRangeDescarga = CellRangeAddress.valueOf("AH4:AI4");
-            CellRangeAddress cellRangeHorometro = CellRangeAddress.valueOf("AJ4:AQ4");
-
-            analisisCombusSheet.addMergedRegion(cellRangeZarpe);
-            analisisCombusSheet.addMergedRegion(cellRangeArribo);
-            analisisCombusSheet.addMergedRegion(cellRangeDescarga);
-            analisisCombusSheet.addMergedRegion(cellRangeHorometro);
-
-            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
-            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
-            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
-            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeZarpe, analisisCombusSheet);
-
-            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
-            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
-            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
-            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeArribo, analisisCombusSheet);
-
-            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
-            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
-            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
-            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeDescarga, analisisCombusSheet);
-
-            RegionUtil.setBorderTop(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
-            RegionUtil.setBorderBottom(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
-            RegionUtil.setBorderRight(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
-            RegionUtil.setBorderLeft(BorderStyle.THIN, cellRangeHorometro, analisisCombusSheet);
-
-            */
-            /*CellStyle styleTitulosCategorias = reporteBook.createCellStyle();
-            styleTitulosCategorias.setFont(fuenteTitulo);*/
-
-            // ------ Títulos de columnas ----------
             int cellIndexTitulos = 1;
             Row rowTitulos = analisisCombusSheet.createRow(4);
 
