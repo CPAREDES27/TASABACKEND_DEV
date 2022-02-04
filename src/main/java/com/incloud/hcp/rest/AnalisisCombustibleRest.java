@@ -86,4 +86,15 @@ public class AnalisisCombustibleRest {
         }
     }
 
+    @PostMapping(value = "/ExportQlikView", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnalisisCombusRegExport> ExportQlikView(@RequestBody QlikView imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoAnalisisCombustibleService.ExportarQlikView(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
 }
