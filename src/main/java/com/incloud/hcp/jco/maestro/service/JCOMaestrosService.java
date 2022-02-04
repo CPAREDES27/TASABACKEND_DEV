@@ -1,5 +1,7 @@
 package com.incloud.hcp.jco.maestro.service;
 
+import com.incloud.hcp.jco.consultaGeneral.dto.RolExport;
+import com.incloud.hcp.jco.consultaGeneral.dto.RolImport;
 import com.incloud.hcp.jco.maestro.dto.*;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public interface JCOMaestrosService {
     UpdateTableExports editarMaestro (MaestroEditImports imports) throws Exception;
 
     UpdateTableExports editarMaestro2 (MaestroEditImport imports) throws Exception;
+    MaestroExport ConsultaRol(RolImport importsParam)throws Exception;
     MensajeDto2 editarMaestro3(MaestroEditImport imports) throws Exception;
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
     AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception;

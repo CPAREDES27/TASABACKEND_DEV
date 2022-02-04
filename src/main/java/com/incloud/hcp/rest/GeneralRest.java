@@ -2,6 +2,8 @@ package com.incloud.hcp.rest;
 
 
 import com.incloud.hcp.jco.consultaGeneral.dto.ConsultaGeneralImports;
+import com.incloud.hcp.jco.consultaGeneral.dto.RolExport;
+import com.incloud.hcp.jco.consultaGeneral.dto.RolImport;
 import com.incloud.hcp.jco.consultaGeneral.service.JCOConsultaGeneralService;
 import com.incloud.hcp.jco.maestro.dto.*;
 import com.incloud.hcp.jco.maestro.service.JCOCampoTablaService;
@@ -68,6 +70,19 @@ public class GeneralRest {
 
         try {
             return Optional.ofNullable(this.MaestroService.obtenerArmador(codigo))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            //String error = Utils.obtieneMensajeErrorException(e);
+            throw new RuntimeException(e.toString());
+        }
+
+    }
+
+        @PostMapping(value = "/ConsultaRol/", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaestroExport> ConsultaRol(@RequestBody RolImport imports){
+
+        try {
+            return Optional.ofNullable(this.MaestroService.ConsultaRol(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             //String error = Utils.obtieneMensajeErrorException(e);

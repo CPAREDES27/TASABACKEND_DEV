@@ -1,5 +1,10 @@
 package com.incloud.hcp.jco.maestro.service.impl;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.incloud.hcp.jco.consultaGeneral.dto.*;
 import com.incloud.hcp.jco.dominios.dto.*;
 import com.incloud.hcp.jco.dominios.service.JCODominiosService;
 import com.incloud.hcp.jco.maestro.dto.*;
@@ -13,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -144,6 +152,147 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
 
         return me;
+    }
+
+    public MaestroExport ConsultaRol(RolImport imports)throws Exception{
+
+        Mensaje msj = new Mensaje();
+        RolExport xd = new RolExport();
+
+        logger.error("USUARIO"+imports.getUsuario());
+
+        String uri = "https://7454-s4pbtp.azurewebsites.net/api/ConsultaRoles";
+        URL url = new URL(uri);
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setRequestProperty("conten-type", "application/json");
+        httpCon.setRequestProperty("x-functions-key", "utagvmegaJTXXuHZOfUsyffzmAN6YTrbfGYaIz36OxcF0erq6ahgWA==");
+        httpCon.setDoOutput(true);
+        httpCon.setDoInput(true);
+        httpCon.setRequestMethod("POST");
+        OutputStream os = httpCon.getOutputStream();
+
+        OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+        osw.write("{\n" +
+                "\n" +
+                "    \"email\" : \"" + imports.getUsuario() + "\",\n" +
+                "\n" +
+                "}");
+
+        osw.flush();
+        osw.close();
+        os.close();
+        httpCon.connect();
+        int responseCode = httpCon.getResponseCode();
+        InputStream inputStream;
+        if (200 <= responseCode && responseCode <= 299) {
+            inputStream = httpCon.getInputStream();
+        } else {
+            inputStream = httpCon.getErrorStream();
+        }
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                        inputStream));
+
+        StringBuilder response = new StringBuilder();
+        String currentLine;
+        logger.error("Respuesta"+in);
+        while ((currentLine = in.readLine()) != null)
+            response.append(currentLine);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonFactory factory = mapper.getFactory();
+        JsonParser jsonParser = factory.createParser(response.toString());
+        JsonNode node = mapper.readTree(jsonParser);
+        in.close();
+        xd.setNode(node);
+        JsonNode nodeP = xd.getNode();
+        JsonNode roles = nodeP.get("roles");
+        int tamanio = roles.size();
+        String rolesAzure[] = new String[tamanio];
+        for(int i=0;i<roles.size();i++){
+            logger.error("ROL "+i+": "+roles.get(i));
+            rolesAzure[i]=roles.get(i).toString();
+        }
+        String userSAP = imports.getUsuario();
+        userSAP= userSAP.split("@")[0];
+        if(userSAP.equals("xternalvpn")){
+            userSAP="FGARCIA";
+        }
+        MaestroImportsKey importSAP = new MaestroImportsKey();
+        List<MaestroOptions> option = new ArrayList<MaestroOptions>();
+        List<MaestroOptionsKey> options=new ArrayList<MaestroOptionsKey>();;
+
+        String arrayFields[]={"IDROL","IDAZURE"};
+        importSAP.setP_pag("");
+        importSAP.setNo_data("");
+        importSAP.setRowskips(0);
+        importSAP.setRowcount(0);
+        importSAP.setP_user(userSAP);
+        importSAP.setOrder("");
+        importSAP.setOption(option);
+        importSAP.setOptions(options);
+        importSAP.setDelimitador("|");
+        importSAP.setTabla("ZFLT_ROL");
+        importSAP.setFields(arrayFields);
+        MaestroExport objetoSAP = new MaestroExport();
+
+        objetoSAP=obtenerRegistrosMaestro(importSAP);
+
+
+        List<RolesSAP> listaRolSap = new ArrayList<RolesSAP>();
+        RolesSAP rolSap = new RolesSAP();
+
+        logger.error("HASHMAP1: "+ objetoSAP.getData().toString());
+
+        List<HashMap<String, Object>> data2= new ArrayList<HashMap<String, Object>>();
+        HashMap<String, Object> importParams2 = new HashMap<String,Object>();
+
+       for(Map<String,Object> datas: objetoSAP.getData()){
+           String rol="";
+           String llave="";
+            for(Map.Entry<String,Object> entry: datas.entrySet()){
+
+                String key= entry.getKey();
+                Object value= entry.getValue();
+
+                if(key.equals("IDROL")){
+                    rol=value.toString();
+                }
+                if(key.equals("IDAZURE")){
+                    llave=value.toString();
+                }
+            }
+           logger.error("HASHMAP iterador valores: "+ rol);
+           logger.error("HASHMAP iterador valores:  "+ llave);
+           importParams2.put(rol,llave);
+
+           data2.add(importParams2);
+
+        }
+        ValidacionesExport  valida = new ValidacionesExport();
+        valida=validaDatos(data2,rolesAzure,imports.getAplicacion());
+        logger.error("HASHMAP FINAL: "+ data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA"));
+        logger.error("HASHMAP FINAL: "+ data2.get(0).get("ADMINISTRADOR_SISTEMA"));
+
+        return objetoSAP;
+    }
+
+
+    public ValidacionesExport validaDatos(List<HashMap<String, Object>> data2,String rolAzure[],String aplicacion){
+        ValidacionesExport objeto = new ValidacionesExport();
+        List<Validacion> listaValida = new ArrayList<Validacion>();
+        Validacion valida = new Validacion();
+
+
+        switch (aplicacion){
+            case "ZARPE":
+
+
+        }
+
+
+        return objeto;
     }
 
     @Override
