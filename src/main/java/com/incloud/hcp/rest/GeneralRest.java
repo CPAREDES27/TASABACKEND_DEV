@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -79,7 +81,7 @@ public class GeneralRest {
     }
 
         @PostMapping(value = "/ConsultaRol/", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<MaestroExport> ConsultaRol(@RequestBody RolImport imports){
+    public ResponseEntity<List<HashMap<String, Boolean>>> ConsultaRol(@RequestBody RolImport imports){
 
         try {
             return Optional.ofNullable(this.MaestroService.ConsultaRol(imports))

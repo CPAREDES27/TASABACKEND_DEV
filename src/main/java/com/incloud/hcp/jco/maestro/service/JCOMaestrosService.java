@@ -5,6 +5,7 @@ import com.incloud.hcp.jco.consultaGeneral.dto.RolImport;
 import com.incloud.hcp.jco.maestro.dto.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface JCOMaestrosService {
@@ -16,7 +17,7 @@ public interface JCOMaestrosService {
     UpdateTableExports editarMaestro (MaestroEditImports imports) throws Exception;
 
     UpdateTableExports editarMaestro2 (MaestroEditImport imports) throws Exception;
-    MaestroExport ConsultaRol(RolImport importsParam)throws Exception;
+    List<HashMap<String, Boolean>>  ConsultaRol(RolImport importsParam)throws Exception;
     MensajeDto2 editarMaestro3(MaestroEditImport imports) throws Exception;
     AppMaestrosExports appMaestros(AppMaestrosImports imports)throws Exception;
     AyudaBusquedaExports AyudasBusqueda(AyudaBusquedaImports importsParam)throws Exception;

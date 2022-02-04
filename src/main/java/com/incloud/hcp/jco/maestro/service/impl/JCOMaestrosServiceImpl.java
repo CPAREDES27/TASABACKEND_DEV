@@ -23,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
+
+
 @Service
 public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
@@ -154,7 +156,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
 
-    public MaestroExport ConsultaRol(RolImport imports)throws Exception{
+    public List<HashMap<String, Boolean>>  ConsultaRol(RolImport imports)throws Exception{
 
         Mensaje msj = new Mensaje();
         RolExport xd = new RolExport();
@@ -271,22 +273,245 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
 
         }
         ValidacionesExport  valida = new ValidacionesExport();
-        valida=validaDatos(data2,rolesAzure,imports.getAplicacion());
+        List<HashMap<String, Boolean>>ListaPermisos=validaDatos(data2,rolesAzure,imports.getAplicacion());
         logger.error("HASHMAP FINAL: "+ data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA"));
         logger.error("HASHMAP FINAL: "+ data2.get(0).get("ADMINISTRADOR_SISTEMA"));
+        //CONTROLLER_FLOTA_ZARPES
+        //CONTROLLER_PESCA_COMBUSTIBLE
+        //ASISTENTE_SUBGER_PESCA
 
-        return objetoSAP;
+
+
+        return ListaPermisos;
     }
 
 
-    public ValidacionesExport validaDatos(List<HashMap<String, Object>> data2,String rolAzure[],String aplicacion){
-        ValidacionesExport objeto = new ValidacionesExport();
-        List<Validacion> listaValida = new ArrayList<Validacion>();
-        Validacion valida = new Validacion();
+    public List<HashMap<String, Boolean>>  validaDatos(List<HashMap<String, Object>> data2,String rolAzure[],String aplicacion) {
+      //  ValidacionesExport objeto = new ValidacionesExport();
+       // List<Validacion> listaValida = new ArrayList<Validacion>();
+        //Validacion valida = new Validacion();
+
+        logger.error("validDatos_1");
+        logger.error("aplicacion: "+aplicacion);
+        logger.error("rolAzure: "+rolAzure[0]);
+        List<HashMap<String, Boolean>> listaPermisos = new ArrayList<>();
+        HashMap<String, Boolean> permiso = new HashMap<>();
+
+        switch (aplicacion) {
+
+            case Aplicacion.REGISTROZARPE:
+                logger.error("validDatos_ REGISTROZARPE");
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+                    permiso = new HashMap<>();
+
+                    if (  data2.get(0).get("ADMINISTRADOR_SISTEMA").equals(rol) ||
+                            data2.get(0).get("CONSULTA_PESCA_ZARPE").equals(rol) ||
+                            data2.get(0).get("CONTROLLER_PESCA_COMBUSTIBLE").equals(rol) ||
+                            data2.get(0).get("ASISTENTE_SUBGER_PESCA").equals(rol))
+                    {
+
+                        if (data2.get(0).get("ASISTENTE_SUBGER_PESCA").equals(rol)) {
+                            permiso.put("ROLAGREGARDOCUMENTO", true);
+
+                        } else {
+                            permiso.put("ROLEDICION", true);
+                            permiso.put("DESCDETALLEROL", true);
+                            permiso.put("SOLOLECTURAROL", false);
+
+                        }
+
+                        if (data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA").equals(rol) ||
+                                data2.get(0).get("CONSULTA_PESCA_ZARPE").equals(rol) ||
+                                data2.get(0).get("CONTROLLER_PESCA_COMBUSTIBLE").equals(rol)) {
+                            permiso.put("ROLAGREGARDOCUMENTO", true);
+
+                        }
+                    }
+                    if (permiso.size()>0) {
+                        listaPermisos.add(permiso);
+
+                    }
+
+                }
+               // listaPermisos.add(permiso);
 
 
 
-        return objeto;
+                break;
+            case Aplicacion.ROLTRIPULANTES:
+
+                boolean bOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+                    if ( data2.get(0).get("ADMINISTRADOR_SISTEMA").toString().equals(rol) ||
+                            data2.get(0).get("CONSULTA_PESCA_ZARPE").toString().equals(rol) ||
+                            data2.get(0).get("CONTROLLER_PESCA_COMBUSTIBLE").toString().equals(rol) ||
+                            data2.get(0).get("ASISTENTE_SUBGER_PESCA").toString().equals(rol))
+                    {
+
+                        bOk=true;
+                        break;
+                    }
+
+                }
+                logger.error("validDatos_ bOk:"+ bOk);
+                permiso = new HashMap<>();
+                if(bOk){
+                    permiso.put("ROLEDICION",true);
+                    permiso.put("SOLOLECTURA",false);
+                    permiso.put("DESCDETALLEROL",true);
+                }
+                if (permiso.size()>0) {
+                    listaPermisos.add(permiso);
+
+                }
+
+
+                break;
+            case Aplicacion.LIBERATRABAJOFF:
+                logger.error("validDatos_ LIBERATRABAJOFF");
+
+                bOk=false;
+                boolean rolOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+
+                    if (data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA").equals(rol) ||
+                            data2.get(0).get("JEFE_BAHIA").equals(rol) ) {
+
+                        bOk = true;
+                    }
+                    if (data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA").equals(rol) ||
+                            data2.get(0).get("JEFE_PESCA").equals(rol)) {
+
+                        rolOk = true;
+                    }
+                    permiso = new HashMap<>();
+                    if(bOk){
+                        permiso.put("ROL",true);
+                        permiso.put("BOTONGUARDAR",true);
+                        listaPermisos.add(permiso);
+                    }
+                    if(rolOk){
+                        permiso.put("ROLEDICION",true);
+                        permiso.put("BOTONGUARDAR",true);
+                        permiso.put("DESCDETALLEROL",true);
+                        permiso.put("SOLOLECTURA",false);
+                        listaPermisos.add(permiso);
+                    }
+
+                }
+
+                break;
+            case Aplicacion.TRABAJOFF:
+                logger.error("validDatos_ TRABAJOFF");
+
+                bOk=false;
+                rolOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+
+                    if (data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA").equals(rol) ||
+                            data2.get(0).get("CONSULTA_PESCA_ZARPE").equals(rol) ||
+                             data2.get(0).get("JEFE_BAHIA").equals(rol)) {
+
+                        bOk = true;
+                    }
+                    if (data2.get(0).get("ADMINISTRADOR_JEFE_TURNO_PLANTA").equals(rol) ||
+                            data2.get(0).get("JEFE_PESCA").equals(rol)) {
+
+                        rolOk = true;
+                    }
+                    permiso = new HashMap<>();
+                    if(bOk){
+                        permiso.put("ROLEDICION",true);
+                        permiso.put("BOTONGUARDAR",true);
+                        permiso.put("DESCDETALLEROL",true);
+                        permiso.put("SOLOLECTURA",false);
+                        listaPermisos.add(permiso);
+                    }
+                    if(rolOk){
+                        permiso.put("ROL",true);
+
+                        listaPermisos.add(permiso);
+                    }
+
+                }
+
+                break;
+            case Aplicacion.PROTESTOS:
+                logger.error("validDatos_ PROTESTOS");
+
+                bOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+
+                    if ( data2.get(0).get("ADMINISTRADOR_SISTEMA").equals(rol) ||
+                            data2.get(0).get("CONSULTA_PESCA_ZARPE").equals(rol) ||
+                            data2.get(0).get("CONTROLLER_PESCA_COMBUSTIBLE").equals(rol) ||
+                            data2.get(0).get("ASISTENTE_SUBGER_PESCA").equals(rol)||
+                            data2.get(0).get("JEFE_BAHIA").equals(rol)||
+                            data2.get(0).get("RADIOOPERADOR_PROTESTO").equals(rol)){
+
+                        bOk = true;
+                        break;
+                    }
+                }
+                permiso = new HashMap<>();
+                if(bOk){
+                    permiso.put("EDICIONROL",true);
+                    permiso.put("LECTURAROL",false);
+                    listaPermisos.add(permiso);
+                }
+
+                break;
+            case Aplicacion.DISTRIBUCIONFLOTA:
+                bOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+
+                    if ( data2.get(0).get("ADMINISTRADOR_SISTEMA").equals(rol) ||
+                            data2.get(0).get("ASISTENTE_ACOPIO_PESCA").equals(rol) ||
+                            data2.get(0).get("RADIOOPERADOR_CENTRO_PESCA").equals(rol) ||
+                            data2.get(0).get("JEFE_ABASTECIMIENTO_CENTRO_PESCA").equals(rol)){
+
+                        bOk = true;
+                        break;
+                    }
+                }
+                permiso = new HashMap<>();
+                if(!bOk){
+                    permiso.put("NOROLFLOTA",true);
+                        listaPermisos.add(permiso);
+                }
+
+                break;
+            case Aplicacion.CONSULTAMAREAS:
+                bOk=false;
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+
+                    if ( data2.get(0).get("ADMINISTRADOR_SISTEMA").equals(rol) ||
+                            data2.get(0).get("RADIOOPERADOR_CENTRO_PESCA").equals(rol) ||
+                            data2.get(0).get("ASISTENTE_CONTROL_COMBUSTIBLE").equals(rol) ||
+                            data2.get(0).get("RADIOOPERADOR").equals(rol)){
+
+                        bOk = true;
+                        break;
+                    }
+                }
+                permiso = new HashMap<>();
+                if(!bOk){
+                    permiso.put("NOROLFLOTA",true);
+                    listaPermisos.add(permiso);
+                }
+
+                break;
+        }
+
+
+        return listaPermisos;
     }
 
     @Override
