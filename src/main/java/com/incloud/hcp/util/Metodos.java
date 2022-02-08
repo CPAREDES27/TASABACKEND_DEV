@@ -13,9 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,7 +32,7 @@ public class Metodos {
     @Autowired
     private JCOConsultaGeneralService jcoConsultaGeneralService;
 
-    public List<HashMap<String, Object>> ListarObjetosLazy(JCoTable tableExport) throws Exception {
+    public List<HashMap<String, Object>> ListarObjetosLazy(JCoTable tableExport) throws Exception, ParseException {
 
         List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
         for (int i = 0; i < tableExport.getNumRows(); i++) {
@@ -39,25 +41,57 @@ public class Metodos {
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             while (iter.hasNextField()) {
                 JCoField field = iter.nextField();
-                String key = (String) field.getName();
-                Object value = tableExport.getValue(key);
+                String value="";
+                String key ="";
+                try {
+                     key = (String) field.getName();
+                    value = tableExport.getValue(key).toString();
 
-                if (field.getTypeAsString().equals("TIME")  && key.equals("HIZAR")  ||key.equals("HIARR")  ) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-                    value = dateFormat.format(value);
-                    if(String.valueOf(value).equalsIgnoreCase("00:00")){
-                        value = "";
-                    }
-                } else  if (field.getTypeAsString().equals("TIME")) {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-                    value = dateFormat.format(value);
-                    if(String.valueOf(value).equalsIgnoreCase("00:00")){
-                        value = "";
-                    }
-                }
 
-                if (key.equals("DSMIN")) {
-                    value = value.toString();
+                    if (key.equals("HRAPR")) {
+
+                    String v = value.toString();
+                    String val = v.substring(11, 19);
+
+
+                    String hora=val.split(":")[0];
+                    String minutos=val.split(":")[1];
+                    String segundo=val.split(":")[2];
+
+                    if(Integer.parseInt(hora)>23 || Integer.parseInt(minutos)>59 || Integer.parseInt(segundo)>59){
+                        value="";
+                    }else{
+                        value=hora+":"+minutos;
+                    }
+
+
+                        //logger.error("HORA : "+ value);
+                    } else if (field.getTypeAsString().equals("TIME") && key.equals("HIZAR") || key.equals("HIARR")) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                        value = dateFormat.format(value);
+                        if (String.valueOf(value).equalsIgnoreCase("00:00")) {
+                            value = "";
+                        }
+
+                    } else if (field.getTypeAsString().equals("TIME")) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
+                        value = dateFormat.format(value);
+
+                        if (String.valueOf(value).equalsIgnoreCase("00:00")) {
+                            value = "";
+                        }
+
+                    }
+
+
+                    if (key.equals("DSMIN")) {
+                        value = value.toString();
+                    }
+                }catch (Exception e){
+                    value="";
                 }
 
                 try {
