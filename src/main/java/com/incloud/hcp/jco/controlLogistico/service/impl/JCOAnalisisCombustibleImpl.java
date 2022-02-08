@@ -2,7 +2,11 @@ package com.incloud.hcp.jco.controlLogistico.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.*;
 import com.incloud.hcp.jco.controlLogistico.service.JCOAnalisisCombustibleService;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.Constantes;
+import com.incloud.hcp.util.Dominios;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
@@ -290,13 +294,76 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
 
             Metodos metodo = new Metodos();
-            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetos(T_MENSAJE);
+            List<HashMap<String, Object>>  dataT_MENSAJE = metodo.ListarObjetosLazy(T_MENSAJE);
 
-            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetos(STR_CEF);
+            List<HashMap<String, Object>> dataSTR_CEF = metodo.ListarObjetosLazy(STR_CEF);
+
+
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.ZCDMMA);
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports detalleMotMarea = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZCDMMA)).findFirst().orElse(null);
+
+            /**
+             * Enlace de los detqlles de los campos
+             * */
+            dataSTR_CEF.stream().map(m -> {
+                String cdmma = m.get("CDMMA").toString();
+
+                // Buscar los detalles
+                DominioExportsData dataCDMMA = detalleMotMarea.getData().stream().filter(d -> d.getId().equals(cdmma)).findFirst().orElse(null);
+
+
+                if (dataCDMMA != null) {
+                    String descCdmma = dataCDMMA.getDescripcion();
+                    m.put("DESC_CDMMA", descCdmma);
+                } else {
+                    m.put("DESC_CDMMA", "");
+                }
+
+
+                return m;
+            }).collect(Collectors.toList());
+
+            ArrayList<String> listMotivos=ObtenerTiposMotivo(dataSTR_CEF);
+
+            List<HashMap<String, Object>> listaReg= new ArrayList<>();
+            for(int i=0; i<listMotivos.size();i++){
+
+                double totalNav=0, totalDes=0, totalPue=0, totalMar=0;
+
+                for(int j=0;j<dataSTR_CEF.size();j++){
+
+                    HashMap<String, Object>Reg= dataSTR_CEF.get(j);
+
+                    if(dataSTR_CEF.get(j).get("DSMMA").toString().equals(listMotivos.get(i))){
+
+                        totalNav+=Double.parseDouble(dataSTR_CEF.get(j).get("CONAV").toString());
+                        totalDes+=Double.parseDouble(dataSTR_CEF.get(j).get("CODES").toString());
+                        totalPue+=Double.parseDouble(dataSTR_CEF.get(j).get("COPUE").toString());
+                        totalMar+=Double.parseDouble(dataSTR_CEF.get(j).get("COMAR").toString());
+
+                        listaReg.add(Reg);
+                    }
+
+                 }
+
+                HashMap<String, Object>Reg= new HashMap<>();
+                Reg.put("DSMMA", "Total");
+                Reg.put("CONAV", String.valueOf(totalNav));
+                Reg.put("CODES", String.valueOf(totalDes));
+                Reg.put("COPUE", String.valueOf(totalPue));
+                Reg.put("COMAR", String.valueOf(totalMar));
+
+                listaReg.add(Reg);
+            }
 
 
             dto.setT_mensaje(dataT_MENSAJE);
-            dto.setStr_cef(dataSTR_CEF);
+            dto.setStr_cef(listaReg);
 
         }catch (Exception e){
             dto.setMensaje(e.getMessage());
@@ -658,6 +725,32 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
         }
 
         return exports;
+    }
+
+    public ArrayList<String> ObtenerTiposMotivo(List<HashMap<String, Object>> listaReg)throws Exception{
+
+        ArrayList<String>motivos=new ArrayList<>();
+        String motivo="";
+
+        for(int i=0;i<listaReg.size();i++){
+
+            String mot=listaReg.get(i).get("DSMMA").toString();
+
+            if(!mot.equals(motivo)){
+
+                logger.error("mot: "+mot);
+                logger.error("motivo: "+motivo);
+                motivo=mot;
+                motivos.add(motivo);
+            }
+
+        }
+
+        Set<String> set = new HashSet<>(motivos);
+        motivos.clear();
+        motivos.addAll(set);
+
+        return motivos;
     }
 
 }
