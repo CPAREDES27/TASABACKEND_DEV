@@ -106,7 +106,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
             }else {
                 if(valida==true){
-                    cadena+=" AND CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
+                    cadena+=" AND (CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T')";
                 }else{
                     cadena+="CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
                 }
