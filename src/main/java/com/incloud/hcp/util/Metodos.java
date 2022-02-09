@@ -41,28 +41,28 @@ public class Metodos {
             HashMap<String, Object> newRecord = new HashMap<String, Object>();
             while (iter.hasNextField()) {
                 JCoField field = iter.nextField();
-                String value="";
-                String key ="";
-                try {
-                     key = (String) field.getName();
-                    value = tableExport.getValue(key).toString();
+                String  key = "";
+                Object  value ;
 
+                try {
+                    key = (String) field.getName();
+                    value = tableExport.getValue(key);
 
                     if (key.equals("HRAPR")) {
 
-                    String v = value.toString();
-                    String val = v.substring(11, 19);
+                        String v = value.toString();
+                        String val = v.substring(11, 19);
 
 
-                    String hora=val.split(":")[0];
-                    String minutos=val.split(":")[1];
-                    String segundo=val.split(":")[2];
+                        String hora=val.split(":")[0];
+                        String minutos=val.split(":")[1];
+                        String segundo=val.split(":")[2];
 
-                    if(Integer.parseInt(hora)>23 || Integer.parseInt(minutos)>59 || Integer.parseInt(segundo)>59){
-                        value="";
-                    }else{
-                        value=hora+":"+minutos;
-                    }
+                        if(Integer.parseInt(hora)>23 || Integer.parseInt(minutos)>59 || Integer.parseInt(segundo)>59){
+                            value="";
+                        }else{
+                            value=hora+":"+minutos;
+                        }
 
 
                         //logger.error("HORA : "+ value);
@@ -90,11 +90,8 @@ public class Metodos {
                     if (key.equals("DSMIN")) {
                         value = value.toString();
                     }
-                }catch (Exception e){
-                    value="";
-                }
 
-                try {
+
 
                     if (key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ) {
                         String valor=value.toString();
