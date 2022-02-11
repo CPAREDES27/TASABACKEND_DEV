@@ -78,4 +78,8 @@ public class ConsultaGeneralOptions {
     public static String CONSGENVIVERES3A=" OR (FITVS >= '";
     public static String CONSGENVIVERES3B=" AND FFTVS <= '";
     public static String CONSGENVIVERES4=" AND ESVVI = 'S'";
+    public static String CONSGENULTMAREA="NRMAR > ";
+    public static String CONSGENULTMAREA1=" AND CDEMB LIKE '";
+    public static String CONSGENVERIFMAREA="NRMAR = ";
+
 }

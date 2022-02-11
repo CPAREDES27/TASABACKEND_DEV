@@ -368,10 +368,10 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
 
             String data="";
-            if(dto.getData().size()>0 && nombreConsulta.equals("CONSGENVIVERES")){
+            if(dto.getData().size()>0 && nombreConsulta.equals("CONSGENVIVERES") || nombreConsulta.equals("CONSGENULTMAREA") || nombreConsulta.equals("CONSGENVERIFMAREA")){
                 data="true";
                 dto.setMensaje(data);
-            }else if(dto.getData().size()==0 && nombreConsulta.equals("CONSGENVIVERES")){
+            }else if(dto.getData().size()==0 && nombreConsulta.equals("CONSGENVIVERES")|| nombreConsulta.equals("CONSGENULTMAREA") || nombreConsulta.equals("CONSGENVERIFMAREA")){
                 data="false";
                 dto.setMensaje(data);
             }else{
@@ -638,6 +638,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENVIVERES":
                 fields = ConsultaGeneralFields.CONSGENVIVERES;
+                break;
+            case "CONSGENULTMAREA":
+                fields = ConsultaGeneralFields.CONSGENULTMAREA;
+                break;
+            case "CONSGENVERIFMAREA":
+                fields = ConsultaGeneralFields.CONSGENVERIFMAREA;
                 break;
         }
 
@@ -931,6 +937,16 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 logger.error("CONSGENVIVERES 4: "+ condicion);
                 options.add(opt);
                 break;
+            case "CONSGENULTMAREA":
+                condicion = ConsultaGeneralOptions.CONSGENULTMAREA + parametro1+ConsultaGeneralOptions.CONSGENULTMAREA1+parametro2+"'";
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
+            case "CONSGENVERIFMAREA":
+                condicion = ConsultaGeneralOptions.CONSGENVERIFMAREA +parametro1;
+                opt.setWa(condicion);
+                options.add(opt);
+                break;
             default:
                 inList = false;
                 break;
@@ -1159,6 +1175,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 rowcount = "1";
                 break;
             case "CONSGENVIVERES":
+                rowcount = "1";
+                break;
+            case "CONSGENULTMAREA":
+                rowcount = "1";
+                break;
+            case "CONSGENVERIFMAREA":
                 rowcount = "1";
                 break;
         }
