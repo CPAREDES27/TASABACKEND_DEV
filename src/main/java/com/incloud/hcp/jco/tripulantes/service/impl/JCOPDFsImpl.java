@@ -1533,8 +1533,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String tdline="";
             for(int i=0; i<T_TEXTOS.getNumRows(); i++){
                 T_TEXTOS.setRow(i);
-                tdline+= T_TEXTOS.getString(PDFProtestosConstantes.TDLINE);
+                tdline+= T_TEXTOS.getString(PDFProtestosConstantes.TDLINE).replaceAll("´","'");
             }
+            logger.error("tdline: "+ tdline);
 
             dto.setSegundoParrafo(tdline);
 
@@ -1562,6 +1563,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         PDFont bold = PDType1Font.HELVETICA_BOLD;
         PDFont font = PDType1Font.HELVETICA;
+
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 

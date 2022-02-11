@@ -41,13 +41,14 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             imports.put("P_INPRP", importsParam.getP_inprp());
             imports.put("P_INUBC", importsParam.getP_inubc());
             imports.put("P_CDTEM", importsParam.getP_cdtem());
+            imports.put("P_ZONAAREA", importsParam.getP_zonaarea());
             logger.error("ListarDistribucionFlota1");
 
             EjecutarRFC exec = new EjecutarRFC();
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
             JCoRepository repo = destination.getRepository();
-            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_DISTR_FLOTA);
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_DISTR_FLOTA_BTP);
             exec.setImports(function, imports);
 
             JCoParameterList jcoTables = function.getTableParameterList();
@@ -471,7 +472,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
             JCoRepository repo = destination.getRepository();
-            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_DISTR_FLOTA);
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_DISTR_FLOTA_BTP);
             exec.setImports(function, imports);
 
             JCoParameterList jcoTables = function.getTableParameterList();

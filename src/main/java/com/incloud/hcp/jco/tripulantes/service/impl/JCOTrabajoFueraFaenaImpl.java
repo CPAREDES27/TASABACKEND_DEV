@@ -83,12 +83,21 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             //List<HashMap<String, Object>> t_fechas = metodo.ObtenerListObjetos(T_FECHAS, imports.getFieldst_fechas());
             //List<HashMap<String, Object>> t_textos = metodo.ObtenerListObjetos(T_TEXTOS, imports.getFieldst_textos());
             //List<HashMap<String, Object>>  t_mensajes = metodo.ListarObjetos(T_MENSAJES);
-
             List<HashMap<String, Object>> t_trabff = metodo.ListarObjetosLazy(T_TRABFF);
+            logger.error("trabajo ff T_TRABFF");
+
             List<HashMap<String, Object>> t_trabaj = metodo.ListarObjetosLazy(T_TRABAJ);
+            logger.error("trabajo ff T_TRABAJ");
+
             List<HashMap<String, Object>> t_fechas = metodo.ListarObjetosLazy(T_FECHAS);
+            logger.error("trabajo ff T_FECHAS");
+
             List<HashMap<String, Object>> t_textos = metodo.ListarObjetosLazy(T_TEXTOS);
+            logger.error("trabajo ff T_TEXTOS");
+
             List<HashMap<String, Object>> t_mensajes = metodo.ListarObjetosLazy(T_MENSAJES);
+            logger.error("trabajo ff T_MENSAJES");
+
             logger.error("tff3");
 
             ArrayList<String> listDomNames = new ArrayList<>();
@@ -209,6 +218,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
         TrabajoFueraFaenaDetalleExports dto= new TrabajoFueraFaenaDetalleExports();
 
+        logger.error("detalle ff_1");
         try{
             TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
 
@@ -230,6 +240,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             tfi.setT_opcion(options);
 
             tffde=TrabajoFueraFaenaTransporte(tfi);
+            logger.error("detalle ff_2");
 
             if(tffde.getT_textos().size()>0){
                 String descripcion="";
@@ -262,6 +273,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 dto.setDescripcionTrabajo("");
                 dto.setObservacion("");
             }
+            logger.error("detalle ff_3");
 
 
             String fechaCrea="";
@@ -290,10 +302,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 }else if(key.equals("FECRE")){
                    fechaCrea=valor;
                 }else if(key.equals("HOCRE")){
-                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
-                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
-                    Date date = parseador.parse(valor);
-                    horaCrea=formateador.format(date);
+                    if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                        horaCrea="";
+                    }else{
+                        horaCrea=valor;
+                    }
                 }else if(key.equals("USMOD")){
                     dto.setUsuarioModif(valor);
                 }else if(key.equals("ESREG")){
@@ -301,10 +314,15 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 }else if(key.equals("FEMOD")){
                     fechaMod=valor;
                 }else if(key.equals("HOMOD")){
-                    SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
-                    SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
-                    Date date = parseador.parse(valor);
-                    horaMod=formateador.format(date);
+                    if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                        horaMod="";
+                    }else{
+                        //SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                        //SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                        //Date date = parseador.parse(valor);
+                        // horaCrea = formateador.format(date);
+                        horaMod=valor;
+                    }
                 } else if(key.equals("DSWKS")){
                 dto.setEmbarcacion(valor);
                  }else if(key.equals("WERKS")){
@@ -317,7 +335,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             }else{
                 dto.setFechaHoraModif("");
             }
-
+            logger.error("detalle ff_4");
             String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
 
             for(String f:Listfechas){
@@ -326,6 +344,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
             dto.setFechas(Listfechas);
             List<TrabajoFFDetalleDto> ListDetalle=new ArrayList<>();
+            logger.error("detalle ff_5");
 
             for (int i=0; i<tffde.getT_trabaj().size(); i++){
                     TrabajoFFDetalleDto detalle=new TrabajoFFDetalleDto();
@@ -356,6 +375,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                 if(key1.equals("WERKS")){
                                     centro=valor1;
                                 }else if(key1.equals("FETRA")){
+                                    logger.error("detalle ff_5 fecha: "+valor1);
+
                                     SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
                                     SimpleDateFormat formateador = new SimpleDateFormat("dd");
                                     Date date = parseador.parse(valor1);
@@ -367,6 +388,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                             fechas.put(fecha, centro);
                         }
                     }
+                    logger.error("detalle ff_6");
+
 
                     detalle.setFechas(fechas);
                     detalle.setCentro("");
@@ -379,6 +402,8 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             dto.setMensaje("Ok");
 
         }catch (Exception e){
+            logger.error("causa error: "+e.getCause());
+            logger.error(" error: "+e.getMessage());
 
             dto.setMensaje(e.getMessage());
 
@@ -394,6 +419,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
         TrabajoDetalleDtoExports dto= new TrabajoDetalleDtoExports();
 
+        logger.error("DetalleTrabajoFueraFaenaTransportez_1");
         try{
             TrabajoFueraFaenaImports tfi=new TrabajoFueraFaenaImports();
 
@@ -415,6 +441,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             tfi.setT_opcion(options);
 
             tffde=TrabajoFueraFaenaTransporte(tfi);
+            logger.error("DetalleTrabajoFueraFaenaTransportez_2");
 
             if(tffde.getT_textos()!=null){
                 String descripcion="";
@@ -446,7 +473,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 dto.setDescripcionTrabajo("");
                 dto.setObservacion("");
             }
-
+            logger.error("DetalleTrabajoFueraFaenaTransportez_3");
             String fechaCrea="";
             String horaCrea="";
             String fechaMod="";
@@ -475,10 +502,15 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                         fechaCrea = valor;
                         dto.setFechaCreacion(fechaCrea);
                     } else if (key.equals("HOCRE")) {
-                        SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
-                        SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
-                        Date date = parseador.parse(valor);
-                        horaCrea = formateador.format(date);
+                        if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                            horaCrea="";
+                        }else{
+                            //SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                            //SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                            //Date date = parseador.parse(valor);
+                           // horaCrea = formateador.format(date);
+                            horaCrea=valor;
+                        }
                     } else if (key.equals("USMOD")) {
                         dto.setUsuarioModif(valor);
                     } else if (key.equals("ESREG")) {
@@ -488,12 +520,18 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     } else if (key.equals("NMUSM")) {
                         dto.setNmusm(valor);
                     } else if (key.equals("HOMOD")) {
-                        SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
-                        SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
-                        Date date = parseador.parse(valor);
-                        horaMod = formateador.format(date);
+                        if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                            horaMod="";
+                        }else {
+                            //SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
+                            //SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
+                            //Date date = parseador.parse(valor);
+                            //horaMod = formateador.format(date);
+                            horaMod=valor;
+                        }
                     }
                 }
+                logger.error("DetalleTrabajoFueraFaenaTransportez_3 A");
                 dto.setFechaHoraCreacion(fechaCrea + " " + horaCrea);
                 dto.setFechaCreacion(fechaCrea);
                 dto.setHoraCreacion(horaCrea);
@@ -506,7 +544,9 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                     dto.setFechaModif(fechaCrea);
                     dto.setHoraModif(horaMod);
                 }
-
+                logger.error("DetalleTrabajoFueraFaenaTransportez_3 B");
+                logger.error("DetalleTrabajoFueraFaenaTransportez_3 B  fecha inicio: "+dto.getFechaInicio());
+                logger.error("DetalleTrabajoFueraFaenaTransportez_3 B  fecha fin: "+ dto.getFechaFin());
                 String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
                 dto.setFechas(Listfechas);
             }else{
@@ -531,6 +571,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
             }
 
+            logger.error("DetalleTrabajoFueraFaenaTransportez_4");
 
             List<TrabajoDetalleDto> ListDetalle=new ArrayList<>();
 
@@ -603,6 +644,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                     if (key1.equals("WERKS")) {
                                         centro = valor1;
                                     } else if (key1.equals("FETRA")) {
+                                        logger.error("Detalle fecha: "+valor1);
                                         SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
                                         SimpleDateFormat formateador = new SimpleDateFormat("dd");
                                         Date date = parseador.parse(valor1);
@@ -627,9 +669,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             }else{
                 dto.setDetalle(ListDetalle);
             }
+            logger.error("DetalleTrabajoFueraFaenaTransportez_5");
             dto.setMensaje(tffde.getMensaje());
         }catch (Exception e){
-
+            logger.error("causa error: "+ e.getCause());
+            logger.error("error: "+ e.getMessage());
             dto.setMensaje(e.getMessage());
 
         }
@@ -763,6 +807,11 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
 
     public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{
+        logger.error("Obtenerfechas_1");
+        logger.error("Obtenerfechas_ fecha inicio: "+ fechaInicio);
+        logger.error("Obtenerfechas_ fecha Fin : "+ fechaFin);
+        logger.error("Obtenerfechas_1");
+
         String[]fechas=new String[7];
 
         SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
@@ -770,8 +819,13 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
         Date date = parseador.parse(fechaInicio);
         String inicio = formateador.format(date);
 
+        logger.error("Obtenerfechas_ inicio: "+inicio);
+
+        logger.error("Obtenerfechas_2");
+
         date = parseador.parse(fechaFin);
         String fin = formateador.format(date);
+        logger.error("Obtenerfechas_ fin: "+fin);
 
         int con=0;
         for(int i=Integer.parseInt(inicio); i<=Integer.parseInt(fin);i++ ){
@@ -855,6 +909,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
     public TrabajoFueraFaenaDetalleExports DetalleTrabajoFFTransporte(TrabajoFueraFaenaImports imports)throws Exception{
 
+        logger.error("DetalleTrabajoFFTransporte_1");
         TrabajoFueraFaenaExports tffde= new TrabajoFueraFaenaExports();
 
         TrabajoFueraFaenaDetalleExports dto= new TrabajoFueraFaenaDetalleExports();
@@ -891,8 +946,10 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             tfi.setOptions(imports.getOptions());
             tfi.setT_opcion(imports.getT_opcion());
 
+            logger.error("DetalleTrabajoFFTransporte_2");
             tffde=TrabajoFueraFaenaTransporte(imports);
 
+            logger.error("DetalleTrabajoFFTransporte_3");
             if(tffde.getT_textos().size()>0){
                 String descripcion="";
                 String observacion="";
@@ -924,7 +981,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 dto.setDescripcionTrabajo("");
                 dto.setObservacion("");
             }
-
+            logger.error("DetalleTrabajoFFTransporte_ textos");
 
             String fechaCrea="";
             String horaCrea="";
@@ -979,6 +1036,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
             }else{
                 dto.setFechaHoraModif("");
             }
+            logger.error("DetalleTrabajoFFTransporte_ trabaff");
 
             String[] Listfechas=Obtenerfechas(dto.getFechaInicio(), dto.getFechaFin());
             dto.setFechas(Listfechas);
@@ -1013,6 +1071,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                                 if(key1.equals("WERKS")){
                                     centro=valor1;
                                 }else if(key1.equals("FETRA")){
+                                    logger.error("fecha: "+valor1);
                                     SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
                                     SimpleDateFormat formateador = new SimpleDateFormat("dd");
                                     Date date = parseador.parse(valor1);
@@ -1025,6 +1084,7 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                         }
                     }
 
+                    logger.error("DetalleTrabajoFFTransporte_ trabaj");
                     detalle.setFechas(fechas);
                     detalle.setCentro("");
                     detalle.setDestino("");

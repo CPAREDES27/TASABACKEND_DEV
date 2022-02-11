@@ -7,6 +7,15 @@ public class DistribucionFlotaImports {
     private String p_cdtem;
     private String p_codPlanta;
     private String p_numFilas;
+    private String p_zonaarea;
+
+    public String getP_zonaarea() {
+        return p_zonaarea;
+    }
+
+    public void setP_zonaarea(String p_zonaarea) {
+        this.p_zonaarea = p_zonaarea;
+    }
 
     public String getP_codPlanta() {
         return p_codPlanta;

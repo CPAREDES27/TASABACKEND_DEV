@@ -89,7 +89,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
         logger.error("ListarEventosPesca_3");;
-        JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_DISTR_FLOTA");
+        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_DISTR_FLOTA_BTP);
         JCoParameterList importx = stfcConnection.getImportParameterList();
 
         importx.setValue("P_USER", user);
