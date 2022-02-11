@@ -515,6 +515,12 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENVIVERES":
                 tabla = ConsultaGeneralTablas.CONSGENVIVERES;
                 break;
+            case "CONSGENULTMAREA":
+                tabla = ConsultaGeneralTablas.CONSGENULTMAREA;
+                break;
+            case "CONSGENVERIFMAREA":
+                tabla = ConsultaGeneralTablas.CONSGENVERIFMAREA;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
