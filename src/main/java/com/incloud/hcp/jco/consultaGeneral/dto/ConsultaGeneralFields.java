@@ -41,4 +41,7 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENCODZONA={"ZCDZAR"};
     public static String[] CONSGENTEORICO={"CSTEO"};
     public static String[] CONSGENCONST={"CAMPO", "LOW"};
+    public static String[] CONSGENVIVERES={"NRVVI","FITVS","FFTVS"};
+
+
 }

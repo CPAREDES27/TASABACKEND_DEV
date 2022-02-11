@@ -7,6 +7,7 @@ public class AppMaestrosImports {
     private String p_tipo;
     private String[] pt_rol;
 
+
     public String getP_rol() {
         return p_rol;
     }

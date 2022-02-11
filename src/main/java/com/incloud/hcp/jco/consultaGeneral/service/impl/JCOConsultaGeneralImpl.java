@@ -366,18 +366,25 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 dto.setData(me.getData());
             }
 
-            for(Map.Entry<String, Object> Entry:me.getData().get(0).entrySet()){
 
-                logger.error("CONSGEN DTO");
-                logger.error("Key: "+ Entry.getKey());
-                logger.error("Value: "+ Entry.getValue());
-
-
+            String data="";
+            if(dto.getData().size()>0 && nombreConsulta.equals("CONSGENVIVERES")){
+                data="true";
+                dto.setMensaje(data);
+            }else if(dto.getData().size()==0 && nombreConsulta.equals("CONSGENVIVERES")){
+                data="false";
+                dto.setMensaje(data);
+            }else{
+                dto.setMensaje("OK");
             }
 
-            dto.setMensaje("Ok");
+
         } catch (Exception e) {
-            dto.setMensaje(e.getMessage());
+            if(e.getMessage().equals("Index: 0, Size: 0")){
+                dto.setMensaje("false");
+            }else {
+                dto.setMensaje(e.getMessage());
+            }
         }
 
         return dto;
@@ -504,6 +511,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENCONST":
                 tabla = ConsultaGeneralTablas.CONSGENCONST;
+                break;//
+            case "CONSGENVIVERES":
+                tabla = ConsultaGeneralTablas.CONSGENVIVERES;
                 break;
         }
         logger.error("tabla= " + tabla);
@@ -625,6 +635,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENCONST":
                 fields = ConsultaGeneralFields.CONSGENCONST;
+                break;
+            case "CONSGENVIVERES":
+                fields = ConsultaGeneralFields.CONSGENVIVERES;
                 break;
         }
 
@@ -892,6 +905,32 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 opt.setWa(condicion);
                 options.add(opt);
                 break;
+            case "CONSGENVIVERES":
+                condicion = ConsultaGeneralOptions.CONSGENVIVERES +parametro1+"'";
+                opt.setWa(condicion);
+                options.add(opt);
+                logger.error("CONSGENVIVERES 0: "+ condicion);
+                condicion = ConsultaGeneralOptions.CONSGENVIVERES1A + parametro2 +"'"+ConsultaGeneralOptions.CONSGENVIVERES1B + parametro2 +"')";
+                opt = new MaestroOptions();
+                opt.setWa(condicion);
+                logger.error("CONSGENVIVERES 1: "+ condicion);
+                options.add(opt);
+                condicion = ConsultaGeneralOptions.CONSGENVIVERES2A + parametro3 +"'"+ConsultaGeneralOptions.CONSGENVIVERES2B + parametro3 +"')";
+                opt = new MaestroOptions();
+                opt.setWa(condicion);
+                logger.error("CONSGENVIVERES 2: "+ condicion);
+                options.add(opt);
+                condicion = ConsultaGeneralOptions.CONSGENVIVERES3A + parametro2 +"'"+ConsultaGeneralOptions.CONSGENVIVERES3B + parametro3 + "'))";
+                opt = new MaestroOptions();
+                opt.setWa(condicion);
+                logger.error("CONSGENVIVERES 3: "+ condicion);
+                options.add(opt);
+                condicion = ConsultaGeneralOptions.CONSGENVIVERES4 ;
+                opt = new MaestroOptions();
+                opt.setWa(condicion);
+                logger.error("CONSGENVIVERES 4: "+ condicion);
+                options.add(opt);
+                break;
             default:
                 inList = false;
                 break;
@@ -1117,6 +1156,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 rowcount = "1";
                 break;
             case "CONSGENEVENTANT":
+                rowcount = "1";
+                break;
+            case "CONSGENVIVERES":
                 rowcount = "1";
                 break;
         }

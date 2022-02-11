@@ -70,5 +70,12 @@ public class ConsultaGeneralOptions {
     public static String CONSGENTEORICO5="' AND FHFVG >= '";
     public static String CONSGENCONST="PROGRAMA EQ 'BTP'";
     public static String CONSGENCONST2=" AND CAMPO EQ '";
-
+    public static String CONSGENVIVERES="CDEMB = '";
+    public static String CONSGENVIVERES1A="AND ((FITVS <= '";
+    public static String CONSGENVIVERES1B=" AND FFTVS >= '";
+    public static String CONSGENVIVERES2A=" OR (FITVS <= '";
+    public static String CONSGENVIVERES2B=" AND FFTVS >= '";
+    public static String CONSGENVIVERES3A=" OR (FITVS >= '";
+    public static String CONSGENVIVERES3B=" AND FFTVS <= '";
+    public static String CONSGENVIVERES4=" AND ESVVI = 'S'";
 }

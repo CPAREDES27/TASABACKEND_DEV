@@ -40,6 +40,8 @@ public class ConsultaGeneralTablas {
     public static String CONSGENCODZONA="ZV_FLPU";
     public static String CONSGENTEORICO="ZFLCEF";
     public static String CONSGENCONST="ZTB_CONSTANTES";
+    public static String CONSGENVIVERES="ZFLVVI";
+
 
 
 }

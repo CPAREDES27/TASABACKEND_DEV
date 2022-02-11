@@ -4556,7 +4556,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
             dto.setFechas(fechas);
 
-            PantillaPDFValeViveres(path, dto, detalle);
+            PantillaPDFValeViveres(path, dto, detalle, imports.getEstadoImpresion());
 
             Metodos exec = new Metodos();
 
@@ -4608,7 +4608,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         return codAlmacen;
     }
-    public void PantillaPDFValeViveres(String path, PDFValeViveresDto dto, List<PDFValeVivereDetalleDto> detalle)throws IOException{
+    public void PantillaPDFValeViveres(String path, PDFValeViveresDto dto, List<PDFValeVivereDetalleDto> detalle, String estadoImpresion)throws IOException{
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage(PDRectangle.A4);
@@ -4626,7 +4626,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDImageXObject logoTasa = PDImageXObject.createFromFile(tasa,document);
         contentStream.drawImage(logoTasa, 40, 760);
 
-        if(dto.getEstadoImpresion().equals("I")) {
+        if(estadoImpresion.equals("I")) {
 
             contentStream.beginText();
             contentStream.setFont(bold, 80);

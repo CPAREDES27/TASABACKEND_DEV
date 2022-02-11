@@ -870,13 +870,28 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             importx.setValue("P_ROL", imports.getP_rol());
             importx.setValue("P_APP", imports.getP_app());
             importx.setValue("P_TIPO", imports.getP_tipo());
-            importx.setValue("PT_ROL", imports.getPt_rol());
+            //importx.setValue("PT_ROL", imports.getPt_rol());
+
+            List<HashMap<String, Object>> listaRoles=new ArrayList<>();
+
+            for(int i=0; i<imports.getPt_rol().length;i++){
+
+                HashMap<String, Object> rol= new HashMap<>();
+
+                rol.put("ROL", imports.getPt_rol()[i]);
+
+                listaRoles.add(rol);
+            }
+
 
 
             JCoParameterList tables = stfcConnection.getExportParameterList();
-            stfcConnection.execute(destination);
+            EjecutarRFC exec= new EjecutarRFC();
+            exec.setTable(importx, "PT_ROL", listaRoles);
 
             stfcConnection.execute(destination);
+
+           // stfcConnection.execute(destination);
 
             JCoTable t_tabapp = tables.getTable(Tablas.T_TABAPP);
             JCoTable t_tabfield = tables.getTable(Tablas.T_TABFIELD);
