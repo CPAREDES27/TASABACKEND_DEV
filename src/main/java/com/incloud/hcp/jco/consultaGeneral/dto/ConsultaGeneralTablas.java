@@ -41,7 +41,7 @@ public class ConsultaGeneralTablas {
     public static String CONSGENTEORICO="ZFLCEF";
     public static String CONSGENCONST="ZTB_CONSTANTES";
     public static String CONSGENVIVERES="ZFLVVI";
-    public static String CONSGENULTMAREA="ZFLVVI";
+    public static String CONSGENULTMAREA="ZFLMAR";
     public static String CONSGENVERIFMAREA="ZFLMAR";
 
 
