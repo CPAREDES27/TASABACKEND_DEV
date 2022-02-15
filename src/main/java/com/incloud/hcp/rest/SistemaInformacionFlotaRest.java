@@ -1,5 +1,6 @@
 package com.incloud.hcp.rest;
 
+import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusRegExport;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +132,17 @@ public class SistemaInformacionFlotaRest {
 
         try {
             return Optional.ofNullable(this.jcoPescaCompetenciaService.PescaCompetenciaProduce(imports))
+                    .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    @PostMapping(value = "/ReportePescaCompProd", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<AnalisisCombusRegExport> ReportePescaCompProd(@RequestBody PesCompetenciaProdImports imports) {
+
+        try {
+            return Optional.ofNullable(this.jcoPescaCompetenciaService.ExportPescaCompetencia(imports))
                     .map(l -> new ResponseEntity<>(l, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             throw new RuntimeException(e.toString());

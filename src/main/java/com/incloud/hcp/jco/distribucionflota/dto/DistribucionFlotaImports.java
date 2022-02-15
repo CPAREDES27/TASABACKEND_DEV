@@ -8,6 +8,15 @@ public class DistribucionFlotaImports {
     private String p_codPlanta;
     private String p_numFilas;
     private String p_zonaarea;
+    private String p_appdfl;
+
+    public String getP_appdfl() {
+        return p_appdfl;
+    }
+
+    public void setP_appdfl(String p_appdfl) {
+        this.p_appdfl = p_appdfl;
+    }
 
     public String getP_zonaarea() {
         return p_zonaarea;

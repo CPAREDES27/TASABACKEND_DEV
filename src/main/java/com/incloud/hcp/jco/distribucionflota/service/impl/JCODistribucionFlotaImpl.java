@@ -42,6 +42,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
             imports.put("P_INUBC", importsParam.getP_inubc());
             imports.put("P_CDTEM", importsParam.getP_cdtem());
             imports.put("P_ZONAAREA", importsParam.getP_zonaarea());
+            imports.put("P_APPDFL", importsParam.getP_appdfl());
             logger.error("ListarDistribucionFlota1");
 
             EjecutarRFC exec = new EjecutarRFC();
@@ -153,6 +154,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                                 n_embarcacion.setIndicador(s_str_di.getString("INPRP"));
                                 n_embarcacion.setSemaforo("");
                                 n_embarcacion.setSemaforoColor("");
+                                n_embarcacion.setValProd(s_str_di.getString("VALPROD"));
 
                                 String CodMotMarea = s_str_di.getString("CDMMA");
                                 String TDC = s_str_di.getString("TDC");

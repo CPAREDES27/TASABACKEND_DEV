@@ -1,24 +1,34 @@
 package com.incloud.hcp.jco.sistemainformacionflota.service.impl;
 
+import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusRegExport;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaCompetenciaProduceExports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaCompetenciaProduceImports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaCompetenciaRadialExports;
-import com.incloud.hcp.jco.sistemainformacionflota.dto.PescaCompetenciaRadialImports;
+import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaCompetenciaService;
 import com.incloud.hcp.util.Constantes;
 import com.incloud.hcp.util.EjecutarRFC;
 import com.incloud.hcp.util.Metodos;
 import com.incloud.hcp.util.Tablas;
 import com.sap.conn.jco.*;
+import io.swagger.models.auth.In;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     @Override
     public PescaCompetenciaRadialExports PescaCompetenciaRadial(PescaCompetenciaRadialImports imports) throws Exception {
@@ -163,5 +173,226 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
         }
 
         return pcp;
+    }
+
+    public AnalisisCombusRegExport ExportPescaCompetencia(PesCompetenciaProdImports imports)throws Exception{
+        AnalisisCombusRegExport exports = new AnalisisCombusRegExport();
+        try {
+
+            logger.error("export pescomprod 1");
+
+            Workbook reporteBook = new HSSFWorkbook();
+            Sheet pescaComProdSheet = reporteBook.createSheet("Exportación SAPUI5");
+
+            Font fuenteTitulo = reporteBook.createFont();
+            fuenteTitulo.setBold(true);
+
+            CellStyle styleTituloGeneral = reporteBook.createCellStyle();
+            styleTituloGeneral.setFont(fuenteTitulo);
+            styleTituloGeneral.setAlignment(HorizontalAlignment.CENTER);
+            String abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            logger.error("export pescomprod 2");
+
+
+            // Títulos generales
+            Row rowTituloGeneral = pescaComProdSheet.createRow(1);
+            Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
+            cellTituloGeneral.setCellValue("PESCA DESCARGADA DE COMPETENCIA");
+            cellTituloGeneral.setCellStyle(styleTituloGeneral);
+
+            logger.error("export pescomprod 2.1");
+
+            int cantCol=imports.getColumnas().size();
+            String rangoTitulo="B2:"+abc.charAt(cantCol)+"2";
+            String rangoTitulo2="B3:"+abc.charAt(cantCol)+"3";
+            String rangoTitulo3="B4:"+abc.charAt(cantCol)+"4";
+
+            logger.error("rangoTitulo: "+rangoTitulo);
+            logger.error("rangoTitulo2: "+ rangoTitulo2);
+            logger.error("rangoTitulo3: "+ rangoTitulo3);
+
+            CellRangeAddress cellRangeGeneral = CellRangeAddress.valueOf(rangoTitulo);
+            pescaComProdSheet.addMergedRegion(cellRangeGeneral);
+            logger.error("export pescomprod 2.2");
+            Row rowTituloGeneral2 = pescaComProdSheet.createRow(2);
+            Cell cellTituloGeneral2 = rowTituloGeneral2.createCell(1);
+            cellTituloGeneral2.setCellValue(imports.getTitulo());
+            cellTituloGeneral2.setCellStyle(styleTituloGeneral);
+
+            cellRangeGeneral = CellRangeAddress.valueOf(rangoTitulo2);
+            pescaComProdSheet.addMergedRegion(cellRangeGeneral);
+            logger.error("export pescomprod 2.3");
+
+            Row rowTituloGeneral3 = pescaComProdSheet.createRow(3);
+            Cell cellTituloGeneral3 = rowTituloGeneral3.createCell(1);
+            cellTituloGeneral3.setCellValue("DEL "+imports.getFechaInicio()+ " AL "+ imports.getFechaFin());
+            cellTituloGeneral3.setCellStyle(styleTituloGeneral);
+            logger.error("export pescomprod 2.4");
+
+            cellRangeGeneral = CellRangeAddress.valueOf(rangoTitulo3);
+            pescaComProdSheet.addMergedRegion(cellRangeGeneral);
+            logger.error("export pescomprod 2.5");
+
+
+            List<LinkedHashMap<String, Object>> columnas=ObtCantColumPorCabecera(imports.getColumnas());
+
+            // ------ Títulos de categorías ----------
+            int canSubCab=0;
+            Row rowTitulosCategorias = pescaComProdSheet.createRow(5);
+            int col=1;
+            for(int i = 0; i<columnas.size(); i++){
+
+                 canSubCab= Integer.parseInt(columnas.get(i).get("columnas").toString());
+                 logger.error("can sub cab: "+canSubCab);
+
+                 if(i!=0){
+                     col+=Integer.parseInt(columnas.get(i-1).get("columnas").toString());
+                 }
+
+
+                if(!columnas.get(i).get("cabecera").toString().equals("")) {
+
+                    logger.error("numero col anterior: "+col);
+
+                    Cell cabeceras = rowTitulosCategorias.createCell(col+1 );
+                    cabeceras.setCellValue(columnas.get(i).get("cabecera").toString());
+                    cabeceras.setCellStyle(styleTituloGeneral);
+
+                    int celf=(col + canSubCab)-1;
+                    String celdaIni = abc.charAt(col) + "6";
+                    String celdaFin = abc.charAt(celf) + "6";
+                    String celdas = celdaIni + ":" + celdaFin;
+
+
+                    logger.error(columnas.get(i).get("cabecera").toString());
+                    logger.error(celdaIni);
+                    logger.error(celdaFin);
+                    logger.error(celdas);
+
+                    CellRangeAddress RangosCeldas = CellRangeAddress.valueOf(celdas);
+                    pescaComProdSheet.addMergedRegion(RangosCeldas);
+
+                    RegionUtil.setBorderTop(BorderStyle.THIN, RangosCeldas, pescaComProdSheet);
+                    RegionUtil.setBorderBottom(BorderStyle.THIN, RangosCeldas, pescaComProdSheet);
+                    RegionUtil.setBorderRight(BorderStyle.THIN, RangosCeldas, pescaComProdSheet);
+                    RegionUtil.setBorderLeft(BorderStyle.THIN, RangosCeldas, pescaComProdSheet);
+                }
+            }
+            logger.error("Export pesca comp produce_3");
+            // ------ Títulos de columnas ----------
+            int cellIndexTitulos = 1;
+            Row rowTitulos = pescaComProdSheet.createRow(6);
+
+            CellStyle styleTitulo = reporteBook.createCellStyle();
+            styleTitulo.setBorderTop(BorderStyle.THIN);
+            styleTitulo.setBorderBottom(BorderStyle.THIN);
+            styleTitulo.setBorderRight(BorderStyle.THIN);
+            styleTitulo.setBorderLeft(BorderStyle.THIN);
+            styleTitulo.setFont(fuenteTitulo);
+
+            for(int i = 0; i<imports.getColumnas().size(); i++) {
+
+                String titulo = imports.getColumnas().get(i).get("titulo").toString();
+                Cell cellTitulo = rowTitulos.createCell(cellIndexTitulos);
+                cellTitulo.setCellValue(titulo);
+                cellTitulo.setCellStyle(styleTitulo);
+
+                cellIndexTitulos++;
+
+            }
+
+            cellIndexTitulos = 1;
+            int rowIndex=7;
+
+
+
+
+            for(int i = 0; i<imports.getFilas().size(); i++) {
+
+                Row rowRegistros = pescaComProdSheet.createRow(rowIndex);
+
+                for(Map.Entry<String, Object> entry: imports.getFilas().get(i).entrySet()){
+
+                    String valor = entry.getValue().toString();
+                    Cell cellTitulo = rowRegistros.createCell(cellIndexTitulos);
+                    cellTitulo.setCellValue(valor);
+                    cellIndexTitulos++;
+                }
+
+
+                rowIndex++;
+            }
+
+            logger.error("Export pesca comp produce_5");
+            String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Reporte_Pesca_Competencia_Produce.xlsx";
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
+            reporteBook.write(fileOutputStream);
+            fileOutputStream.close();
+            logger.error("Export pesca comp produce_6");
+            File file = new File(path);
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+            String base64Encoded = new String(encoded, StandardCharsets.UTF_8);
+            exports.setBase64(base64Encoded);
+
+        } catch (Exception ex) {
+            logger.error("causa: "+ex.getCause());
+            logger.error("error: "+ex.getMessage());
+            exports.setBase64(ex.getMessage());
+        }
+        return exports;
+
+    }
+
+    public  List<LinkedHashMap<String, Object>>   ObtCantColumPorCabecera(List<LinkedHashMap<String, Object>> columnas){
+
+
+        logger.error("ObtCantColumPorCabecera ");
+        List<LinkedHashMap<String, Object>> column= new ArrayList<>();
+
+        logger.error("ObtCantColumPorCabecera  column size:"+ columnas.size());
+
+
+        for(int i=0; i<columnas.size();i++){
+            LinkedHashMap<String, Object> col= new LinkedHashMap<>();
+            String cabecera=columnas.get(i).get("cabecera").toString();
+            int con=0;
+            if(i==0){
+                for(int j=0; j<columnas.size(); j++){
+
+                    if(cabecera.equals(columnas.get(j).get("cabecera"))){
+                        con++;
+                    }
+                }
+
+                col.put("cabecera", cabecera);
+                col.put("columnas", con);
+                column.add(col);
+            }else{
+                if(!cabecera.equals(columnas.get(i-1).get("cabecera").toString())){
+                    for(int j=0; j<columnas.size(); j++){
+
+                        if(cabecera.equals(columnas.get(j).get("cabecera"))){
+                            con++;
+                        }
+                    }
+
+                    col.put("cabecera", cabecera);
+                    col.put("columnas", con);
+                    column.add(col);
+                }
+
+            }
+
+        }
+
+        for(int i=0;  i<column.size();i++){
+            for (Map.Entry<String, Object> entry: column.get(i).entrySet())
+            {
+                logger.error(entry.getKey()+" : "+entry.getValue().toString());
+            }
+        }
+
+        return column;
     }
 }

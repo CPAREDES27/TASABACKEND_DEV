@@ -20,6 +20,15 @@ public class EmbarcacionesDto {
     private String SemaforoColor;
     private String CodPlanta;
     private String NomPlanta;
+    private String ValProd;
+
+    public String getValProd() {
+        return ValProd;
+    }
+
+    public void setValProd(String valProd) {
+        ValProd = valProd;
+    }
 
     public String getCodPlanta() {
         return CodPlanta;
