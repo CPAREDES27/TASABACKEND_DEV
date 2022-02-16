@@ -43,6 +43,7 @@ public class ConsultaGeneralTablas {
     public static String CONSGENVIVERES="ZFLVVI";
     public static String CONSGENULTMAREA="ZFLMAR";
     public static String CONSGENVERIFMAREA="ZFLMAR";
+    public static String CONSGENMAREAS="ZVFL_ZAMAR";
 
 
 

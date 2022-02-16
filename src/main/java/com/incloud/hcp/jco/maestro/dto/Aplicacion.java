@@ -23,6 +23,9 @@ public  class Aplicacion {
     //REPORTE DE PESCA
     public static final String CONSULTAMAREAS="CONSULTAMAREAS";
 
+    //EVENTOS DE PESCA
+    public static final String EVENTOPESCA="EVENTOPESCA";
+
 
 
 

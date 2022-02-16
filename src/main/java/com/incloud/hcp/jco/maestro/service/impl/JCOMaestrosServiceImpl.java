@@ -508,6 +508,34 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 }
 
                 break;
+            case Aplicacion.EVENTOPESCA:
+                logger.error("validDatos_ EVENTOPESCA");
+
+                for (int i = 0; i < rolAzure.length; i++) {
+                    String rol=rolAzure[i].replaceAll("\"","");
+                    logger.error("EVENTOPESCA rol del usuario: "+rol);
+                    permiso = new HashMap<>();
+                    if (data2.get(0).get("RADIOOPERADOR").equals(rol) ||
+                            data2.get(0).get("RADIOOPERADOR_CENTRO_PESCA").equals(rol) ||
+                            data2.get(0).get("RADIOOPERADOR_PROTESTO").equals(rol)) {
+
+                        permiso.put("ROLRADOPE",true);
+
+                    }
+                    if (data2.get(0).get("ASISTENTE_CONTROL_COMBUSTIBLE").equals(rol)) {
+
+                        permiso.put("ROLINGCOMB",true);
+
+                    }
+
+                    if (permiso.size()>0) {
+                        listaPermisos.add(permiso);
+
+                    }
+
+                }
+
+                break;
         }
 
 

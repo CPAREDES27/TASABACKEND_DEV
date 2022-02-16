@@ -88,22 +88,30 @@ public class JCOProtestosImpl implements JCOProtestosService {
             ArrayList<String> listDomNames = new ArrayList<>();
             listDomNames.add(Dominios.CLASEPROTESTO);
             listDomNames.add(Dominios.TIPOPROTESTO);
+            listDomNames.add(Dominios.ZINEIF);
 
             DominiosHelper helper = new DominiosHelper();
             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
 
             DominiosExports claseProtesto = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.CLASEPROTESTO)).findFirst().orElse(null);
             DominiosExports tipoProtestos = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.TIPOPROTESTO)).findFirst().orElse(null);
+            DominiosExports zineif = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ZINEIF)).findFirst().orElse(null);
+
 
             t_baprt.stream().map(m -> {
                 String clprt = m.get("CLPRT").toString()!=null ? m.get("CLPRT").toString() : "";
                 String tpptr = m.get("TPPRT").toString()!=null ? m.get("TPPRT").toString() : "";
+                String amplc = m.get("AMPLC").toString()!=null ? m.get("AMPLC").toString() : "";
 
 
                 DominioExportsData dataCLPRT = claseProtesto.getData().stream().filter(d -> d.getId().equals(clprt)).findFirst().orElse(null);
                 DominioExportsData dataTPPTR = tipoProtestos.getData().stream().filter(d -> d.getId().equals(tpptr)).findFirst().orElse(null);
+                DominioExportsData dataAMPLC = zineif.getData().stream().filter(d -> d.getId().equals(amplc)).findFirst().orElse(null);
+
                 m.put("DESC_CLPRT", dataCLPRT != null ? dataCLPRT.getDescripcion() : "");
                 m.put("DESC_TPPRT", dataTPPTR != null ? dataTPPTR.getDescripcion() : "");
+                m.put("DESC_AMPLC", dataAMPLC != null ? dataAMPLC.getDescripcion() : "");
+
 
 
 

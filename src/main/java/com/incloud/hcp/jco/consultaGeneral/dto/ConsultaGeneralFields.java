@@ -44,6 +44,7 @@ public class ConsultaGeneralFields {
     public static String[] CONSGENVIVERES={"NRVVI","FITVS","FFTVS"};
     public static String[] CONSGENULTMAREA={"NRMAR"};
     public static String[] CONSGENVERIFMAREA={"ESMAR", "ESCMA"};
+    public static String[] CONSGENMAREAS={"NRMAR", "CDMMA ","DESCR","NMEMB", "FIEVN","HIEVN", "DSPOS"};
 
 
 }

@@ -16,6 +16,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.encoding.WinAnsiEncoding;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.util.Matrix;
 import org.slf4j.Logger;
@@ -1533,9 +1534,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
             String tdline="";
             for(int i=0; i<T_TEXTOS.getNumRows(); i++){
                 T_TEXTOS.setRow(i);
-                tdline+= T_TEXTOS.getString(PDFProtestosConstantes.TDLINE).replaceAll("´","'");
+                tdline+= T_TEXTOS.getString(PDFProtestosConstantes.TDLINE);
             }
             logger.error("tdline: "+ tdline);
+
+            tdline= replaceCaracter(tdline);
 
             dto.setSegundoParrafo(tdline);
 
@@ -1553,6 +1556,35 @@ public class JCOPDFsImpl implements JCOPDFsService {
 
         return pdf;
     }
+    public  String replaceCaracter(String test) {
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < test.length(); i++) {
+            Character c= test.charAt(i);
+            if (WinAnsiEncoding.INSTANCE.contains(c)) {
+                b.append(test.charAt(i));
+            }else {
+
+
+                char cd = '″', cs = '′', g = '–';
+
+                if (Character.compare(c, g) == 0 || c.equals(g)) {
+                    b.append("-");
+                }
+                if (Character.compare(c, cd) == 0 || c.equals(cd)) {
+                    logger.error("c: " + c);
+                    b.append("\"");
+                }
+                if (Character.compare(c, cs) == 0 || c.equals(cs)) {
+                    logger.error("c: " + c);
+                    b.append("\'");
+                }
+            }
+
+        }
+        return b.toString();
+    }
+
+
 
     public void PlantillaPDFProtestos(String Path, PDFProtestosDto dto)throws Exception{
 
@@ -1704,11 +1736,11 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 text = text.substring(lastSpace).trim();
 
                 lastSpace = -1;
-                logger.error("width antes: "+width);
+
                 if(!lines.isEmpty()){
 
                     width = 510;
-                    logger.error("width dsps: "+width);
+
                 }
                 //logger.error("contador: "+c);
                 //logger.error("lines.lenght: "+lines.size());
@@ -1805,7 +1837,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
             if (spaceIndex < 0)
                 spaceIndex = text.length();
             String subString = text.substring(0, spaceIndex);
-            logger.error("subString: "+subString);
             float size = fontSize * pdfFont.getStringWidth(subString) / 1000;
 
             if (size > width)
@@ -1821,7 +1852,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
             else if (spaceIndex == text.length())
             {
-                logger.error("lines.add(text) "+text);
                 lines.add(text);
 
                 text = "";
@@ -1845,7 +1875,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             {
                 size = fontSize * pdfFont.getStringWidth(lines.get(i)) / 1000;
 
-                logger.error("size "+size);
+
                 float  free = width - size;
                 int tam=lines.size()-1;
                 if(i==tam){
@@ -1857,7 +1887,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     }
                 }
             }
-            logger.error("charSpacing "+charSpacing);
             contentStream.setCharacterSpacing(charSpacing);
             contentStream.showText(lines.get(i));
             //contentStream.newLineAtOffset(startX, -leading);
@@ -2635,8 +2664,9 @@ public class JCOPDFsImpl implements JCOPDFsService {
                             registros[j] = T_DZART.getString(CamposRolTripulacion[campos]);
                         }
 
-                        if (registros[j].trim().compareTo("PATRON EP") == 0|| registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0) {
+                        if (registros[j].trim().compareTo("CAPITAN DE NAVEGACION")==0 ||registros[j].trim().compareTo("PATRON EP") == 0) {
                             dto.setNombrePatron(registros[1]);
+                            dto.setDni(T_DZART.getString("NRDNI"));
 
                         }
 
@@ -2924,11 +2954,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.drawString(PDFRolTripulacionConstantes.siete);
         contentStream.endText();
 
+        /*
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(90, 250);
-        contentStream.drawString(dto.getFecha());
-        contentStream.endText();
+        contentStream.drawString("");
+        contentStream.endText();*/
 
         contentStream.beginText();
         contentStream.setFont(font, 8);
@@ -2981,6 +3012,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(125, 175);
+        contentStream.drawString(dto.getNombrePatron());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(125, 174);
         contentStream.drawString("______________________________");
         contentStream.endText();
 
@@ -3005,6 +3042,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
         contentStream.beginText();
         contentStream.setFont(font, 8);
         contentStream.moveTextPositionByAmount(125, 160);
+        contentStream.drawString(dto.getDni());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(font, 8);
+        contentStream.moveTextPositionByAmount(125, 159);
         contentStream.drawString("______________________________");
         contentStream.endText();
 

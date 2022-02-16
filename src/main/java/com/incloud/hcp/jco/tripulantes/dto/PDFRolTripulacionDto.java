@@ -11,6 +11,15 @@ public class PDFRolTripulacionDto {
     private String arqueoNeto;
     private String fecha;
     private String numTripulantes;
+    private String dni;
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
     public String getNumTripulantes() {
         return numTripulantes;

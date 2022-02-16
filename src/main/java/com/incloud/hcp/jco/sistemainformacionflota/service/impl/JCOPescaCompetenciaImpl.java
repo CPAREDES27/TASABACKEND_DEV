@@ -237,9 +237,15 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
             List<LinkedHashMap<String, Object>> columnas=ObtCantColumPorCabecera(imports.getColumnas());
 
+
             // ------ Títulos de categorías ----------
+
+            CellStyle styleHeader = reporteBook.createCellStyle();
+            styleHeader.setFont(fuenteTitulo);
+            styleHeader.setAlignment(HorizontalAlignment.CENTER);
             int canSubCab=0;
             Row rowTitulosCategorias = pescaComProdSheet.createRow(5);
+
             int col=1;
             for(int i = 0; i<columnas.size(); i++){
 
@@ -253,11 +259,15 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
                 if(!columnas.get(i).get("cabecera").toString().equals("")) {
 
-                    logger.error("numero col anterior: "+col);
 
-                    Cell cabeceras = rowTitulosCategorias.createCell(col+1 );
-                    cabeceras.setCellValue(columnas.get(i).get("cabecera").toString());
-                    cabeceras.setCellStyle(styleTituloGeneral);
+                    logger.error("col: "+(col+1));
+                    Cell cabeceras = rowTitulosCategorias.createCell(col );
+                    String header=columnas.get(i).get("cabecera").toString();
+                    logger.error("cabecera: "+header);
+                    cabeceras.setCellValue(header);
+                    cabeceras.setCellStyle(styleHeader);
+
+
 
                     int celf=(col + canSubCab)-1;
                     String celdaIni = abc.charAt(col) + "6";
@@ -265,7 +275,7 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
                     String celdas = celdaIni + ":" + celdaFin;
 
 
-                    logger.error(columnas.get(i).get("cabecera").toString());
+
                     logger.error(celdaIni);
                     logger.error(celdaFin);
                     logger.error(celdas);
@@ -281,8 +291,16 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             }
             logger.error("Export pesca comp produce_3");
             // ------ Títulos de columnas ----------
+
+            int canCab=columnas.size();
+            int nFilaTitulos=6;
+            int nFilaRegistros=7;
+            if(canCab==1){
+                nFilaTitulos=5;
+                nFilaRegistros=6;
+            }
             int cellIndexTitulos = 1;
-            Row rowTitulos = pescaComProdSheet.createRow(6);
+            Row rowTitulos = pescaComProdSheet.createRow(nFilaTitulos);
 
             CellStyle styleTitulo = reporteBook.createCellStyle();
             styleTitulo.setBorderTop(BorderStyle.THIN);
@@ -298,30 +316,30 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
                 cellTitulo.setCellValue(titulo);
                 cellTitulo.setCellStyle(styleTitulo);
 
+                pescaComProdSheet.autoSizeColumn(cellIndexTitulos);
                 cellIndexTitulos++;
 
             }
 
             cellIndexTitulos = 1;
-            int rowIndex=7;
-
-
 
 
             for(int i = 0; i<imports.getFilas().size(); i++) {
 
-                Row rowRegistros = pescaComProdSheet.createRow(rowIndex);
+                Row rowRegistros = pescaComProdSheet.createRow(nFilaRegistros);
 
                 for(Map.Entry<String, Object> entry: imports.getFilas().get(i).entrySet()){
 
                     String valor = entry.getValue().toString();
                     Cell cellTitulo = rowRegistros.createCell(cellIndexTitulos);
                     cellTitulo.setCellValue(valor);
+
+                    pescaComProdSheet.autoSizeColumn(cellIndexTitulos);
                     cellIndexTitulos++;
                 }
 
 
-                rowIndex++;
+                nFilaRegistros++;
             }
 
             logger.error("Export pesca comp produce_5");
@@ -352,6 +370,28 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
         logger.error("ObtCantColumPorCabecera  column size:"+ columnas.size());
 
+        /*for(int i=0; i<column.size();i++){
+            logger.error("ObtCantColumPorCabecera  primer for: "+i);
+            LinkedHashMap<String, Object> col= new LinkedHashMap<>();
+            String cabecera=columnas.get(i).get("cabecera").toString();
+            logger.error("ObtCantColumPorCabecera  cabecera: "+ cabecera);
+            int con=0;
+
+            for(int j=0; j<column.size();j++) {
+                logger.error("ObtCantColumPorCabecera  segundo for: "+ cabecera+":"+columnas.get(j).get("cabecera").toString());
+
+                if (cabecera.equals(columnas.get(j).get("cabecera").toString())) {
+                    con++;
+                }else{
+                    break;
+                }
+            }
+                col.put("cabecera", cabecera);
+                col.put("columnas", con);
+                column.add(col);
+
+
+        }*/
 
         for(int i=0; i<columnas.size();i++){
             LinkedHashMap<String, Object> col= new LinkedHashMap<>();
@@ -362,6 +402,10 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
                     if(cabecera.equals(columnas.get(j).get("cabecera"))){
                         con++;
+                    }else{
+                        if(con>0){
+                            break;
+                        }
                     }
                 }
 
@@ -374,6 +418,10 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
                         if(cabecera.equals(columnas.get(j).get("cabecera"))){
                             con++;
+                        }else{
+                            if(con>0){
+                                break;
+                            }
                         }
                     }
 

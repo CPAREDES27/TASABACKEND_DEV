@@ -168,8 +168,13 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
 
                     break;
                 default:
+
                     order = BuscarOrder(importsParam.getNombreConsulta());
-                    rowcount = BuscarRowcount(importsParam.getNombreConsulta());
+                    if(importsParam.getNombreConsulta().equals("CONSGENMAREAS")){
+                        rowcount=importsParam.getParametro6();
+                    }else {
+                        rowcount = BuscarRowcount(importsParam.getNombreConsulta());
+                    }
                     tabla = Buscartabla(importsParam.getNombreConsulta());
                     options = BuscarOption(importsParam.getNombreConsulta(), importsParam.getParametro1(), importsParam.getParametro2()
                             , importsParam.getParametro3(), importsParam.getParametro4(), importsParam.getParametro5());
@@ -521,6 +526,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
             case "CONSGENVERIFMAREA":
                 tabla = ConsultaGeneralTablas.CONSGENVERIFMAREA;
                 break;
+            case "CONSGENMAREAS":
+                tabla = ConsultaGeneralTablas.CONSGENMAREAS;
+                break;
         }
         logger.error("tabla= " + tabla);
         return tabla;
@@ -650,6 +658,9 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 break;
             case "CONSGENVERIFMAREA":
                 fields = ConsultaGeneralFields.CONSGENVERIFMAREA;
+                break;
+            case "CONSGENMAREAS":
+                fields = ConsultaGeneralFields.CONSGENMAREAS;
                 break;
         }
 
@@ -952,6 +963,32 @@ public class JCOConsultaGeneralImpl implements JCOConsultaGeneralService {
                 condicion = ConsultaGeneralOptions.CONSGENVERIFMAREA +parametro1;
                 opt.setWa(condicion);
                 options.add(opt);
+                break;
+            case "CONSGENMAREAS":
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENMAREAS + parametro1+"%' ";
+
+                }
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENMAREAS1 + parametro2+"%' ";
+
+                }
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENMAREAS2 + parametro3+"%' ";
+
+                }
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENMAREAS3 + parametro4+"%' ";
+
+                }
+                if(!parametro1.equals("")){
+                    condicion += ConsultaGeneralOptions.CONSGENMAREAS4 + parametro5+"' ";
+
+                }
+                if(!condicion.equals("")) {
+                    opt.setWa(condicion);
+                    options.add(opt);
+                }
                 break;
             default:
                 inList = false;

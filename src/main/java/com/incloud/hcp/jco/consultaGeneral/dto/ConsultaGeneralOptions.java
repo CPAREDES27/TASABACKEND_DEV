@@ -81,5 +81,11 @@ public class ConsultaGeneralOptions {
     public static String CONSGENULTMAREA="NRMAR > ";
     public static String CONSGENULTMAREA1=" AND CDEMB LIKE '";
     public static String CONSGENVERIFMAREA="NRMAR = ";
+    public static String CONSGENMAREAS="NRMAR LIKE '%";
+    public static String CONSGENMAREAS1="WERKS LIKE '%";
+    public static String CONSGENMAREAS2="WERKP LIKE '%";
+    public static String CONSGENMAREAS3="FIEVN LIKE '%";
+    public static String CONSGENMAREAS4= "CDTEV = '";
+
 
 }

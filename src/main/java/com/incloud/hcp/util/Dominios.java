@@ -19,6 +19,7 @@ public class Dominios {
     public static String ESVVI = "ZESREG";
     public static String ESRNV = "ZD_FLESRNV";
     public static String CDFAS = "ZCDFAS";
-    public static String ESPRO = "ZDO_ESREGC";
+    public static String ESPRO = "ZDO_ESREGC";//
+    public static String ZINEIF = "ZINEIF";
 
 }
