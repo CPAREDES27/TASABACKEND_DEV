@@ -14,5 +14,6 @@ public interface JCOEmbarcacionService {
      MensajeEmbarcaExport Nuevo(EmbarcacionNuevImports importsParam)throws Exception;
      Mensaje Editar(EmbarcacionEditImports importsParam)throws Exception;
      MensajeDto MoverEmbarcacion(MoverEmbarcaImports importsParam)throws Exception;
+     CantidadTripulantesExports ObtenerCantidadTripulantes(CantidadTripulantesImports imports)throws Exception;
 
 }

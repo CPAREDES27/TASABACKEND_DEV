@@ -20,5 +20,8 @@ public class AyudaBusquedaOptions {
     public static String BSQGRPEMPR="ESREG = 'S'";
     public static String BSQEMPRESAREC="ESREG = 'S'";
     public static String BSQAMADORPROP="INPRP = 'P' AND ESREG = 'S'";
+    public static String BSQORDENROLES="ARGUM = 'RZCDCARG'";
+    public static String BSQORDENROLES2=" OR ARGUM = 'RZCDCARG1'";
+    public static String BSQORDENROLES3=" OR ARGUM = 'RZCDCARG2'";
 
 }

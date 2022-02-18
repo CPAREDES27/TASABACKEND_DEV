@@ -1,13 +1,13 @@
 package com.incloud.hcp.jco.sistemainformacionflota.service.impl;
 
 import com.incloud.hcp.jco.controlLogistico.dto.AnalisisCombusRegExport;
+import com.incloud.hcp.jco.dominios.dto.DominioExportsData;
+import com.incloud.hcp.jco.dominios.dto.DominiosExports;
 import com.incloud.hcp.jco.maestro.dto.MaestroOptions;
+import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.jco.sistemainformacionflota.dto.*;
 import com.incloud.hcp.jco.sistemainformacionflota.service.JCOPescaCompetenciaService;
-import com.incloud.hcp.util.Constantes;
-import com.incloud.hcp.util.EjecutarRFC;
-import com.incloud.hcp.util.Metodos;
-import com.incloud.hcp.util.Tablas;
+import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
 import io.swagger.models.auth.In;
 import org.apache.commons.codec.binary.Base64;
@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
@@ -153,6 +154,27 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             List<HashMap<String, Object>> str_ped = metodo.ListarObjetosLazy(tblSTR_PED);
             List<HashMap<String, Object>> str_grp = metodo.ListarObjetosLazy(tblSTR_GRP);
             List<HashMap<String, Object>> str_plm = metodo.ListarObjetosLazy(tblSTR_PLM);
+
+            ArrayList<String> listDomNames = new ArrayList<>();
+            listDomNames.add(Dominios.GRUPOEMPRESA);
+
+
+            DominiosHelper helper = new DominiosHelper();
+            ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
+
+            DominiosExports grupoempresa = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.GRUPOEMPRESA)).findFirst().orElse(null);
+
+            str_pge.stream().map(m -> {
+                String cdgrp = m.get("CDGRP").toString()!=null ? m.get("CDGRP").toString() : "";
+
+                // Buscar los detalles
+                DominioExportsData dataCDGRP = grupoempresa.getData().stream().filter(d -> d.getId().equals(cdgrp)).findFirst().orElse(null);
+
+                m.put("DESC_CDGRP", dataCDGRP != null ? dataCDGRP.getDescripcion() : "");
+
+
+                return m;
+            }).collect(Collectors.toList());
 
             pcp.setStr_zlt(str_zlt);
             pcp.setStr_pto(str_pto);
@@ -321,12 +343,13 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
             }
 
-            cellIndexTitulos = 1;
+
 
 
             for(int i = 0; i<imports.getFilas().size(); i++) {
 
                 Row rowRegistros = pescaComProdSheet.createRow(nFilaRegistros);
+                cellIndexTitulos = 1;
 
                 for(Map.Entry<String, Object> entry: imports.getFilas().get(i).entrySet()){
 

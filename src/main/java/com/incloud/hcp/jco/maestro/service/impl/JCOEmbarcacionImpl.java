@@ -8,6 +8,7 @@ import com.incloud.hcp.jco.maestro.service.RFCCompartidos.ZFL_RFC_READ_TEABLEImp
 import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -344,5 +345,69 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
 
         return msj;
     }
+
+    public CantidadTripulantesExports ObtenerCantidadTripulantes(CantidadTripulantesImports imports)throws Exception{
+
+        CantidadTripulantesExports dto= new CantidadTripulantesExports();
+
+        try{
+            /*EmbarcacionImports ei= new EmbarcacionImports();
+
+            List<MaestroOptions>moList= new ArrayList<>();
+            List<MaestroOptions>moList2= new ArrayList<>();
+            List<MaestroOptionsKey>mokList2 = new ArrayList<>();
+
+
+            List<MaestroOptionsKey>mokList = new ArrayList<>();
+            MaestroOptionsKey mo=new MaestroOptionsKey();
+            mo.setCantidad("10");
+            mo.setControl("COMBOBOX");
+            mo.setKey("WERKS");
+            mo.setValueHigh("");
+            mo.setValueLow("T054");
+            mokList.add(mo);
+
+            ei.setP_user(imports.p_user);
+            ei.setP_pag("");
+            ei.setOption(moList);
+            ei.setOption2(moList2);
+            ei.setOptions(mokList);
+            ei.setOptions2(mokList2);
+
+            EmbarcacionExports ee=ListarEmbarcaciones(ei);*/
+
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put("P_USER", imports.getP_user());
+            hashMap.put("P_PAG", "");
+
+
+
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_CONS_EMBARCA_BTP);
+            JCoParameterList jcoTables = function.getTableParameterList();
+
+            JCoTable tableImport = jcoTables.getTable("P_OPTIONS");
+            tableImport.appendRow();
+            tableImport.setValue("WA","WERKS = '"+imports.getWerks()+"'");
+
+
+
+            function.execute(destination);
+            JCoTable tableExport = jcoTables.getTable(Tablas.STR_EMB);
+            dto.setNrtri(tableExport.getString("NRTRI"));
+
+
+
+
+
+            dto.setMensaje("Ok");
+        }catch (Exception e){
+            dto.setMensaje(e.getMessage());
+        }
+
+        return dto;
+    }
+
 
 }

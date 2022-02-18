@@ -21,5 +21,6 @@ public class Dominios {
     public static String CDFAS = "ZCDFAS";
     public static String ESPRO = "ZDO_ESREGC";//
     public static String ZINEIF = "ZINEIF";
+    public static String GRUPOEMPRESA="GRUPOEMPRESA";
 
 }

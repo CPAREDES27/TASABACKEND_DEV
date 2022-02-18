@@ -29,5 +29,6 @@ public class AyudaBusquedaTablas {
     public static String BSQGRPEMPR="ZFLGRE";
     public static String BSQEMBARCA="ZFLEMB";
     public static String BSQAMADORPROP="ZFLEMP";
+    public static String BSQORDENROLES="ZTBC_DATA";
 
 }

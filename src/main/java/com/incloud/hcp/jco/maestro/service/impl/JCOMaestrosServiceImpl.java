@@ -999,6 +999,12 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 logger.error("AyudasBusqueda_6");
 
                 dto.setData(me.getData());
+
+                if(importsParam.getNombreAyuda().equals("BSQORDENROLES")){
+                    dto.setData(OrdenRoles(me.getData()));
+                }
+
+
                 dto.setMensaje("Ok");
             }
 
@@ -1094,6 +1100,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
             case "BSQAMADORPROP":
                     tabla=AyudaBusquedaTablas.BSQAMADORPROP;
                 break;
+            case "BSQORDENROLES":
+                tabla=AyudaBusquedaTablas.BSQORDENROLES;
+                break;
         }
 
         return tabla;
@@ -1184,6 +1193,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQAMADORPROP":
                 fields = AyudaBusquedaFields.BSQAMADORPROP;
+                break;//
+            case "BSQORDENROLES":
+                fields = AyudaBusquedaFields.BSQORDENROLES;
                 break;
         }
         logger.error("AyudasBusqueda fields= "+fields[0]);
@@ -1254,6 +1266,9 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 break;
             case "BSQAMADORPROP":
                 opt.setWa(AyudaBusquedaOptions.BSQAMADORPROP);//
+                break;
+            case "BSQORDENROLES":
+                opt.setWa(AyudaBusquedaOptions.BSQORDENROLES + AyudaBusquedaOptions.BSQORDENROLES2 + AyudaBusquedaOptions.BSQORDENROLES3);//
                 break;
             default:
                 noExists=true;
@@ -1335,6 +1350,41 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         }
 
         return dto;
+    }
+
+    public List<HashMap<String, Object>> OrdenRoles(List<HashMap<String, Object>> listRoles){
+
+        List<HashMap<String, Object>> Roles=new ArrayList<>();
+        logger.error("OrdenRoles");
+        try{
+
+            String roles="";
+            for (int i=0; i<listRoles.size();i++){
+
+
+                roles+=listRoles.get(i).get("DESCR").toString();
+                logger.error("roles: "+roles);
+            }
+
+
+            String[] aRoles=roles.split("/");
+
+
+            HashMap<String, Object>Rol=new HashMap<>();
+
+            for (int i=0; i<aRoles.length;i++){
+                logger.error("aRoles: "+aRoles[i]);
+                Rol.put(String.valueOf(i+1),aRoles[i]);
+                logger.error(i+1+" : "+aRoles[i]);
+            }
+            Roles.add(Rol);
+
+        }catch (Exception e){
+            logger.error("causa: "+e.getCause());
+            logger.error("error: "+e.getMessage());
+        }
+
+        return Roles;
     }
 
     public HashMap<String, Object> BuscarNombreDominio(String nomCampo){

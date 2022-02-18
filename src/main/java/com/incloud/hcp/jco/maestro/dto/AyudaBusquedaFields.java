@@ -31,6 +31,7 @@ public class AyudaBusquedaFields {
     public static String[] BSQGRPEMPR={"CDGRE","DSGRE","CTGRA"};
     public static String[] BSQEMPRESAREC={"CDEMP","DSEMP","RUCPRO"};
     public static String[] BSQAMADORPROP={"LIFNR"};
+    public static String[] BSQORDENROLES={"DESCR"};
 
 
 }
