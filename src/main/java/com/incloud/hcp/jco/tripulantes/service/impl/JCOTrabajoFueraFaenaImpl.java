@@ -1009,10 +1009,16 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 }else if(key.equals("FECRE")){
                     fechaCrea=valor;
                 }else if(key.equals("HOCRE")){
+                    /*
                     SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
                     SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
                     Date date = parseador.parse(valor);
-                    horaCrea=formateador.format(date);
+                    horaCrea=formateador.format(date);*/
+                    if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                        horaCrea="";
+                    }else{
+                        horaCrea=valor;
+                    }
                 }else if(key.equals("USMOD")){
                     dto.setUsuarioModif(valor);
                 }else if(key.equals("ESREG")){
@@ -1020,10 +1026,16 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
                 }else if(key.equals("FEMOD")){
                     fechaMod=valor;
                 }else if(key.equals("HOMOD")){
+                    /*
                     SimpleDateFormat parseador = new SimpleDateFormat("HH:mm:ss");
                     SimpleDateFormat formateador = new SimpleDateFormat("HH:mm");
                     Date date = parseador.parse(valor);
-                    horaMod=formateador.format(date);
+                    horaMod=formateador.format(date);*/
+                    if(valor==null || valor.isEmpty() || valor.equals(null)) {
+                        horaMod="";
+                    }else{
+                        horaMod=valor;
+                    }
                 }else if(key.equals("DSWKS")){
                     dto.setEmbarcacion(valor);
                 }else if(key.equals("WERKS")){

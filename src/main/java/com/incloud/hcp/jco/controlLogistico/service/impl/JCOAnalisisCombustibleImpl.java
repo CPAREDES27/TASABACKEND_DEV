@@ -630,7 +630,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             analisisCombusSheet.addMergedRegion(cellRangeGeneral);
 
             int cellIndexTitulos = 1;
-            Row rowTitulos = analisisCombusSheet.createRow(4);
+            Row rowTitulos = analisisCombusSheet.createRow(3);
 
             CellStyle styleTitulo = reporteBook.createCellStyle();
             styleTitulo.setBorderTop(BorderStyle.THIN);
@@ -649,7 +649,7 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             }
 
             // Llenado de datos
-            int rowIndex = 5;
+            int rowIndex = 4;
             String dataStr = "";
             String[] fieldsNumbers ={"CNPDS","NRMAR","HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE","COMAR", "RRNAV", "RRDES", "RRPUE","RRMAR","RPNAV", "RPDES", "RPPUE","RPMAR"};
             String[] fieldsDate = {"FEPRD"};

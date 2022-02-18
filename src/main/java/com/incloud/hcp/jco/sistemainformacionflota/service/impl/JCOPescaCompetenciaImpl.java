@@ -344,7 +344,8 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             }
 
 
-
+            CellStyle formatNumber = reporteBook.createCellStyle();
+            formatNumber.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0.0"));
 
             for(int i = 0; i<imports.getFilas().size(); i++) {
 
@@ -355,7 +356,15 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
                     String valor = entry.getValue().toString();
                     Cell cellTitulo = rowRegistros.createCell(cellIndexTitulos);
-                    cellTitulo.setCellValue(valor);
+
+
+                    if(cellIndexTitulos>1 && !valor.equals("")){
+                        double doubleValue = Double.parseDouble(valor);
+                        cellTitulo.setCellStyle(formatNumber);
+                        cellTitulo.setCellValue(doubleValue);
+                    }else{
+                        cellTitulo.setCellValue(valor);
+                    }
 
                     pescaComProdSheet.autoSizeColumn(cellIndexTitulos);
                     cellIndexTitulos++;
@@ -393,28 +402,7 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
         logger.error("ObtCantColumPorCabecera  column size:"+ columnas.size());
 
-        /*for(int i=0; i<column.size();i++){
-            logger.error("ObtCantColumPorCabecera  primer for: "+i);
-            LinkedHashMap<String, Object> col= new LinkedHashMap<>();
-            String cabecera=columnas.get(i).get("cabecera").toString();
-            logger.error("ObtCantColumPorCabecera  cabecera: "+ cabecera);
-            int con=0;
 
-            for(int j=0; j<column.size();j++) {
-                logger.error("ObtCantColumPorCabecera  segundo for: "+ cabecera+":"+columnas.get(j).get("cabecera").toString());
-
-                if (cabecera.equals(columnas.get(j).get("cabecera").toString())) {
-                    con++;
-                }else{
-                    break;
-                }
-            }
-                col.put("cabecera", cabecera);
-                col.put("columnas", con);
-                column.add(col);
-
-
-        }*/
 
         for(int i=0; i<columnas.size();i++){
             LinkedHashMap<String, Object> col= new LinkedHashMap<>();
