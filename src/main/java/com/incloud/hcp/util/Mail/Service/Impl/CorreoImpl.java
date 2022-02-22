@@ -520,8 +520,8 @@ public class CorreoImpl implements CorreoService {
         CorreoMensaje msj=new CorreoMensaje();
         String remitente = "mareaeventos@tasa.com.pe";
         String asunto = "Horometros averiados";
-        String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
-        String mensaje = "En las siguientes descargas han sido modificadas la asignación de embarcaciones ";
+        //String titulo = "Corrección de Asignación de Embarcaciones a las Descargas";
+        String mensaje = "Los siguientes horómetros han sido marcados como averiados en la embarcacion ";
 
         try {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);

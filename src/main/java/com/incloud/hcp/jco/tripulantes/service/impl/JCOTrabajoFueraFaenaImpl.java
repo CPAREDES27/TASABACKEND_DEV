@@ -808,36 +808,24 @@ public class JCOTrabajoFueraFaenaImpl implements JCOTrabajoFueraFaenaService {
 
     public String[] Obtenerfechas(String fechaInicio, String fechaFin)throws Exception{
         logger.error("Obtenerfechas_1");
-        logger.error("Obtenerfechas_ fecha inicio: "+ fechaInicio);
-        logger.error("Obtenerfechas_ fecha Fin : "+ fechaFin);
-        logger.error("Obtenerfechas_1");
 
-        String[]fechas=new String[7];
 
         SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat formateador = new SimpleDateFormat("dd");
-        Date date = parseador.parse(fechaInicio);
-        String inicio = formateador.format(date);
 
-        logger.error("Obtenerfechas_ inicio: "+inicio);
+        Date ndate = parseador.parse(fechaInicio);
+        String[]fechas=new String[7];
 
-        logger.error("Obtenerfechas_2");
+        for(int i=0; i<7; i++) {
+            Date tomorrow = new Date(ndate.getTime() + (86400000*i));
+            logger.error("dia:"+ tomorrow.getDate());
 
-        date = parseador.parse(fechaFin);
-        String fin = formateador.format(date);
-        logger.error("Obtenerfechas_ fin: "+fin);
+            int dia= tomorrow.getDate();
+            if(dia>9){
+                fechas[i] = String.valueOf(dia);
+            }else{
+                fechas[i]="0"+String.valueOf(dia);
+            }
 
-        int con=0;
-        for(int i=Integer.parseInt(inicio); i<=Integer.parseInt(fin);i++ ){
-
-           if(i>9){
-               fechas[con] = String.valueOf(i);
-           }else{
-               fechas[con]="0"+String.valueOf(i);
-           }
-
-
-            con++;
         }
 
         return fechas;
