@@ -89,7 +89,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
                 dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
                 dto.setArqueoBruto(T_ZATRP.getString(PDFZarpeConstantes.AQBRT));
-                dto.setZonaPesca(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
+                HashMap<String, Object> zp=me.BuscarNombreDominio(PDFZarpeConstantes.CDZPC,T_ZATRP.getString(PDFZarpeConstantes.CDZPC));
+                dto.setZonaPesca(zp.get("DESC_CDZPC").toString());
                 dto.setTiempoOperacio(T_ZATRP.getString(PDFZarpeConstantes.TOPER));
                 dto.setEstimadaArribo(fechaArribo+"   "+ hora);
                 dto.setRepresentante(T_ZATRP.getString(PDFZarpeConstantes.RACRE ));
@@ -1924,6 +1925,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
             JCoTable T_DZATR = tables.getTable(Tablas.T_DZATR);
             JCoTable T_VGCER = tables.getTable(Tablas.T_VGCER);
 
+            Metodos me= new Metodos();
+
             for(int i=0; i<T_ZATRP.getNumRows(); i++){
                 T_ZATRP.setRow(i);
 
@@ -1938,6 +1941,8 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 String codigo =String.valueOf(codigoZ);
                 dto.setCodigoZarpe(codigo);
 
+                //HashMap<String, Object> zp=me.BuscarNombreDominio(PDFZarpeConstantes.CDZPC,T_ZATRP.getString(PDFZarpeConstantes.CDZPC));
+                //dto.setCapitaniaGuardacostas(zp.get("DESC_CDZPC").toString());
                 dto.setCapitaniaGuardacostas(T_ZATRP.getString(PDFZarpeConstantes.DSWKP));
                 dto.setNombreNave(T_ZATRP.getString(PDFZarpeConstantes.DSWKS));
                 dto.setMatricula(T_ZATRP.getString(PDFZarpeConstantes.MREMB));
@@ -1968,7 +1973,6 @@ public class JCOPDFsImpl implements JCOPDFsService {
                     PDFZarpeConstantes.FEFVG,
                     PDFZarpeConstantes.STELL};
 
-            Metodos me = new Metodos();
             List<HashMap<String, Object>> t_daztr=me.ListarObjetos(T_DZATR);
             List<HashMap<String, Object>> t_vgcer=me.ListarObjetos(T_VGCER);
 
@@ -3280,7 +3284,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 dto.setNombreCapitanPatron(imports.getPatron());
                 dto.setRepresentanteAcreditado(imports.getRepresentante());
                 dto.setTelefono(imports.getTelefono());
-                dto.setDni("");
+                dto.setDni(imports.getDni());
             }
 
             logger.error("TIMESTRAL PDF");

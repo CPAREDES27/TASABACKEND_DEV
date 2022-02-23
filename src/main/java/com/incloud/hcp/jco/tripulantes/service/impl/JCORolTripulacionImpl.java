@@ -54,7 +54,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
             EjecutarRFC exec= new EjecutarRFC();
             exec.setTable(tables, Tablas.T_OPCIONES,tmpOptions);
 
-            if(imports.getP_tope().equals("C")){
+            if(imports.getP_tope().equals("C") || imports.getP_tope().equals("A")){
                 exec.setTable(tables, Tablas.T_ZARTR,imports.getT_zartr());
                 exec.setTable(tables, Tablas.T_DZART,imports.getT_dzart());
 

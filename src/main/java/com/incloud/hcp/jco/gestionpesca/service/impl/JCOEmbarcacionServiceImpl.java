@@ -524,7 +524,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         return mensajes;
     }
 
-    public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
+    /*public BodegaExport ValidarBodegaCert(BodegaImport imports) throws Exception{
         Metodos metodo = new Metodos();
         boolean bOk  = true;
 
@@ -565,16 +565,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             bOk = false;
         }
 
-        /*
-        imports1.setTabla(Tablas.ZFLEMB);
 
-        logger.error(wa2);
-        mo1.setWa(wa2);
-        listOptions1.clear();
-        listOptions1.add(mo1);
-        imports1.setOption(listOptions1);
-
-        imports1.setFields(fields1);*/
 
 
         MaestroImportsKey imports2 = new MaestroImportsKey();
@@ -650,111 +641,43 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         valBodega.setEstado(bOk);
         return valBodega;
 
-        /*
-        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
-        JCoRepository repo = destination.getRepository();
+    }*/
 
-        JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-        JCoParameterList importx = stfcConnection.getImportParameterList();
+    public BodegaExport ValidarBodegaCert(BodegaImport imports)throws Exception{
 
-        importx.setValue("DELIMITER","|");
-        importx.setValue("QUERY_TABLE",Tablas.ZFLPTA);
+        BodegaExport dto= new BodegaExport();
+        try{
 
-        JCoParameterList tables = stfcConnection.getTableParameterList();
-        JCoTable tableImport = tables.getTable("OPTIONS");
-        tableImport.appendRow();
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_VAL_BODEGA_CERT);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_CDEMB", imports.getCodEmba());
+            importx.setValue("P_CDPTA", imports.getCodPlanta());
+            JCoParameterList export = stfcConnection.getExportParameterList();
 
-        tableImport.setValue("WA", "CDPTA = "+"'"+imports.getCodPlanta()+"'");
+            String valor=export.getValue("P_ESTADO").toString();
 
-        stfcConnection.execute(destination);
+            logger.error("valor: "+valor);
+            boolean estado=false;
 
-
-        JCoTable tableExport = tables.getTable("DATA");
-        JCoTable FIELDS = tables.getTable("FIELDS");
-
-
-        BodegaExport me = new BodegaExport();
-        String campo= metodo.ObtenerCampo(tableExport,FIELDS,"WERKS");
-
-        if(campo != null && campo.length()>0){
-            werks=campo; //0001
-        }else{
-            werks=imports.getCodPlanta();
-            bOk=false;
-        }
-
-
-        JCoDestination destinations = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-        ;
-        JCoRepository repos = destinations.getRepository();
-        JCoFunction stfcConnections = repos.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-        JCoParameterList importz = stfcConnections.getImportParameterList();
-
-        importz.setValue("DELIMITER","|");
-        importz.setValue("QUERY_TABLE",Tablas.ZFLEMB);
-
-        JCoParameterList table = stfcConnections.getTableParameterList();
-        JCoTable tableImports = table.getTable("OPTIONS");
-        tableImports.appendRow();
-        tableImports.setValue("WA", "CDEMB = "+"'"+imports.getCodEmba()+"'");
-
-        stfcConnections.execute(destinations);
-
-
-        JCoTable tableExports = table.getTable("DATA");
-        JCoTable FIELD = table.getTable("FIELDS");
-
-        String bodega= metodo.ObtenerCampo(tableExports,FIELD,"HPACH");
-
-
-        if(!bodega.equalsIgnoreCase("S")){
-
-            JCoDestination destination3 = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
-
-            JCoRepository repos3 = destination3.getRepository();
-            JCoFunction stfcConnections3 = repos3.getFunction(Constantes.ZFL_RFC_READ_TABLE);
-            JCoParameterList importz3 = stfcConnections3.getImportParameterList();
-
-            importz3.setValue("DELIMITER","|");
-            importz3.setValue("QUERY_TABLE","ZTB_CONSTANTES");
-
-            JCoParameterList table3 = stfcConnections.getTableParameterList();
-            JCoTable tableImports3 = table3.getTable("OPTIONS");
-            tableImports3.appendRow();
-            tableImports3.setValue("WA","APLICACION = 'FL'");
-            tableImports3.setValue("WA","AND PROGRAMA = 'ZFL_RFC_DISTR_FLOTA'");
-            tableImports3.setValue("WA","AND CAMPO = 'WERKS'");
-            JCoTable tableFields = table3.getTable("FIELDS");
-            tableFields.appendRow();
-            tableFields.setValue("FIELDNAME","LOW");
-
-            stfcConnections3.execute(destination3);
-
-            JCoTable tableExports3 = table3.getTable("DATA");
-
-            for(int i=0;i<tableExports3.getNumRows();i++){
-                tableExports3.setRow(i);
-                String centroData = tableExports3.getString();
-
-                String[] ArrayResponse = tableExports3.getString().split("\\|");
-
-                if(ArrayResponse[0].equalsIgnoreCase(werks)){
-                    bOk=false;
-                    logger.error("GG",ArrayResponse[0]);
-                    break;
-                }
+            if(valor.equals(1)){
+                estado=true;
+            }else if(valor.equals(0)){
+                estado= false;
             }
-        }else{
-            bOk=true;
+
+            dto.setEstado(estado);
+            dto.setMensaje("Ok");
+
+        }catch (Exception e){
+
+            dto.setMensaje(e.getMessage());
         }
-        String log = "ValidarBodegaCert: " + bOk;
-        logger.error(log);
-        me.setEstado(bOk);
-        return  me;*/
+
+        return dto;
     }
-
-
 
     public ValidaMareaExports ValidarMarea(ValidaMareaImports imports)throws Exception{
 

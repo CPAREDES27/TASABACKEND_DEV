@@ -2,6 +2,7 @@ package com.incloud.hcp.jco.tripulantes.dto;
 
 public class PDFTrimestralImports {
 
+    private String dni;
     private String patron;
     private String representante;
     private String telefono;
@@ -13,6 +14,15 @@ public class PDFTrimestralImports {
     private String p_canti;
     private String p_cdmma;
     private String p_pernr;
+
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
 
     public String getPatron() {
         return patron;

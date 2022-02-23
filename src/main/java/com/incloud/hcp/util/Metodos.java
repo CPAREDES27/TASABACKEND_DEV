@@ -1556,6 +1556,9 @@ public class Metodos {
             }if(campo.equals("CLPRT")){
                 dom="CLASEPROTESTO";
                 campo="DESC_"+campo;
+            }if(campo.equals("CDZPC")){
+                dom="1ZONAPESCA";
+                campo="DESC_"+campo;
             }
             descripcion=ObtenerDominio(dom,valor);
        }

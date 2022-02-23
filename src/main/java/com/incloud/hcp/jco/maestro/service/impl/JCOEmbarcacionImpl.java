@@ -8,7 +8,6 @@ import com.incloud.hcp.jco.maestro.service.RFCCompartidos.ZFL_RFC_READ_TEABLEImp
 import com.incloud.hcp.jco.reportepesca.dto.DominiosHelper;
 import com.incloud.hcp.util.*;
 import com.sap.conn.jco.*;
-import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +136,7 @@ public class JCOEmbarcacionImpl implements JCOEmbarcacionService {
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 
             JCoRepository repo = destination.getRepository();
-            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_LECT_MAES_EMBAR);
+            JCoFunction function = repo.getFunction(Constantes.ZFL_RFC_LECT_MAES_EMBAR_BTP);
             JCoParameterList jcoTables = function.getTableParameterList();
             EjecutarRFC exec = new EjecutarRFC();
             exec.setImports(function, imports);
