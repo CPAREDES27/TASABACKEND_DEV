@@ -21,48 +21,31 @@ import java.util.stream.Collectors;
 public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
 
     public LogRegCombusExports Listar(LogRegCombusImports imports)throws Exception{
-
         LogRegCombusExports lrce= new LogRegCombusExports();
         Metodos metodo = new Metodos();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_REG_COMB_MARE_SAP);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_TOPE", imports.getP_tope());
             importx.setValue("P_LCCO", imports.getP_lcco());
             importx.setValue("P_CANTI", imports.getP_canti());
-
             List<MaestroOptions> option = imports.getOption();
             List<MaestroOptionsKey> options2 = imports.getOptions();
-
-
             List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
             tmpOptions=metodo.ValidarOptions(option,options2);
-
-
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec=new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
-
             JCoTable STR_LGCCO = tables.getTable(Tablas.STR_LGCCO);
-
             if(imports.getP_tope().equals("A")){
-
                 for(int i=0; i<imports.getStr_lgcco().size();i++){
-
                     LogRegistroCombusDto dto=imports.getStr_lgcco().get(i);
-
                     STR_LGCCO.appendRow();
                     STR_LGCCO.setValue("CDIMP",dto.getCDIMP());
                     STR_LGCCO.setValue("CNCON",dto.getCNCON());
-                   // STR_LGCCO.setValue("DESC_ESREG",dto.getDESC_ESREG());
                     STR_LGCCO.setValue("DSIMP",dto.getDSIMP());
                     STR_LGCCO.setValue("DSOBS",dto.getDSOBS());
                     STR_LGCCO.setValue("ESPRO",dto.getESPRO());
@@ -75,49 +58,30 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
                     STR_LGCCO.setValue("NRMAR",dto.getNRMAR());
                     STR_LGCCO.setValue("TPLCC",dto.getTPLCC());
                     STR_LGCCO.setValue("WERKS",dto.getWERKS());
-                    //STR_LGCCO.setValue("DESC_ESPRO",dto.getDESC_ESPRO());
-
                 }
             }
-
             stfcConnection.execute(destination);
-
-
-           // JCoTable STR_LGCCO = tables.getTable(Tablas.STR_LGCCO);
             JCoTable STR_CSMAJ = tables.getTable(Tablas.STR_CSMAJ);
             JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
-
             List<HashMap<String, Object>> str_lgcco = metodo.ListarObjetosLazy(STR_LGCCO);
             List<HashMap<String, Object>> str_csmaj = metodo.ListarObjetosLazy(STR_CSMAJ);
             List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosLazy(STR_CSMAR);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
-
-            //Dominios
             ArrayList<String> listDomNames = new ArrayList<>();
             listDomNames.add(Dominios.ESPRO);
-
             DominiosHelper helper = new DominiosHelper();
             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
-
             DominiosExports esproDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESPRO)).findFirst().orElse(null);
-
             str_lgcco.stream().map(s -> {
                 String espro = s.get("ESPRO").toString();
-
                 DominioExportsData dataEspro = esproDom.getData().stream().filter(d -> d.getId().equals(espro)).findFirst().orElse(null);
-
                 s.put("DESC_ESPRO", dataEspro != null ? dataEspro.getDescripcion() : "");
-
                 return s;
             }).collect(Collectors.toList());
-
             List<LogRegistroCombusDto> ListDto= new ArrayList<>();
             for(int i=0; i<str_lgcco.size();i++){
-
                 HashMap<String,Object> data=str_lgcco.get(i);
-
                 LogRegistroCombusDto dto=new LogRegistroCombusDto();
                 for (Map.Entry<String, Object> entry :data.entrySet()) {
                     String key= entry.getKey();
@@ -158,9 +122,7 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
                 }
                 ListDto.add(dto);
             }
-
             for (int i=0; i<ListDto.size();i++){
-
                 if(ListDto.get(i).getESPRO().equals("E")){
                     ListDto.get(i).setEstado("sap-icon://circle-task-2");
                     ListDto.get(i).setColor("Error");
@@ -174,8 +136,6 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
                     ListDto.get(i).setColor("Warning");
                 }
             }
-
-
             if(!imports.getP_tope().equals("A")){
             lrce.setStr_lgcco(ListDto);
             }
@@ -186,9 +146,7 @@ public class JCOLogRegisCombusImpl implements JCOLogRegisCombusService {
         }catch (Exception e){
             lrce .setMensaje(e.getMessage());
         }
-
         return lrce;
-
     }
 
     public LogRegCombusExports Nuevo(LogRegCombusImports imports)throws Exception {

@@ -36,17 +36,13 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public AnalisisCombusLisExports Listar(AnalisisCombusLisImports imports)throws Exception{
-
         AnalisisCombusLisExports ce= new AnalisisCombusLisExports();
         Metodos metodo = new Metodos();
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONT_COMB_MARE_BTP);
             logger.error("stfcConnection: "+stfcConnection.toString());
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_ROW", imports.getP_row());
@@ -111,31 +107,21 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                     cadena+="CDTEV EQ '5' OR CDTEV EQ 'H' OR CDTEV EQ 'T'";
                 }
             }
-            logger.error("CADENA FINAL"+ cadena);
             JCoParameterList tables = stfcConnection.getTableParameterList();
             JCoTable tableImport = tables.getTable("P_OPTIONS");
             tableImport.appendRow();
             tableImport.setValue("WA", cadena);
-
-
-
             stfcConnection.execute(destination);
             JCoTable STR_CSMAR = tables.getTable(Tablas.STR_CSMAR);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
-
             List<HashMap<String, Object>> str_csmar = metodo.ListarObjetosLazy(STR_CSMAR);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
-
-
             ce.setStr_csmar(str_csmar);
             ce.setT_mensaje(t_mensaje);
             ce.setMensaje("Ok");
-
         }catch (Exception e){
             ce .setMensaje(e.getMessage());
         }
-
         return ce;
     }
 
@@ -286,7 +272,6 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_FIEVN", imports.getFechaIni());
             importx.setValue("P_FFEVN", imports.getFechaFin());
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             stfcConnection.execute(destination);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
@@ -583,8 +568,6 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
         try {
             QlikExport exportsData = QlikView(imports);
-
-            // Nombres de campos de la tabla
             LinkedHashMap<String, String> titulosField = new LinkedHashMap<>();
             titulosField.put("CDEMB", "Cdemb");
             titulosField.put("NRMAR", "Nmar");
@@ -609,18 +592,13 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
             titulosField.put("RPPUE", "Rppue");
             titulosField.put("RPMAR", "Rpmar");
             titulosField.put("FEPRD", "Feprd");
-
             Workbook reporteBook = new HSSFWorkbook();
             Sheet analisisCombusSheet = reporteBook.createSheet("Exportación SAPUI5");
-
             Font fuenteTitulo = reporteBook.createFont();
             fuenteTitulo.setBold(true);
-
             CellStyle styleTituloGeneral = reporteBook.createCellStyle();
             styleTituloGeneral.setFont(fuenteTitulo);
             styleTituloGeneral.setAlignment(HorizontalAlignment.CENTER);
-
-            // Título general
             Row rowTituloGeneral = analisisCombusSheet.createRow(1);
             Cell cellTituloGeneral = rowTituloGeneral.createCell(1);
             cellTituloGeneral.setCellValue("CONTROL DE COMBUSTIBLE - QLIKVIEW");
@@ -647,25 +625,19 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
 
                 cellIndexTitulos++;
             }
-
-            // Llenado de datos
             int rowIndex = 4;
             String dataStr = "";
-            String[] fieldsNumbers ={"CNPDS","NRMAR","HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE","COMAR", "RRNAV", "RRDES", "RRPUE","RRMAR","RPNAV", "RPDES", "RPPUE","RPMAR"};
+            String[] fieldsNumbers ={"CNPDS","NRMAR","HONAV", "HODES", "HOPUE", "HOMAR", "CONAV", "CODES", "COPUE",
+                    "COMAR", "RRNAV", "RRDES", "RRPUE","RRMAR","RPNAV", "RPDES", "RPPUE","RPMAR"};
             String[] fieldsDate = {"FEPRD"};
 
             CellStyle styleNumberFormat = reporteBook.createCellStyle();
             styleNumberFormat.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0"));
-
-
             CellStyle styleNumberFormat1 = reporteBook.createCellStyle();
             styleNumberFormat1.setDataFormat(reporteBook.createDataFormat().getFormat("#,##0.000"));
-
-
             for (HashMap<String, Object> itemData : exportsData.getStr_cef()) {
                 Row row = analisisCombusSheet.createRow(rowIndex);
                 int cellIndex = 1;
-
                 for (Map.Entry<String, String> titulosFieldEntry: titulosField.entrySet()) {
                     String key=titulosFieldEntry.getKey();
                     String value = itemData.get(titulosFieldEntry.getKey()).toString();
@@ -674,62 +646,42 @@ public class JCOAnalisisCombustibleImpl implements JCOAnalisisCombustibleService
                         String dia = value.substring(0, 2);
                         String mes = value.substring(3, 5);
                         String anho = value.substring(6);
-
                         value = anho + "-" + mes + "-" + dia;
                         cell.setCellValue(value);
                     } else if (Arrays.asList(fieldsNumbers).contains(titulosFieldEntry.getKey())) {
                         double doubleValue = Double.parseDouble(value);
                         cell.setCellStyle(styleNumberFormat1);
                         cell.setCellValue(doubleValue);
-
-                    /*} else if(key.equals("CNPDS")){
-                        value=value.replace(".","");
-                        double doubleValue = Double.parseDouble(value);
-                        cell.setCellStyle(styleNumberFormat);
-                        cell.setCellValue(doubleValue);*/
-
                     }else if(key.equals("NRMAR")){
                         double doubleValue = Double.parseDouble(value);
                         cell.setCellStyle(styleNumberFormat);
                         String nrmar=String.valueOf(doubleValue).concat(".000");
                         cell.setCellValue(nrmar);
-
                     }else {
                         cell.setCellValue(value);
                     }
-
                     dataStr += value;
-
                     cellIndex++;
                 }
-
                 rowIndex++;
             }
-
-            // Autoajuste de ancho de columnas
             int indexColumn = 1;
             for (Map.Entry<String, String> titulosFieldsEntry: titulosField.entrySet()) {
                 analisisCombusSheet.autoSizeColumn(indexColumn);
                 indexColumn++;
             }
-
-            logger.info(dataStr);
-
             String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "ControlCombustible_QlikView.xlsx";
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
             reporteBook.write(fileOutputStream);
             fileOutputStream.close();
-
             File file = new File(path);
             byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
             String base64Encoded = new String(encoded, StandardCharsets.UTF_8);
             exports.setBase64(base64Encoded);
-
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             exports.setBase64(ex.getMessage());
         }
-
         return exports;
     }
 

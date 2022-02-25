@@ -28,12 +28,10 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
     public ValeViveresExports ListarValeViveres(ValeViveresImports imports)throws Exception{
 
         ValeViveresExports vve= new ValeViveresExports();
-
         try {
             Metodos metodo = new Metodos();
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_LECT_MAES_VIVER);
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
@@ -45,35 +43,19 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
             List<HashMap<String, Object>> tmpOption = new ArrayList<HashMap<String, Object>>();
             tmpOption=metodo.ValidarOptions(option,options2,"TEXT");
 
-
-            /*
-            List<Options> options = imports.getOptions();
-            List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
-            for (int i = 0; i < options.size(); i++) {
-                Options o = options.get(i);
-                HashMap<String, Object> record = new HashMap<String, Object>();
-                record.put("TEXT", o.getText());
-                tmpOptions.add(record);
-            }*/
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
 
             EjecutarRFC exec= new EjecutarRFC();
-
-
                 exec.setTable(tables, Tablas.OPTIONS,tmpOption);
-
 
             stfcConnection.execute(destination);
 
             JCoTable S_DATA = tables.getTable(Tablas.S_DATA);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
   ;
             String [] fields=imports.getFields();
             List<HashMap<String, Object>> s_data = metodo.ListarObjetosLazy(S_DATA);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
-
             //Dominios
             ArrayList<String> listDomNames = new ArrayList<>();
             listDomNames.add(Dominios.INPRP);
@@ -81,42 +63,32 @@ public class JCOValeViveresImpl implements JCOValeVivereService {
 
             DominiosHelper helper = new DominiosHelper();
             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
-
             DominiosExports inprpDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.INPRP)).findFirst().orElse(null);
             DominiosExports esvviDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESVVI)).findFirst().orElse(null);
-
             s_data.stream().map(s -> {
                 String inprp = s.get("INPRP").toString();
                 String esvvi = s.get("ESVVI").toString();
-
                 DominioExportsData dataInprp = inprpDom.getData().stream().filter(d -> d.getId().equals(inprp)).findFirst().orElse(null);
                 DominioExportsData dataEsvvi = esvviDom.getData().stream().filter(d -> d.getId().equals(esvvi)).findFirst().orElse(null);
-
                 s.put("DESC_INPRP", !dataInprp.equals(null) ? dataInprp.getDescripcion() : "");
                 s.put("DESC_ESVVI", !dataEsvvi.equals(null) ? dataEsvvi.getDescripcion() : "");
 
                 return s;
             }).collect(Collectors.toList());
-
             List<HashMap<String, Object>> data=new ArrayList<>();
-
             for(int i=0; i<s_data.size();i++){
-
                 HashMap<String, Object> obj=s_data.get(i);
                 String codAlm=s_data.get(i).get("CDALM").toString();
                 String codAlmacen=ObtenerCodAlmacen(codAlm, imports.getP_user());
-
                 obj.put("CDALE", codAlmacen);
                 data.add(obj);
             }
-
             vve.setT_mensaje(t_mensaje);
             vve.setData(data);
             vve.setMensaje("Ok");
         }catch (Exception e){
             vve .setMensaje(e.getMessage());
         }
-
         return vve;
     }
     public String ObtenerCodAlmacen(String codAlm, String user)throws  Exception{

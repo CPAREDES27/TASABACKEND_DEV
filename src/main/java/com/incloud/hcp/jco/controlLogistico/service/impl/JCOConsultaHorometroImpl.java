@@ -17,40 +17,27 @@ import java.util.Map;
 public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
 
     public ConsultaHorometroExports Listar(ConsultaHorometroImports imports)throws Exception{
-
         ConsultaHorometroExports ch= new ConsultaHorometroExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_CONS_HORO_BTP);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FIEVN", imports.getP_fievn());
             importx.setValue("P_FFEVN", imports.getP_ffevn());
             importx.setValue("P_CDEMB", imports.getP_cdemb());
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             stfcConnection.execute(destination);
-
-
             JCoTable STR_EMB = tables.getTable(Tablas.STR_EMB);
             JCoTable STR_EVN = tables.getTable(Tablas.STR_EVN);
             JCoTable STR_LHO= tables.getTable(Tablas.STR_LHO);
             JCoTable T_MENSAJE= tables.getTable(Tablas.T_MENSAJE);
-
             Metodos metodo = new Metodos();
-
             List<HashMap<String, Object>> str_emb = metodo.ListarObjetosLazy(STR_EMB);
             List<HashMap<String, Object>> str_evn = metodo.ListarObjetosLazy(STR_EVN);
             List<HashMap<String, Object>> str_lho = metodo.ListarObjetosLazy(STR_LHO);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
-
-
-
             List<HorometroListDto> lista =new ArrayList<HorometroListDto>();
             for(Map<String,Object> datas: str_evn) {
                 HorometroListDto horo = new HorometroListDto();
@@ -69,12 +56,9 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     if(key.equals("CDEMB")){
                         horo.setCDEMB(value.toString());
                     }
-
-
                 }
                 lista.add(horo);
             }
-
             List<HorometroStrDto> listaStr = new ArrayList<HorometroStrDto>();
             for(Map<String,Object> datas: str_lho) {
                 HorometroStrDto horoStr = new HorometroStrDto();
@@ -96,12 +80,12 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                 }
                 listaStr.add(horoStr);
             }
-
             for(int i=0;i<lista.size();i++){
                 List<MotorDto> motorobj = new ArrayList<MotorDto>();
                 for(int j=0;j<listaStr.size();j++){
                     MotorDto obj = new MotorDto();
-                    if(lista.get(i).getNRMAR().equals(listaStr.get(j).getNRMAR()) && lista.get(i).getNREVN().equals(listaStr.get(j).getNREVN())){
+                    if(lista.get(i).getNRMAR().equals(listaStr.get(j).getNRMAR()) &&
+                            lista.get(i).getNREVN().equals(listaStr.get(j).getNREVN())){
                         obj.setLCHOR(listaStr.get(j).getLCHOR());
                         obj.setCDTHR(listaStr.get(j).getCDTHR());
                         motorobj.add(obj);
@@ -109,7 +93,6 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                 }
                 lista.get(i).setLista(motorobj);
             }
-
             List<HorometroExportDto> listaHorometro = new ArrayList<HorometroExportDto>();
             for(int i=0;i<lista.size();i++){
                 HorometroExportDto obj = new HorometroExportDto();
@@ -147,7 +130,6 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     if(lista.get(i).getLista().get(j).getCDTHR().equals("8")){
                         obj.setFlujometro(lista.get(i).getLista().get(j).getLCHOR());
                     }
-
                 }
                 if(i > 0) {
                     HorometroExportDto objfinal=listaHorometro.get(listaHorometro.size()-1);
@@ -156,18 +138,13 @@ public class JCOConsultaHorometroImpl implements JCOConsultaHorometroService {
                     }
                 }
                     listaHorometro.add(obj);
-
             }
-
-
-
             ch.setListaHorometro(listaHorometro);
             ch.setT_mensaje(t_mensaje);
             ch.setMensaje("Ok");
         }catch (Exception e){
             ch .setMensaje(e.getMessage());
         }
-
         return ch;
     }
 

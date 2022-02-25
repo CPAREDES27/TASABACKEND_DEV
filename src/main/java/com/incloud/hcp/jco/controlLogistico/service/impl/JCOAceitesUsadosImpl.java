@@ -25,16 +25,11 @@ import java.util.stream.Collectors;
 public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public AceitesUsadosExports Listar(AceitesUsadosImports imports)throws Exception{
-
         AceitesUsadosExports au=new AceitesUsadosExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GEST_ACEITES);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("IP_TOPE", imports.getIp_tope());
             importx.setValue("IP_NRRNV", imports.getIp_nrrnv());
@@ -44,70 +39,46 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             importx.setValue("IP_CDALM", imports.getIp_cdalm());
             importx.setValue("IP_ESRNV", imports.getIp_esrnv());
             Metodos metodo = new Metodos();
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             JCoTable T_RNV = tables.getTable(Tablas.T_RNV);
             JCoTable T_RPN = tables.getTable(Tablas.T_RPN);
-
-            //region
-
-            //endRegion
             stfcConnection.execute(destination);
             List<HashMap<String, Object>> t_rnv = metodo.ListarObjetosLazy(T_RNV);
             List<HashMap<String, Object>> t_rpn = metodo.ListarObjetosLazy(T_RPN);
-
             //Dominios
             ArrayList<String> listDomNames = new ArrayList<>();
             listDomNames.add(Dominios.ESRNV);
-
             DominiosHelper helper = new DominiosHelper();
             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
-
             DominiosExports esrnvDom = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.ESRNV)).findFirst().orElse(null);
-
             t_rpn.stream().map(s -> {
                 String esrnv = s.get("ESRNV").toString();
-
                 DominioExportsData dataErnv = esrnvDom.getData().stream().filter(d -> d.getId().equals(esrnv)).findFirst().orElse(null);
-
                 s.put("DESC_ESRNV", dataErnv != null ? dataErnv.getDescripcion() : "");
-
                 return s;
             }).collect(Collectors.toList());
-
             au.setT_rnv(t_rnv);
             au.setT_rpn(t_rpn);
-
             au.setMensaje("OK");
         }catch (Exception e){
             au .setMensaje(e.getMessage());
         }
-
         return au;
     }
     public AceitesUsadosExports Nuevo(AceitesUsadosImports imports)throws Exception{
-
         AceitesUsadosExports au=new AceitesUsadosExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GEST_ACEITES);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("IP_TOPE", "NR");
             importx.setValue("IP_NRRNV", "0000000000");
             Metodos metodo = new Metodos();
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             JCoTable T_RNV = tables.getTable(Tablas.T_RNV);
             JCoTable T_RPN = tables.getTable(Tablas.T_RPN);
-
-            //region
-
-                for(int i=0; i<imports.getT_rpn().size();i++) {
+            for(int i=0; i<imports.getT_rpn().size();i++) {
                     RegistroAceiteDto  dto = imports.getT_rpn().get(i);
                     logger.error("GGG"+imports.getT_rpn().get(i).getNRPOS());
                     T_RPN.appendRow();
@@ -138,7 +109,6 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                     T_RPN.setValue("FHMFN",dto.getFHMFN());
                     T_RPN.setValue("HRMFN",dto.getHRMFN());
                     T_RPN.setValue("ATMFN",dto.getATMFN());
-
                 }
                 T_RNV.appendRow();
                 T_RNV.setValue("MANDT","");
@@ -151,12 +121,8 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
                 T_RNV.setValue("FHMFN","");
                 T_RNV.setValue("HRMFN","000000");
                 T_RNV.setValue("ATMFN","");
-
-
-            //endRegion
             stfcConnection.execute(destination);
-
-                JCoParameterList gg = stfcConnection.getExportParameterList();
+            JCoParameterList gg = stfcConnection.getExportParameterList();
             String code = gg.getTable("ET_MENSJ").getString("MESSAGE");
             String hola = gg.getValue("EP_NRRNV").toString();
             logger.error("ERRROR CODE "+code);
@@ -166,20 +132,14 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
         }catch (Exception e){
             au.setMensaje(e.getMessage());
         }
-
         return au;
     }
     public AceitesUsadosExports Anular(AceitesUsadosImports imports)throws Exception{
-
         AceitesUsadosExports au=new AceitesUsadosExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
-
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_GEST_ACEITES);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("IP_TOPE", "AN");
             importx.setValue("IP_NRRNV", "0000000000");
@@ -189,11 +149,9 @@ public class JCOAceitesUsadosImpl implements JCOAceitesUsadosService {
             importx.setValue("IP_CDALM", imports.getIp_cdalm());
             importx.setValue("IP_ESRNV", imports.getIp_esrnv());
             Metodos metodo = new Metodos();
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             JCoTable T_RNV = tables.getTable(Tablas.T_RNV);
             JCoTable T_RPN = tables.getTable(Tablas.T_RPN);
-
             //region
 
                 for(int i=0; i<imports.getT_rpn().size();i++) {
