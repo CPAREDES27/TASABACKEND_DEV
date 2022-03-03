@@ -118,22 +118,16 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return me;
     }
     public MaestroExport obtenerMaestro2 (MaestroImportsKey imports) throws Exception {
-        logger.error("ARMADOR 1");
         Metodos metodo= new Metodos();
         MaestroExport me=new MaestroExport();
         MaestroOptionsKey me2 = new MaestroOptionsKey();
-        logger.error("ARMADOR 2");
         List<MaestroOptions> option = imports.getOption();
-        logger.error("TAMAÑO import: "+option.size());
         List<MaestroOptionsKey> options = imports.getOptions();
-        logger.error("TAMAÑO import: "+options.size());
             /*for(int j =0;j<option.size();j++){
                 MaestroOptions mop= option.get(j);
                 logger.error("GET IMPORT: "+mop.getWa());
             }*/
-        logger.error("ARMADOR 3");
         HashMap<String, Object> importz = new HashMap<String, Object>();
-        logger.error("ARMADOR 4");
         importz.put("QUERY_TABLE", imports.getTabla());
         importz.put("DELIMITER", imports.getDelimitador());
         importz.put("NO_DATA", imports.getNo_data());
@@ -142,17 +136,11 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         importz.put("P_USER", imports.getP_user());
         importz.put("P_ORDER", imports.getOrder());
         importz.put("P_PAG", imports.getP_pag());
-        logger.error("ARMADOR 5");
         List<HashMap<String, Object>> tmpOptions = new ArrayList<HashMap<String, Object>>();
         tmpOptions=metodo.ValidarOptions(option,options);
-        logger.error("ARMADOR 6");
         String []fields=imports.getFields();
         EjecutarRFC exec = new EjecutarRFC();
         me = exec.Execute_ZFL_RFC_READ_TABLE(importz, tmpOptions, fields);
-
-
-
-
         return me;
     }
 
@@ -503,7 +491,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 }
                 permiso = new HashMap<>();
                 if(!bOk){
-                    permiso.put("NOROLFLOTA",true);
+                    permiso.put("NOROLFLOTA",false);
                     listaPermisos.add(permiso);
                 }
 

@@ -113,13 +113,9 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             importx.setValue("P_FEINI", imports.getP_feini());
             importx.setValue("P_FEFIN", imports.getP_fefin());
 
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
-
             stfcConnection.execute(destination);
-
             JCoTable STR_DL = tables.getTable(Tablas.STR_DL);
-
 
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_dl = metodo.ListarObjetosLazy(STR_DL);
@@ -147,7 +143,6 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
                 return s;
             });
-
             /**
              * Cálculos de porcentajes y totales
              */
@@ -170,25 +165,21 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
                 } else {
                     s.put("PORC_DECL_CHI_PROP", 0);
                 }
-
                 if (!Double.isNaN(porcDeclChiTerc)) {
                     s.put("PORC_DECL_CHI_TERC", Math.round(porcDeclChiTerc * 100.00) / 100.00);
                 } else {
                     s.put("PORC_DECL_CHI_TERC", 0);
                 }
-
                 if (!Double.isNaN(eficProp)) {
                     s.put("EFIC_PROP", Math.round(eficProp * 100.00) / 100.00);
                 } else {
                     s.put("EFIC_PROP", 0);
                 }
-
                 if (!Double.isNaN(eficTerc)) {
                     s.put("EFIC_TERC", Math.round(eficTerc * 100.00) / 100.00);
                 } else {
                     s.put("EFIC_TERC", 0);
                 }
-
                 if (!Double.isNaN(porcDifer)) {
                     s.put("PORC_DIFER", Math.round(porcDifer * 100.00) / 100.00);
                 } else {
@@ -197,16 +188,11 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
 
                 return s;
             }).collect(Collectors.toList());
-
             HashMap<String, Object> totales = new HashMap<>();
-
-            //Obtener modelo de una fila y usarla para generar la fila de totales
             HashMap<String, Object> firstPescDecl = str_dl.get(0);
-
             for (Map.Entry<String, Object> mapEntry : firstPescDecl.entrySet()) {
                 totales.put(mapEntry.getKey(), null);
             }
-
             double totPescDeclChi = 0;
             double totPescDeclChd = 0;
             double totPescDeclChiProp = 0;
@@ -260,14 +246,11 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
             totales.replace("PORC_DIFER", Math.round(totPorcDifer * 100.00) / 100.00);
 
             str_dl.add(totales);
-
             pdd.setStr_dl(str_dl);
             pdd.setMensaje("Ok");
-
         } catch (Exception e) {
             pdd.setMensaje(e.getMessage());
         }
-
         return pdd;
     }
 
@@ -275,36 +258,26 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
     public PescaDeclaradaDifeExports PescaDeclaradaDife(PescaDeclaradaDifeImports imports) throws Exception {
 
         PescaDeclaradaDifeExports pdd = new PescaDeclaradaDifeExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESC_DECLA_DIFE2);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FECHA", imports.getP_fecha());
             importx.setValue("P_FIDES", imports.getP_fides());
             importx.setValue("P_FFDES", imports.getP_ffdes());
-
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
-
             stfcConnection.execute(destination);
-
             JCoTable STR_PTD = tables.getTable(Tablas.STR_PTD);
             JCoTable STR_PTR = tables.getTable(Tablas.STR_PTR);
             JCoTable STR_EMD = tables.getTable(Tablas.STR_EMD);
             JCoTable STR_EMR = tables.getTable(Tablas.STR_EMR);
-
-
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_ptd = metodo.ObtenerListObjetos(STR_PTD, imports.getFieldstr_ptd());
             List<HashMap<String, Object>> str_ptr = metodo.ObtenerListObjetos(STR_PTR, imports.getFieldstr_ptr());
             List<HashMap<String, Object>> str_emd = metodo.ObtenerListObjetos(STR_EMD, imports.getFieldstr_emd());
             List<HashMap<String, Object>> str_emr = metodo.ObtenerListObjetos(STR_EMR, imports.getFieldstr_emr());
-
             pdd.setStr_ptd(str_ptd);
             pdd.setStr_ptr(str_ptr);
             pdd.setStr_emd(str_emd);
@@ -314,7 +287,6 @@ public class JCOPescaDeclaradaImpl implements JCOPescaDeclaradaService {
         } catch (Exception e) {
             pdd.setMensaje(e.getMessage());
         }
-
         return pdd;
     }
 

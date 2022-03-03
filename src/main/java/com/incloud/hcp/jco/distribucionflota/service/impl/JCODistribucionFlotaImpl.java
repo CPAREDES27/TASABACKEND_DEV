@@ -240,11 +240,12 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                 BigDecimal b_cnpcm = new BigDecimal(s_str_dp.getString("CNPCM"));
                 BigDecimal b_cnpdt = new BigDecimal(s_str_dp.getString("CNPDT"));
 
-
+                logger.error("b_cnpcm value:" + b_cnpcm);
+                logger.error("b_cnpdt value:" + b_cnpdt);
                // MaestroExport maestroPl =  this.MaestroService.obtenerMaestro2();
 
                 if (b_cnpcm.compareTo(new BigDecimal(0))> 0) {
-
+                    logger.error("b_cnpcm");
                     MaestroImportsKey maestro = new MaestroImportsKey();
                     String[] fields = {"CXPXD"};
                     List<MaestroOptions> options = new ArrayList<MaestroOptions>();
@@ -301,7 +302,7 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                 }
 
                 if (b_cnpdt.compareTo(new BigDecimal(0))> 0) {
-
+                    logger.error("b_cnpdt");
                     MaestroImportsKey maestro = new MaestroImportsKey();
                     String[] fields = {"CXPXD"};
                     List<MaestroOptions> options = new ArrayList<MaestroOptions>();
@@ -355,7 +356,8 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
                     logger.error("CESARIN: "+resumenTotal.getCbodProp());
                     lst_terceros.add(resumenTerc);
                     lst_totales.add(resumenTotal);
-
+                    logger.error("lista total: "+ lst_totales.size());
+                    logger.error("resumen total: "+ resumenTotal.toString());
                 }
 
             }
@@ -369,48 +371,61 @@ public class JCODistribucionFlotaImpl implements JCODistribucionFlotaService {
 
                 if(!lst_totales.get(i).getDescPlanta().equals(planta)){
 
-                    if(i==0){
-                        planta=lst_totales.get(i).getDescPlanta();
-                        sumCBOD=lst_totales.get(i).getCbodProp();
-                        sumDCL=lst_totales.get(i).getPescDeclProp();
-                        sumEP=lst_totales.get(i).getEmbaPescProp();
-                    }else if(i==(lst_totales.size()-1)){
-
+                    if(lst_totales.size()==1){
                         TotalDto resumenTotal2 = new TotalDto();
 
-                        resumenTotal2.setCodPlanta(lst_totales.get(i-1).getCodPlanta());
-                        resumenTotal2.setDescPlanta(lst_totales.get(i-1).getDescPlanta());
-                        resumenTotal2.setPescDeclProp(sumDCL);
-                        resumenTotal2.setEmbaPescProp(sumEP);
-                        resumenTotal2.setCbodProp(sumCBOD);
+                        resumenTotal2.setCodPlanta(lst_totales.get(i).getCodPlanta());
+                        resumenTotal2.setDescPlanta(lst_totales.get(i).getDescPlanta());
+                        resumenTotal2.setPescDeclProp(lst_totales.get(i).getPescDeclProp());
+                        resumenTotal2.setEmbaPescProp(lst_totales.get(i).getEmbaPescProp());
+                        resumenTotal2.setCbodProp(lst_totales.get(i).getCbodProp());
 
                         lst_totales2.add(resumenTotal2);
 
-                        TotalDto resumenTotal3 = new TotalDto();
+                    }else {
+                        if (i == 0) {
+                            planta = lst_totales.get(i).getDescPlanta();
+                            sumCBOD = lst_totales.get(i).getCbodProp();
+                            sumDCL = lst_totales.get(i).getPescDeclProp();
+                            sumEP = lst_totales.get(i).getEmbaPescProp();
+                        } else if (i == (lst_totales.size() - 1)) {
 
-                        resumenTotal3.setCodPlanta(lst_totales.get(i).getCodPlanta());
-                        resumenTotal3.setDescPlanta(lst_totales.get(i).getDescPlanta());
-                        resumenTotal3.setPescDeclProp(lst_totales.get(i).getPescDeclProp());
-                        resumenTotal3.setEmbaPescProp(lst_totales.get(i).getEmbaPescProp());
-                        resumenTotal3.setCbodProp(lst_totales.get(i).getCbodProp());
+                            TotalDto resumenTotal2 = new TotalDto();
 
-                        lst_totales2.add(resumenTotal3);
-                    }else{
-                        TotalDto resumenTotal2 = new TotalDto();
+                            resumenTotal2.setCodPlanta(lst_totales.get(i - 1).getCodPlanta());
+                            resumenTotal2.setDescPlanta(lst_totales.get(i - 1).getDescPlanta());
+                            resumenTotal2.setPescDeclProp(sumDCL);
+                            resumenTotal2.setEmbaPescProp(sumEP);
+                            resumenTotal2.setCbodProp(sumCBOD);
 
-                        resumenTotal2.setCodPlanta(lst_totales.get(i-1).getCodPlanta());
-                        resumenTotal2.setDescPlanta(lst_totales.get(i-1).getDescPlanta());
-                        resumenTotal2.setPescDeclProp(sumDCL);
-                        resumenTotal2.setEmbaPescProp(sumEP);
-                        resumenTotal2.setCbodProp(sumCBOD);
+                            lst_totales2.add(resumenTotal2);
 
-                        lst_totales2.add(resumenTotal2);
+                            TotalDto resumenTotal3 = new TotalDto();
 
+                            resumenTotal3.setCodPlanta(lst_totales.get(i).getCodPlanta());
+                            resumenTotal3.setDescPlanta(lst_totales.get(i).getDescPlanta());
+                            resumenTotal3.setPescDeclProp(lst_totales.get(i).getPescDeclProp());
+                            resumenTotal3.setEmbaPescProp(lst_totales.get(i).getEmbaPescProp());
+                            resumenTotal3.setCbodProp(lst_totales.get(i).getCbodProp());
+
+                            lst_totales2.add(resumenTotal3);
+                        } else {
+                            TotalDto resumenTotal2 = new TotalDto();
+
+                            resumenTotal2.setCodPlanta(lst_totales.get(i - 1).getCodPlanta());
+                            resumenTotal2.setDescPlanta(lst_totales.get(i - 1).getDescPlanta());
+                            resumenTotal2.setPescDeclProp(sumDCL);
+                            resumenTotal2.setEmbaPescProp(sumEP);
+                            resumenTotal2.setCbodProp(sumCBOD);
+
+                            lst_totales2.add(resumenTotal2);
+
+                        }
+                        planta = lst_totales.get(i).getDescPlanta();
+                        sumCBOD = lst_totales.get(i).getCbodProp();
+                        sumDCL = lst_totales.get(i).getPescDeclProp();
+                        sumEP = lst_totales.get(i).getEmbaPescProp();
                     }
-                    planta=lst_totales.get(i).getDescPlanta();
-                    sumCBOD=lst_totales.get(i).getCbodProp();
-                    sumDCL=lst_totales.get(i).getPescDeclProp();
-                    sumEP=lst_totales.get(i).getEmbaPescProp();
                 }else{
                     //planta=lst_totales.get(i).getDescPlanta();
                     sumCBOD+=lst_totales.get(i).getCbodProp();

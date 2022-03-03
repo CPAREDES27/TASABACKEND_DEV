@@ -2595,6 +2595,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
         PDFExports pdf = new PDFExports();
         String path = Constantes.RUTA_ARCHIVO_IMPORTAR + "Archivo.pdf";
         PDFRolTripulacionDto dto= new PDFRolTripulacionDto();
+        logger.error("RolTripulacion1");
 
          try {
 
@@ -2613,6 +2614,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             JCoTable T_ZARTR = tables.getTable(Tablas.T_ZARTR);
             JCoTable T_DZART = tables.getTable(Tablas.T_DZART);
 
+             logger.error("RolTripulacion2");
 
             for(int i=0; i<T_ZARTR.getNumRows(); i++){
                 T_ZARTR.setRow(i);
@@ -2632,7 +2634,7 @@ public class JCOPDFsImpl implements JCOPDFsService {
             }
              Metodos me= new Metodos();
 
-             logger.error("RolTripulacion");
+             logger.error("RolTripulacion3");
             String[] CamposRolTripulacion= new String[]{PDFRolTripulacionConstantes.NOMBR,
                     PDFRolTripulacionConstantes.TITRP,
                     PDFRolTripulacionConstantes.STELL,
@@ -2682,6 +2684,12 @@ public class JCOPDFsImpl implements JCOPDFsService {
                 con++;
             }
 
+            if( dto.getNombrePatron()==null){
+                dto.setNombrePatron("");
+                dto.setDni("");
+            }
+
+             logger.error("RolTripulacion4");
 
 
              PlantillaPDFRolTripulacion(path, dto, RolTripulacion);

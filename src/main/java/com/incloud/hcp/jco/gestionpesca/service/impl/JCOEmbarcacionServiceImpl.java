@@ -656,15 +656,16 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             importx.setValue("P_CDEMB", imports.getCodEmba());
             importx.setValue("P_CDPTA", imports.getCodPlanta());
             JCoParameterList export = stfcConnection.getExportParameterList();
+            stfcConnection.execute(destination);
 
             String valor=export.getValue("P_ESTADO").toString();
 
             logger.error("valor: "+valor);
             boolean estado=false;
 
-            if(valor.equals(1)){
+            if(valor.equals("1")){
                 estado=true;
-            }else if(valor.equals(0)){
+            }else if(valor.equals("0")){
                 estado= false;
             }
 

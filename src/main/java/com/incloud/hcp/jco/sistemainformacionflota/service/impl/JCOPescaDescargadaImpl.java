@@ -182,47 +182,36 @@ public class JCOPescaDescargadaImpl implements JCOPescaDescargadaService {
     @Override
     public PescaDescargadaDiaResumExports PescaDescargadaDiaResum(PescaDescargadaDiaResumImports imports) throws Exception {
         PescaDescargadaDiaResumExports pd = new PescaDescargadaDiaResumExports();
-
         try {
-
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
             JCoRepository repo = destination.getRepository();
             JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_PESCA_DESC_DIA_RESUM);
-
             JCoParameterList importx = stfcConnection.getImportParameterList();
             importx.setValue("P_USER", imports.getP_user());
             importx.setValue("P_FIDES", imports.getP_fides());
             importx.setValue("P_FFDES", imports.getP_ffdes());
-
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
-
             stfcConnection.execute(destination);
-
             JCoTable STR_PTA = tables.getTable(Tablas.STR_PTA);
             JCoTable STR_DSD = tables.getTable(Tablas.STR_DSD);
             JCoTable STR_DSDDIA = tables.getTable(Tablas.STR_DSDDIA);
             JCoTable STR_DSDTOT = tables.getTable(Tablas.STR_DSDTOT);
             JCoTable T_MENSAJE = tables.getTable(Tablas.T_MENSAJE);
-
             Metodos metodo = new Metodos();
             List<HashMap<String, Object>> str_pta = metodo.ListarObjetosLazy(STR_PTA);
             List<HashMap<String, Object>> str_dsd = metodo.ListarObjetosLazy(STR_DSD);
             List<HashMap<String, Object>> str_dsddia = metodo.ListarObjetosLazy(STR_DSDDIA);
             List<HashMap<String, Object>> str_dsdtot = metodo.ListarObjetosLazy(STR_DSDTOT);
             List<HashMap<String, Object>> t_mensaje = metodo.ListarObjetosLazy(T_MENSAJE);
-
             pd.setStr_pta(str_pta);
             pd.setStr_dsd(str_dsd);
             pd.setStr_dsddia(str_dsddia);
             pd.setStr_dsdtot(str_dsdtot);
             pd.setT_mensaje(t_mensaje);
             pd.setMensaje("Ok");
-
         } catch (Exception e) {
             pd.setMensaje(e.getMessage());
         }
-
         return pd;
     }
 }

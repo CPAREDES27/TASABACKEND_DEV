@@ -12,10 +12,12 @@ import com.sap.conn.jco.*;
 import io.swagger.models.auth.In;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.apache.poi.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -102,7 +104,6 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
     public PescaCompetenciaProduceExports PescaCompetenciaProduce(PescaCompetenciaProduceImports imports) throws Exception {
 
         PescaCompetenciaProduceExports pcp=new PescaCompetenciaProduceExports();
-
         try {
             Metodos metodo = new Metodos();
             JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
@@ -123,7 +124,6 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             importx.setValue("P_EMPEB", imports.getP_empeb());
 
             List<HashMap<String, Object>> tmpOptions = metodo.ValidarOptions(imports.getP_option(),imports.getP_options());
-
             JCoParameterList tables = stfcConnection.getTableParameterList();
             EjecutarRFC exec = new EjecutarRFC();
             exec.setTable(tables, Tablas.P_OPTIONS, tmpOptions);
@@ -154,28 +154,17 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             List<HashMap<String, Object>> str_ped = metodo.ListarObjetosLazy(tblSTR_PED);
             List<HashMap<String, Object>> str_grp = metodo.ListarObjetosLazy(tblSTR_GRP);
             List<HashMap<String, Object>> str_plm = metodo.ListarObjetosLazy(tblSTR_PLM);
-
             ArrayList<String> listDomNames = new ArrayList<>();
             listDomNames.add(Dominios.GRUPOEMPRESA);
-
-
             DominiosHelper helper = new DominiosHelper();
             ArrayList<DominiosExports> listDescipciones = helper.listarDominios(listDomNames);
-
             DominiosExports grupoempresa = listDescipciones.stream().filter(d -> d.getDominio().equals(Dominios.GRUPOEMPRESA)).findFirst().orElse(null);
-
             str_pge.stream().map(m -> {
                 String cdgrp = m.get("CDGRP").toString()!=null ? m.get("CDGRP").toString() : "";
-
-                // Buscar los detalles
                 DominioExportsData dataCDGRP = grupoempresa.getData().stream().filter(d -> d.getId().equals(cdgrp)).findFirst().orElse(null);
-
                 m.put("DESC_CDGRP", dataCDGRP != null ? dataCDGRP.getDescripcion() : "");
-
-
                 return m;
             }).collect(Collectors.toList());
-
             pcp.setStr_zlt(str_zlt);
             pcp.setStr_pto(str_pto);
             pcp.setStr_gre(str_gre);
@@ -193,7 +182,6 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
         }catch (Exception e){
             pcp.setMensaje(e.getMessage());
         }
-
         return pcp;
     }
 
@@ -226,9 +214,22 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
             logger.error("export pescomprod 2.1");
 
             int cantCol=imports.getColumnas().size();
-            String rangoTitulo="B2:"+abc.charAt(cantCol)+"2";
-            String rangoTitulo2="B3:"+abc.charAt(cantCol)+"3";
-            String rangoTitulo3="B4:"+abc.charAt(cantCol)+"4";
+
+            String cell="";
+            String rangoTitulo = "";
+            String rangoTitulo2 = "";
+            String rangoTitulo3 = "";
+            logger.error("cell: "+cell);
+            if(cantCol>=abc.length()) {
+                  cell=celda(cantCol);
+                rangoTitulo = "B2:" + cell+ "2";
+                rangoTitulo2 = "B3:" + cell + "3";
+                rangoTitulo3 = "B4:" + cell + "4";
+            }else {
+                 rangoTitulo = "B2:" + abc.charAt(cantCol) + "2";
+                 rangoTitulo2 = "B3:" + abc.charAt(cantCol) + "3";
+                 rangoTitulo3 = "B4:" + abc.charAt(cantCol) + "4";
+            }
 
             logger.error("rangoTitulo: "+rangoTitulo);
             logger.error("rangoTitulo2: "+ rangoTitulo2);
@@ -292,10 +293,35 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
 
 
                     int celf=(col + canSubCab)-1;
-                    String celdaIni = abc.charAt(col) + "6";
-                    String celdaFin = abc.charAt(celf) + "6";
-                    String celdas = celdaIni + ":" + celdaFin;
+                    String celdaIni="";
+                    String celdaFin = "";
+                    String celdas ="";
 
+                    logger.error("col: "+col+" abc.lenght: "+abc.length());
+
+                    String cellIni="";
+                    String cellFin="";
+
+                    if(col>=abc.length()) {
+                        cellIni=celda(col)+"6";
+                    }else{
+                        cellIni = abc.charAt(col) + "6";
+                    }
+                    logger.error("celf: "+celf+" abc.lenght: "+abc.length());
+
+                    if(celf>=abc.length()) {
+                        cellFin=celda(celf)+"6";
+                    }else{
+                        cellFin=abc.charAt(celf) + "6";
+                    }
+
+                    celdaIni=cellIni;
+                    celdaFin=cellFin;
+
+
+                    //celdaIni = abc.charAt(col) + "6";
+                    //celdaFin = abc.charAt(celf) + "6";
+                    celdas = celdaIni + ":" + celdaFin;
 
 
                     logger.error(celdaIni);
@@ -358,7 +384,8 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
                     Cell cellTitulo = rowRegistros.createCell(cellIndexTitulos);
 
 
-                    if(cellIndexTitulos>1 && !valor.equals("")){
+                    boolean isNumeric=esDecimal(valor);
+                    if(isNumeric){
                         double doubleValue = Double.parseDouble(valor);
                         cellTitulo.setCellStyle(formatNumber);
                         cellTitulo.setCellValue(doubleValue);
@@ -392,6 +419,39 @@ public class JCOPescaCompetenciaImpl implements JCOPescaCompetenciaService {
         }
         return exports;
 
+    }
+    public String celda(int n){
+        logger.error("numero: "+n);
+        String abc="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int tam=abc.length();
+
+        String rpta="";
+
+        if(n>=tam){
+            int letraUno=n/tam;
+            logger.error("letraUno: "+letraUno);
+            int letraDos=n-(letraUno*tam);
+            logger.error("letraDos: "+letraDos);
+            rpta=abc.charAt(letraUno-1)+"";
+            rpta+=abc.charAt(letraDos)+"";
+        }else{
+            rpta= abc.charAt(n)+"";
+        }
+        logger.error("celdaFinal: "+rpta);
+        return rpta;
+
+    }
+    public boolean esDecimal(String cad)
+    {
+        try
+        {
+            Double.parseDouble(cad);
+            return true;
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
     }
 
     public  List<LinkedHashMap<String, Object>>   ObtCantColumPorCabecera(List<LinkedHashMap<String, Object>> columnas){
