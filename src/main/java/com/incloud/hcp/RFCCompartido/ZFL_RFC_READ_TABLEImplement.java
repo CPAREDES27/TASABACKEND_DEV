@@ -1,5 +1,6 @@
 package com.incloud.hcp.RFCCompartido;
 
+import com.incloud.hcp.util.Constantes;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
         logger.error("Paso la condicion: "+cond);
         logger.error("Paso");
 
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
         logger.error("_2");;
         JCoRepository repo = destination.getRepository();

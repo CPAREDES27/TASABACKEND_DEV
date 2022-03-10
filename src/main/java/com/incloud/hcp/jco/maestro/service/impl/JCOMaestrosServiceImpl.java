@@ -620,61 +620,66 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         //DESPUES
         MaestroExport me= new MaestroExport();
         UpdateTableExports msj= new UpdateTableExports();
+        String cadena="";
         try {
             logger.error("editarMaestro2= FIELDWHERE: "+importsParam.getFieldWhere()+", KEYWHERE= "+importsParam.getKeyWhere()+", TABLA:"+importsParam.getTabla()+", P_USER: "+importsParam.getP_user());
             me= ConsultaReadTable(importsParam.getFieldWhere(),importsParam.getKeyWhere(),importsParam.getTabla(),importsParam.getP_user());
-            logger.error("VERIFICAR DATA"+me.getData().toString());
-            List<MaestroUpdate> update = importsParam.getOpcion();
-            List<HashMap<String, Object>> data= me.getData();
-            LinkedHashMap<String,Object> newRecord = new LinkedHashMap<String,Object>();
-            LinkedHashMap<String,Object> setDAta = new LinkedHashMap<String,Object>();
-            logger.error("VERIFICAR DATA PASO2");
-            int contador=0;
-            for(Map<String,Object> datas: data){
-                for(Map.Entry<String,Object> entry: datas.entrySet()){
-                       String key= entry.getKey();
-                       Object value= entry.getValue();
-                       newRecord.put(key, value);
-                }
 
-            }
-            logger.error("VERIFICAR DATA PASO3");
-            String mensajito="";
-            String valor="";
-           for(int i=0;i<update.size();i++){
-               mensajito=update.get(i).getField();
-               valor = update.get(i).getValor().toUpperCase().trim();
-               for(Map.Entry<String,Object> entry:newRecord.entrySet()){
-                   if(entry.getKey().contains(mensajito)){
-                       entry.setValue(valor);
-                   }
-               }
-           }
-            logger.error("VERIFICAR DATA PASO4");
-            String cadena="";
-            if(importsParam.getKeyWhere() == null || importsParam.getKeyWhere() == "")
-            {
-                cadena ="||";
-                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
-
-                    if(contador >1) {
-                        cadena += entry.getValue();
-                        cadena += "|";
-                    }
-                    contador++;
-                }
+            if(me.getData().isEmpty() && importsParam.getP_case().equals("N")){
+                cadena=NuevoRegistro(importsParam);
             }else {
-                 cadena = "|";
-                for(Map.Entry<String,Object> entry:newRecord.entrySet()){
 
-                    if(contador >0) {
-                        cadena += entry.getValue();
-                        cadena += "|";
+                logger.error("VERIFICAR DATA" + me.getData().toString());
+                List<MaestroUpdate> update = importsParam.getOpcion();
+                List<HashMap<String, Object>> data = me.getData();
+                LinkedHashMap<String, Object> newRecord = new LinkedHashMap<String, Object>();
+                LinkedHashMap<String, Object> setDAta = new LinkedHashMap<String, Object>();
+                logger.error("VERIFICAR DATA PASO2");
+                int contador = 0;
+                for (Map<String, Object> datas : data) {
+                    for (Map.Entry<String, Object> entry : datas.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+                        newRecord.put(key, value);
                     }
-                    contador++;
+
                 }
-            }
-            logger.error("VERIFICAR DATA PASO_ cadena"+cadena);
+                logger.error("VERIFICAR DATA PASO3");
+                String mensajito = "";
+                String valor = "";
+                for (int i = 0; i < update.size(); i++) {
+                    mensajito = update.get(i).getField();
+                    valor = update.get(i).getValor().toUpperCase().trim();
+                    for (Map.Entry<String, Object> entry : newRecord.entrySet()) {
+                        if (entry.getKey().contains(mensajito)) {
+                            entry.setValue(valor);
+                        }
+                    }
+                }
+                logger.error("VERIFICAR DATA PASO4");
+
+                if (importsParam.getKeyWhere() == null || importsParam.getKeyWhere() == "") {
+                    cadena = "||";
+                    for (Map.Entry<String, Object> entry : newRecord.entrySet()) {
+
+                        if (contador > 1) {
+                            cadena += entry.getValue();
+                            cadena += "|";
+                        }
+                        contador++;
+                    }
+                } else {
+                    cadena = "|";
+                    for (Map.Entry<String, Object> entry : newRecord.entrySet()) {
+
+                        if (contador > 0) {
+                            cadena += entry.getValue();
+                            cadena += "|";
+                        }
+                        contador++;
+                    }
+                }
+                logger.error("VERIFICAR DATA PASO_ cadena" + cadena);
 
             /*for(Map.Entry<String,Object> entry:newRecord.entrySet()){
 
@@ -684,10 +689,10 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
                 }
                 contador++;
             }*/
-            logger.error("VERIFICAR DATA PASO5");
-            cadena = cadena.substring(0,cadena.length()-1);
+                logger.error("VERIFICAR DATA PASO5");
+                cadena = cadena.substring(0, cadena.length() - 1);
 
-
+            }
             logger.error("CADENA: " +cadena);
             HashMap<String, Object> imports = new HashMap<String, Object>();
             imports.put("I_TABLE", importsParam.getTabla());
@@ -710,6 +715,80 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
         return msj;
 
 
+    }
+    public String NuevoRegistro(MaestroEditImport importsParam)throws Exception{
+        logger.error("nuevo registro inicio ");
+
+        String data = "";
+        try {
+            /**Obtener campos- incio*/
+           /* MaestroImportsKey mkey = new MaestroImportsKey();
+            List<MaestroOptionsKey> options = new ArrayList<>();
+            List<MaestroOptions> option = new ArrayList<>();
+            MaestroOptions mo = new MaestroOptions();
+            mo.setWa(importsParam.getFieldWhere() + "= '" + importsParam.getKeyWhere() + "'");
+            logger.error("wa: " + importsParam.getFieldWhere() + " = '" + importsParam.getKeyWhere() + "'");
+            mkey.setOptions(options);
+            mkey.setOption(option);
+            mkey.setTabla(importsParam.getTabla());
+            mkey.setP_user(importsParam.getP_user());
+            mkey.setDelimitador("|");
+            mkey.setRowcount(1);
+
+            MaestroExport me = obtenerMaestro2(mkey);*/
+            JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
+            JCoRepository repo = destination.getRepository();
+            JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_READ_TABLE_BTP);
+            JCoParameterList importx = stfcConnection.getImportParameterList();
+            importx.setValue("P_USER", importsParam.getP_user());
+            importx.setValue("QUERY_TABLE", importsParam.getTabla());
+            importx.setValue("DELIMITER", "|");
+            importx.setValue("ROWCOUNT","1");
+
+
+            Metodos me=new Metodos();
+            JCoParameterList tables = stfcConnection.getTableParameterList();
+            JCoTable FIELDS = tables.getTable(Tablas.FIELDS);
+            stfcConnection.execute(destination);
+
+            List<HashMap<String, Object>> fields= me.ListarObjetosLazy(FIELDS);
+            /**Obtener campos-- fin*/
+
+            logger.error(" fields.size" + fields.size());
+            String campoKey= importsParam.getFieldWhere();
+            String valorKey= importsParam.getKeyWhere();
+            logger.error("campoKey: "+campoKey);//nrmar
+            logger.error("valorkey: "+valorKey);//codigo
+            for (int i = 0; i < fields.size(); i++) {
+                String field = fields.get(i).get("FIELDNAME").toString();
+
+                if(campoKey.equals(field)){
+                    data+=valorKey;
+                }
+                logger.error("field " + field);
+                for (int j = 0; j < importsParam.getOpcion().size(); j++) {
+
+
+                    if (importsParam.getOpcion().get(j).getField().equals(field)) {
+                        data += importsParam.getOpcion().get(j).getValor();
+                    }
+
+                }
+                if(i!=fields.size()-1) {
+                    data += "|";
+                }
+                logger.error("data: "+data);
+
+            }
+
+            logger.error("nuevo registro fin ");
+        }catch (Exception e){
+            logger.error("error: "+e.getMessage());
+            logger.error("causa: "+e.getCause());
+
+        }
+
+        return data;
     }
 
     public MensajeDto2 editarMaestro3 (MaestroEditImport importsParam) throws Exception{
@@ -819,7 +898,7 @@ public class JCOMaestrosServiceImpl implements JCOMaestrosService {
     public MaestroExport ConsultaReadTable(String key, String value, String table, String usuario) throws Exception{
 
         logger.error("STEP 1");
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");
         JCoParameterList importx = stfcConnection.getImportParameterList();

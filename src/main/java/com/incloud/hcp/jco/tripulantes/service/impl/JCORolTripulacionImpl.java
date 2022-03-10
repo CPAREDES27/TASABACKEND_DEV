@@ -85,7 +85,7 @@ public class JCORolTripulacionImpl implements JCORolTripulacionService {
 
     @Override
     public RolTripulacionExports PersonalRol(PersonalDtoImport imports) throws Exception {
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
         JCoRepository repo = destination.getRepository();
         JCoFunction stfcConnection = repo.getFunction("ZFL_RFC_READ_TABLE");

@@ -1,5 +1,6 @@
 package com.incloud.hcp;
 
+import com.incloud.hcp.util.Constantes;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class CallBAPI {
 		//Parametro dto = new Parametro();
 		List<EmbarcacionDto> listaEmbarcacion = new ArrayList<EmbarcacionDto>();
 		logger.error("listaEmbarcacion_1_1_1");;
-		JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+		JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
 		//JCo
 		logger.error("listaEmbarcacion_2_2_2_4");;
 		JCoRepository repo = destination.getRepository();

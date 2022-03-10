@@ -1,6 +1,7 @@
 package com.incloud.hcp.jco.maestro.service.RFCCompartidos;
 
 import com.incloud.hcp.jco.gestionpesca.dto.Options;
+import com.incloud.hcp.util.Constantes;
 import com.sap.conn.jco.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ public class ZFL_RFC_READ_TEABLEImplement {
 
 
         logger.error("TIPO_1111");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
         logger.error("TIPO_12");;
         JCoRepository repo = destination.getRepository();

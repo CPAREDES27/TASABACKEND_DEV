@@ -42,7 +42,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         List<EmbarcacionDto> listaEmbarcacion = new ArrayList<EmbarcacionDto>();
         logger.error("listaEmbarcacion_1");
         ;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
         logger.error("listaEmbarcacion_2");
         ;
@@ -85,7 +85,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
     public FlotaDto obtenerDistribucionFlota(String user) throws Exception{
 
         logger.error("ListarEventosPesca_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
         logger.error("ListarEventosPesca_3");;
@@ -150,7 +150,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
     public MareaDto consultaMarea(MareaOptions marea) throws Exception{
 
         logger.error("ListarEventosPesca_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
         logger.error("ListarEventosPesca_3");;
@@ -295,7 +295,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
 
     public MareaDto2 consultaMarea2(MareaOptions marea) throws Exception{
         logger.error("ListarEventosPesca_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         logger.error("ListarEventosPesca_2");;
         JCoRepository repo = destination.getRepository();
         logger.error("ListarEventosPesca_3");;
@@ -423,7 +423,7 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
     @Override
     public HorometroExport consultarHorometro(HorometroDto horometro) throws Exception {
 
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         JCoRepository repo = destination.getRepository();
         JCoFunction stfcConnection = repo.getFunction(Constantes.ZFL_RFC_OBT_LEC_ULT_HOR);
         JCoParameterList importx = stfcConnection.getImportParameterList();

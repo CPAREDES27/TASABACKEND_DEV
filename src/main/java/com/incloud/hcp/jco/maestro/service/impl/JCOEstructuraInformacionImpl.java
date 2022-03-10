@@ -23,7 +23,7 @@ public class JCOEstructuraInformacionImpl implements JCOEstructuraInformacionSer
 
         try{
         logger.error("EditarEstructuraInf_1");;
-        JCoDestination destination = JCoDestinationManager.getDestination("TASA_DEST_RFC");
+        JCoDestination destination = JCoDestinationManager.getDestination(Constantes.DESTINATION_NAME);
         //JCo
         logger.error("EditarEstructuraInf_2");;
         JCoRepository repo = destination.getRepository();
