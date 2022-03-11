@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.Error;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -178,7 +179,9 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
         logger.error("ListarEventosPesca_7");
 
         Metodos metodo = new Metodos();
-        List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(S_MAREA,marea.getFieldMarea());
+        //List<HashMap<String, Object>> ListarS_MAREA= metodo.ObtenerListObjetos(S_MAREA,marea.getFieldMarea());
+        List<HashMap<String, Object>> ListarS_MAREA= metodo.ListarObjetosLazy(S_MAREA);
+
         List<HashMap<String, Object>> ListarS_EVENTO= metodo.ObtenerListObjetos(S_EVENTO,marea.getFieldEvento());
         List<HashMap<String, Object>> ListarSTR_FLBSP= metodo.ObtenerListObjetos(STR_FLBSP,marea.getFieldFLBSP());
         List<HashMap<String, Object>> ListarSTR_PSCINC= metodo.ObtenerListObjetos(STR_PSCINC,marea.getFieldPSCINC());
@@ -201,9 +204,26 @@ public class JCOEmbarcacionServiceImpl implements JCOEmbarcacionService {
             }
         }
 
+        List<HashMap<String, Object>> list_sevento= new ArrayList<>();
+        for(int i=0; i<ListarS_EVENTO.size();i++){
+
+            HashMap<String, Object> s_evento=new HashMap<>();
+            for(Map.Entry<String, Object>entry:ListarS_EVENTO.get(i).entrySet()){
+                String key= entry.getKey();
+                Object value= entry.getValue();
+                if(key.equals("TEMAR")){
+                    s_evento.put(key,value.toString());
+                }else{
+                    s_evento.put(key,value);
+                }
+
+            }
+            list_sevento.add(s_evento);
+        }
+
         MareaDto dto= new MareaDto();
         dto.setS_marea(ListarS_MAREA);
-        dto.setS_evento(ListarS_EVENTO);
+        dto.setS_evento(list_sevento);
         dto.setStr_flbsp(ListarSTR_FLBSP);
         dto.setStr_pscinc(ListarSTR_PSCINC);
 

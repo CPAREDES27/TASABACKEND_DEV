@@ -95,11 +95,8 @@ public class Metodos {
 
                     if (key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ) {
                         String valor=value.toString();
-                        logger.error("valor= "+valor);
                         valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
-                        logger.error("valor= "+valor);
                         value=valor.substring(0,6)+"'";
-                        logger.error("value= "+value);
                     }
 
                     if (field.getTypeAsString().equals("DATE")) {
@@ -176,11 +173,8 @@ public class Metodos {
 
                     if(key.equals("LNMAX") || key.equals("LNMIN") ||key.equals("LTMAX") ||key.equals("LTMIN") ){
                         String valor=value.toString();
-                        logger.error("valor= "+valor);
                         valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
-                        logger.error("valor= "+valor);
                         value=valor.substring(0,6)+"'";
-                        logger.error("value= "+value);
                     }
                     if (field.getTypeAsString().equals("DATE")) {
 
@@ -1066,7 +1060,6 @@ public class Metodos {
                     Object value = jcoTable.getValue(key);
 
                     for (int k = 0; k < fields.length; k++) {
-                        logger.error("key: " + key + " k: " + fields[k]);
 
                         if (fields[k].trim().equals(key.trim())) {
                             if (field.getTypeAsString().equals("TIME")) {
@@ -1182,7 +1175,6 @@ public class Metodos {
                 JCoField field = iter.nextField();
                 String key = (String) field.getName();
                 Object value = jcoTable.getValue(key);
-                logger.error("key: "+key+" valor: "+value);
                try{
                     if(value.equals("null") ){
                         logger.error("valor es 'null'");
@@ -1324,7 +1316,7 @@ public class Metodos {
                 logger.error("Entré");
 
                 for(int k=0;k<fields.length;k++) {
-                    logger.error("key+"+ key + "field "+ fields[k]);
+
                     if (key.equals(fields[k])) {
                         try{
                             value = ArrayResponse[j].trim();

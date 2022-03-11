@@ -379,7 +379,6 @@ public class JCOEventosPescaImpl implements JCOEventosPescaService {
             for(Map.Entry<String,Object> entry: datas.entrySet()){
                 String key= entry.getKey();
                 Object value= entry.getValue();
-                logger.error("KEYCITO:" + key + " " + value);
                 if(key.equals("LCHOR")){
 
                     objHorom.setLCHOR(value.toString());

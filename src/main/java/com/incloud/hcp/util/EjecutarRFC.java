@@ -454,11 +454,8 @@ public class EjecutarRFC {
                             }
                             newRecord.put(field, value);
                             String valor=value.toString();
-                            logger.error("valor= "+valor);
                             valor=valor.substring(0,3)+"°"+valor.substring(3,valor.length());
-                            logger.error("valor= "+valor);
                             value=valor.substring(0,6)+"'";
-                            logger.error("value= "+value);
                         }
 //HIDES
                         if (key.equals("HRCRN") || key.equals("HRMOD")|| key.equals("HRREQ") || key.equals("HIDES")) {
